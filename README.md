@@ -9,6 +9,7 @@ Vytvořte skript pro konverzi JSON formátu (viz RFC 4627) do XML. Každému prv
 
 JSON hodnoty typu string a number a JSON literály true, false a null budou transformovány v závislosti na parametrech skriptu na atribut value daného elementu odpovídající hodnotou (stejného tvaru jako v JSON vstupu; nezapomeňte na požadavek ouvozovkování atributů v XML) nebo na textový element v případě hodnoty typu string a number či na párový element (ve zkráceném zápise) <true/>, <false/> a <null/>. Je-li hodnotou desetinné číslo (případně s exponentem), bude na výstupu celé číslo zaokrouhleno dolů (čísla mimo meze neuvažujte).
 
+---
 ### Vstupní parametry
 
 * <b>--help</b> provede výpis nápovědy
@@ -27,3 +28,10 @@ JSON hodnoty typu string a number a JSON literály true, false a null budou tran
 * <b>-t | --index-items </b> u prvků pole bude použit atribut index s určením polohy prvku v rámci pole (indexováno od 1)
 * <b>--start=n </b> inicializace čítače prvků pole (kombinovat s -t)
 * <b>--types</b> obalující elementy skalárních hodnot bude doplněn o atribut type obsahující hodnotu integer pro int, real pro desetinou hodnotu, string pro řetězec a literal pro literály (true, false, null)
+---
+## Použití testů:
+Ve skriptu <code>run_tests.sh</code> změňte proměnné <code>INTERPRETER</code> a <code>SOURCE</code>, tak aby odpovídali vašemu prostředí.
+
+Pokud byste objevili v testech chybu napište mi a já to opravím.
+
+V současnosti skript nekontroluje správnost výsledků, bude přidáno ve chvíli, kdy budu mít na čem testovat.

@@ -37,7 +37,7 @@ INPUT_PATH="./tests/input/"
 OUTPUT_PATH="./tests/real-out/"
 REFERENCE_OUTPUT_PATH="./tests/ref-out/"
 
-INPUT_JSONS=(./tests/input/*.jsn)
+INPUT_JSONS=(./tests/input/*.json)
 INPUT_PARAMS=(./tests/input/*.params)
 
 REF_OUT_XML=(./tests/ref-out/*.xml)

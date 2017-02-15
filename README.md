@@ -28,6 +28,7 @@ JSON hodnoty typu string a number a JSON literály true, false a null budou tran
 * <b>-t | --index-items </b> u prvků pole bude použit atribut index s určením polohy prvku v rámci pole (indexováno od 1)
 * <b>--start=n </b> inicializace čítače prvků pole (kombinovat s -t)
 * <b>--types</b> obalující elementy skalárních hodnot bude doplněn o atribut type obsahující hodnotu integer pro int, real pro desetinou hodnotu, string pro řetězec a literal pro literály (true, false, null)
+
 ---
 ## Použití testů:
 Ve skriptu <code>run_tests.sh</code> změňte proměnné <code>INTERPRETER</code> a <code>SOURCE</code>, tak aby odpovídali vašemu prostředí.

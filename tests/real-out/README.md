@@ -1,0 +1,1 @@
+# Tady budou výsledky vašeho skriptu

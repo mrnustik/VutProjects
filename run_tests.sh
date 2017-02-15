@@ -16,7 +16,7 @@ echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 echo -e "\n\n\n"
 
 INTERPRETER="php" # PATH TO YOUR PHP INTERPRETER
-SOURCE="PATH TO YOUR SOURCE"
+SOURCE="./args_dump.php"
 
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=";
@@ -37,12 +37,15 @@ INPUT_PATH="./tests/input/"
 OUTPUT_PATH="./tests/real-out/"
 REFERENCE_OUTPUT_PATH="./tests/ref-out/"
 
-INPUT_JSONS=(tests/input/*.jsn)
-INPUT_PARAMS=(tests/input/*.params)
+INPUT_JSONS=(./tests/input/*.jsn)
+INPUT_PARAMS=(./tests/input/*.params)
+
+REF_OUT_XML=(./tests/ref-out/*.xml)
+REF_OUT_CODE=(./tests/ref-out/*.!!!)
+REF_OUT_ERR=(./tests/ref-out/*.err)
 
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=";
 echo "Number of tests:" ${#INPUT_JSONS[@]}
-echo "All tests:" "${INPUT_JSONS[@]}"
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=";
 
 for i in ${!INPUT_JSONS[*]}; do 
@@ -50,6 +53,8 @@ for i in ${!INPUT_JSONS[*]}; do
     echo "Running test number: " $i;
     echo "Input test file:" ${INPUT_JSONS[$i]}
     echo "Test params: " $(cat ${INPUT_PARAMS[$i]})
+    $INTERPRETER $SOURCE --input=${INPUT_JSONS[$i]} --output=$OUTPUT_PATH$i.xml $(cat ${INPUT_PARAMS[$i]}) 2> $OUTPUT_PATH$i.err
+    echo $? > $OUTPUT_PATH$i.code
 done;
 
 

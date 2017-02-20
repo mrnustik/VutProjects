@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 echo "===============================================================================";
 echo "=  __      ___               _____                                            =";
 echo "=  \ \    / / |        /\   |  __ \                                           =";
@@ -16,7 +17,7 @@ echo "==========================================================================
 echo -e "\n\n\n"
 
 INTERPRETER="php" # PATH TO YOUR PHP INTERPRETER
-SOURCE="./args_dump.php"
+SOURCE="./jsn.php"
 
 
 echo "===============================================================================";
@@ -57,7 +58,7 @@ for i in ${!INPUT_JSONS[*]}; do
     echo "Running test number: " $i;
     echo "Input test file:" ${INPUT_JSONS[$i]}
     echo "Test params: " $(cat ${INPUT_PARAMS[$i]})
-    $INTERPRETER $SOURCE --input=${INPUT_JSONS[$i]} --output=$OUTPUT_PATH$i.xml $(cat ${INPUT_PARAMS[$i]}) 2> $OUTPUT_PATH$i.err > /dev/null
+    $INTERPRETER $SOURCE --input=${INPUT_JSONS[$i]} --output=$OUTPUT_PATH$i.xml $(cat ${INPUT_PARAMS[$i]}) 2> $OUTPUT_PATH$i.err
     echo -n $? > $OUTPUT_PATH$i.code
     echo -n "Test exit code: " 
     diff -y ${REF_OUT_CODE[$i]} $OUTPUT_PATH$i.code > /dev/null
@@ -72,7 +73,7 @@ for i in ${!INPUT_JSONS[*]}; do
     fi;
     echo -e "${NO_COLOR}"
     echo -n "Test output:"
-    OUTPUT=$(diff -y ${REF_OUT_XML[$i]} $OUTPUT_PATH$i.xml 2>/dev/null)
+    OUTPUT=$(diff -b -y --ignore-all-space ${REF_OUT_XML[$i]} $OUTPUT_PATH$i.xml 2>/dev/null)
     if [ ! $? -eq 0 ]; then
         echo ""
         echo -e "\t${RED}Error: Bad output xml."

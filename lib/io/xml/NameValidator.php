@@ -7,7 +7,6 @@
  * Time: 12:18
  */
 
-require_once "../../argument/Arguments.php";
 
 class NameValidator
 {

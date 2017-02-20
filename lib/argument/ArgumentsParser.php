@@ -7,8 +7,8 @@
  * Time: 19:13
  */
 
-
-require_once "Arguments.php";
+include_once "Arguments.php";
+include_once "./exception/InvalidArgumentException.php";
 
 class ArgumentsParser
 {
@@ -115,6 +115,10 @@ class ArgumentsParser
     {
         if (array_key_exists("r", $options)) {
             $arguments->setRootElement(self::removeQuotes($options['r']));
+            if(NameValidator::invalidate($arguments->getRootElement()) == false)
+            {
+                throw new InvalidArgumentException("Root element does not follow XML syntax");
+            }
             Logger::LogDebug("Argument root element found ".$arguments->getRootElement());
         }
     }
@@ -123,6 +127,10 @@ class ArgumentsParser
     {
         if (array_key_exists("array-name", $options)) {
             $arguments->setArrayName(self::removeQuotes($options["array-name"]));
+            if(NameValidator::invalidate($arguments->getArrayName()) == false)
+            {
+                throw new InvalidArgumentException("Root element does not follow XML syntax");
+            }
             Logger::LogDebug("Argument array name found ".$options["array-name"]);
         } else {
             $arguments->setArrayName("array");
@@ -134,6 +142,10 @@ class ArgumentsParser
     {
         if (array_key_exists("item-name", $options)) {
             $arguments->setItemName(self::removeQuotes($options["item-name"]));
+            if(NameValidator::invalidate($arguments->getItemName()) == false)
+            {
+                throw new InvalidArgumentException("Root element does not follow XML syntax");
+            }
             Logger::LogDebug("Argument item name found ".$options["item-name"]);
         } else {
             $arguments->setItemName("item");

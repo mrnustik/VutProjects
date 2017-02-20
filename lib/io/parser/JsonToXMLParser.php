@@ -8,6 +8,7 @@
  */
 
 
+
 class JsonToXMLParser
 {
 
@@ -42,7 +43,7 @@ class JsonToXMLParser
         }
         else
         {
-            throw new InvalidJsonFileException("The file does not start as object.");
+            throw new InvalidJsonFileException("The file does not start as object or array.");
         }
     }
 
@@ -72,7 +73,7 @@ class JsonToXMLParser
     {
         foreach ($json as $key => $value)
         {
-            $this->xml_writer->startElement($key);
+            $this->xml_writer->startElement(NameValidator::invalidateAndReplace($key));
             $this->parse_value($value);
             $this->xml_writer->endElement();
         }
@@ -80,7 +81,6 @@ class JsonToXMLParser
 
     private function parse_value($json)
     {
-        var_dump($json);
         if(is_object($json))
         {
             $this->parse_object($json);
@@ -164,9 +164,9 @@ class JsonToXMLParser
     {
         $arguments = Arguments::getInstance();
         if ($arguments->getFlagElementsNumber()) {
-            $this->xml_writer->text($json);
+            $this->xml_writer->text(floor($json));
         } else {
-            $this->xml_writer->writeAttribute("value", $json);
+            $this->xml_writer->writeAttribute("value", floor($json));
         }
         if ($arguments->getFlagTypes()) {
             $this->xml_writer->writeAttribute("type", is_int($json) ? "integer" : "real");

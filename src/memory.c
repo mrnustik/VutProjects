@@ -7,6 +7,8 @@
 void memoryInit()
 {
     memory = malloc(sizeof(tGlobalMemory));
+    memory->first = NULL;
+    memory->last = NULL;
 }
 
 void* mMalloc(long size)
@@ -14,6 +16,7 @@ void* mMalloc(long size)
     tAllocUnit* unit = malloc(sizeof(tAllocUnit));
     unit->pointer = malloc(sizeof(size));
     unit->size = size;
+    unit->next = NULL;
     if(memory->first == NULL && memory->last == NULL)
     {
         memory->first = unit;
@@ -45,8 +48,10 @@ void memoryDestroy()
     tAllocUnit* unit = memory->first;
     while(unit != NULL)
     {
-        free(unit->pointer);
-        free(unit);
+        tAllocUnit* tmp = unit;
+        unit = tmp->next;
+        free(tmp->pointer);
+        free(tmp);
     }
     free(memory);
 }

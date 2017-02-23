@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "src/memory.h"
 
 typedef struct {
     char* rootFolder;
@@ -25,7 +26,7 @@ int readParameter(char* flag, char* value, tArguments **pArguments) {
 
 int parseArguments(int argc, char* argv[], tArguments** pArguments)
 {
-    (*pArguments) = malloc(sizeof(tArguments));
+    (*pArguments) = mMalloc(sizeof(tArguments));
     (*pArguments)->rootFolder = ".";
     (*pArguments)->port = 80;
 
@@ -43,6 +44,8 @@ int parseArguments(int argc, char* argv[], tArguments** pArguments)
 
 int main(int argc, char* argv[])
 {
+    memoryInit();
+
     tArguments* arguments = NULL;
 
     int valid_args = parseArguments(argc, argv, &arguments);
@@ -51,5 +54,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
+
+    memoryDestroy();
 	return 0;
 }

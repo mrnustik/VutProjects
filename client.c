@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "src/operation.h"
+#include "src/memory.h"
 
 
 typedef struct {
@@ -16,7 +17,7 @@ int parseArguments(int argc, char* argv[], tArguments** pArguments)
         return -1;
     }
 
-    *pArguments = malloc(sizeof(tArguments));
+    *pArguments = mMalloc(sizeof(tArguments));
 
     char * opString = argv[1];
 
@@ -40,6 +41,7 @@ int parseArguments(int argc, char* argv[], tArguments** pArguments)
 
 int main(int argc, char* argv[])
 {
+    memoryInit();
 
     tArguments* arguments = NULL;
 
@@ -50,5 +52,6 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    memoryDestroy();
     return 0;
 }

@@ -7,7 +7,6 @@
  * Time: 21:57
  */
 
-require 'exception/FileNotFoundException.php';
 
 class File
 {

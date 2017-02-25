@@ -38,6 +38,13 @@ INPUT_PATH="./tests/input/"
 OUTPUT_PATH="./tests/real-out/"
 REFERENCE_OUTPUT_PATH="./tests/ref-out/"
 
+
+echo "===============================================================================";
+echo "=- Cleaning old results ===================================================-=-=";
+echo "===============================================================================";
+$(rm -rf ${OUTPUT_PATH}*.xml ${OUTPUT_PATH}*.code  ${OUTPUT_PATH}*.err)
+
+
 INPUT_JSONS=(./tests/input/*.json)
 INPUT_PARAMS=(./tests/input/*.params)
 
@@ -73,7 +80,15 @@ for i in ${!INPUT_JSONS[*]}; do
     fi;
     echo -e "${NO_COLOR}"
     echo -n "Test output:"
-    OUTPUT=$(diff -b -y --ignore-all-space ${REF_OUT_XML[$i]} $OUTPUT_PATH$i.xml 2>/dev/null)
+    REF=$(cat ${REF_OUT_XML[$i]})
+    REAL=$(cat $OUTPUT_PATH$i.xml)
+    $(echo "<root>"  $REF > /tmp/ref_$i.xml)
+    $(echo "</root>" >> /tmp/ref_$i.xml)
+    $(echo "<root>" $REAL > /tmp/real_$i.xml)
+    $(echo "</root>" >> /tmp/real_$i.xml)
+    $(xmllint --c14n /tmp/real_$i.xml > /tmp/real_$i_lint.xml)
+    $(xmllint --c14n /tmp/ref_$i.xml > /tmp/ref_$i_lint.xml)
+    OUTPUT=$(diff -b -y --ignore-all-space /tmp/ref_$i_lint.xml /tmp/real_$i_lint.xml 2>/dev/null)
     if [ ! $? -eq 0 ]; then
         echo ""
         echo -e "\t${RED}Error: Bad output xml."

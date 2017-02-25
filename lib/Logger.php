@@ -23,5 +23,9 @@ class Logger
         fprintf(STDERR, "E: %s\n", $message);
     }
 
+    public static function printHelp()
+    {
+    }
+
 
 }

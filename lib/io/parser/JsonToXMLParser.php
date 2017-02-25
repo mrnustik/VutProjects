@@ -115,6 +115,9 @@ class JsonToXMLParser
     private function parse_literal($json)
     {
         $arguments = Arguments::getInstance();
+        if ($arguments->getFlagTypes()) {
+            $this->xml_writer->writeAttribute("type", "literal");
+        }
         if ($arguments->getFlagElementsLiteral()) {
             if ($json === false) {
                 $this->xml_writer->writeElement("false");
@@ -132,9 +135,7 @@ class JsonToXMLParser
                 $this->xml_writer->writeAttribute("value", "null");
             }
         }
-        if ($arguments->getFlagTypes()) {
-            $this->xml_writer->writeAttribute("type", "literal");
-        }
+
     }
 
     /**
@@ -143,8 +144,11 @@ class JsonToXMLParser
     private function parse_string($json)
     {
         $arguments = Arguments::getInstance();
+        if ($arguments->getFlagTypes()) {
+            $this->xml_writer->writeAttribute("type", "string");
+        }
         if ($arguments->getFlagElementsText()) {
-            if ($arguments->getFlagCharaceterDecode()) {
+            if ($arguments->getFlagCharacterDecode()) {
                 $this->xml_writer->text($json);
             } else {
                 $this->xml_writer->writeRaw($json);
@@ -152,9 +156,7 @@ class JsonToXMLParser
         } else {
             $this->xml_writer->writeAttribute("value", $json);
         }
-        if ($arguments->getFlagTypes()) {
-            $this->xml_writer->writeAttribute("type", "string");
-        }
+
     }
 
     /**
@@ -163,14 +165,15 @@ class JsonToXMLParser
     private function parse_number($json)
     {
         $arguments = Arguments::getInstance();
+        if ($arguments->getFlagTypes()) {
+            $this->xml_writer->writeAttribute("type", is_int($json) ? "integer" : "real");
+        }
         if ($arguments->getFlagElementsNumber()) {
             $this->xml_writer->text(floor($json));
         } else {
             $this->xml_writer->writeAttribute("value", floor($json));
         }
-        if ($arguments->getFlagTypes()) {
-            $this->xml_writer->writeAttribute("type", is_int($json) ? "integer" : "real");
-        }
+
     }
 
 

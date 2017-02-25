@@ -6,7 +6,6 @@
  * Date: 19/02/2017
  * Time: 22:06
  */
-require 'exception/JsonParseException.php';
 
 class JsonFile extends File
 {
@@ -15,7 +14,7 @@ class JsonFile extends File
         $json = json_decode($this->getContents());
         if($json == NULL)
         {
-            throw new JsonParseException("Could not parse file: ".$this->getPath()." to a json.");
+            throw new InvalidJsonFileException("Could not parse file: ".$this->getPath()." to a json.");
         }
         return $json;
     }

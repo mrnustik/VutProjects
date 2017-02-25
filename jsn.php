@@ -27,6 +27,7 @@ try
     if($arguments->getFlagHelp() == true)
     {
         Logger::printHelp();
+        exit(0);
     }
 
     $json_file = new JsonFile($arguments->getInputFile(), 'r');

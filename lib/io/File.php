@@ -43,9 +43,16 @@ class File
 
     function getContents()
     {
-        if(file_exists($this->path))
+        $file = @ fopen($this->getPath(), $this->getMode());
+        if($file != FALSE)
         {
-            return file_get_contents($this->path);
+            $content = "";
+            while($line = fgets($file))
+            {
+                $content .= $line;
+            }
+            fclose($file);
+            return $content;
         }
         else
         {

@@ -1,10 +1,8 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: mrnda
- * Date: 19/02/2017
- * Time: 22:13
+ * Class JsonParseException
+ * Exception thrown when JSON file was invalid.
  */
 class JsonParseException extends Exception
 {

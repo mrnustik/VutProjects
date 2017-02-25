@@ -1,10 +1,8 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: mrnda
- * Date: 20/02/2017
- * Time: 14:14
+ * Class BadFilePermissionException
+ * Exception thrown when could not open given file.
  */
 class BadFilePermissionException extends Exception
 {

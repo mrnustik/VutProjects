@@ -8,9 +8,17 @@
  */
 const IS_DEBUG = false;
 
+/**
+ * Class Logger
+ * Static class used for communication with standard output and standard error output.
+ */
 class Logger
 {
 
+    /**
+     * Logs messages when in debug mode.
+     * @param $message string message
+     */
     public static function LogDebug($message)
     {
         if(IS_DEBUG)
@@ -19,11 +27,18 @@ class Logger
         }
     }
 
+    /**
+     * Writes message into stanard error output.
+     * @param $message string error message.
+     */
     public static function LogError($message)
     {
         fprintf(STDERR, "E: %s\n", $message);
     }
 
+    /**
+     * Prints program help to the standard output.
+     */
     public static function printHelp()
     {
         echo "Json2Xml parser 0.9 (Frebruary 25th 2017)\n";

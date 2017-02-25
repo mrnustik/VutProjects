@@ -8,7 +8,6 @@
  */
 
 include_once "Arguments.php";
-include_once "./exception/InvalidArgumentException.php";
 
 class ArgumentsParser
 {
@@ -18,8 +17,7 @@ class ArgumentsParser
         $options = self::getOptions();
 
         if(count($options) != $argc - 1){
-            Logger::LogError("Unknwon argument");
-            exit(1);
+            throw new InvalidCommandLineArgumentException("Illegal arguments exception.");
         }
 
         $arguments = Arguments::getInstance();
@@ -48,10 +46,14 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkFlagHelp($options, $arguments)
+    private static function checkFlagHelp($options, Arguments $arguments)
     {
         if (array_key_exists("help", $options)) {
             $arguments->setFlagHelp(true);
+            if(count($options) != 1)
+            {
+                throw new InvalidCommandLineArgumentException("Help can be used only as solo parameter.");
+            }
             Logger::LogDebug("Argument help found");
         } else {
             $arguments->setFlagHelp(false);
@@ -63,7 +65,7 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkInput($options, $arguments)
+    private static function checkInput($options, Arguments $arguments)
     {
         if (array_key_exists("input", $options)) {
             $arguments->setInputFile(self::removeQuotes($options["input"]));
@@ -77,7 +79,7 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkOutput($options, $arguments)
+    private static function checkOutput($options, Arguments $arguments)
     {
         if (array_key_exists("output", $options)) {
             $arguments->setOutputFile(self::removeQuotes($options["output"]));
@@ -91,7 +93,7 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkFlagNoHeader($options, $arguments)
+    private static function checkFlagNoHeader($options, Arguments $arguments)
     {
         if (array_key_exists("n", $options)) {
             $arguments->setFlagNoHeader(true);
@@ -101,7 +103,7 @@ class ArgumentsParser
         }
     }
 
-    private static function checkSubstCharacter($options, $arguments)
+    private static function checkSubstCharacter($options, Arguments $arguments)
     {
         if (array_key_exists("h", $options)) {
             $arguments->setSubstCharacter($options["h"]);
@@ -111,25 +113,25 @@ class ArgumentsParser
         }
     }
 
-    private static function checkRootElement($options, $arguments)
+    private static function checkRootElement($options, Arguments $arguments)
     {
         if (array_key_exists("r", $options)) {
             $arguments->setRootElement(self::removeQuotes($options['r']));
             if(NameValidator::invalidate($arguments->getRootElement()) == false)
             {
-                throw new InvalidArgumentException("Root element does not follow XML syntax");
+                throw new InvalidCommandLineArgumentException("Root element does not follow XML syntax", 50);
             }
             Logger::LogDebug("Argument root element found ".$arguments->getRootElement());
         }
     }
 
-    private static function checkArrayName($options, $arguments)
+    private static function checkArrayName($options, Arguments $arguments)
     {
         if (array_key_exists("array-name", $options)) {
             $arguments->setArrayName(self::removeQuotes($options["array-name"]));
             if(NameValidator::invalidate($arguments->getArrayName()) == false)
             {
-                throw new InvalidArgumentException("Root element does not follow XML syntax");
+                throw new InvalidCommandLineArgumentException("Array element does not follow XML syntax", 50);
             }
             Logger::LogDebug("Argument array name found ".$options["array-name"]);
         } else {
@@ -138,13 +140,13 @@ class ArgumentsParser
     }
 
 
-    private static function checkItemName($options, $arguments)
+    private static function checkItemName($options, Arguments $arguments)
     {
         if (array_key_exists("item-name", $options)) {
             $arguments->setItemName(self::removeQuotes($options["item-name"]));
             if(NameValidator::invalidate($arguments->getItemName()) == false)
             {
-                throw new InvalidArgumentException("Root element does not follow XML syntax");
+                throw new InvalidCommandLineArgumentException("Array item element does not follow XML syntax", 50);
             }
             Logger::LogDebug("Argument item name found ".$options["item-name"]);
         } else {
@@ -156,11 +158,11 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkFlagElementText($options, $arguments)
+    private static function checkFlagElementText($options, Arguments $arguments)
     {
         if (array_key_exists("s", $options)) {
             $arguments->setFlagElementsText(true);
-            Logger::LogDebug("Argument flag text elelement found");
+            Logger::LogDebug("Argument flag text element found");
         } else {
             $arguments->setFlagElementsText(false);
         }
@@ -170,11 +172,11 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkFlagElementNumber($options, $arguments)
+    private static function checkFlagElementNumber($options, Arguments $arguments)
     {
         if (array_key_exists("i", $options)) {
             $arguments->setFlagElementsNumber(true);
-            Logger::LogDebug("Argument flag number elelement found");
+            Logger::LogDebug("Argument flag number element found");
         } else {
             $arguments->setFlagElementsNumber(false);
         }
@@ -184,7 +186,7 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkFlagElementLiteral($options, $arguments)
+    private static function checkFlagElementLiteral($options, Arguments $arguments)
     {
         if (array_key_exists("l", $options)) {
             $arguments->setFlagElementsLiteral(true);
@@ -198,13 +200,13 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkFlagCharacterDecode($options, $arguments)
+    private static function checkFlagCharacterDecode($options, Arguments $arguments)
     {
         if (array_key_exists("c", $options)) {
-            $arguments->setFlagCharaceterDecode(true);
+            $arguments->setFlagCharacterDecode(true);
             Logger::LogDebug("Argument flag character decode found");
         } else {
-            $arguments->setFlagCharaceterDecode(false);
+            $arguments->setFlagCharacterDecode(false);
         }
     }
 
@@ -212,11 +214,15 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkFlagArraySize($options, $arguments)
+    private static function checkFlagArraySize($options, Arguments $arguments)
     {
         if (array_key_exists("a", $options) ||
-            array_key_exists("array-size", $options)
-        ) {
+            array_key_exists("array-size", $options))
+        {
+            if(array_key_exists("a", $options) && array_key_exists("array-size", $options))
+            {
+                throw new InvalidCommandLineArgumentException("Redefining already defined argument --array-size");
+            }
             $arguments->setFlagArraySize(true);
             Logger::LogDebug("Argument flag array size found");
         } else {
@@ -228,11 +234,15 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkFlagArrayIndex($options, $arguments)
+    private static function checkFlagArrayIndex($options, Arguments $arguments)
     {
         if (array_key_exists("t", $options) ||
-            array_key_exists("index-items", $options)
-        ) {
+            array_key_exists("index-items", $options))
+        {
+            if(array_key_exists("t", $options) && array_key_exists("index-items", $options))
+            {
+                throw new InvalidCommandLineArgumentException("Redefining already defined argument --index-items");
+            }
             $arguments->setFlagArrayIndex(true);
             Logger::LogDebug("Argument flag index items found");
         } else {
@@ -244,7 +254,7 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkArrayStartIndex($options, $arguments)
+    private static function checkArrayStartIndex($options, Arguments $arguments)
     {
         if (array_key_exists("start", $options)) {
             $arguments->setArrayStartIndex(self::removeQuotes($options["start"]));
@@ -258,7 +268,7 @@ class ArgumentsParser
      * @param $options
      * @param $arguments
      */
-    private static function checkFlagTypes($options, $arguments)
+    private static function checkFlagTypes($options, Arguments $arguments)
     {
         if (array_key_exists("types", $options)) {
             $arguments->setFlagTypes(true);

@@ -22,7 +22,7 @@ class Arguments
     private $flag_elements_number;
     private $flag_elements_literal;
 
-    private $flag_characeter_decode;
+    private $flag_character_decode;
 
     private $flag_array_size;
     private $flag_array_index;
@@ -91,14 +91,14 @@ class Arguments
         $this->flag_elements_literal = $flag_elements_literal;
     }
 
-    public function getFlagCharaceterDecode()
+    public function getFlagCharacterDecode()
     {
-        return $this->flag_characeter_decode;
+        return $this->flag_character_decode;
     }
 
-    public function setFlagCharaceterDecode($flag_characeter_decode)
+    public function setFlagCharacterDecode($flag_character_decode)
     {
-        $this->flag_characeter_decode = $flag_characeter_decode;
+        $this->flag_character_decode = $flag_character_decode;
     }
 
     public function getFlagArraySize()

@@ -9,9 +9,20 @@
 
 include_once "Arguments.php";
 
+/**
+ * Class ArgumentsParser
+ * Static class used for arguments parsing from command line.
+ */
 class ArgumentsParser
 {
 
+    /**
+     * Method used to retrieve Arguments object from command line.
+     * @param $argc int arguments count
+     * @return Arguments arguments parsed from command line
+     * @throws InvalidCommandLineArgumentException when arguments from command line are invalid
+     * @see Arguments
+     */
     public static function parseArguments($argc)
     {
         $options = self::getOptions();
@@ -43,8 +54,11 @@ class ArgumentsParser
     }
 
     /**
-     * @param $options
-     * @param $arguments
+     * Checks for help argument flag.
+     * @param $options array array from {@see getopt()}
+     * @param $arguments Arguments arguments object instance
+     * @throws InvalidCommandLineArgumentException when there is more arguments then help.
+
      */
     private static function checkFlagHelp($options, Arguments $arguments)
     {
@@ -62,8 +76,11 @@ class ArgumentsParser
     }
 
     /**
-     * @param $options
-     * @param $arguments
+     * Checks for input file argument.
+     * @param $options array array from {@see getopt()}
+     * @param $arguments Arguments arguments object instance
+
+
      */
     private static function checkInput($options, Arguments $arguments)
     {
@@ -76,8 +93,11 @@ class ArgumentsParser
     }
 
     /**
-     * @param $options
-     * @param $arguments
+     * Check for output file argument.
+     * @param $options array array from {@see getopt()}
+     * @param $arguments Arguments argument object instance
+
+
      */
     private static function checkOutput($options, Arguments $arguments)
     {
@@ -89,9 +109,13 @@ class ArgumentsParser
         }
     }
 
+
     /**
-     * @param $options
-     * @param $arguments
+     * Checks for no header argument flag.
+     * @param $options array array from {@see getopt()}
+     * @param Arguments $arguments argument object instance
+
+
      */
     private static function checkFlagNoHeader($options, Arguments $arguments)
     {
@@ -103,6 +127,13 @@ class ArgumentsParser
         }
     }
 
+    /**
+     * Checks for substitution argument.
+     * @param $options array array from {@see getopt()}
+     * @param Arguments $arguments argument object instance
+
+
+     */
     private static function checkSubstCharacter($options, Arguments $arguments)
     {
         if (array_key_exists("h", $options)) {
@@ -113,6 +144,14 @@ class ArgumentsParser
         }
     }
 
+    /**
+     * Check for root element argument.
+     * @param $options array array from {@see getopt()}
+     * @param Arguments $arguments argument object instance
+     * @throws InvalidCommandLineArgumentException when root element has not valid xml syntax.
+
+
+     */
     private static function checkRootElement($options, Arguments $arguments)
     {
         if (array_key_exists("r", $options)) {
@@ -125,6 +164,14 @@ class ArgumentsParser
         }
     }
 
+    /**
+     * Check for array element argument
+     * @param $options array array from {@see getopt()}
+     * @param Arguments $arguments arguments object instance
+     * @throws InvalidCommandLineArgumentException when array element has not valid xml syntax.
+
+
+     */
     private static function checkArrayName($options, Arguments $arguments)
     {
         if (array_key_exists("array-name", $options)) {
@@ -140,6 +187,14 @@ class ArgumentsParser
     }
 
 
+    /**
+     * Check for array item name argument
+     * @param $options array array from {@see getopt()}
+     * @param Arguments $arguments arguments object instance
+     * @throws InvalidCommandLineArgumentException when array item element has invalid xml syntax
+
+
+     */
     private static function checkItemName($options, Arguments $arguments)
     {
         if (array_key_exists("item-name", $options)) {
@@ -155,8 +210,9 @@ class ArgumentsParser
     }
 
     /**
-     * @param $options
-     * @param $arguments
+     * Check for text element argument flag.
+     * @param $options array array from {@see getopt()}
+     * @param $arguments Arguments instance of arguments object
      */
     private static function checkFlagElementText($options, Arguments $arguments)
     {
@@ -169,8 +225,9 @@ class ArgumentsParser
     }
 
     /**
-     * @param $options
-     * @param $arguments
+     * Check for number element argument flag.
+     * @param $options array array from {@see getopt()}
+     * @param $arguments Arguments instance of arguments object
      */
     private static function checkFlagElementNumber($options, Arguments $arguments)
     {
@@ -183,8 +240,9 @@ class ArgumentsParser
     }
 
     /**
-     * @param $options
-     * @param $arguments
+     * Check for literal element flag.
+     * @param $options array array from {@see getopt()}
+     * @param $arguments Arguments instance of arguments object
      */
     private static function checkFlagElementLiteral($options, Arguments $arguments)
     {
@@ -197,8 +255,9 @@ class ArgumentsParser
     }
 
     /**
-     * @param $options
-     * @param $arguments
+     * Check for character decode flag.
+     * @param $options array array from {@see getopt()}
+     * @param $arguments Arguments instance of arguments object
      */
     private static function checkFlagCharacterDecode($options, Arguments $arguments)
     {
@@ -211,8 +270,10 @@ class ArgumentsParser
     }
 
     /**
-     * @param $options
-     * @param $arguments
+     * Checks for array size argument flag.
+     * @param $options array array from {@see getopt()}
+     * @param $arguments Arguments instance of arguments object
+     * @throws InvalidCommandLineArgumentException when argument has been there more times.
      */
     private static function checkFlagArraySize($options, Arguments $arguments)
     {
@@ -231,8 +292,10 @@ class ArgumentsParser
     }
 
     /**
-     * @param $options
-     * @param $arguments
+     * Checks for array index argument flag.
+     * @param $options array array from {@see getopt()}
+     * @param $arguments Arguments instance of arguments object
+     * @throws InvalidCommandLineArgumentException when argument has been there more times.
      */
     private static function checkFlagArrayIndex($options, Arguments $arguments)
     {
@@ -251,22 +314,32 @@ class ArgumentsParser
     }
 
     /**
-     * @param $options
-     * @param $arguments
+     * Checks for index start argument.
+     * @param $options array array from {@see getopt()}
+     * @param $arguments Arguments instance of arguments object
+     * @throws InvalidCommandLineArgumentException -t or --index-items flag was not defined.
      */
     private static function checkArrayStartIndex($options, Arguments $arguments)
     {
         if (array_key_exists("start", $options)) {
-            $arguments->setArrayStartIndex(self::removeQuotes($options["start"]));
-            Logger::LogDebug("Argument start index found ".$options["start"]);
+            if (array_key_exists("t", $options) ||
+                array_key_exists("index-items", $options)) {
+                $arguments->setArrayStartIndex(self::removeQuotes($options["start"]));
+                Logger::LogDebug("Argument start index found " . $options["start"]);
+            }
+            else
+            {
+                throw new InvalidCommandLineArgumentException("Index items flag has to be specified with the start argument.");
+            }
         } else {
             $arguments->setArrayStartIndex(1);
         }
     }
 
     /**
-     * @param $options
-     * @param $arguments
+     * Check for type argument flag.
+     * @param $options array array from {@see getopt()}
+     * @param Arguments $arguments instance of arguments object
      */
     private static function checkFlagTypes($options, Arguments $arguments)
     {
@@ -278,13 +351,19 @@ class ArgumentsParser
         }
     }
 
+    /**
+     * Removes quotes from argument string.
+     * @param $string string value with quotes
+     * @return string value with removed quotes
+     */
     private static function removeQuotes($string)
     {
         return str_replace('"', "", $string);
     }
 
     /**
-     * @return array
+     * Parses arguments from command line using {@see getopt()}
+     * @return array from {@see getopt()}
      */
     private static function getOptions()
     {

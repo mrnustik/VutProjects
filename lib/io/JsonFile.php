@@ -1,14 +1,18 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: mrnda
- * Date: 19/02/2017
- * Time: 22:06
- */
 
+
+/**
+ * Class JsonFile
+ * Json file wrapper. Used for retrieving Json contents of file.
+ */
 class JsonFile extends File
 {
+    /**
+     * Metho used for getting json file representation.
+     * @return mixed json representation of file
+     * @throws InvalidJsonFileException when was invalid json.
+     */
     public function getJsonContent()
     {
         $json = json_decode($this->getContents());

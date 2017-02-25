@@ -33,7 +33,7 @@ class NameValidator
         if(preg_match(self::valid_regex, $string)
             || preg_match(self::start_regex, $string))
         {
-            //TODO throw exception
+            throw new InvalidJsonSubstitutionException("Invalid JSON after substitution");
         }
         return $string;
     }

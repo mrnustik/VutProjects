@@ -8,9 +8,19 @@
  */
 
 
+/**
+ * Class File
+ * File wrapper. Wrapps functionalitz of the file.
+ */
 class File
 {
 
+    /**
+     * File constructor.
+     * @param $path string file path
+     * @param $mode string file opening mode
+     * @throws BadFilePermissionException when was unable to open given file.
+     */
     function __construct($path, $mode)
     {
         $this->path = $path;
@@ -23,30 +33,37 @@ class File
         fclose($output_file);
     }
 
+    /**
+     * @var string file path
+     */
     private $path;
 
+    /**
+     * @return string path {@see $path}
+     */
     public function getPath()
     {
         return $this->path;
     }
 
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
 
+    /**
+     * @var string file mode
+     */
     private $mode;
 
+    /**
+     * @return string file mode
+     */
     public function getMode()
     {
         return $this->mode;
     }
 
-    public function setMode($mode)
-    {
-        $this->mode = $mode;
-    }
-
+    /**
+     * Method for retrieving file contents.
+     * @return string file contents
+     */
     function getContents()
     {
         $file = @ fopen($this->getPath(), $this->getMode());
@@ -60,10 +77,7 @@ class File
             fclose($file);
             return $content;
         }
-        else
-        {
-            throw new FileNotFoundException("File: ".$this->path." was not found.");
-        }
+        return "";
     }
 
 }

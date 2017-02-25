@@ -30,9 +30,25 @@ try
         exit(0);
     }
 
-    $json_file = new JsonFile($arguments->getInputFile(), 'r');
+    try
+    {
+        $json_file = new JsonFile($arguments->getInputFile(), 'r');
+    }
+    catch (BadFilePermissionException $exception)
+    {
+        Logger::LogError($exception->getMessage());
+        exit(2);
+    }
 
-    $xml_file = new XMLFile($arguments->getOutputFile(), 'w');
+    try
+    {
+        $xml_file = new XMLFile($arguments->getOutputFile(), 'w');
+    }
+    catch (BadFilePermissionException $exception)
+    {
+        Logger::LogError($exception->getMessage());
+        exit(3);
+    }
 
     $parser = new JsonToXMLParser($xml_file);
 
@@ -42,16 +58,6 @@ catch(InvalidCommandLineArgumentException $exception)
 {
     Logger::LogError($exception->getMessage());
     exit($exception->getCode());
-}
-catch (FileNotFoundException $exception)
-{
-    Logger::LogError($exception->getMessage());
-    exit(2);
-}
-catch(BadFilePermissionException $exception)
-{
-    Logger::LogError($exception->getMessage());
-    exit(3);
 }
 catch(InvalidJsonFileException $exception)
 {

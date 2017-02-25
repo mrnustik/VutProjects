@@ -1,14 +1,6 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: mrnda
- * Date: 19/02/2017
- * Time: 21:57
- */
-
-
-/**
  * Class File
  * File wrapper. Wrapps functionalitz of the file.
  */

@@ -1,25 +1,34 @@
 <?php
 
+
 /**
- * Created by PhpStorm.
- * User: mrnda
- * Date: 19/02/2017
- * Time: 22:29
+ * Class JsonToXMLParser
+ * Class used for parsing JSON objects into XML.
  */
-
-
-
 class JsonToXMLParser
 {
 
+    /**
+     * @var XMLWriter XMLWriter used for writing into the XML file.
+     */
     private $xml_writer;
 
+    /**
+     * JsonToXMLParser constructor.
+     * Creates the parser that outputs into given file.
+     * @param XMLFile $output_file file used for writing the XML output.
+     */
     function __construct(XMLFile $output_file)
     {
         $this->xml_writer = $output_file->getXmlWriter();
         $this->xml_writer->setIndent(true);
     }
 
+    /**
+     * Parses the JSON into given file via {@see $xml_writer}
+     * @param $json mixed
+     * @throws InvalidJsonFileException when the file does not start with array or object.
+     */
     public function parse($json)
     {
         if(is_object($json) || is_array($json))
@@ -47,6 +56,11 @@ class JsonToXMLParser
         }
     }
 
+    /**
+     * Parses the array object into XML notation.
+     * Uses {@see $xml_writer}
+     * @param $json array array to be parsed
+     */
     private function parseArray($json)
     {
         $arguments = Arguments::getInstance();
@@ -69,6 +83,11 @@ class JsonToXMLParser
         $this->xml_writer->endElement();
     }
 
+    /**
+     * Parses object into XML notation.
+     * Uses {@see $xml_writer}
+     * @param $json object object to be parsed
+     */
     private function parseObject($json)
     {
         foreach ($json as $key => $value)
@@ -79,6 +98,10 @@ class JsonToXMLParser
         }
     }
 
+    /**
+     * Parses given value into XML notation.
+     * @param $json mixed
+     */
     private function parseValue($json)
     {
         if(is_object($json))
@@ -110,7 +133,9 @@ class JsonToXMLParser
     }
 
     /**
-     * @param $json
+     * Parses literal into XML notation.
+     * Uses {@see $xml_writer}
+     * @param $json mixed true, false or null
      */
     private function parseLiteral($json)
     {
@@ -139,7 +164,9 @@ class JsonToXMLParser
     }
 
     /**
-     * @param $json
+     * Parses string into XML notation.
+     * Uses {@see $xml_writer}
+     * @param $json string string to be parsed
      */
     private function parseString($json)
     {
@@ -160,7 +187,9 @@ class JsonToXMLParser
     }
 
     /**
-     * @param $json
+     * Parses number into XML notation.
+     * Uses {@see $xml_writer}
+     * @param $json mixed integer or real to be parsed
      */
     private function parseNumber($json)
     {

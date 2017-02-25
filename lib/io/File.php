@@ -15,7 +15,7 @@ class File
     {
         $this->path = $path;
         $this->mode = $mode;
-        $output_file = fopen($path, $mode);
+        $output_file =  @ fopen($path, $mode);
         if($output_file == false)
         {
             throw new BadFilePermissionException("Can't open file $path for mode ".$mode.".");

@@ -32,12 +32,12 @@ class JsonToXMLParser
             if($arguments->getRootElement() != null)
             {
                 $this->xml_writer->startElement($arguments->getRootElement());
-                $this->parse_value($json);
+                $this->parseValue($json);
                 $this->xml_writer->endElement();
             }
             else
             {
-                $this->parse_value($json);
+                $this->parseValue($json);
             }
 
         }
@@ -47,7 +47,7 @@ class JsonToXMLParser
         }
     }
 
-    private function parse_array($json)
+    private function parseArray($json)
     {
         $arguments = Arguments::getInstance();
         $this->xml_writer->startElement($arguments->getArrayName());
@@ -63,45 +63,45 @@ class JsonToXMLParser
             {
                 $this->xml_writer->writeAttribute("index", $index++);
             }
-            $this->parse_value($value);
+            $this->parseValue($value);
             $this->xml_writer->endElement();
         }
         $this->xml_writer->endElement();
     }
 
-    private function parse_object($json)
+    private function parseObject($json)
     {
         foreach ($json as $key => $value)
         {
             $this->xml_writer->startElement(NameValidator::invalidateAndReplace($key));
-            $this->parse_value($value);
+            $this->parseValue($value);
             $this->xml_writer->endElement();
         }
     }
 
-    private function parse_value($json)
+    private function parseValue($json)
     {
         if(is_object($json))
         {
-            $this->parse_object($json);
+            $this->parseObject($json);
         }
         elseif(is_array($json))
         {
-            $this->parse_array($json);
+            $this->parseArray($json);
         }
         elseif(is_int($json) || is_float($json))
         {
-            $this->parse_number($json);
+            $this->parseNumber($json);
         }
         elseif (is_string($json))
         {
-            $this->parse_string($json);
+            $this->parseString($json);
         }
         elseif($json === false
                     || $json === true
                     || $json == null)
         {
-            $this->parse_literal($json);
+            $this->parseLiteral($json);
         }
         else
         {
@@ -112,7 +112,7 @@ class JsonToXMLParser
     /**
      * @param $json
      */
-    private function parse_literal($json)
+    private function parseLiteral($json)
     {
         $arguments = Arguments::getInstance();
         if ($arguments->getFlagTypes()) {
@@ -141,7 +141,7 @@ class JsonToXMLParser
     /**
      * @param $json
      */
-    private function parse_string($json)
+    private function parseString($json)
     {
         $arguments = Arguments::getInstance();
         if ($arguments->getFlagTypes()) {
@@ -162,7 +162,7 @@ class JsonToXMLParser
     /**
      * @param $json
      */
-    private function parse_number($json)
+    private function parseNumber($json)
     {
         $arguments = Arguments::getInstance();
         if ($arguments->getFlagTypes()) {

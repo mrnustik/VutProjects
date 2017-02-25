@@ -8,11 +8,6 @@
  */
 class XMLFile extends File
 {
-    function __construct($path, $mode)
-    {
-        parent::__construct($path, $mode);
-
-    }
 
 
     function getXmlWriter()

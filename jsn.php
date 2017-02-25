@@ -22,14 +22,17 @@ include_once "lib/io/xml/NameValidator.php";
 
 try
 {
+    //retrieve arguments
     $arguments = ArgumentsParser::parseArguments($argc);
 
+    //check if help flag is set
     if($arguments->getFlagHelp() == true)
     {
         Logger::printHelp();
         exit(0);
     }
 
+    //try to find input file
     try
     {
         $json_file = new JsonFile($arguments->getInputFile(), 'r');
@@ -40,6 +43,7 @@ try
         exit(2);
     }
 
+    //try to open output file
     try
     {
         $xml_file = new XMLFile($arguments->getOutputFile(), 'w');
@@ -50,9 +54,12 @@ try
         exit(3);
     }
 
+    //initialize parser
     $parser = new JsonToXMLParser($xml_file);
 
+    //begin the parsing
     $parser->parse($json_file->getJsonContent());
+
 }
 catch(InvalidCommandLineArgumentException $exception)
 {

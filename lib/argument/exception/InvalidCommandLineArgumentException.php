@@ -1,15 +1,18 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: mrnda
- * Date: 20/02/2017
- * Time: 13:46
+ * Class InvalidCommandLineArgumentException
+ * Exception that is used to represent invalid arguments of the script.
  */
 class InvalidCommandLineArgumentException extends Exception
 {
-    public function __construct($message = "", $code = 1, Exception $previous = null)
+    /**
+     * InvalidCommandLineArgumentException constructor. Creates the exception.
+     * @param string $message Message that will be displayed in the Logger.
+     * @param int $code Code of the issue that occured (default 1)
+     */
+    public function __construct($message = "", $code = 1)
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $code, null);
     }
 }

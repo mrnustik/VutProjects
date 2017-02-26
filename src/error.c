@@ -3,3 +3,10 @@
 //
 
 #include "error.h"
+
+
+void exitError(const char* message, int code)
+{
+    fprintf(stderr, "Error: %s\n", message);
+    exit(code);
+}

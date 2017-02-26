@@ -30,6 +30,26 @@ public class Card {
         this.mValue = value;
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Card)
+        {
+            Card card = (Card) obj;
+            if(card.color() == color()
+                    && value() == card.value())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return mColor.hashCode() + mValue;
+    }
+
     public Card.Color color()
     {
         return mColor;

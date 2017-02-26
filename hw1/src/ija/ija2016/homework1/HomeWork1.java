@@ -67,7 +67,7 @@ public class HomeWork1 {
             assert testCards.remove(c) : "Spravna karta";
         }
         
-        assert testCards.isEmpty() : "Testova sada musi byt prazdna";       
+        assert testCards.isEmpty() : "Testova sada musi byt prazdna";
     }
 
     /**

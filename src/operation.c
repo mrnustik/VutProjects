@@ -35,3 +35,20 @@ OperationType parseOperation(char* opString)
         return INVALID;
     }
 }
+
+const char* operationToHTTPMethod(OperationType operationType)
+{
+    switch (operationType)
+    {
+        case DELETE:
+        case REMOVE_DIR:
+            return "DELETE";
+        case DOWNLOAD:
+        case LIST:
+            return "GET";
+        case MAKE_DIR:
+        case UPLOAD:
+            return "PUT";
+    }
+    return "";
+}

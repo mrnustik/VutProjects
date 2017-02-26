@@ -19,4 +19,6 @@ typedef enum {
 
 OperationType parseOperation(char* opString);
 
+const char* operationToHTTPMethod(OperationType operation);
+
 #endif //OPERATION_H

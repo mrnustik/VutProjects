@@ -1,8 +1,10 @@
+#define CLIENT
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "src/operation.h"
 #include "src/memory.h"
-
+#include "src/error.h"
 
 typedef struct {
     OperationType operation;
@@ -49,7 +51,7 @@ int main(int argc, char* argv[])
 
     if(valid_args < 0)
     {
-        return 1;
+        exitError("Program has been started with invalid arguments", CLIENT_ERROR_INVALID_ARGUMENTS);
     }
 
     memoryDestroy();

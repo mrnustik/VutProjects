@@ -1,7 +1,11 @@
+#define SERVER
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "src/error.h"
 #include "src/memory.h"
+
 
 typedef struct {
     char* rootFolder;
@@ -31,6 +35,10 @@ int parseArguments(int argc, char* argv[], tArguments** pArguments)
     (*pArguments)->port = 80;
 
     int result = 0;
+    if(argc == 0)
+    {
+
+    }
     if(argc > 2)
     {
         result = readParameter(argv[1], argv[2], pArguments);
@@ -38,6 +46,10 @@ int parseArguments(int argc, char* argv[], tArguments** pArguments)
     if(argc == 4)
     {
         result = readParameter(argv[3], argv[4], pArguments);
+    }
+    else
+    {
+        result = -1;
     }
     return result;
 }
@@ -51,8 +63,9 @@ int main(int argc, char* argv[])
     int valid_args = parseArguments(argc, argv, &arguments);
     if(valid_args < 0)
     {
-        return -1;
+        exitError("Program has been started with invalid arguments", SERVER_ERROR_INVALID_ARGUMENTS);
     }
+
 
 
     memoryDestroy();

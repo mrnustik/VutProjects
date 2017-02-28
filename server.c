@@ -3,8 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
 #include "src/error.h"
 #include "src/memory.h"
+#include "src/logger.h"
 
 
 typedef struct {
@@ -16,10 +19,12 @@ int readParameter(char* flag, char* value, tArguments **pArguments) {
     if(strcmp(flag, "-r") == 0)
     {
         (*pArguments)->rootFolder = value;
+        logInfo("Arguments root folder", value);
     }
     else if(strcmp(flag, "-p") == 0)
     {
         (*pArguments)->port = atoi(value);
+        logInfo("Arguments port", value);
     }
     else
     {
@@ -36,9 +41,7 @@ int parseArguments(int argc, char* argv[], tArguments** pArguments)
 
     int result = 0;
     if(argc == 1)
-    {
-
-    }
+    {}
     else if(argc == 3)
     {
         readParameter(argv[1], argv[2], pArguments);
@@ -67,8 +70,17 @@ int main(int argc, char* argv[])
         exitError("Program has been started with invalid arguments", SERVER_ERROR_INVALID_ARGUMENTS);
     }
 
+    logInfo("server.c", "Opening server socket...");
+    int server_socket = socket(AF_INET, SOCK_STREAM, 0);
+    if(server_socket < 0)
+    {
+        exitError("Unable to open server socket", EXIT_FAILURE);
+    }
+    logInfo("server.c", "Server socket opened.");
 
 
+    logInfo("server.c", "Closing server socket.");
+    close(server_socket);
     memoryDestroy();
 	return 0;
 }

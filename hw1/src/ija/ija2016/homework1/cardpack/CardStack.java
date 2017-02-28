@@ -57,7 +57,7 @@ public class CardStack {
 
     public CardStack takeFrom(Card card)
     {
-        int index = mCards.indexOf(card);
+        int index = mCards.lastIndexOf(card);
         if(index > 0)
         {
             CardStack stack = new CardStack(mCards.size() - index);

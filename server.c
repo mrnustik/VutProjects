@@ -35,17 +35,18 @@ int parseArguments(int argc, char* argv[], tArguments** pArguments)
     (*pArguments)->port = 80;
 
     int result = 0;
-    if(argc == 0)
+    if(argc == 1)
     {
 
     }
-    if(argc > 2)
+    else if(argc == 3)
     {
-        result = readParameter(argv[1], argv[2], pArguments);
+        readParameter(argv[1], argv[2], pArguments);
     }
-    if(argc == 4)
+    else if(argc == 5)
     {
-        result = readParameter(argv[3], argv[4], pArguments);
+        readParameter(argv[1], argv[2], pArguments);
+        readParameter(argv[3], argv[4], pArguments);
     }
     else
     {

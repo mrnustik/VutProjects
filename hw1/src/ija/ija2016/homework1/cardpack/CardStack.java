@@ -46,7 +46,7 @@ public class CardStack {
         if(!isEmpty())
         {
             Card card = mCards.get(mCards.size() - 1);
-            mCards.remove(card);
+            mCards.remove(mCards.size()-1);
             return card;
         }
         else

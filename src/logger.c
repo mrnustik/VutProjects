@@ -8,17 +8,17 @@
 void logInfo(const char* category, const char* message)
 {
     if(DEBUG)
-        printf("INFO %s: %s", category, message);
+        printf("INFO %s: %s\n", category, message);
 }
 
 void logWarning(const char* category, const char* message)
 {
     if(DEBUG)
-        printf("WARNING %s: %s", category, message);
+        printf("WARNING %s: %s\n", category, message);
 }
 
 void logError(const char* category, const char* message)
 {
     if(DEBUG)
-        printf("ERROR %s: %s", category, message);
+        printf("ERROR %s: %s\n", category, message);
 }

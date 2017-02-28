@@ -36,8 +36,8 @@ public class Card {
         if(obj instanceof Card)
         {
             Card card = (Card) obj;
-            if(card.color() == color()
-                    && value() == card.value())
+            if(card.color() == this.color()
+                    && card.value() == this.value())
             {
                 return true;
             }
@@ -47,7 +47,7 @@ public class Card {
 
     @Override
     public int hashCode() {
-        return mColor.hashCode() + mValue;
+        return this.color().hashCode() + this.value();
     }
 
     public Card.Color color()
@@ -64,7 +64,7 @@ public class Card {
     public String toString() {
         if(value() != 1 && value() < 11)
         {
-            return String.format("%d(%s)", value(), mColor.toString());
+            return String.format("%d(%s)", this.value(), this.color());
         }
         else
         {
@@ -84,7 +84,7 @@ public class Card {
                     shortcut = 'K';
                     break;
             }
-            return String.format("%c(%s)", shortcut, mColor.toString());
+            return String.format("%c(%s)", shortcut, this.color());
         }
     }
 }

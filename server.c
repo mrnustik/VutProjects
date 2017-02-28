@@ -5,6 +5,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <netinet/in.h>
 #include "src/error.h"
 #include "src/memory.h"
 #include "src/logger.h"
@@ -77,6 +78,19 @@ int main(int argc, char* argv[])
         exitError("Unable to open server socket", EXIT_FAILURE);
     }
     logInfo("server.c", "Server socket opened.");
+
+    struct sockaddr_in socket_address;
+    memset(&socket_address, 0, sizeof(socket_address));
+    socket_address.sin_family = AF_INET;
+    socket_address.sin_addr.s_addr = INADDR_ANY;
+    socket_address.sin_port = htons(arguments->port);
+
+    logInfo("server.c", "Binding server socket.");
+    if(bind(server_socket, (struct sockaddr*) &socket_address, sizeof(socket_address)) != 0)
+    {
+        exitError("Unable to bind server socket", EXIT_FAILURE);
+    }
+    logInfo("server.c", "Server socket bound.");
 
 
     logInfo("server.c", "Closing server socket.");

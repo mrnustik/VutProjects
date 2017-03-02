@@ -5,9 +5,9 @@
 #ifndef HTTP_H
 #define HTTP_H
 
-
-#include "memory.h"
 #include "string.h"
+#include "memory.h"
+#include "logger.h"
 
 #include <time.h>
 
@@ -16,7 +16,8 @@ enum HttpMethod
 {
     GET,
     PUT,
-    DELETE
+    DELETE,
+    UNDEFINED
 };
 
 
@@ -41,8 +42,8 @@ typedef struct HttpResponse
 
 } HttpResponse;
 
-HttpRequest* httpFromRequestString(const char* request);
-HttpResponse httpFromResponseString(const char* response);
+HttpRequest* httpFromRequestString(tString* request);
+HttpResponse* httpFromResponseString(tString* response);
 
 
 #endif //HTTP_H

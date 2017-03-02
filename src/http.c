@@ -6,7 +6,7 @@
 #include "logger.h"
 
 
-HttpRequest* httpFromRequestString(char* requestString)
+HttpRequest* httpFromRequestString(tString* string)
 {
     HttpRequest* request = mMalloc(sizeof(HttpRequest));
 
@@ -16,21 +16,32 @@ HttpRequest* httpFromRequestString(char* requestString)
         return NULL;
     }
 
-    if(substringPosition(requestString, "GET") == 0)
+    int position = 0;
+
+    logInfo("HTTP parsing:","Parsing started");
+    if(stringFind(string, "GET") == 0)
     {
+        logInfo("HTTP parsing:","Found GET method");
         request->method = GET;
+        position += 3;
     }
-    else if(substringPosition(requestString, "PUT") == 0)
+    if(stringFind(string, "PUT") == 0)
     {
+        logInfo("HTTP parsing:","Found PUT method");
         request->method = PUT;
+        position += 3;
     }
-    else if(substringPosition(requestString, "DELETE") == 0)
+    else if(stringFind(string, "DELETE") == 0)
     {
+        logInfo("HTTP parsing:","Found DELETE method");
         request->method = DELETE;
+        position += 6;
     }
     else
     {
         logWarning("HTTP parsing", "Unable to parse HTTP method.");
         return NULL;
     }
+
+
 }

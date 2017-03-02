@@ -46,7 +46,7 @@ void stringAppend(tString* string, char* data)
 
 int stringFind(tString* string, const char* find)
 {
-
+    return substringPosition(string->pointer, find);
 }
 
 void stringErase(tString* string)

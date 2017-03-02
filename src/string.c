@@ -21,6 +21,7 @@ tString* stringInit()
         logWarning("String", "Failed memory allocation");
         exitError("Unable to allocate memory", EXIT_FAILURE);
     }
+    bzero(string->pointer, STRING_INIT_SIZE);
     string->allocated = STRING_INIT_SIZE;
     string->used = 0;
     return string;
@@ -29,7 +30,18 @@ tString* stringInit()
 
 void stringAppend(tString* string, char* data)
 {
-
+    int dataLength = strlen(data);
+    if(dataLength + string->used > string->allocated)
+    {
+        string->pointer = mRealloc(string->pointer, string->allocated + dataLength + STRING_INIT_SIZE);
+        if(string->pointer == NULL)
+        {
+            logWarning("String", "Failed memory allocation");
+            exitError("Unable to allocate memory", EXIT_FAILURE);
+        }
+    }
+    strcat(string->pointer, data);
+    string->used += dataLength;
 }
 
 int stringFind(tString* string, const char* find)

@@ -6,6 +6,7 @@
 #define STRING_H
 
 #include <string.h>
+#include <memory.h>
 
 #define STRING_INIT_SIZE 256
 

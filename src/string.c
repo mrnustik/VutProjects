@@ -49,6 +49,12 @@ int stringFind(tString* string, const char* find)
     return substringPosition(string->pointer, find);
 }
 
+char* stringSubstring(tString* strings, int position)
+{
+
+}
+
+
 void stringErase(tString* string)
 {
     bzero(string->pointer, string->allocated);

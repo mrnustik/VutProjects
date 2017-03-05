@@ -20,6 +20,7 @@ tString* stringInit();
 void stringAppend(tString* string, char* data);
 void stringErase(tString* string);
 int stringFind(tString* string, const char* find);
+char* stringSubstring(tString* string, int position);
 int substringPosition(char* string, const char* substring);
 
 #endif //FTREST_STRING_H

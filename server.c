@@ -111,27 +111,33 @@ int main(int argc, char *argv[])
         {
 
             tString* pom = stringInit();
-            tString* header;
+            tString* header = stringInit();
             tString* body = stringInit();
             logInfo("Networking", "Client connected");
             logInfo("Networking", "Received incoming socket");
             while(true) {
                 int position = -1;
                 int n = read(incoming_socket, buffer, 1024);
-                if(n < 0)
+                if(n <= 0)
                 {
                     logError("Networking","Unable to read.");
                     close(incoming_socket);
                     break;
                 }
                 stringAppend(pom, buffer);
-                bzero(buffer, 1024);
-                if ((position = stringFind(pom, "\r\n\r\n")) > 0) {
+                if ((position = stringFind(pom, "\r\n\r\n")) > 0
+                        && header->used == 0) {
                     header = stringSubstring(pom,0 ,  position + 4);
-                    logInfo("Header\n", header->pointer);
-                    close(incoming_socket);
-                    break;
+                    stringErase(pom);
                 }
+
+                if(header->used > 0)
+                {
+                    stringAppend(body, buffer);
+                    stringErase(pom);
+                }
+                bzero(buffer, 1024);
+
             }
         }
         else

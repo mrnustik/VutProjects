@@ -15,13 +15,12 @@ tString* stringInit()
         logWarning("String", "Failed memory allocation");
         exitError("Unable to allocate memory", EXIT_FAILURE);
     }
-    string->pointer = mMalloc(sizeof(STRING_INIT_SIZE));
+    string->pointer = mMalloc(sizeof(char) * STRING_INIT_SIZE);
     if(string->pointer == NULL)
     {
         logWarning("String", "Failed memory allocation");
         exitError("Unable to allocate memory", EXIT_FAILURE);
     }
-    bzero(string->pointer, STRING_INIT_SIZE);
     string->allocated = STRING_INIT_SIZE;
     string->used = 0;
     return string;
@@ -49,9 +48,17 @@ int stringFind(tString* string, const char* find)
     return substringPosition(string->pointer, find);
 }
 
-char* stringSubstring(tString* strings, int position)
+tString* stringSubstring(tString* src, int from, int to)
 {
-
+    tString* ret = stringInit();
+    if(ret->allocated < to - from)
+    {
+        ret->pointer = mRealloc(ret->pointer, sizeof(char) * (ret->allocated + to - from + STRING_INIT_SIZE));
+        ret->allocated += to - from + STRING_INIT_SIZE;
+    }
+    strncpy(ret->pointer, src->pointer + from, to - from);
+    ret->used = to - from;
+    return ret;
 }
 
 
@@ -67,5 +74,5 @@ int substringPosition(char* string, const char* substring)
     {
         return -1;
     }
-    return (int) (string - substringPointer);
+    return (int) (substringPointer - string);
 }

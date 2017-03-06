@@ -14,17 +14,17 @@ typedef struct sAllocUnit{
 }tAllocUnit;
 
 typedef struct {
-    tAllocUnit* first;
-    tAllocUnit* last;
+    tAllocUnit* First;
+    tAllocUnit* Last;
 } tGlobalMemory;
 
 tGlobalMemory* memory;
 
 void memoryInit();
 
-void* mMalloc(long size);
+void* mMalloc(unsigned long size);
 
-void* mRealloc(void* oldPointer, long size);
+void* mRealloc(void* oldPointer, unsigned long size);
 
 void memoryDestroy();
 

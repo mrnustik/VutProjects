@@ -1,57 +1,71 @@
-//
-// Created by Michal Mrnustik on 23/02/2017.
-//
-
 #include "memory.h"
+
+tGlobalMemory *globalMemory; //globalMemory memory struct
+
+//================================================================================
+// Memory initialization
+//================================================================================
+
 
 void memoryInit()
 {
-    memory = malloc(sizeof(tGlobalMemory));
-    memory->first = NULL;
-    memory->last = NULL;
+    globalMemory = malloc(sizeof(tGlobalMemory));
+    globalMemory->First = NULL;
+    globalMemory->Last = NULL;
 }
 
-void* mMalloc(long size)
+//================================================================================
+// Memory request calls
+//================================================================================
+
+
+void* mMalloc(unsigned long size)
 {
-    tAllocUnit* unit = malloc(sizeof(tAllocUnit));
-    unit->pointer = malloc(sizeof(size));
-    unit->size = size;
-    unit->next = NULL;
-    if(memory->first == NULL && memory->last == NULL)
+
+    if(globalMemory->Last == NULL && globalMemory->First == NULL)
     {
-        memory->first = unit;
-        memory->last = unit;
+        globalMemory->First = globalMemory->Last = malloc(sizeof(tAllocUnit));
     }
     else
     {
-        memory->last->next = unit;
-        memory->last = unit;
+        globalMemory->Last->next = malloc(sizeof(tAllocUnit));
+        globalMemory->Last = globalMemory->Last->next;
     }
-    return unit->pointer;
+    globalMemory->Last->next = NULL;
+    globalMemory->Last->pointer = malloc(size);
+    return globalMemory->Last->pointer; //return allocated pointer or null if not allocated
 }
 
-void* mRealloc(void* pointer, long size)
+void* mRealloc(void* oldPointer, unsigned long size)
 {
-    tAllocUnit* unit = memory->first;
-    while(unit->pointer != pointer)
+    tAllocUnit *unit = globalMemory->First;
+    while(unit != NULL)
     {
+        if(unit->pointer == oldPointer)
+        {
+            unit->pointer = realloc(unit->pointer, size);
+            return unit->pointer;
+        }
         unit = unit->next;
-        if(unit == NULL) return NULL;
     }
-    unit->pointer = realloc(unit->pointer, size);
-    unit->size = size;
-    return unit->pointer;
+    return NULL;
 }
+
+
 
 void memoryDestroy()
 {
-    tAllocUnit* unit = memory->first;
+    tAllocUnit *unit = globalMemory->First;
+    tAllocUnit *tmp;
     while(unit != NULL)
     {
-        tAllocUnit* tmp = unit;
-        unit = tmp->next;
-        free(tmp->pointer);
+        if(unit->pointer != NULL)
+        {
+            free(unit->pointer);
+        }
+
+        tmp = unit;
+        unit = unit->next;
         free(tmp);
     }
-    free(memory);
 }

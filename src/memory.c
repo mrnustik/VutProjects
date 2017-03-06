@@ -68,4 +68,5 @@ void memoryDestroy()
         unit = unit->next;
         free(tmp);
     }
+    free(globalMemory);
 }

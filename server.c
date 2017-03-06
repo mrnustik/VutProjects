@@ -109,26 +109,32 @@ int main(int argc, char *argv[])
         int incoming_socket = accept(server_socket, (struct sockaddr *) &client_addr, &clien_address_size);
         if (incoming_socket > 0)
         {
+
+            tString* pom = stringInit();
+            tString* header;
+            tString* body = stringInit();
             logInfo("Networking", "Client connected");
             logInfo("Networking", "Received incoming socket");
-            while (true)
-            {
-                bzero(buffer, 1024);
-                int bytes = read(incoming_socket, buffer, 1024);
-                if (bytes < 0)
+            while(true) {
+                int position = -1;
+                int n = read(incoming_socket, buffer, 1024);
+                if(n < 0)
                 {
+                    logError("Networking","Unable to read.");
                     close(incoming_socket);
                     break;
-                } else if (bytes == 0)
-                {
-                    //whole file read
-                } else
-                {
-                    bytesRead += bytes;
-
+                }
+                stringAppend(pom, buffer);
+                bzero(buffer, 1024);
+                if ((position = stringFind(pom, "\r\n\r\n")) > 0) {
+                    header = stringSubstring(pom,0 ,  position + 4);
+                    logInfo("Header\n", header->pointer);
+                    close(incoming_socket);
+                    break;
                 }
             }
-        } else
+        }
+        else
         {
             exitError("Unable to accept on server_socket", EXIT_FAILURE);
         }

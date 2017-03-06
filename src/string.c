@@ -32,7 +32,7 @@ void stringAppend(tString* string, char* data)
     int dataLength = strlen(data);
     if(dataLength + string->used > string->allocated)
     {
-        string->pointer = mRealloc(string->pointer, string->allocated + dataLength + STRING_INIT_SIZE);
+        string->pointer = mRealloc(string->pointer, sizeof(char)*(string->allocated + dataLength + STRING_INIT_SIZE));
         if(string->pointer == NULL)
         {
             logWarning("String", "Failed memory allocation");
@@ -65,6 +65,7 @@ tString* stringSubstring(tString* src, int from, int to)
 void stringErase(tString* string)
 {
     bzero(string->pointer, string->allocated);
+    string->used = 0;
 }
 
 int substringPosition(char* string, const char* substring)

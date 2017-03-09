@@ -8,7 +8,7 @@ public class Card {
         CLUBS,
         DIAMONDS,
         HEARTS,
-        SPADES
+        SPADES;
 
         boolean similarColorTo(Card.Color color)
         {
@@ -28,5 +28,47 @@ public class Card {
             return false;
         }
     }
+
+    private Color mColor;
+    private int mValue;
+    private boolean mIsFaceUp = false;
+
+    public Card(Color color, int value)
+    {
+        this.mColor = color;
+        this.mValue = value;
+    }
+
+    public Color color()
+    {
+        return mColor;
+    }
+
+    public int value()
+    {
+        return mValue;
+    }
+
+    public boolean isTurnedFaceUp()
+    {
+        return mIsFaceUp;
+    }
+
+    public void turnFaceUp()
+    {
+        mIsFaceUp = true;
+    }
+
+    public boolean similarColorTo(Card card)
+    {
+        return color().similarColorTo(card.color());
+    }
+
+    public int compareValue(Card card)
+    {
+        return value() - card.value();
+    }
+
+
 
 }

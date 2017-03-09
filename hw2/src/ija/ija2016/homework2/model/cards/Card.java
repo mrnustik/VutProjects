@@ -3,14 +3,14 @@ package ija.ija2016.homework2.model.cards;
 /**
  * Created by Mrnda on 3/9/2017.
  */
-public class Card {
+public interface Card {
     public enum Color {
         CLUBS,
         DIAMONDS,
         HEARTS,
         SPADES;
 
-        boolean similarColorTo(Card.Color color)
+        public boolean similarColorTo(Card.Color color)
         {
             switch(this)
             {
@@ -29,46 +29,18 @@ public class Card {
         }
     }
 
-    private Color mColor;
-    private int mValue;
-    private boolean mIsFaceUp = false;
 
-    public Card(Color color, int value)
-    {
-        this.mColor = color;
-        this.mValue = value;
-    }
+    Color color();
 
-    public Color color()
-    {
-        return mColor;
-    }
+    int value();
 
-    public int value()
-    {
-        return mValue;
-    }
+    boolean isTurnedFaceUp();
 
-    public boolean isTurnedFaceUp()
-    {
-        return mIsFaceUp;
-    }
+    boolean turnFaceUp();
 
-    public void turnFaceUp()
-    {
-        mIsFaceUp = true;
-    }
+    boolean similarColorTo(Card card);
 
-    public boolean similarColorTo(Card card)
-    {
-        return color().similarColorTo(card.color());
-    }
-
-    public int compareValue(Card card)
-    {
-        return value() - card.value();
-    }
-
+    int compareValue(Card card);
 
 
 }

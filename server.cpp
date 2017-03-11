@@ -9,6 +9,7 @@
 #include "Library/Memory.h"
 #include "Library/Logger.h"
 #include "Library/Http.h"
+#include "Library/Files.h"
 
 typedef struct
 {
@@ -182,7 +183,7 @@ int main(int argc, char *argv[])
                     //err = listDirectory(arguments->rootFolder, request);
                     break;
                 case FILE_DELETE:
-                    //err = deleteFile(arguments->rootFolder, request);
+                    err = deleteFile(arguments->rootFolder, request);
                     break;
                 case FILE_GET:
                     //err = getFile(request);

@@ -6,7 +6,13 @@
 #define FILES_H
 
 #include <string>
+#include <unistd.h>
+#include <errno.h>
+#include "Http.h"
+
 using namespace std;
+
+int deleteFile(string rootFolder, HttpRequest* request);
 
 string getFileContentLength(string path);
 

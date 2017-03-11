@@ -88,11 +88,8 @@ HttpRequest *httpRequestFromString(string str)
 
     request->date = getParameterValue(str, "Date: ");
     request->hostName = getParameterValue(str, "Host: ");
-    if(request->hostName.empty()) return NULL;
     request->accept = getParameterValue(str, "Accept: ");
-    if(request->accept.empty()) return NULL;
     request->acceptEncoding = getParameterValue(str, "Accept-Encoding: ");
-
     string contentLength = getParameterValue(str, "Content-Length: ");
     try
     {

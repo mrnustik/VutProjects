@@ -27,6 +27,7 @@ string buildHttpRequest(tArguments* arguments)
     string typeQuery = operationToTypeQuery(arguments->operation);
 
     request += " " + arguments->remotePath + typeQuery + " HTTP/1.1\r\n";
+    request += "Host: "+ arguments->hostname +"\r\n"
     request += "Accept: " + accept + "\r\n";
     request += "Accept-Encoding: identity\r\n";
     if(arguments->operation == DIR_MAKE || arguments->operation == FILE_UPLOAD)

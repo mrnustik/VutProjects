@@ -156,6 +156,7 @@ int main(int argc, char *argv[])
                         if(request == NULL)
                         {
                             err = E_INVALID;
+                            break;
                         }
                         else
                         {

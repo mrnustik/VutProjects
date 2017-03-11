@@ -3,16 +3,22 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <dirent.h>
 
+#include "Library/Directories.h"
 #include "Library/Memory.h"
 #include "Library/Logger.h"
-
+#include "Library/Http.h"
 
 typedef struct
 {
     string rootFolder;
     int port;
 } tArguments;
+
+#define E_OK            200
+#define E_INVALID       400
+#define E_NOT_FOUND     404
 
 int readParameter(char *flag, char *value, tArguments **pArguments)
 {
@@ -34,7 +40,7 @@ int readParameter(char *flag, char *value, tArguments **pArguments)
 int parseArguments(int argc, char *argv[], tArguments **pArguments)
 {
     (*pArguments) = (tArguments*) mMalloc(sizeof(tArguments));
-    (*pArguments)->rootFolder = ".";
+    (*pArguments)->rootFolder = getCurrentDirectory();
     (*pArguments)->port = 80;
 
     int result = 0;
@@ -51,6 +57,18 @@ int parseArguments(int argc, char *argv[], tArguments **pArguments)
     {
         result = -1;
     }
+
+    DIR* dir = opendir((*pArguments)->rootFolder.c_str());
+    if (dir)
+    {
+        closedir(dir);
+    }
+    else
+    {
+        logError("Directory", "Unable to open directory.");
+        return -1;
+    }
+
     return result;
 }
 
@@ -114,15 +132,65 @@ int main(int argc, char *argv[])
             char buffer[1024];
             int n;
 
-            string message = string();
-
+            string body = string();
+            string header = string();
+            string tmp = string();
+            HttpRequest* request = NULL;
+            int err = 0;
+            int contentLength = 0;
+            int contentRead = 0;
             while((n = read(incomingSocket, buffer, 1024))> 0)
-                message.append(buffer, n);
-
-
+            {    
+                tmp.append(buffer, n);
+                if(header.size() == 0)
+                {
+                    if(tmp.find("\r\n\r\n") != string::npos)
+                    {
+                        int headerIndex = tmp.find("\r\n\r\n");
+                        header = tmp.substr(0, headerIndex + 4);
+                        body = tmp.substr(headerIndex + 4);
+                        contentRead += body.size();
+                        tmp.erase();
+                        request = httpRequestFromString(header);
+                        if(request == NULL)
+                        {
+                            err = E_INVALID;
+                        }
+                        else
+                        {
+                            contentLength = request->contentLength;
+                        }
+                    }
+                }
+                else 
+                {
+                    contentRead += n;
+                    body.append(buffer);
+                }
+                if(contentRead == contentLength) break;
+            }
             
-
-            //TODO build response.
+            switch(request->operation)
+            {
+                case DIR_MAKE:
+                    err = createDirectory(arguments->rootFolder, request);
+                    break;
+                case DIR_REMOVE:
+                    err = deleteDirectory(arguments->rootFolder, request);
+                    break;
+                case DIR_LIST:
+                    //err = listDirectory(arguments->rootFolder, request);
+                    break;
+                case FILE_DELETE:
+                    //err = deleteFile(arguments->rootFolder, request);
+                    break;
+                case FILE_GET:
+                    //err = getFile(request);
+                    break;
+                case FILE_UPLOAD:
+                    //err = addFile(request);
+                    break;
+            }
 
             logInfo("Networking", "Comunication end. Closing socket.");
             close(incomingSocket);
@@ -132,7 +200,6 @@ int main(int argc, char *argv[])
         {
             logInfo("Networking", "Unable to accept socket");
         }
-        break;
     }
 
     close(server_socket);

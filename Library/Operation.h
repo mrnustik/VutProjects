@@ -22,6 +22,9 @@ typedef enum {
 
 OperationType parseOperation(string str);
 
+
+
+
 string operationToHTTPMethod(OperationType type);
 
 string operationToAccept(OperationType type);

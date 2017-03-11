@@ -38,6 +38,9 @@ OperationType parseOperation(string opString)
     }
 }
 
+
+
+
 string operationToHTTPMethod(OperationType type)
 {
     switch(type)
@@ -75,6 +78,7 @@ string operationToAccept(OperationType type)
     return string();
 }
 
+
 string operationToTypeQuery(OperationType type)
 {
     switch(type)
@@ -82,11 +86,11 @@ string operationToTypeQuery(OperationType type)
         case DIR_MAKE:
         case DIR_REMOVE:
         case DIR_LIST:
-            return "?type=dir";
+            return "?operation=dir";
         case FILE_DELETE:
         case FILE_UPLOAD:
         case FILE_GET:
-            return "?type=file";
+            return "?operation=file";
         default:
             break;
     }

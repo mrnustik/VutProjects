@@ -1,4 +1,5 @@
 
+#include <fstream>
 #include "Files.h"
 
 int deleteFile(string rootFolder, HttpRequest *request)
@@ -21,8 +22,25 @@ int deleteFile(string rootFolder, HttpRequest *request)
     return 0;
 }
 
+int writeFile(string rootFolder, HttpRequest *request, string body)
+{
+    string userName = request->url->userName;
+    string path = request->url->path;
+    string fullPath = rootFolder + "/" + userName + "/" + path;
+    ofstream OutFile;
+    OutFile.open(fullPath, ios::out | ios::binary);
+    if(OutFile.fail())
+        return -1;
+    OutFile.write(body.c_str(), body.length());
+    OutFile.close();
+    return 0;
+}
+
 string getFileContentLength(string path)
 {
-    //TODO
-    return "1000";
+    ifstream is;
+    is.open (path.c_str(), ios::binary );
+    is.seekg (0, ios::end);
+    unsigned long length = is.tellg();
+    return to_string(length);
 }

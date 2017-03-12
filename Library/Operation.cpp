@@ -66,12 +66,12 @@ string operationToAccept(OperationType type)
     {
         case DIR_MAKE:
         case FILE_UPLOAD:
-            return "application/octet-stream";
         case DIR_REMOVE:
         case FILE_DELETE:
         case DIR_LIST:
-        case FILE_GET:
             return "application/javascript";
+        case FILE_GET:
+            return "application/octet-stream";
         default:
             break;
     }
@@ -86,11 +86,11 @@ string operationToTypeQuery(OperationType type)
         case DIR_MAKE:
         case DIR_REMOVE:
         case DIR_LIST:
-            return "?operation=dir";
+            return "?type=dir";
         case FILE_DELETE:
         case FILE_UPLOAD:
         case FILE_GET:
-            return "?operation=file";
+            return "?type=file";
         default:
             break;
     }

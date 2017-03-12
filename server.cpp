@@ -167,8 +167,9 @@ int main(int argc, char *argv[])
                 else 
                 {
                     contentRead += n;
-                    body.append(buffer);
+                    body.append(buffer, n);
                 }
+                bzero(buffer, 1024);
                 if(contentRead == contentLength) break;
             }
             
@@ -190,7 +191,7 @@ int main(int argc, char *argv[])
                     //err = getFile(request);
                     break;
                 case FILE_UPLOAD:
-                    //err = addFile(request);
+                    err = writeFile(arguments->rootFolder, request, body);
                     break;
             }
 

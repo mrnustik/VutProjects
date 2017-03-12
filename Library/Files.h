@@ -13,6 +13,7 @@
 using namespace std;
 
 int deleteFile(string rootFolder, HttpRequest* request);
+int writeFile(string rootFolder, HttpRequest* request, string body);
 
 string getFileContentLength(string path);
 

@@ -84,7 +84,9 @@ HttpRequest *httpRequestFromString(string str)
 
     string url = str.substr(index, versionStart - index);
 
-    request->url = parseUrl(url);
+    Url *url1 = parseUrl(url);
+    if(url1 == NULL) return NULL;
+    request->url = url1;
 
     request->date = getParameterValue(str, "Date: ");
     request->hostName = getParameterValue(str, "Host: ");

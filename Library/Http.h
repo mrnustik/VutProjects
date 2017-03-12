@@ -17,6 +17,12 @@ typedef enum {
 } HttpMethod;
 
 typedef enum {
+    OK,
+    E_INVALID,
+    E_NOT_FOUND
+} HttpResponseCode;
+
+typedef enum {
     FIL,
     DIRECTORY
 } Type;
@@ -39,10 +45,17 @@ typedef struct {
     Url* url;
 } HttpRequest;
 
+typedef struct {
+    HttpResponseCode code;
+    string date;
+    string contentType;
+    int contentLength;
+} HttpResponse;
 
 OperationType parseOperation(HttpMethod method, Type type);
 
 HttpRequest* httpRequestFromString(string str);
 
+HttpResponse* httpResponseFromString(string header);
 
 #endif

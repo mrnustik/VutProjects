@@ -1,5 +1,3 @@
-#define CLIENT
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
@@ -27,13 +25,13 @@ string buildHttpRequest(tArguments* arguments)
     string typeQuery = operationToTypeQuery(arguments->operation);
 
     request += " " + arguments->remotePath + typeQuery + " HTTP/1.1\r\n";
-    request += "Host: "+ arguments->hostname +"\r\n"
+    request += "Host: "+ arguments->hostname +"\r\n";
     request += "Accept: " + accept + "\r\n";
     request += "Accept-Encoding: identity\r\n";
-    if(arguments->operation == DIR_MAKE || arguments->operation == FILE_UPLOAD)
+    if(arguments->operation == FILE_UPLOAD)
     {
         request += "Content-Type: application/octet-stream\r\n";
-        request += "Content-Length:" +contentLength + "\r\n";
+        request += "Content-Length: " +contentLength + "\r\n";
     }
     request += "\r\n";
 
@@ -42,10 +40,11 @@ string buildHttpRequest(tArguments* arguments)
 
 int parseArguments(int argc, char* argv[], tArguments** pArguments)
 {
-    if (argc < 2 || argc > 3) //invalid arguments count
+    if (argc < 3 || argc > 4) //invalid arguments count
     {
         return -1;
     }
+
 
     *pArguments = (tArguments *) mMalloc(sizeof(tArguments));
 
@@ -86,8 +85,26 @@ int parseArguments(int argc, char* argv[], tArguments** pArguments)
 
     if(operationType == FILE_UPLOAD)
     {
-        if(argc != 3) return -1;
-        else (*pArguments)->localPath = argv[3];
+        if(argc != 4)
+        {
+            logError("Arguments","Trying to upload but missing file.");
+            return -1;
+        }
+        else
+        {
+            string localFile = argv[3];
+            FILE* file = std::fopen(localFile.c_str(), "r");
+            if(file == NULL)
+            {
+                logError("Arguments", "Invalid file path.");
+                return -1;
+            }
+            else
+            {
+                (*pArguments)->localPath = localFile;
+                fclose(file);
+            }
+        }
     }
     return 1;
 }
@@ -147,14 +164,61 @@ int main(int argc, char* argv[])
         exit(EXIT_FAILURE);
     }
 
+    if(arguments->operation == FILE_UPLOAD)
+    {
+        int bytesRead = 0;
+        char fileBuffer[256];
+        bzero(fileBuffer, 256);
+
+        FILE* file = fopen(arguments->localPath.c_str(), "r");
+        while((bytesRead = fread(fileBuffer, sizeof(char), 256, file)) > 0)
+        {
+            if(send(clientSocket, fileBuffer, bytesRead, 0) < 0)
+            {
+                logError("File send","Unable to send data.");
+                break;
+            }
+            bzero(fileBuffer, 256);
+        }
+    }
+
     char buffer[1024];
     int n;
+    string body = string();
+    string header = string();
+    string tmp = string();
+    HttpRequest* request = NULL;
+    int err = 0;
+    int contentLength = 0;
+    int contentRead = 0;
+    while((n = read(clientSocket, buffer, 1024))> 0)
+    {
+        tmp.append(buffer, n);
+        if(header.size() == 0)
+        {
+            if(tmp.find("\r\n\r\n") != string::npos)
+            {
+                int headerIndex = tmp.find("\r\n\r\n");
+                header = tmp.substr(0, headerIndex + 4);
+                body = tmp.substr(headerIndex + 4);
+                contentRead += body.size();
+                tmp.erase();
+                if(request == NULL)
+                {
+                    err = -10;
+                    break;
+                }
+                else
+                {
+                    contentLength = request->contentLength;
+                }
+            }
+        }
+        else
+        {
 
-    string result = string();
-
-    while((n = read(clientSocket, buffer, 1024)) > 0)
-        result.append(buffer, n);
-
+        }
+    }
 
 
 

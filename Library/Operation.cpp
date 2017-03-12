@@ -3,6 +3,7 @@
 //
 
 #include "Operation.h"
+#include "Codes.h"
 
 using namespace std;
 
@@ -95,4 +96,64 @@ string operationToTypeQuery(OperationType type)
             break;
     }
     return string();
+}
+
+OperationResponse *operationMakeDirectory(string rootFolder, Url* url) {
+    OperationResponse* response = new OperationResponse;
+    int result = createDirectory(rootFolder, url);
+
+    if(result == CODE_OK) response->httpCode = HTTP_OK;
+    else response->httpCode = HTTP_INVALID_REQUEST;
+
+    //TODO build json response
+
+    return response;
+}
+
+OperationResponse *operationRemoveDirectory(string rootFolder, Url* url) {
+    OperationResponse* response = new OperationResponse;
+    int result = createDirectory(rootFolder, url);
+
+    if(result == CODE_OK) response->httpCode = HTTP_OK;
+    else if(result == CODE_DIR_NOT_FOUND) response->httpCode = HTTP_NOT_FOUND;
+    else response->httpCode = HTTP_INVALID_REQUEST;
+
+    //TODO buld json response
+
+    return nullptr;
+}
+
+OperationResponse *operationListDirectory(string rootFolder, Url* url) {
+    //TODO
+    return nullptr;
+}
+
+OperationResponse *operationUploadFile(string rootFolder, Url* url, string body) {
+    OperationResponse* response = new OperationResponse;
+    int result = writeFile(rootFolder, url, body);
+
+    if(result == CODE_OK) response->httpCode = HTTP_OK;
+    else if(result == CODE_EXISTS) response->httpCode = HTTP_CONFLICT;
+    else response->httpCode = HTTP_INVALID_REQUEST;
+
+    //TODO build json response
+
+    return response;
+}
+
+OperationResponse *operationDownloadFile(string rootFolder, Url* url) {
+    return nullptr;
+}
+
+OperationResponse *operationDeleteFile(string rootFolder, Url* url) {
+    OperationResponse* response = new OperationResponse;
+    int result = deleteFile(rootFolder, url);
+
+    if(result == CODE_OK) response->httpCode = HTTP_OK;
+    else if(result == CODE_FILE_NOT_FOUND) response->httpCode = HTTP_NOT_FOUND;
+    else response->httpCode = HTTP_INVALID_REQUEST;
+
+    //TODO build json response
+
+    return response;
 }

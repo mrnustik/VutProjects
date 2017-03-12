@@ -6,6 +6,7 @@
 #include <string>
 
 #include "Operation.h"
+#include "Files.h"
 
 using namespace std;
 
@@ -17,9 +18,10 @@ typedef enum {
 } HttpMethod;
 
 typedef enum {
-    OK,
-    E_INVALID,
-    E_NOT_FOUND
+    HTTP_OK,
+    HTTP_CONFLICT,
+    HTTP_INVALID_REQUEST,
+    HTTP_NOT_FOUND
 } HttpResponseCode;
 
 typedef enum {
@@ -57,5 +59,11 @@ OperationType parseOperation(HttpMethod method, Type type);
 HttpRequest* httpRequestFromString(string str);
 
 HttpResponse* httpResponseFromString(string header);
+
+string buildHttpRequest(OperationType operation, string localPath, string remotePath, string hostname);
+
+string buildHttpResponse(HttpResponseCode code, string contentType ,int contentLength);
+
+
 
 #endif

@@ -1,10 +1,22 @@
 
+#include "Library/Files.h"
+#include <stdexcept>
 #include "Http.h"
 #include "Memory.h"
 
+string getCurrentHttpDate()
+{
+    char buf[256];
+    time_t now = time(0);
+    struct tm tm = *gmtime(&now);
+    strftime(buf, sizeof buf, "%a, %d %b %Y %H:%M:%S %Z", &tm);
+    return string(buf);
+}
+
+
 Url* parseUrl(string str)
 {
-    Url* url = (Url*) mMalloc(sizeof(Url));
+    Url* url = new Url;
 
     unsigned long userNameEnd = str.find("/", 1);
     unsigned long queryTypeStart = str.find("?type=");
@@ -35,7 +47,6 @@ Url* parseUrl(string str)
     return url;
 }
 
-
 string getParameterValue(string str, string paramName)
 {
     unsigned long paramEnd = str.find(paramName);
@@ -48,9 +59,52 @@ string getParameterValue(string str, string paramName)
 }
 
 
+HttpResponse *httpResponseFromString(string header) {
+    HttpResponse* response = new HttpResponse;
+    if(header.find("HTTP/1.1 ") != 0)
+    {
+        return NULL;
+    }
+
+    if(header.find("200 HTTP_OK\r\n", 8) != string::npos)
+    {
+        response->code = HTTP_OK;
+    }
+    else if(header.find("400 Bad Request\r\n", 8) != string::npos)
+    {
+        response->code = HTTP_INVALID_REQUEST;
+    }
+    else if(header.find("404 Not Found\r\n", 8) != string::npos)
+    {
+        response->code = HTTP_NOT_FOUND;
+    }
+    else
+    {
+        return NULL;
+    }
+
+    response->date = getParameterValue(header,  "Date: ");
+    response->contentType = getParameterValue(header, "Content-Type: ");
+    string contentLength = getParameterValue(header, "Content-Length: ");
+    try
+    {
+        response->contentLength = stoi(contentLength);
+    }
+    catch (std::invalid_argument invalidArgument)
+    {
+        response->contentLength = 0;
+    }
+
+
+    return response;
+}
+
+
+
+
 HttpRequest *httpRequestFromString(string str)
 {
-    HttpRequest* request = (HttpRequest*) mMalloc(sizeof(HttpRequest));
+    HttpRequest* request = new HttpRequest;
 
     int index = 0;
     if(str.find("GET") == 0)
@@ -124,4 +178,57 @@ OperationType parseOperation(HttpMethod method, Type type)
             break;
     }
     return INVALID;
+}
+
+
+string buildHttpRequest(OperationType operation, string localPath, string remotePath, string hostname)
+{
+    string request = operationToHTTPMethod(operation);
+    string accept = operationToAccept(operation);
+    string contentLength = getFileContentLength(localPath);
+    string typeQuery = operationToTypeQuery(operation);
+    string dateString = getCurrentHttpDate();
+
+    request += " " + remotePath + typeQuery + " HTTP/1.1\r\n";
+    request += "Host: "+ hostname +"\r\n";
+    request += "Date: " + dateString + "\r\n";
+    request += "Accept: " + accept + "\r\n";
+    request += "Accept-Encoding: identity\r\n";
+    if(operation == FILE_UPLOAD)
+    {
+        request += "Content-Type: application/octet-stream\r\n";
+        request += "Content-Length: " +contentLength + "\r\n";
+    }
+    request += "\r\n";
+
+    return request;
+}
+
+string buildHttpResponse(HttpResponseCode code, string contentType ,int contentLength)
+{
+    string httpCode = to_string(code);
+    string date = getCurrentHttpDate();
+    string httpCodeValue = "";
+    string contLength = to_string(contentLength);
+    string response = "";
+    switch(code)
+    {
+        case HTTP_OK:
+            httpCodeValue = "HTTP_OK";
+            break;
+        case HTTP_INVALID_REQUEST:
+            httpCodeValue = "Bad Request";
+            break;
+        case HTTP_NOT_FOUND:
+            httpCodeValue = "Not Found";
+            break;
+    }
+
+    response += "HTTP/1.1 " + httpCode + " " + httpCodeValue + "\r\n";
+    response += "Date: " + date + "\r\n";
+    response += "Content-Type: " + contentType + "\r\n";
+    response += "Content-Length: " + contLength + "\r\n";
+    response += "Content-Encoding: identity\r\n";
+    response += "\r\n";
+    return response;
 }

@@ -1,4 +1,4 @@
-#include "memory.h"
+#include "Memory.h"
 
 tGlobalMemory *globalMemory; //globalMemory globalMemory struct
 

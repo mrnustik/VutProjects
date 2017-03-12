@@ -1,6 +1,7 @@
 CC=g++
 SERVER = ftrestd
 CLIENT = ftrest
+C_FLAGS= -g
 LIBRARY=$(wildcard Library/*.cpp)
 OBJECTS=$(LIBRARY:.cpp=.o)
 

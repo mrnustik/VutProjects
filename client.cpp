@@ -3,11 +3,14 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "Library/Files.h"
 #include "Library/Operation.h"
 #include "Library/Logger.h"
 #include "Library/Memory.h"
+#include "Library/Http.h"
+
 
 typedef struct {
     OperationType operation;
@@ -17,26 +20,9 @@ typedef struct {
     string localPath;
 } tArguments;
 
-string buildHttpRequest(tArguments* arguments)
-{
-    string request = operationToHTTPMethod(arguments->operation);
-    string accept = operationToAccept(arguments->operation);
-    string contentLength = getFileContentLength(arguments->localPath);
-    string typeQuery = operationToTypeQuery(arguments->operation);
+int createSocket();
 
-    request += " " + arguments->remotePath + typeQuery + " HTTP/1.1\r\n";
-    request += "Host: "+ arguments->hostname +"\r\n";
-    request += "Accept: " + accept + "\r\n";
-    request += "Accept-Encoding: identity\r\n";
-    if(arguments->operation == FILE_UPLOAD)
-    {
-        request += "Content-Type: application/octet-stream\r\n";
-        request += "Content-Length: " +contentLength + "\r\n";
-    }
-    request += "\r\n";
-
-    return request;
-}
+hostent *getHostent(string hostname);
 
 int parseArguments(int argc, char* argv[], tArguments** pArguments)
 {
@@ -46,7 +32,7 @@ int parseArguments(int argc, char* argv[], tArguments** pArguments)
     }
 
 
-    *pArguments = (tArguments *) mMalloc(sizeof(tArguments));
+    *pArguments = new tArguments;
 
     char *opString = argv[1];
 
@@ -123,19 +109,17 @@ int main(int argc, char* argv[])
         exit(EXIT_FAILURE);
     }
 
-    logInfo("Networking", "Creating socket.");
-    int clientSocket;
-    clientSocket = socket(AF_INET , SOCK_STREAM , 0);
-    logInfo("Networking", "Socket created.");
+    int clientSocket = createSocket();
 
     if (clientSocket == -1)
     {
         logError("Networking", "Could not create socket.");
     }
 
-    logInfo("Networking", "Getting host by name.");
     struct sockaddr_in serv_addr;
-    hostent* server = gethostbyname(arguments->hostname.c_str());
+
+    logInfo("Networking", "Getting host by name.");
+    hostent *server = getHostent(arguments->hostname);
     if (server == NULL) {
         logError("Networking", "No such hostname");
         exit(EXIT_FAILURE);
@@ -157,7 +141,10 @@ int main(int argc, char* argv[])
 
 
 
-    string message =  buildHttpRequest(arguments);
+    string message =  buildHttpRequest(arguments->operation,
+                                       arguments->localPath,
+                                       arguments->remotePath,
+                                       arguments->hostname);
     if( send(clientSocket , message.c_str() , message.length() , 0) < 0)
     {
         logError("Networking", "Sending failed.");
@@ -187,7 +174,7 @@ int main(int argc, char* argv[])
     string body = string();
     string header = string();
     string tmp = string();
-    HttpRequest* request = NULL;
+    HttpResponse* response = NULL;
     int err = 0;
     int contentLength = 0;
     int contentRead = 0;
@@ -203,24 +190,29 @@ int main(int argc, char* argv[])
                 body = tmp.substr(headerIndex + 4);
                 contentRead += body.size();
                 tmp.erase();
-                if(request == NULL)
+                response = httpResponseFromString(header);
+                if(response == NULL)
                 {
                     err = -10;
                     break;
                 }
                 else
                 {
-                    contentLength = request->contentLength;
+                    contentLength = response->contentLength;
                 }
             }
         }
         else
         {
-
+            contentLength += n;
+            body.append(buffer, n);
         }
     }
 
-
+    if(arguments->operation == FILE_GET)
+    {
+        //writeFile()
+    }
 
     close(clientSocket);
 
@@ -229,4 +221,17 @@ int main(int argc, char* argv[])
     logInfo("Networking", "Socket closed.");
     memoryDestroy();
     return 0;
+}
+
+hostent *getHostent(string hostname) {
+    hostent* server = gethostbyname(hostname.c_str());
+    return server;
+}
+
+int createSocket() {
+    logInfo("Networking", "Creating socket.");
+    int clientSocket;
+    clientSocket = socket(AF_INET , SOCK_STREAM , 0);
+    logInfo("Networking", "Socket created.");
+    return clientSocket;
 }

@@ -6,6 +6,8 @@
 #define OPERATION_H
 
 #include <string>
+#include "Http.h"
+#include "Directories.h"
 
 using namespace std;
 
@@ -19,16 +21,31 @@ typedef enum {
     INVALID
 } OperationType;
 
+typedef struct
+{
+    HttpResponseCode httpCode;
+    string contentType;
+    string body;
+} OperationResponse;
 
 OperationType parseOperation(string str);
-
-
-
 
 string operationToHTTPMethod(OperationType type);
 
 string operationToAccept(OperationType type);
 
 string operationToTypeQuery(OperationType types);
+
+OperationResponse* operationMakeDirectory(string rootFolder, Url* url);
+
+OperationResponse* operationRemoveDirectory(string rootFolder, Url* url);
+
+OperationResponse* operationListDirectory(string rootFolder, Url* url);
+
+OperationResponse *operationUploadFile(string rootFolder, Url* url, string body);
+
+OperationResponse* operationDownloadFile(string rootFolder, Url* url);
+
+OperationResponse* operationDeleteFile(string rootFolder, Url* url);
 
 #endif //OPERATION_H

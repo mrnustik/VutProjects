@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <dirent.h>
+#include <cstring>
 
 #include "Library/Directories.h"
 #include "Library/Memory.h"
@@ -16,6 +17,8 @@ typedef struct
     string rootFolder;
     int port;
 } tArguments;
+
+void exit();
 
 #define E_OK            200
 #define E_INVALID       400
@@ -40,7 +43,8 @@ int readParameter(char *flag, char *value, tArguments **pArguments)
 
 int parseArguments(int argc, char *argv[], tArguments **pArguments)
 {
-    (*pArguments) = (tArguments*) mMalloc(sizeof(tArguments));
+    (*pArguments) = new tArguments;
+    (*pArguments)->rootFolder = string();
     (*pArguments)->rootFolder = getCurrentDirectory();
     (*pArguments)->port = 80;
 
@@ -84,7 +88,7 @@ int main(int argc, char *argv[])
     if (valid_args < 0)
     {
         logError("Arguments", "Invalid arguments");
-        exit(EXIT_FAILURE);
+        exit();
     }
 
     logInfo("Networking", "Opening server socket...");
@@ -92,7 +96,7 @@ int main(int argc, char *argv[])
     if (server_socket < 0)
     {
         logError("Networking", "Unable to create socket");
-        exit(EXIT_FAILURE);
+        exit();
     }
     logInfo("Networking", "Server socket opened.");
 
@@ -107,7 +111,7 @@ int main(int argc, char *argv[])
     if ((::bind(server_socket, (struct sockaddr *) &socketAddress, (socklen_t) sizeof(socketAddress))) != 0)
     {
         logError("Networking", "Unable to bind server socket");
-        exit(EXIT_FAILURE);
+        exit();
     }
     logInfo("Networking", "Server socket bound.");
 
@@ -115,7 +119,7 @@ int main(int argc, char *argv[])
     if (listen(server_socket, 1) < 0)
     {
         logError("Networking", "Unable to start listening on server socket");
-        exit(EXIT_FAILURE);
+        exit();
     }
     logInfo("Networking", "Listening successful.");
 
@@ -139,6 +143,7 @@ int main(int argc, char *argv[])
             HttpRequest* request = NULL;
             int err = 0;
             int contentLength = 0;
+            OperationType operation = INVALID;
             int contentRead = 0;
             while((n = read(incomingSocket, buffer, 1024))> 0)
             {    
@@ -172,28 +177,33 @@ int main(int argc, char *argv[])
                 bzero(buffer, 1024);
                 if(contentRead == contentLength) break;
             }
-            
-            switch(request->operation)
-            {
-                case DIR_MAKE:
-                    err = createDirectory(arguments->rootFolder, request);
-                    break;
-                case DIR_REMOVE:
-                    err = deleteDirectory(arguments->rootFolder, request);
-                    break;
-                case DIR_LIST:
-                    //err = listDirectory(arguments->rootFolder, request);
-                    break;
-                case FILE_DELETE:
-                    err = deleteFile(arguments->rootFolder, request);
-                    break;
-                case FILE_GET:
-                    //err = getFile(request);
-                    break;
-                case FILE_UPLOAD:
-                    err = writeFile(arguments->rootFolder, request, body);
-                    break;
+            if(request != NULL) {
+                operation = request->operation;
+                switch (request->operation) {
+                    case DIR_MAKE:
+                        err = createDirectory(arguments->rootFolder, request);
+                        break;
+                    case DIR_REMOVE:
+                        err = deleteDirectory(arguments->rootFolder, request);
+                        break;
+                    case DIR_LIST:
+                        //err = listDirectory(arguments->rootFolder, request);
+                        break;
+                    case FILE_DELETE:
+                        err = deleteFile(arguments->rootFolder, request);
+                        break;
+                    case FILE_GET:
+
+                        break;
+                    case FILE_UPLOAD:
+                        err = writeFile(arguments->rootFolder, request, body);
+                        break;
+                }
             }
+            int responseContentLength = 0;
+            string response = buildHttpResponse(HTTP_OK,
+                                                operation == FILE_GET ? "application/json" : "application/octet-stream",
+                                                responseContentLength);
 
             logInfo("Networking", "Comunication end. Closing socket.");
             close(incomingSocket);
@@ -204,8 +214,14 @@ int main(int argc, char *argv[])
             logInfo("Networking", "Unable to accept socket");
         }
     }
-
+    memoryDestroy();
     close(server_socket);
 
     return 0;
+}
+
+void exit() 
+{
+    memoryDestroy();
+    exit(EXIT_FAILURE);
 }

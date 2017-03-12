@@ -12,9 +12,9 @@
 #include <sys/types.h>
 
 
-int createDirectory(string rootFolder, HttpRequest* request);
+int createDirectory(string rootFolder, Url* request);
 
-int deleteDirectory(string rootFolder, HttpRequest* request);
+int deleteDirectory(string rootFolder, Url* request);
 
 string getCurrentDirectory();
 

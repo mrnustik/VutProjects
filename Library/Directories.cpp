@@ -5,50 +5,54 @@
 #include <errno.h>
 #include "Directories.h"
 #include "Http.h"
+#include "Codes.h"
 
 using namespace std;
 
-int createDirectory(string rootFolder, HttpRequest* request)
+int createDirectory(string rootFolder, Url* url)
 {
-    string userName = request->url->userName;
-    string path = request->url->path;
+    string userName = url->userName;
+    string path = url->path;
     string fullPath = rootFolder + "/" + userName + "/" + path;
     int result = mkdir(fullPath.c_str(), 0700);
     if(result < 0){
        if(errno == EEXIST)
        {
-           return -2;
+           return CODE_EXISTS;
        }
-       if(errno == ENOENT)
+       else
        {
-           return -3;
+           return CODE_UNKNOWN;
        }
-
     }
-    return 0;
+    return CODE_OK;
 }
 
-int deleteDirectory(string rootFolder, HttpRequest *request)
+int deleteDirectory(string rootFolder, Url *url)
 {
-    string userName = request->url->userName;
-    string path = request->url->path;
+    string userName = url->userName;
+    string path = url->path;
     string fullPath = rootFolder + "/" + userName + "/" + path;
     int result = rmdir(fullPath.c_str());
     if(result < 0){
-        if(errno == EEXIST || errno == ENOTEMPTY)
+        if(errno == ENOTEMPTY)
         {
-            return -2;
+            return CODE_NOT_EMPTY;
         }
         else if(errno == ENOTDIR)
         {
-            return -3;
+            return CODE_NOT_DIRECTORY;
+        }
+        else if(errno == ENOENT)
+        {
+            return CODE_DIR_NOT_FOUND;
         }
         else
         {
-            return -1;
+            return CODE_UNKNOWN;
         }
     }
-    return 0;
+    return CODE_OK;
 }
 
 string getCurrentDirectory()

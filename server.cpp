@@ -11,6 +11,7 @@
 #include "Library/Logger.h"
 #include "Library/Http.h"
 #include "Library/Files.h"
+#include "Library/Operation.h"
 
 typedef struct
 {
@@ -141,6 +142,7 @@ int main(int argc, char *argv[])
             string header = string();
             string tmp = string();
             HttpRequest* request = NULL;
+            OperationResponse* result = NULL;
             int err = 0;
             int contentLength = 0;
             OperationType operation = INVALID;
@@ -181,29 +183,48 @@ int main(int argc, char *argv[])
                 operation = request->operation;
                 switch (request->operation) {
                     case DIR_MAKE:
-                        err = createDirectory(arguments->rootFolder, request);
+                        result = operationMakeDirectory(arguments->rootFolder, request->url);
                         break;
                     case DIR_REMOVE:
-                        err = deleteDirectory(arguments->rootFolder, request);
+                        result = operationRemoveDirectory(arguments->rootFolder, request->url);
                         break;
                     case DIR_LIST:
-                        //err = listDirectory(arguments->rootFolder, request);
+                        result = operationListDirectory(arguments->rootFolder, request->url);
                         break;
                     case FILE_DELETE:
-                        err = deleteFile(arguments->rootFolder, request);
+                        result = operationDeleteFile(arguments->rootFolder, request->url);
                         break;
                     case FILE_GET:
-
+                        result = operationDownloadFile(arguments->rootFolder, request->url);
                         break;
                     case FILE_UPLOAD:
-                        err = writeFile(arguments->rootFolder, request, body);
+                        result = operationUploadFile(arguments->rootFolder, request->url, body);
                         break;
                 }
             }
-            int responseContentLength = 0;
-            string response = buildHttpResponse(HTTP_OK,
-                                                operation == FILE_GET ? "application/json" : "application/octet-stream",
-                                                responseContentLength);
+            else
+            {
+                //TODO build invalid request
+            }
+
+            string response = buildHttpResponse(result->httpCode, result->contentType, body.length());
+
+            if(write(incomingSocket, response.c_str(), response.length()) < 0)
+            {
+                logError("Networking", "Could not write response to client.");
+                close(incomingSocket);
+                continue;
+            }
+
+            if(result->body.length() > 0)
+            {
+                if (write(incomingSocket, result->body.c_str(), result->body.length()) < 0)
+                {
+                    logError("Networking", "Could not write response body to client.");
+                    close(incomingSocket);
+                    continue;
+                }
+            }
 
             logInfo("Networking", "Comunication end. Closing socket.");
             close(incomingSocket);

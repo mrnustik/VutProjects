@@ -6,11 +6,7 @@
 #define OPERATION_H
 
 #include <string>
-#include "Http.h"
-#include "Directories.h"
-
 using namespace std;
-
 typedef enum {
     DIR_MAKE,
     DIR_REMOVE,
@@ -20,6 +16,10 @@ typedef enum {
     FILE_GET,
     INVALID
 } OperationType;
+
+#include "Directories.h"
+
+#include "Http.h"
 
 typedef struct
 {

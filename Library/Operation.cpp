@@ -142,6 +142,9 @@ OperationResponse *operationUploadFile(string rootFolder, Url* url, string body)
 }
 
 OperationResponse *operationDownloadFile(string rootFolder, Url* url) {
+
+    //TODO build json response
+
     return nullptr;
 }
 

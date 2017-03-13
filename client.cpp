@@ -193,7 +193,7 @@ int main(int argc, char* argv[])
                 response = httpResponseFromString(header);
                 if(response == NULL)
                 {
-                    err = -10;
+
                     break;
                 }
                 else

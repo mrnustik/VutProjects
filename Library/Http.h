@@ -3,26 +3,9 @@
 #ifndef HTTP_H
 #define HTTP_H
 
-#include <string>
-
-#include "Operation.h"
-#include "Files.h"
-
 using namespace std;
 
-typedef enum {
-    GET,
-    POST,
-    PUT,
-    DELETE
-} HttpMethod;
-
-typedef enum {
-    HTTP_OK,
-    HTTP_CONFLICT,
-    HTTP_INVALID_REQUEST,
-    HTTP_NOT_FOUND
-} HttpResponseCode;
+#include <string>
 
 typedef enum {
     FIL,
@@ -34,6 +17,24 @@ typedef struct {
     string path;
     Type type;
 } Url;
+
+typedef enum {
+    HTTP_OK,
+    HTTP_CONFLICT,
+    HTTP_INVALID_REQUEST,
+    HTTP_NOT_FOUND
+} HttpResponseCode
+;
+#include "Operation.h"
+#include "Files.h"
+
+typedef enum {
+    GET,
+    POST,
+    PUT,
+    DELETE
+} HttpMethod;
+
 
 typedef struct {
     OperationType operation;
@@ -62,8 +63,8 @@ HttpResponse* httpResponseFromString(string header);
 
 string buildHttpRequest(OperationType operation, string localPath, string remotePath, string hostname);
 
-string buildHttpResponse(HttpResponseCode code, string contentType ,int contentLength);
+string buildHttpResponse(HttpResponseCode code, string contentType , unsigned long contentLength);
 
-
+int httpResponseCodeToInt(HttpResponseCode code);
 
 #endif

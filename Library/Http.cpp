@@ -1,5 +1,5 @@
 
-#include "Library/Files.h"
+#include "Files.h"
 #include <stdexcept>
 #include "Http.h"
 #include "Memory.h"
@@ -204,9 +204,9 @@ string buildHttpRequest(OperationType operation, string localPath, string remote
     return request;
 }
 
-string buildHttpResponse(HttpResponseCode code, string contentType ,int contentLength)
+string buildHttpResponse(HttpResponseCode code, string contentType ,unsigned long contentLength)
 {
-    string httpCode = to_string(code);
+    string httpCode = httpToInt(code);
     string date = getCurrentHttpDate();
     string httpCodeValue = "";
     string contLength = to_string(contentLength);
@@ -214,13 +214,16 @@ string buildHttpResponse(HttpResponseCode code, string contentType ,int contentL
     switch(code)
     {
         case HTTP_OK:
-            httpCodeValue = "HTTP_OK";
+            httpCodeValue = "OK";
             break;
         case HTTP_INVALID_REQUEST:
             httpCodeValue = "Bad Request";
             break;
         case HTTP_NOT_FOUND:
             httpCodeValue = "Not Found";
+            break;
+        case HTTP_CONFLICT:
+            httpCodeValue = "Conflict";
             break;
     }
 

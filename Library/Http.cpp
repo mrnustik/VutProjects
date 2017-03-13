@@ -1,8 +1,7 @@
 
 #include "Files.h"
-#include <stdexcept>
-#include "Http.h"
-#include "Memory.h"
+
+
 
 string getCurrentHttpDate()
 {
@@ -66,7 +65,7 @@ HttpResponse *httpResponseFromString(string header) {
         return NULL;
     }
 
-    if(header.find("200 HTTP_OK\r\n", 8) != string::npos)
+    if(header.find("200 OK\r\n", 8) != string::npos)
     {
         response->code = HTTP_OK;
     }
@@ -204,28 +203,29 @@ string buildHttpRequest(OperationType operation, string localPath, string remote
     return request;
 }
 
-string buildHttpResponse(HttpResponseCode code, string contentType ,unsigned long contentLength)
+string httpResponseCodeToString(const HttpResponseCode code)
 {
-    string httpCode = httpToInt(code);
-    string date = getCurrentHttpDate();
-    string httpCodeValue = "";
-    string contLength = to_string(contentLength);
-    string response = "";
     switch(code)
     {
         case HTTP_OK:
-            httpCodeValue = "OK";
-            break;
+            return "OK";
         case HTTP_INVALID_REQUEST:
-            httpCodeValue = "Bad Request";
-            break;
+            return "Bad Request";
         case HTTP_NOT_FOUND:
-            httpCodeValue = "Not Found";
-            break;
+            return "Not Found";
         case HTTP_CONFLICT:
-            httpCodeValue = "Conflict";
-            break;
+            return "Conflict";
     }
+    return "";
+}
+
+string buildHttpResponse(HttpResponseCode code, string contentType ,unsigned long contentLength)
+{
+    string httpCode = to_string(httpResponseCodeToInt(code));
+    string date = getCurrentHttpDate();
+    string httpCodeValue = httpResponseCodeToString(code);
+    string contLength = to_string(contentLength);
+    string response = "";
 
     response += "HTTP/1.1 " + httpCode + " " + httpCodeValue + "\r\n";
     response += "Date: " + date + "\r\n";
@@ -234,4 +234,22 @@ string buildHttpResponse(HttpResponseCode code, string contentType ,unsigned lon
     response += "Content-Encoding: identity\r\n";
     response += "\r\n";
     return response;
+}
+
+
+int httpResponseCodeToInt(HttpResponseCode code)
+{
+    switch (code)
+    {
+        case HTTP_OK:
+            return 200;
+        case HTTP_INVALID_REQUEST:
+            return 400;
+        case HTTP_NOT_FOUND:
+            return 404;
+        case HTTP_CONFLICT:
+            return 409;
+        default:
+            return 0;
+    }
 }

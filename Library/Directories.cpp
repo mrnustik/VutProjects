@@ -9,6 +9,24 @@
 
 using namespace std;
 
+#define DIR_OK              0
+#define DIR_NOT_EXISTS      1
+#define DIR_NOT_DIRECTORY   2
+
+int directoryExists(string fullPath)
+{
+    struct stat state;
+    if(stat(fullPath.c_str(), &state) == 0)
+    {
+        return DIR_NOT_EXISTS;
+    }
+    if(S_ISDIR(state.st_mode))
+    {
+        return DIR_OK;
+    }
+    return DIR_NOT_DIRECTORY;
+}
+
 int createDirectory(string rootFolder, Url* url)
 {
     string userName = url->userName;

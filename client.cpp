@@ -193,7 +193,6 @@ int main(int argc, char* argv[])
                 response = httpResponseFromString(header);
                 if(response == NULL)
                 {
-
                     break;
                 }
                 else
@@ -208,10 +207,17 @@ int main(int argc, char* argv[])
             body.append(buffer, n);
         }
     }
-
-    if(arguments->operation == FILE_GET)
+    if(response != NULL)
     {
-        //writeFile()
+        if (arguments->operation == FILE_GET)
+        {
+            writeFile(arguments->remotePath, body);
+        }
+    }
+    else
+    {
+        cout << "Unknown error" << endl;
+        exit(EXIT_FAILURE);
     }
 
     close(clientSocket);

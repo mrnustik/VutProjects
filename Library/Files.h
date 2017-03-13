@@ -8,6 +8,11 @@
 #include <string>
 #include <unistd.h>
 #include <errno.h>
+#include <stdexcept>
+#include <sys/stat.h>
+
+#include "Http.h"
+#include "Memory.h"
 #include "Http.h"
 
 using namespace std;
@@ -15,6 +20,7 @@ using namespace std;
 int deleteFile(string rootFolder, Url* request);
 int writeFile(string rootFolder, Url* request, string body);
 int writeFile(string remotePath, string body);
+pair<int, string> readFile(string rootFolder, Url *url);
 
 string getFileContentLength(string path);
 

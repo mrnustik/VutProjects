@@ -2,7 +2,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
-#include <arpa/inet.h>
 #include <dirent.h>
 #include <cstring>
 
@@ -20,10 +19,6 @@ typedef struct
 } tArguments;
 
 void exit();
-
-#define E_OK            200
-#define E_INVALID       400
-#define E_NOT_FOUND     404
 
 int readParameter(char *flag, char *value, tArguments **pArguments)
 {
@@ -162,7 +157,6 @@ int main(int argc, char *argv[])
                         request = httpRequestFromString(header);
                         if(request == NULL)
                         {
-                            err = E_INVALID;
                             break;
                         }
                         else
@@ -209,7 +203,7 @@ int main(int argc, char *argv[])
 
             string response = buildHttpResponse(result->httpCode, result->contentType, body.length());
 
-            if(write(incomingSocket, response.c_str(), response.length()) < 0)
+            if(send(incomingSocket, response.c_str(), response.length(), 0) < 0)
             {
                 logError("Networking", "Could not write response to client.");
                 close(incomingSocket);
@@ -218,7 +212,7 @@ int main(int argc, char *argv[])
 
             if(result->body.length() > 0)
             {
-                if (write(incomingSocket, result->body.c_str(), result->body.length()) < 0)
+                if (send(incomingSocket, result->body.c_str(), result->body.length(), 0) < 0)
                 {
                     logError("Networking", "Could not write response body to client.");
                     close(incomingSocket);

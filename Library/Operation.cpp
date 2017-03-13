@@ -142,10 +142,29 @@ OperationResponse *operationUploadFile(string rootFolder, Url* url, string body)
 }
 
 OperationResponse *operationDownloadFile(string rootFolder, Url* url) {
+    OperationResponse* response = new OperationResponse;
+    int result = 0;
+    string body = "";
 
-    //TODO build json response
+    tie(result, body) = readFile(rootFolder, url);
 
-    return nullptr;
+    if(result == CODE_OK)
+    {
+        response->httpCode = HTTP_OK;
+    }
+    else if(result == CODE_EXISTS)
+    {
+        response->httpCode = HTTP_CONFLICT;
+    }
+    else
+    {
+        response->httpCode = HTTP_INVALID_REQUEST;
+    }
+
+    response->body = body;
+    response->contentType = "application/octet-stream";
+
+    return response;
 }
 
 OperationResponse *operationDeleteFile(string rootFolder, Url* url) {

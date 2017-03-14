@@ -3,9 +3,8 @@
 //
 
 #include <errno.h>
+
 #include "Directories.h"
-#include "Http.h"
-#include "Codes.h"
 
 using namespace std;
 
@@ -26,6 +25,44 @@ int directoryExists(string fullPath)
     }
     return DIR_NOT_DIRECTORY;
 }
+
+tuple<int, vector<string>> getDirectoryContent(string rootFolder, Url* url)
+{
+    vector<string> directories;
+    int code = 0;
+    string userName = url->userName;
+    string path = url->path;
+    string fullPath = rootFolder + "/" + userName + "/" + path;
+    int isDir = directoryExists(fullPath);
+    if(isDir == DIR_OK)
+    {
+        code = CODE_OK;
+    }
+    else if(isDir == DIR_NOT_DIRECTORY)
+    {
+        code = CODE_NOT_DIRECTORY;
+    }
+    else
+    {
+        code = CODE_DIR_NOT_FOUND;
+    }
+
+    DIR* dir = opendir(fullPath.c_str());
+    if(dir != NULL)
+    {
+        string name = "";
+        struct dirent* entry;
+        while((entry = readdir(dir)) != NULL)
+        {
+            name = entry->d_name;
+            directories.push_back(name);
+        }
+        closedir(dir);
+    }
+
+    return make_tuple(code, directories);
+
+};
 
 int createDirectory(string rootFolder, Url* url)
 {

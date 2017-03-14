@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <stdexcept>
 #include <sys/stat.h>
+#include <tuple>
 
 #include "Http.h"
 #include "Memory.h"
@@ -20,7 +21,7 @@ using namespace std;
 int deleteFile(string rootFolder, Url* request);
 int writeFile(string rootFolder, Url* request, string body);
 int writeFile(string remotePath, string body);
-pair<int, string> readFile(string rootFolder, Url *url);
+tuple<int, string> readFile(string rootFolder, Url *url);
 
 string getFileContentLength(string path);
 

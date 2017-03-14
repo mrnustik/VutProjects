@@ -21,6 +21,7 @@ typedef struct {
 typedef enum {
     HTTP_OK,
     HTTP_CONFLICT,
+    HTTP_FORBIDEN,
     HTTP_INVALID_REQUEST,
     HTTP_NOT_FOUND
 } HttpResponseCode
@@ -66,5 +67,6 @@ string buildHttpRequest(OperationType operation, string localPath, string remote
 string buildHttpResponse(HttpResponseCode code, string contentType , unsigned long contentLength);
 
 int httpResponseCodeToInt(HttpResponseCode code);
+
 
 #endif

@@ -56,7 +56,7 @@ int writeFile(string rootFolder, Url *url, string body)
     return 0;
 }
 
-pair<int, string> readFile(string rootFolder, Url *url)
+tuple<int, string> readFile(string rootFolder, Url *url)
 {
     string userName = url->userName;
     string path = url->path;

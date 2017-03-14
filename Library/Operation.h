@@ -18,7 +18,7 @@ typedef enum {
 } OperationType;
 
 #include "Directories.h"
-
+#include "Codes.h"
 #include "Http.h"
 
 typedef struct
@@ -47,5 +47,7 @@ OperationResponse *operationUploadFile(string rootFolder, Url* url, string body)
 OperationResponse* operationDownloadFile(string rootFolder, Url* url);
 
 OperationResponse* operationDeleteFile(string rootFolder, Url* url);
+
+OperationResponse* operationInvalid();
 
 #endif //OPERATION_H

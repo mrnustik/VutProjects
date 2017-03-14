@@ -229,9 +229,13 @@ string buildHttpResponse(HttpResponseCode code, string contentType ,unsigned lon
 
     response += "HTTP/1.1 " + httpCode + " " + httpCodeValue + "\r\n";
     response += "Date: " + date + "\r\n";
-    response += "Content-Type: " + contentType + "\r\n";
-    response += "Content-Length: " + contLength + "\r\n";
-    response += "Content-Encoding: identity\r\n";
+    //Sometimes we dont have a Content-Type
+    if(contentType.size() > 0)
+    {
+        response += "Content-Type: " + contentType + "\r\n";
+        response += "Content-Length: " + contLength + "\r\n";
+        response += "Content-Encoding: identity\r\n";
+    }
     response += "\r\n";
     return response;
 }
@@ -245,6 +249,8 @@ int httpResponseCodeToInt(HttpResponseCode code)
             return 200;
         case HTTP_INVALID_REQUEST:
             return 400;
+        case HTTP_FORBIDEN:
+            return 401;
         case HTTP_NOT_FOUND:
             return 404;
         case HTTP_CONFLICT:

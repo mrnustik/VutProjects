@@ -42,7 +42,7 @@ int parseArguments(int argc, char *argv[], tArguments **pArguments)
     (*pArguments) = new tArguments;
     (*pArguments)->rootFolder = string();
     (*pArguments)->rootFolder = getCurrentDirectory();
-    (*pArguments)->port = 80;
+    (*pArguments)->port = 6677;
 
     int result = 0;
     if (argc == 1)
@@ -154,9 +154,11 @@ int main(int argc, char *argv[])
                         body = tmp.substr(headerIndex + 4);
                         contentRead += body.size();
                         tmp.erase();
+                        cout << header;
                         request = httpRequestFromString(header);
                         if(request == NULL)
                         {
+                            logWarning("HTTP", "Unable to parse HTTP request.");
                             break;
                         }
                         else
@@ -174,7 +176,6 @@ int main(int argc, char *argv[])
                 if(contentRead == contentLength) break;
             }
             if(request != NULL) {
-                operation = request->operation;
                 switch (request->operation) {
                     case DIR_MAKE:
                         result = operationMakeDirectory(arguments->rootFolder, request->url);
@@ -194,11 +195,15 @@ int main(int argc, char *argv[])
                     case FILE_UPLOAD:
                         result = operationUploadFile(arguments->rootFolder, request->url, body);
                         break;
+                    case INVALID:
+                        result = operationInvalid();
+                        break;
                 }
             }
             else
             {
-                //TODO build invalid request
+                //creates default invalid response (issue when he does not send valid http req)
+                result = operationInvalid();
             }
 
             string response = buildHttpResponse(result->httpCode, result->contentType, body.length());

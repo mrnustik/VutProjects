@@ -10,9 +10,13 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-
+#include <vector>
+#include <dirent.h>
+#include "Codes.h"
 
 int createDirectory(string rootFolder, Url* request);
+
+tuple<int, vector<string>> getDirectoryContent(string rootFolder, Url* url);
 
 int deleteDirectory(string rootFolder, Url* request);
 

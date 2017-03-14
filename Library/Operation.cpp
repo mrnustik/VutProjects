@@ -3,7 +3,7 @@
 //
 
 #include "Operation.h"
-#include "Codes.h"
+
 
 using namespace std;
 
@@ -105,6 +105,8 @@ OperationResponse *operationMakeDirectory(string rootFolder, Url* url) {
     if(result == CODE_OK) response->httpCode = HTTP_OK;
     else response->httpCode = HTTP_INVALID_REQUEST;
 
+    response->contentType = "application/javascript";
+
     //TODO build json response
 
     return response;
@@ -118,14 +120,40 @@ OperationResponse *operationRemoveDirectory(string rootFolder, Url* url) {
     else if(result == CODE_DIR_NOT_FOUND) response->httpCode = HTTP_NOT_FOUND;
     else response->httpCode = HTTP_INVALID_REQUEST;
 
+    response->contentType = "application/javascript";
+
     //TODO buld json response
 
     return nullptr;
 }
 
 OperationResponse *operationListDirectory(string rootFolder, Url* url) {
-    //TODO
-    return nullptr;
+    OperationResponse* response = new OperationResponse;
+    vector<string> directories;
+    int result = 0;
+
+    tie(result, directories) = getDirectoryContent(rootFolder, url);
+
+    if(result == CODE_OK)
+    {
+        response->httpCode = HTTP_OK;
+    }
+    else if(result == CODE_DIR_NOT_FOUND)
+    {
+        response->httpCode = HTTP_NOT_FOUND;
+    }
+    else
+    {
+        response->httpCode = HTTP_INVALID_REQUEST;
+    }
+
+    //TODO build json response
+    if(directories.size() != 0)
+    {
+
+    }
+
+    return response;
 }
 
 OperationResponse *operationUploadFile(string rootFolder, Url* url, string body) {
@@ -135,6 +163,8 @@ OperationResponse *operationUploadFile(string rootFolder, Url* url, string body)
     if(result == CODE_OK) response->httpCode = HTTP_OK;
     else if(result == CODE_EXISTS) response->httpCode = HTTP_CONFLICT;
     else response->httpCode = HTTP_INVALID_REQUEST;
+
+    response->contentType = "application/javascript";
 
     //TODO build json response
 
@@ -175,7 +205,18 @@ OperationResponse *operationDeleteFile(string rootFolder, Url* url) {
     else if(result == CODE_FILE_NOT_FOUND) response->httpCode = HTTP_NOT_FOUND;
     else response->httpCode = HTTP_INVALID_REQUEST;
 
+    response->contentType = "application/javascript";
+
     //TODO build json response
 
+    return response;
+}
+
+OperationResponse *operationInvalid()
+{
+    OperationResponse* response = new OperationResponse;
+    response->httpCode = HTTP_INVALID_REQUEST;
+    response->body = "";
+    response->contentType = "";
     return response;
 }

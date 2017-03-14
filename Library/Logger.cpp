@@ -5,17 +5,26 @@
 
 #include "Logger.h"
 
+bool logging = true;
+
+void disableLogging()
+{
+    logging = false;
+}
+
 void logInfo(string category, string message)
 {
-    cout << " Info (" << category << ") : " << message << endl;
+    if(logging)
+        cout << " Info (" << category << ") : " << message << endl;
 }
 
 void logWarning(string category, string message)
 {
-    cout << "Warning (" << category << ") : " << message << endl;
+    if(logging)
+        cout << "Warning (" << category << ") : " << message << endl;
 }
 
 void logError(string category, string message)
 {
-    cout << "Error (" << category << ") : " << message << endl;
+    cerr << "Error (" << category << ") : " << message << endl;
 }

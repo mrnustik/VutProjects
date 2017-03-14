@@ -1,3 +1,5 @@
+#define CLIENT
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
@@ -10,6 +12,7 @@
 #include "Library/Logger.h"
 #include "Library/Memory.h"
 #include "Library/Http.h"
+#include "Library/Json.h"
 
 
 typedef struct {
@@ -98,6 +101,7 @@ int parseArguments(int argc, char* argv[], tArguments** pArguments)
 int main(int argc, char* argv[])
 {
     memoryInit();
+    disableLogging();
 
     tArguments* arguments = NULL;
 
@@ -207,20 +211,53 @@ int main(int argc, char* argv[])
             body.append(buffer, n);
         }
     }
-    if(response != NULL)
+
+    if (arguments->operation == FILE_GET)
     {
-        if (arguments->operation == FILE_GET)
+        if(response != NULL)
         {
-            writeFile(arguments->remotePath, body);
+            if(response->code == HTTP_CONFLICT)
+            {
+                cerr << codeToMessage(CODE_EXISTS);
+            }
+            else if(response->code == HTTP_FORBIDEN)
+            {
+                cerr << codeToMessage(CODE_USER_NOT_FOUND);
+            }
+            else if(response->code == HTTP_NOT_FOUND)
+            {
+                cerr << codeToMessage(CODE_FILE_NOT_FOUND);
+            }
+            else
+            {
+                cerr << codeToMessage(CODE_UNKNOWN);
+            }
+            if(body.size() > 0)
+                writeFile(arguments->remotePath, body);
+        }
+        else
+        {
+            cerr << "Unknown error" << endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+    else if(response != NULL)
+    {
+        JsonMessage* json = jsonFromString(body);
+        string message = codeToMessage(json->code);
+        cerr << message;
+        if(json->code != 0)
+            exit(EXIT_FAILURE);
+        if(json->body.size() > 0)
+        {
+            cout << json->body;
         }
     }
     else
     {
-        cout << "Unknown error" << endl;
+        cerr << "Unknown error" << endl;
         exit(EXIT_FAILURE);
     }
-
-    close(clientSocket);
 
     logInfo("Networking", "Closing socket.");
     close(clientSocket);

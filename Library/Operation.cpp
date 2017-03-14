@@ -3,6 +3,7 @@
 //
 
 #include "Operation.h"
+#include "Http.h"
 
 
 using namespace std;
@@ -98,8 +99,29 @@ string operationToTypeQuery(OperationType type)
     return string();
 }
 
+bool userExists(string rootFolder, Url* url)
+{
+    string userPath = rootFolder + "/" + url->userName;
+    DIR* dir = opendir(userPath.c_str());
+    if(dir != NULL)
+    {
+        closedir(dir);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 OperationResponse *operationMakeDirectory(string rootFolder, Url* url) {
     OperationResponse* response = new OperationResponse;
+    if(userExists(rootFolder, url) == false)
+    {
+        response->httpCode = HTTP_FORBIDEN;
+        response->body = jsonWithStatus(CODE_USER_NOT_FOUND);
+        return response;
+    }
     int result = createDirectory(rootFolder, url);
 
     if(result == CODE_OK) response->httpCode = HTTP_OK;
@@ -107,14 +129,20 @@ OperationResponse *operationMakeDirectory(string rootFolder, Url* url) {
 
     response->contentType = "application/javascript";
 
-    //TODO build json response
+    response->body = jsonWithStatus(result);
 
     return response;
 }
 
 OperationResponse *operationRemoveDirectory(string rootFolder, Url* url) {
     OperationResponse* response = new OperationResponse;
-    int result = createDirectory(rootFolder, url);
+    if(userExists(rootFolder, url) == false)
+    {
+        response->httpCode = HTTP_FORBIDEN;
+        response->body = jsonWithStatus(CODE_USER_NOT_FOUND);
+        return response;
+    }
+    int result = deleteDirectory(rootFolder, url);
 
     if(result == CODE_OK) response->httpCode = HTTP_OK;
     else if(result == CODE_DIR_NOT_FOUND) response->httpCode = HTTP_NOT_FOUND;
@@ -122,16 +150,21 @@ OperationResponse *operationRemoveDirectory(string rootFolder, Url* url) {
 
     response->contentType = "application/javascript";
 
-    //TODO buld json response
+    response->body = jsonWithStatus(result);
 
-    return nullptr;
+    return response;
 }
 
 OperationResponse *operationListDirectory(string rootFolder, Url* url) {
     OperationResponse* response = new OperationResponse;
     vector<string> directories;
     int result = 0;
-
+    if(userExists(rootFolder, url) == false)
+    {
+        response->httpCode = HTTP_FORBIDEN;
+        response->body = jsonWithStatus(CODE_USER_NOT_FOUND);
+        return response;
+    }
     tie(result, directories) = getDirectoryContent(rootFolder, url);
 
     if(result == CODE_OK)
@@ -147,11 +180,21 @@ OperationResponse *operationListDirectory(string rootFolder, Url* url) {
         response->httpCode = HTTP_INVALID_REQUEST;
     }
 
-    //TODO build json response
+    response->contentType = "application/javascript";
+
+
+    string output = "";
     if(directories.size() != 0)
     {
+        for(vector<string>::iterator it = directories.begin(); it != directories.end(); ++it )
+        {
+            output += *it + "\n";
+        }
 
     }
+
+    response->body = jsonWithStatusAndBody(result, output);
+
 
     return response;
 }
@@ -159,14 +202,18 @@ OperationResponse *operationListDirectory(string rootFolder, Url* url) {
 OperationResponse *operationUploadFile(string rootFolder, Url* url, string body) {
     OperationResponse* response = new OperationResponse;
     int result = writeFile(rootFolder, url, body);
-
+    if(userExists(rootFolder, url) == false)
+    {
+        response->httpCode = HTTP_FORBIDEN;
+        return response;
+    }
     if(result == CODE_OK) response->httpCode = HTTP_OK;
     else if(result == CODE_EXISTS) response->httpCode = HTTP_CONFLICT;
     else response->httpCode = HTTP_INVALID_REQUEST;
 
     response->contentType = "application/javascript";
 
-    //TODO build json response
+    response->body = jsonWithStatus(result);
 
     return response;
 }
@@ -175,7 +222,12 @@ OperationResponse *operationDownloadFile(string rootFolder, Url* url) {
     OperationResponse* response = new OperationResponse;
     int result = 0;
     string body = "";
-
+    if(userExists(rootFolder, url) == false)
+    {
+        response->httpCode = HTTP_FORBIDEN;
+        response->body = jsonWithStatus(CODE_USER_NOT_FOUND);
+        return response;
+    }
     tie(result, body) = readFile(rootFolder, url);
 
     if(result == CODE_OK)
@@ -185,6 +237,10 @@ OperationResponse *operationDownloadFile(string rootFolder, Url* url) {
     else if(result == CODE_EXISTS)
     {
         response->httpCode = HTTP_CONFLICT;
+    }
+    else if(result == CODE_FILE_NOT_FOUND)
+    {
+        response->httpCode = HTTP_NOT_FOUND;
     }
     else
     {
@@ -200,14 +256,19 @@ OperationResponse *operationDownloadFile(string rootFolder, Url* url) {
 OperationResponse *operationDeleteFile(string rootFolder, Url* url) {
     OperationResponse* response = new OperationResponse;
     int result = deleteFile(rootFolder, url);
-
+    if(userExists(rootFolder, url) == false)
+    {
+        response->httpCode = HTTP_FORBIDEN;
+        response->body = jsonWithStatus(CODE_USER_NOT_FOUND);
+        return response;
+    }
     if(result == CODE_OK) response->httpCode = HTTP_OK;
     else if(result == CODE_FILE_NOT_FOUND) response->httpCode = HTTP_NOT_FOUND;
     else response->httpCode = HTTP_INVALID_REQUEST;
 
     response->contentType = "application/javascript";
 
-    //TODO build json response
+    response->body = jsonWithStatus(result);
 
     return response;
 }

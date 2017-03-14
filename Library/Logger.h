@@ -11,7 +11,7 @@
 
 using namespace std;
 
-
+void disableLogging();
 void logInfo(string category, string message);
 void logWarning(string category, string message);
 void logError(string category, string message);

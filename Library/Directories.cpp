@@ -3,6 +3,7 @@
 //
 
 #include <errno.h>
+#include <algorithm>
 
 #include "Directories.h"
 
@@ -12,10 +13,25 @@ using namespace std;
 #define DIR_NOT_EXISTS      1
 #define DIR_NOT_DIRECTORY   2
 
+
+
+bool sortDirectories(const string& a, const std::string& b)
+{
+    for (size_t c = 0; c < a.size() and c < b.size(); c++) {
+        if (std::tolower(a[c]) == std::tolower(b[c]))
+            continue;
+        if (std::tolower(a[c]) < std::tolower(b[c]))
+            return true;
+        else
+            return false;
+    }
+    return a.size() < b.size();
+}
+
 int directoryExists(string fullPath)
 {
     struct stat state;
-    if(stat(fullPath.c_str(), &state) == 0)
+    if(stat(fullPath.c_str(), &state) != 0)
     {
         return DIR_NOT_EXISTS;
     }
@@ -55,10 +71,13 @@ tuple<int, vector<string>> getDirectoryContent(string rootFolder, Url* url)
         while((entry = readdir(dir)) != NULL)
         {
             name = entry->d_name;
-            directories.push_back(name);
+            if(name.compare(".") != 0 && name.compare("..") != 0)
+                directories.push_back(name);
         }
         closedir(dir);
     }
+
+    std::sort(directories.begin(), directories.end(), sortDirectories);
 
     return make_tuple(code, directories);
 

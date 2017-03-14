@@ -216,6 +216,7 @@ int main(int argc, char* argv[])
     {
         if(response != NULL)
         {
+
             if(response->code == HTTP_CONFLICT)
             {
                 cerr << codeToMessage(CODE_EXISTS);
@@ -228,7 +229,7 @@ int main(int argc, char* argv[])
             {
                 cerr << codeToMessage(CODE_FILE_NOT_FOUND);
             }
-            else
+            else if(response->code != HTTP_OK)
             {
                 cerr << codeToMessage(CODE_UNKNOWN);
             }

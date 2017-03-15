@@ -103,7 +103,7 @@ bool userExists(string rootFolder, Url* url)
 {
     string userPath = rootFolder + "/" + url->userName;
     DIR* dir = opendir(userPath.c_str());
-    if(dir != NULL)
+    if(dir != NULL && url->userName.size() != 0)
     {
         closedir(dir);
         return true;
@@ -234,7 +234,7 @@ OperationResponse *operationDownloadFile(string rootFolder, Url* url) {
     {
         response->httpCode = HTTP_OK;
     }
-    else if(result == CODE_EXISTS)
+    else if(result == CODE_NOT_FILE)
     {
         response->httpCode = HTTP_CONFLICT;
     }

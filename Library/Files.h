@@ -14,13 +14,13 @@
 
 #include "Http.h"
 #include "Memory.h"
-#include "Http.h"
+
 
 using namespace std;
 
 int deleteFile(string rootFolder, Url* request);
 int writeFile(string rootFolder, Url* request, string body);
-int writeFile(string remotePath, string body);
+int writeFile(string remotePath, string localPath, string body);
 tuple<int, string> readFile(string rootFolder, Url *url);
 
 string getFileContentLength(string path);

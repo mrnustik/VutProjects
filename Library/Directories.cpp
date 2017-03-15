@@ -19,7 +19,12 @@ bool sortDirectories(const string& a, const std::string& b)
 {
     for (size_t c = 0; c < a.size() and c < b.size(); c++) {
         if (std::tolower(a[c]) == std::tolower(b[c]))
-            continue;
+            if(a[c] > b[c])
+                return true;
+            else if(a[c] < b[c])
+                return false;
+            else
+                continue;
         if (std::tolower(a[c]) < std::tolower(b[c]))
             return true;
         else

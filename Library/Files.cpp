@@ -95,16 +95,25 @@ tuple<int, string> readFile(string rootFolder, Url *url)
 }
 
 
-int writeFile(string remotePath, string body)
+int writeFile(string remotePath, string localPath, string body)
 {
-    int lastIndex = remotePath.find_last_of("/");
-    string fullPath = "./" + remotePath.substr(lastIndex+1);
+    string fullPath;
+    if(localPath.size() == 0)
+    {
+        int lastIndex = remotePath.find_last_of("/");
+        fullPath = "./" + remotePath.substr(lastIndex + 1);
+    }
+    else
+    {
+        fullPath = localPath;
+    }
     ofstream OutFile;
     OutFile.open(fullPath, ios::out | ios::binary);
     if(OutFile.fail())
         return -1;
     OutFile.write(body.c_str(), body.length());
     OutFile.close();
+    return CODE_OK;
 }
 
 string getFileContentLength(string path)

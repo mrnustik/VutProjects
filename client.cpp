@@ -95,6 +95,18 @@ int parseArguments(int argc, char* argv[], tArguments** pArguments)
             }
         }
     }
+    else if(operationType == FILE_GET)
+    {
+        if(argc == 4)
+        {
+            (*pArguments)->localPath = argv[3];
+        }
+        else
+        {
+            (*pArguments)->localPath = "";
+        }
+
+    }
     return 1;
 }
 
@@ -219,7 +231,7 @@ int main(int argc, char* argv[])
 
             if(response->code == HTTP_CONFLICT)
             {
-                cerr << codeToMessage(CODE_EXISTS);
+                cerr << codeToMessage(CODE_NOT_FILE);
             }
             else if(response->code == HTTP_FORBIDEN)
             {
@@ -234,7 +246,7 @@ int main(int argc, char* argv[])
                 cerr << codeToMessage(CODE_UNKNOWN);
             }
             if(body.size() > 0)
-                writeFile(arguments->remotePath, body);
+                writeFile(arguments->remotePath, arguments->localPath, body);
         }
         else
         {

@@ -1,6 +1,7 @@
 
 #include "Files.h"
 #include "Http.h"
+#include <algorithm>
 
 
 string getCurrentHttpDate()
@@ -19,14 +20,21 @@ Url* parseUrl(string str)
 
     unsigned long userNameEnd = str.find("/", 1);
     unsigned long queryTypeStart = str.find("?type=");
-    if(userNameEnd == string::npos
-            || queryTypeStart == string::npos)
+    if(userNameEnd == string::npos)
+    {
+        userNameEnd = queryTypeStart;
+        url->path = "";
+        url->userName = str.substr(1, userNameEnd - 1);
+    }
+    else if(queryTypeStart == string::npos)
     {
         return NULL;
     }
-
-    url->userName = str.substr(1, userNameEnd - 1);
-    url->path = str.substr(userNameEnd + 1, queryTypeStart - userNameEnd - 1);
+    else
+    {
+        url->userName = str.substr(1, userNameEnd - 1);
+        url->path = str.substr(userNameEnd + 1, queryTypeStart - userNameEnd - 1);
+    }
 
     string type = str.substr(queryTypeStart + 6);
     if(type.compare("file") == 0)

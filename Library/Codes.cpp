@@ -23,7 +23,7 @@ string codeToMessage(int code) {
         case CODE_FILE_NOT_FOUND:
             return "File not found\n";
         case CODE_USER_NOT_FOUND:
-            return "User not found\n";
+            return "User Account Not Found\n";
         case CODE_UNKNOWN:
         default:
             return "Code unknown\n";

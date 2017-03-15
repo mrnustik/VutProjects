@@ -10,7 +10,7 @@ string jsonWithStatus(int code) {
     string json = "";
 
     json += "{\n";
-    json += "\tstatus:\"" + to_string(code) + "\"\n";
+    json += "\t\"status\":\"" + to_string(code) + "\"\n";
     json += "}\n";
 
     return json;
@@ -20,8 +20,8 @@ string jsonWithStatusAndBody(int code, string body) {
     string json = "";
 
     json += "{\n";
-    json += "\tstatus:\"" + to_string(code) + "\"\n,";
-    json += "\tbody:\"" + body + "\"\n";
+    json += "\t\"status\":\"" + to_string(code) + "\"\n,";
+    json += "\t\"body\":\"" + body + "\"\n";
     json += "}\n";
 
 
@@ -31,13 +31,13 @@ string jsonWithStatusAndBody(int code, string body) {
 JsonMessage* jsonFromString(string json) {
     JsonMessage* message = new JsonMessage;
 
-    int statusIndex = json.find("status:");
+    int statusIndex = json.find("status\":");
     int endIndex = json.find("\"\n", statusIndex);
     if(statusIndex == string::npos)
         message->code = CODE_UNKNOWN;
     else
     {
-        string codeString = json.substr(statusIndex + 8, endIndex - statusIndex - 8);
+        string codeString = json.substr(statusIndex + 9, endIndex - statusIndex - 9);
         try
         {
             message->code = stoi(codeString);
@@ -48,13 +48,13 @@ JsonMessage* jsonFromString(string json) {
         }
     }
 
-    int bodyIndex = json.find("body:");
+    int bodyIndex = json.find("\"body\":");
     int bodyEndIndex = json.find("\"\n", bodyIndex);
     if(bodyIndex == string::npos)
         message->body = "";
     else
     {
-        string codeString = json.substr(bodyIndex + 6, bodyEndIndex - bodyIndex - 6);
+        string codeString = json.substr(bodyIndex + 8, bodyEndIndex - bodyIndex - 8);
         message->body = codeString;
     }
 

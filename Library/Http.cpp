@@ -33,7 +33,7 @@ Url* parseUrl(string str)
     {
         url->type = FIL;
     }
-    else if(type.compare("dir") == 0)
+    else if(type.compare("folder") == 0)
     {
         url->type = DIRECTORY;
     }

@@ -87,7 +87,7 @@ string operationToTypeQuery(OperationType type)
         case DIR_MAKE:
         case DIR_REMOVE:
         case DIR_LIST:
-            return "?type=dir";
+            return "?type=folder";
         case FILE_DELETE:
         case FILE_UPLOAD:
         case FILE_GET:

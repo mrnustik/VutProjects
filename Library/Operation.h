@@ -6,6 +6,7 @@
 #define OPERATION_H
 
 #include <string>
+#include "Json.h"
 using namespace std;
 typedef enum {
     DIR_MAKE,

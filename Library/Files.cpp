@@ -47,6 +47,14 @@ int writeFile(string rootFolder, Url *url, string body)
     string userName = url->userName;
     string path = url->path;
     string fullPath = rootFolder + "/" + userName + "/" + path;
+
+    int exists = fileExists(fullPath);
+
+    if(exists == FILE_OK)
+    {
+        return CODE_EXISTS;
+    }
+
     ofstream OutFile;
     OutFile.open(fullPath, ios::out | ios::binary);
     if(OutFile.fail())
@@ -73,7 +81,7 @@ tuple<int, string> readFile(string rootFolder, Url *url)
     }
     else if(exists == FILE_NOT_FILE)
     {
-        result = CODE_UNKNOWN;
+        result = CODE_NOT_FILE;
     }
     else
     {

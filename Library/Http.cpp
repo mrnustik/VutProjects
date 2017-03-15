@@ -1,6 +1,6 @@
 
 #include "Files.h"
-
+#include "Http.h"
 
 
 string getCurrentHttpDate()
@@ -76,6 +76,14 @@ HttpResponse *httpResponseFromString(string header) {
     else if(header.find("404 Not Found\r\n", 8) != string::npos)
     {
         response->code = HTTP_NOT_FOUND;
+    }
+    else if(header.find("401 Forbidden\r\n", 8) != string::npos)
+    {
+        response->code = HTTP_FORBIDEN;
+    }
+    else if(header.find("409 Conflict\r\n", 8) != string::npos)
+    {
+        response->code = HTTP_CONFLICT;
     }
     else
     {
@@ -215,6 +223,8 @@ string httpResponseCodeToString(const HttpResponseCode code)
             return "Not Found";
         case HTTP_CONFLICT:
             return "Conflict";
+        case HTTP_FORBIDEN:
+            return "Forbidden";
     }
     return "";
 }

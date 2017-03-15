@@ -13,7 +13,7 @@ set(SERVER_SOURCE_FILES server.cpp
         Library/Files.cpp
         Library/Files.h
         Library/Http.cpp
-        Library/Http.h Library/Directories.cpp Library/Directories.h)
+        Library/Http.h Library/Directories.cpp Library/Directories.h Library/Json.cpp Library/Json.h)
 
 set(CLIENT_SOURCE_FILES client.cpp
         Library/Logger.cpp
@@ -25,7 +25,7 @@ set(CLIENT_SOURCE_FILES client.cpp
         Library/Files.cpp
         Library/Files.h
         Library/Http.cpp
-        Library/Http.h Library/Directories.cpp Library/Directories.h Library/Codes.h)
+        Library/Http.h Library/Directories.cpp Library/Directories.h Library/Codes.h Library/Json.cpp Library/Json.h Library/Codes.cpp)
 
 add_executable(ftrestd ${SERVER_SOURCE_FILES})
 

@@ -136,6 +136,12 @@ OperationResponse *operationMakeDirectory(string rootFolder, Url* url) {
 
 OperationResponse *operationRemoveDirectory(string rootFolder, Url* url) {
     OperationResponse* response = new OperationResponse;
+    if(url->path.size() == 0)
+    {
+        response->httpCode = HTTP_INVALID_REQUEST;
+        response->body = jsonWithStatus(CODE_UNKNOWN);
+        return response;
+    }
     if(userExists(rootFolder, url) == false)
     {
         response->httpCode = HTTP_FORBIDEN;

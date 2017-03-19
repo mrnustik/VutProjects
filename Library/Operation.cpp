@@ -71,7 +71,7 @@ string operationToAccept(OperationType type)
         case DIR_REMOVE:
         case FILE_DELETE:
         case DIR_LIST:
-            return "application/javascript";
+            return "application/json";
         case FILE_GET:
             return "application/octet-stream";
         default:
@@ -127,7 +127,7 @@ OperationResponse *operationMakeDirectory(string rootFolder, Url* url) {
     if(result == CODE_OK) response->httpCode = HTTP_OK;
     else response->httpCode = HTTP_INVALID_REQUEST;
 
-    response->contentType = "application/javascript";
+    response->contentType = "application/json";
 
     response->body = jsonWithStatus(result);
 
@@ -154,7 +154,7 @@ OperationResponse *operationRemoveDirectory(string rootFolder, Url* url) {
     else if(result == CODE_DIR_NOT_FOUND) response->httpCode = HTTP_NOT_FOUND;
     else response->httpCode = HTTP_INVALID_REQUEST;
 
-    response->contentType = "application/javascript";
+    response->contentType = "application/json";
 
     response->body = jsonWithStatus(result);
 
@@ -186,7 +186,7 @@ OperationResponse *operationListDirectory(string rootFolder, Url* url) {
         response->httpCode = HTTP_INVALID_REQUEST;
     }
 
-    response->contentType = "application/javascript";
+    response->contentType = "application/json";
 
 
     string output = "";
@@ -217,7 +217,7 @@ OperationResponse *operationUploadFile(string rootFolder, Url* url, string body)
     else if(result == CODE_EXISTS) response->httpCode = HTTP_CONFLICT;
     else response->httpCode = HTTP_INVALID_REQUEST;
 
-    response->contentType = "application/javascript";
+    response->contentType = "application/json";
 
     response->body = jsonWithStatus(result);
 
@@ -272,7 +272,7 @@ OperationResponse *operationDeleteFile(string rootFolder, Url* url) {
     else if(result == CODE_FILE_NOT_FOUND) response->httpCode = HTTP_NOT_FOUND;
     else response->httpCode = HTTP_INVALID_REQUEST;
 
-    response->contentType = "application/javascript";
+    response->contentType = "application/json";
 
     response->body = jsonWithStatus(result);
 

@@ -75,7 +75,7 @@ int parseArguments(int argc, char *argv[], tArguments **pArguments)
 
 int main(int argc, char *argv[])
 {
-
+    disableLogging();
     memoryInit();
 
     tArguments *arguments = NULL;
@@ -154,7 +154,6 @@ int main(int argc, char *argv[])
                         body = tmp.substr(headerIndex + 4);
                         contentRead += body.size();
                         tmp.erase();
-                        cout << header;
                         request = httpRequestFromString(header);
                         if(request == NULL)
                         {

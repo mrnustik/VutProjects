@@ -11,12 +11,12 @@ import java.util.List;
 /**
  * Created by Mrnda on 3/9/2017.
  */
-public class CardDeckImpl implements CardDeck {
+public class StandardCardDeck implements CardDeck {
 
     public static CardDeck createStandardCardDeck()
     {
         AbstractFactorySolitaire factory = new FactoryKlondike();
-        CardDeck deck = new CardDeckImpl();
+        CardDeck deck = new StandardCardDeck();
         for (int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.CLUBS,i)); }
         for (int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.DIAMONDS,i)); }
         for (int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.HEARTS,i)); }

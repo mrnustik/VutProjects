@@ -5,8 +5,6 @@ package ija.ija2016.homework2;
 import ija.ija2016.homework2.model.board.AbstractFactorySolitaire;
 import ija.ija2016.homework2.model.board.FactoryKlondike;
 import ija.ija2016.homework2.model.cards.Card;
-//import ija.ija2016.homework2.model.cards.CardDeck;
-//import ija.ija2016.homework2.model.cards.CardStack;
 import ija.ija2016.homework2.model.cards.CardDeck;
 import ija.ija2016.homework2.model.cards.CardStack;
 import org.junit.After;

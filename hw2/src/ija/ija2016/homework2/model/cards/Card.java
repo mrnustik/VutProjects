@@ -5,10 +5,30 @@ package ija.ija2016.homework2.model.cards;
  */
 public interface Card {
     public enum Color {
-        CLUBS,
-        DIAMONDS,
-        HEARTS,
-        SPADES;
+        CLUBS {
+            @Override
+            public String toString() {
+                return "C";
+            }
+        },
+        DIAMONDS{
+            @Override
+            public String toString() {
+                return "D";
+            }
+        },
+        HEARTS{
+            @Override
+            public String toString() {
+                return "H";
+            }
+        },
+        SPADES{
+            @Override
+            public String toString() {
+                return "S";
+            }
+        };
 
         public boolean similarColorTo(Card.Color color)
         {

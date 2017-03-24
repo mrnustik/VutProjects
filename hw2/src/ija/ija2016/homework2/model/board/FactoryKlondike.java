@@ -18,16 +18,16 @@ public class FactoryKlondike extends AbstractFactorySolitaire {
 
     @Override
     public CardDeck createCardDeck() {
-        return CardDeckImpl.createStandardCardDeck();
+        return StandardCardDeck.createStandardCardDeck();
     }
 
     @Override
     public CardDeck createTargetPack(Card.Color color) {
-        return new TargetCardDeckImpl(color);
+        return new TargetCardDeck(color);
     }
 
     @Override
     public CardStack createWorkingPack() {
-        return new WorkingPackImpl();
+        return new WorkingCardStack();
     }
 }

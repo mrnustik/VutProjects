@@ -6,21 +6,26 @@ import ija.ija2016.homework2.model.cards.CardStack;
 /**
  * Created by Mrnda on 3/9/2017.
  */
-public class CardStackImpl extends CardDeckImpl implements CardStack {
+public class WorkingCardStack extends StandardCardStack {
+
     @Override
-    public CardStack pop(Card card) {
-        int idx = this.lastIndexOf(card);
-        if(idx > 0)
+    public boolean put(Card card) {
+        if(isEmpty())
         {
-            CardStackImpl stack = new CardStackImpl();
-            for(int i = idx; i <  size(); i++)
-            {
-                stack.put(this.get(i));
-            }
-            mCards.removeAll(stack.mCards);
-            return stack;
+            if(card.value() != 13)
+                return false;
+            super.put(card);
+            return true;
         }
-        return null;
+        if(get().color().similarColorTo(card.color()))
+        {
+            return false;
+        }
+        else if(get().value() == card.value() + 1)
+        {
+            return super.put(card);
+        }
+        return false;
     }
 
     @Override
@@ -35,6 +40,4 @@ public class CardStackImpl extends CardDeckImpl implements CardStack {
         }
         return true;
     }
-
-
 }

@@ -5,11 +5,11 @@ import ija.ija2016.homework2.model.cards.Card;
 /**
  * Created by Mrnda on 3/9/2017.
  */
-public class TargetCardDeckImpl extends CardDeckImpl {
+public class TargetCardDeck extends StandardCardDeck {
 
     private Card.Color mColor;
 
-    public TargetCardDeckImpl(Card.Color color)
+    public TargetCardDeck(Card.Color color)
     {
         this.mColor = color;
     }

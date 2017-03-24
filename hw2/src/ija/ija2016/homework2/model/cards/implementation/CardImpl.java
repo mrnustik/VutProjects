@@ -65,4 +65,32 @@ public class CardImpl implements Card {
     public int compareValue(Card card) {
         return this.value() - card.value();
     }
+
+    @Override
+    public String toString() {
+        if(value() != 1 && value() < 11)
+        {
+            return String.format("%d(%s)", this.value(), this.color());
+        }
+        else
+        {
+            char shortcut = ' ';
+            switch (value())
+            {
+                case 1:
+                    shortcut = 'A';
+                    break;
+                case 11:
+                    shortcut = 'J';
+                    break;
+                case 12:
+                    shortcut = 'Q';
+                    break;
+                case 13:
+                    shortcut = 'K';
+                    break;
+            }
+            return String.format("%c(%s)", shortcut, this.color());
+        }
+    }
 }

@@ -15,6 +15,7 @@ ERROR_SYNTACTIC = 60
 ERROR_SEMANTIC = 61
 ERROR_NOT_DSKA = 62
 
+# (?!'),(?!')
 
 def print_error(message, code):
     print(message, file=sys.stderr)
@@ -219,8 +220,22 @@ def read(args):
     else:
         return str(text)
 
+def scan(input_text):
+    states = ""
+    alphabet = ""
+    rules = ""
+    start = ""
+    final_states = ""
+    i = 0
+    part = 1
+    while i < len(input_text) and part < 6:
+        if i == 0 and input_text[i] == '(':
+            i += 1; #prvni znak nas nezajima
+
+
+
 args = parse_arguments()
 input_text = read(args)
-input_text = re.sub(r'#.*', '', string=input_text)
-print(input_text)
+input_text = re.sub(r'#.*', repl='', string=input_text)
+
 

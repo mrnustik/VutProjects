@@ -1,7 +1,10 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import argparse
 import sys
-from pprint import pprint
+import re
+import os
 
 EXIT_OK = 0
 ERROR_INVALID_PARAMS = 1
@@ -22,7 +25,9 @@ class State:
 
     # inicializace stavu podle jmena
     def __init__(self, name):
+
         self.name = name
+
 
     # porovnani dvou stavu (jmen stavu)
     def __cmp__(self, other):
@@ -33,21 +38,21 @@ class State:
         else:
             return 1
 
-    # equalita dvou stavu 
+    # equalita dvou stavu
     def __eq__(self, other):
         if type(other) is str:
             return self.name == other
         else:
             return other is self
 
-    # navrat stavu jako stringu 
+    # navrat stavu jako stringu
     def __str__(self):
         #TODO Zmenit na odpovidajici syntaxi
         return "State: " + str(self.name)
 
 
 class AlphabetCharacter:
-    
+
     def __init__(self, character):
         self.character = character
 
@@ -59,7 +64,7 @@ class AlphabetCharacter:
         else:
             return 1
 
-            # equalita dvou stavu 
+            # equalita dvou stavu
 
     def __eq__(self, other):
         if type(other) is str:
@@ -87,7 +92,7 @@ class Rule:
         return "Rule: " + str(self.fr) + " '" + str(self.input) + "' -> " + str(self.to)
 
 
-class InvalidStateException(Exception):
+class ScriptException(Exception):
     def __init__(self, message, error):
         self.message = message
         self.error = error
@@ -111,7 +116,7 @@ class FiniteStateMachine:
             rule = Rule(state_from, character, state_to)
             self.rules.append(rule)
         else:
-            raise InvalidStateException("Trying to create rule with invalid parameter", ERROR_SEMANTIC)
+            raise ScriptException("Trying to create rule with invalid parameter", ERROR_SEMANTIC)
 
     def add_alphabet_character(self, character):
         self.alphabet.append(character)
@@ -120,13 +125,13 @@ class FiniteStateMachine:
         if final_state in self.states:
             self.final_states.append(final_state)
         else:
-            raise InvalidStateException("Trying to add final state that is not defined", ERROR_SEMANTIC)
+            raise ScriptException("Trying to add final state that is not defined", ERROR_SEMANTIC)
 
     def set_start(self, start_state):
         if start_state in self.states:
             self.start = start_state
         else:
-            raise InvalidStateException("Trying to add start state that is not defined", ERROR_SEMANTIC)
+            raise ScriptException("Trying to add start state that is not defined", ERROR_SEMANTIC)
 
 
 class Arguments:
@@ -149,12 +154,12 @@ def parse_arguments():
         parser.add_argument('--input',
                             help="input file",
                             required=False,
-                            default='sys.stdin')
+                            default=sys.stdin)
 
         parser.add_argument('--output',
                             help="output file",
                             required=False,
-                            default='sys.stdout')
+                            default=sys.stdout)
 
         parser.add_argument('-f',
                             '--find-non-finishing',
@@ -194,11 +199,28 @@ def parse_arguments():
         arguments.input = args.input
         arguments.output = args.output
         arguments.minimize = args.minimize
-
         return arguments
 
+
+def read(args):
+    text = ""
+    if args.input != sys.stdin:
+        try:
+            with open(args.input, 'r', encoding='utf8') as file:
+                text = file.read()
+        except:
+            print_error('Cant open the file.', ERROR_INVALID_INPUT)
+    else:
+        text = args.input.read()
+    if len(text) == 0:
+        print_error("Invalid input file. It is empty.", ERROR_INVALID_INPUT)
+    if args.caseInsensitive:
+        return str(text).lower()
+    else:
+        return str(text)
+
 args = parse_arguments()
-
-
-
+input_text = read(args)
+input_text = re.sub(r'#.*', '', string=input_text)
+print(input_text)
 

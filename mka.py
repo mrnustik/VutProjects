@@ -15,6 +15,33 @@ ERROR_SYNTACTIC = 60
 ERROR_SEMANTIC = 61
 ERROR_NOT_DSKA = 62
 
+class ScannerStates(Enum):
+    BEGIN = 0
+    STATE = 1
+    STATE_NEXT = 2
+    BEGIN_ALPHA = 3
+    ALPHABET = 4
+    SYMBOL = 5
+    SYMBOL_COMMA = 6
+    SYMBOL_END = 7
+    SYMBOL_NEXT = 8
+    BEGIN_RULES = 9
+    RULE_FROM = 10
+    RULE_SYMBOL = 11
+    RULE_SYMBOL_COMMA = 12
+    RULE_ARROW_1 = 13
+    RULE_ARROW_2 = 14
+    RULE_TO = 15
+    START_STATE = 16
+    BEGIN_FINAL = 17
+    FINAL_STATE = 18
+    FINAL_STATE_NEXT = 19
+    STATE_ALPHA_SEPARATOR = 20
+    ALPHA_RULES_SEPARATOR = 21
+    RULE_START_SEPARATOR = 22
+    START_FINAL_SEPARATOR = 23
+    END = 24
+
 # (?!'),(?!')
 
 def print_error(message, code):
@@ -221,16 +248,157 @@ def read(args):
         return str(text)
 
 def scan(input_text):
-    states = ""
-    alphabet = ""
-    rules = ""
-    start = ""
-    final_states = ""
+    current_state_name = ""
+    current_from_state_name = ""
+    current_symbol = ""
+    current_to_state_name = ""
+    fsm = FiniteStateMachine()
     i = 0
     part = 1
+    state = ScannerStates.BEGIN;
     while i < len(input_text) and part < 6:
         if i == 0 and input_text[i] == '(':
-            i += 1; #prvni znak nas nezajima
+            i += 1 #prvni znak nas nezajima
+        if re.match("\s", input_text[i]) and state != ScannerStates.SYMBOL and state != ScannerStates.RULE_SYMBOL
+            i += 1
+            continue
+        if state == ScannerStates.BEGIN:
+            if input_text[i] == '{':
+                state = ScannerStates.STATE
+            else:
+                raise ScriptException("Expecting { as first character", ERROR_SYNTACTIC)
+        elif state == ScannerStates.STATE:
+            if input_text[i] == ',':
+                fsm.add_state(State(current_state_name))
+                current_state_name = ""
+                state = ScannerStates.STATE_NEXT
+            elif input_text[i] == '}':
+                fsm.add_state(State(current_state_name))
+                current_state_name = ""
+                state = ScannerStates.STATE_ALPHA_SEPARATOR
+            else:
+                current_state_name += input_text[i]
+        elif state == ScannerStates.STATE_ALPHA_SEPARATOR:
+            if input_text[i] == ',':
+                state = ScannerStates.BEGIN_ALPHA
+            else:
+                raise ScriptException("Expecting separator(,) between states and alphabet", ERROR_SYNTACTIC)
+        elif state == ScannerStates.BEGIN_ALPHA:
+            if input_text[i] == '{':
+                state = ScannerStates.ALPHABET
+            else:
+                raise ScriptException("Expecting { before alphabet list starts", ERROR_SYNTACTIC)
+        elif state == ScannerStates.ALPHABET:
+            if input_text[i] == '\'':
+                state = ScannerStates.SYMBOL
+            else:
+                raise ScriptException("Alphabet has to contain at least one symbol of the alphabet", ERROR_SEMANTIC)
+        elif state == ScannerStates.SYMBOL:
+            fsm.add_alphabet_character(AlphabetCharacter(input_text[i]))
+            state = ScannerStates.SYMBOL_COMMA
+        elif state == ScannerStates.SYMBOL_COMMA:
+            if input_text[i] == '\'':
+                state = ScannerStates.SYMBOL_END
+            else:
+                raise ScriptException("Symbol has to be 1 character surrounded with apostrophes.", ERROR_SYNTACTIC)
+        elif state == ScannerStates.SYMBOL_END:
+            if input_text[i] == ',':
+                state = ScannerStates.SYMBOL_NEXT
+            elif input_text[i] == '}':
+                state = ScannerStates.ALPHA_RULES_SEPARATOR
+            else:
+                raise ScriptException("Unexpected character in alphabet section",ERROR_SYNTACTIC)
+        elif state == ScannerStates.SYMBOL_NEXT:
+            if input_text[i] == '\'':
+                state = ScannerStates.SYMBOL
+            else:
+                raise ScriptException("Symbol has to be 1 character surrounded with apostrophes", ERROR_SYNTACTIC)
+        elif state == ScannerStates.ALPHA_RULES_SEPARATOR:
+            if input_text[i] == ',':
+                state = ScannerStates.BEGIN_RULES
+            else:
+                raise ScriptException("Expecting separator(,) between alphabet and rulse", ERROR_SYNTACTIC)
+        elif state == ScannerStates.BEGIN_RULES:
+            if input_text[i] == '{':
+                state = ScannerStates.RULE_FROM
+            else:
+                raise ScriptException("Rules has to start with left bracket {")
+        elif state == ScannerStates.RULE_FROM:
+            if input_text[i] == '\'':
+                state = ScannerStates.RULE_SYMBOL
+            else:
+                current_from_state_name += input_text[i]
+        elif state == ScannerStates.RULE_SYMBOL:
+            current_symbol = input_text[i]
+            state = ScannerStates.RULE_SYMBOL_COMMA
+        elif state == ScannerStates.RULE_SYMBOL_COMMA:
+            if input_text[i] == '\'':
+                state = ScannerStates.RULE_ARROW_1
+            else:
+                raise ScriptException("Alphabet symbol has to be 1 character placed between apostrophes", ERROR_SYNTACTIC)
+        elif state == ScannerStates.RULE_ARROW_1:
+            if input_text[i] == '-':
+                state = ScannerStates.RULE_ARROW_2
+            else:
+                raise ScriptException("Arrow has to be placed in rule between symbol and next state", ERROR_SYNTACTIC)
+        elif state == ScannerStates.RULE_ARROW_2:
+            if input_text[i] == '>':
+                state = ScannerStates.RULE_TO
+            else:
+                raise ScriptException("Arrow has to be placed in rule between symbol and next state", ERROR_SYNTACTIC)
+        elif state == ScannerStates.RULE_TO:
+            if input_text[i] == ',':
+                fsm.add_rule(current_from_state_name, current_symbol, current_to_state_name)
+                current_from_state_name = ""
+                current_symbol = ""
+                current_to_state_name = ""
+                state = ScannerStates.RULE_FROM
+            elif input_text[i] == '}':
+                fsm.add_rule(current_from_state_name, current_symbol, current_to_state_name)
+                current_from_state_name = ""
+                current_symbol = ""
+                current_to_state_name = ""
+                state = ScannerStates.RULE_START_SEPARATOR
+            else:
+                current_to_state_name += input_text[i]
+        elif state == ScannerStates.RULE_START_SEPARATOR:
+            if input_text[i] == ',':
+                state = ScannerStates.START_STATE
+            else:
+                raise ScriptException("Expecting separator(,) between rules and start state", ERROR_SYNTACTIC)
+        elif state == ScannerStates.START_STATE:
+            if input_text[i] == ',':
+                fsm.set_start(State(current_state_name))
+                current_state_name = ""
+                state = ScannerStates.BEGIN_FINAL
+            else:
+                current_state_name += input_text[i]
+        elif state == ScannerStates.BEGIN_FINAL:
+            if input_text[i] == '{':
+                state = ScannerStates.FINAL_STATE
+            else:
+                raise ScriptException("{ has to be before final states", ERROR_SYNTACTIC)
+        elif state == ScannerStates.FINAL_STATE:
+            if input_text[i] == '}':
+                fsm.add_final_state(State(current_state_name))
+                current_state_name = ""
+                state = ScannerStates.END
+            elif input_text[i] == ',':
+                fsm.add_final_state(State(current_state_name))
+                current_state_name = ""
+                state = ScannerStates.FINAL_STATE_NEXT
+            else:
+                current_state_name += input_text[i]
+        elif state == ScannerStates.FINAL_STATE_NEXT:
+            if input_text[i] == ',':
+                state = ScannerStates.FINAL_STATE
+            else:
+                raise ScriptException("After comma has to be next state in finals", ERROR_SYNTACTIC)
+        elif state == ScannerStates.END:
+            break
+        i += 1
+
+                
 
 
 

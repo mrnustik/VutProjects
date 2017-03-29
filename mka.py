@@ -4,6 +4,7 @@
 import argparse
 import sys
 import re
+from enum import Enum
 import os
 
 EXIT_OK = 0
@@ -70,13 +71,15 @@ class State:
     def __eq__(self, other):
         if type(other) is str:
             return self.name == other
+        if type(other) is State:
+            return self.name == other.name
         else:
             return other is self
 
     # navrat stavu jako stringu
     def __str__(self):
         #TODO Zmenit na odpovidajici syntaxi
-        return "State: " + str(self.name)
+        return str(self.name)
 
 
 class AlphabetCharacter:
@@ -97,11 +100,13 @@ class AlphabetCharacter:
     def __eq__(self, other):
         if type(other) is str:
             return self.character == other
+        elif type(other) is AlphabetCharacter:
+            return self.character == other.character
         else:
             return other is self
 
     def __str__(self):
-        return "Character: " + self.character
+        return  self.character
 
 
 class Rule:
@@ -117,7 +122,7 @@ class Rule:
             return False
 
     def __str__(self):
-        return "Rule: " + str(self.fr) + " '" + str(self.input) + "' -> " + str(self.to)
+        return str(self.fr) + " '" + str(self.input) + "' -> " + str(self.to)
 
 
 class ScriptException(Exception):
@@ -160,6 +165,117 @@ class FiniteStateMachine:
             self.start = start_state
         else:
             raise ScriptException("Trying to add start state that is not defined", ERROR_SEMANTIC)
+
+    def __find_to_rules(self, state, symbol = None):
+        rules = []
+        for rule in self.rules:
+            if rule.to == state and (symbol is None or rule.input == symbol):
+                rules.append(rule)
+        return rules
+
+    def __find_from_rules(self, state, symbol):
+        rules = []
+        for rule in self.rules:
+            if rule.fr == state and (rule.input == symbol or symbol is None):
+                rules.append(rule)
+        return rules
+
+    def find_non_finishing(self):
+        non_finishing = []
+        stack = self.final_states[:]
+        visited = []
+        while stack:
+            current_state = stack.pop()
+            if current_state not in visited:
+                visited.append(current_state)
+            rules = self.__find_from_rules(current_state, None)
+
+            for rule in rules:
+                if rule.fr not in visited:
+                    stack.append(rule.fr)
+
+        for state in self.states:
+            if state not in visited:
+                non_finishing.append(state)
+
+        return non_finishing
+
+    def find_unreachable(self):
+        for state in self.states:
+            if state != self.start:
+                rules = self.__find_to_rules(state)
+                if len(rules) == 0:
+                    return state
+        return None
+
+    def is_well_specified(self):
+        unreachable = self.find_unreachable()
+        if unreachable is not None:
+            return False
+
+        for state in self.states:
+            for symbol in self.alphabet:
+                rules = self.__find_from_rules(state, symbol)
+                if len(rules) != 1:
+                    print_error("Deterministic rule violated. State: " + str(state) + " symbol: " + str(symbol), ERROR_NOT_DSKA)
+                    return False
+
+        non_finishing = self.find_non_finishing()
+        if len(non_finishing) > 1:
+            return False
+
+        return True
+
+    def str_states(self):
+        states = "{"
+        for state in self.states:
+            if self.states[len(self.states) - 1] == state:
+                states += str(state)
+            else:
+                states += str(state) + ", "
+        states += "}"
+        return states
+
+    def str_alphabet(self):
+        alphabet = "{"
+        for symbol in self.alphabet:
+            if self.alphabet[len(self.alphabet) - 1] == symbol:
+                alphabet += "\'" + str(symbol) + "\'"
+            else:
+                alphabet += "\'" + str(symbol) + "\', "
+        alphabet += "}"
+        return alphabet
+
+    def str_rules(self):
+        rules = "{\n"
+        for rule in self.rules:
+            if self.rules[len(self.rules) - 1] == rule:
+                rules += str(rule) + "\n"
+            else:
+                rules += str(rule) + ",\n"
+        rules += "}"
+        return rules
+
+    def str_final_states(self):
+        states = "{"
+        for state in self.final_states:
+            if self.final_states[len(self.final_states) - 1] == state:
+                states += str(state)
+            else:
+                states += str(state) + ", "
+        states += "}"
+        return states
+
+    def __str__(self):
+        string = "(\n"
+        string += self.str_states() + ",\n"
+        string += self.str_alphabet() + ",\n"
+        string += self.str_rules() + ",\n"
+        string += str(self.start) + ",\n"
+        string += self.str_final_states() + "\n"
+        string += ")\n"
+        return string
+
 
 
 class Arguments:
@@ -257,9 +373,9 @@ def scan(input_text):
     part = 1
     state = ScannerStates.BEGIN;
     while i < len(input_text) and part < 6:
-        if i == 0 and input_text[i] == '(':
+        if input_text[i] == '(':
             i += 1 #prvni znak nas nezajima
-        if re.match("\s", input_text[i]) and state != ScannerStates.SYMBOL and state != ScannerStates.RULE_SYMBOL
+        if re.match("\s", input_text[i]) and state != ScannerStates.SYMBOL and state != ScannerStates.RULE_SYMBOL:
             i += 1
             continue
         if state == ScannerStates.BEGIN:
@@ -278,6 +394,9 @@ def scan(input_text):
                 state = ScannerStates.STATE_ALPHA_SEPARATOR
             else:
                 current_state_name += input_text[i]
+        elif state == ScannerStates.STATE_NEXT:
+            state = ScannerStates.STATE
+            current_state_name += input_text[i]
         elif state == ScannerStates.STATE_ALPHA_SEPARATOR:
             if input_text[i] == ',':
                 state = ScannerStates.BEGIN_ALPHA
@@ -348,13 +467,13 @@ def scan(input_text):
                 raise ScriptException("Arrow has to be placed in rule between symbol and next state", ERROR_SYNTACTIC)
         elif state == ScannerStates.RULE_TO:
             if input_text[i] == ',':
-                fsm.add_rule(current_from_state_name, current_symbol, current_to_state_name)
+                fsm.add_rule(State(current_from_state_name), AlphabetCharacter(current_symbol), State(current_to_state_name))
                 current_from_state_name = ""
                 current_symbol = ""
                 current_to_state_name = ""
                 state = ScannerStates.RULE_FROM
             elif input_text[i] == '}':
-                fsm.add_rule(current_from_state_name, current_symbol, current_to_state_name)
+                fsm.add_rule(State(current_from_state_name), AlphabetCharacter(current_symbol), State(current_to_state_name))
                 current_from_state_name = ""
                 current_symbol = ""
                 current_to_state_name = ""
@@ -386,24 +505,32 @@ def scan(input_text):
             elif input_text[i] == ',':
                 fsm.add_final_state(State(current_state_name))
                 current_state_name = ""
-                state = ScannerStates.FINAL_STATE_NEXT
-            else:
-                current_state_name += input_text[i]
-        elif state == ScannerStates.FINAL_STATE_NEXT:
-            if input_text[i] == ',':
                 state = ScannerStates.FINAL_STATE
             else:
-                raise ScriptException("After comma has to be next state in finals", ERROR_SYNTACTIC)
+                current_state_name += input_text[i]
         elif state == ScannerStates.END:
             break
         i += 1
+    return fsm
 
-                
+def write_result(machine, args):
+    if args.output != sys.stdout:
+        try:
+            with open(args.output, 'w') as file:
+                file.write(str(machine))
+        except:
+            print_error("Cant open the output file.", ERROR_INVALID_OUTPUT)
+    else:
+        args.output.write(str(machine))
+    pass
 
-
-
-args = parse_arguments()
-input_text = read(args)
-input_text = re.sub(r'#.*', repl='', string=input_text)
-
-
+try:
+    args = parse_arguments()
+    input_text = read(args)
+    input_text = re.sub(r'#.*', repl='', string=input_text)
+    machine = scan(input_text)
+    if not machine.is_well_specified():
+        print_error("Finite state machine not well specified", ERROR_NOT_DSKA)
+    write_result(machine, args)
+except ScriptException as ex:
+    print_error(ex.message, ex.error)

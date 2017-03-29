@@ -179,7 +179,7 @@ class FiniteStateMachine:
             current_state = stack.pop()
             if current_state not in visited:
                 visited.append(current_state)
-            rules = self.__find_from_rules(current_state, None)
+            rules = self.__find_to_rules(current_state, None)
 
             for rule in rules:
                 if rule.fr not in visited:
@@ -528,6 +528,11 @@ try:
     machine = scan(input_text)
     if not machine.is_well_specified():
         print_error("Finite state machine not well specified", ERROR_NOT_DSKA)
-    write_result(machine, args)
+    if args.nonFinishing:
+        non_finishing = machine.find_non_finishing()
+        write_result(str(non_finishing[0]) + "\n", args)
+    else:
+        machine.minimize()
+        write_result(machine, args)
 except ScriptException as ex:
     print_error(ex.message, ex.error)

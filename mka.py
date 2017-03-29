@@ -5,7 +5,6 @@ import argparse
 import sys
 import re
 from enum import Enum
-import os
 
 EXIT_OK = 0
 ERROR_INVALID_PARAMS = 1
@@ -15,6 +14,7 @@ ERROR_INVALID_FORMAT = 4
 ERROR_SYNTACTIC = 60
 ERROR_SEMANTIC = 61
 ERROR_NOT_DSKA = 62
+
 
 class ScannerStates(Enum):
     BEGIN = 0
@@ -43,6 +43,7 @@ class ScannerStates(Enum):
     START_FINAL_SEPARATOR = 23
     END = 24
 
+
 # (?!'),(?!')
 
 def print_error(message, code):
@@ -51,23 +52,18 @@ def print_error(message, code):
 
 
 class State:
-
-    # inicializace stavu podle jmena
     def __init__(self, name):
 
         self.name = name
 
-
-    # porovnani dvou stavu (jmen stavu)
     def __cmp__(self, other):
-        if  self.name < other.name:
+        if self.name < other.name:
             return -1
         elif self.name == other.name:
             return 0
         else:
             return 1
 
-    # equalita dvou stavu
     def __eq__(self, other):
         if type(other) is str:
             return self.name == other
@@ -76,14 +72,11 @@ class State:
         else:
             return other is self
 
-    # navrat stavu jako stringu
     def __str__(self):
-        #TODO Zmenit na odpovidajici syntaxi
         return str(self.name)
 
 
 class AlphabetCharacter:
-
     def __init__(self, character):
         self.character = character
 
@@ -95,8 +88,6 @@ class AlphabetCharacter:
         else:
             return 1
 
-            # equalita dvou stavu
-
     def __eq__(self, other):
         if type(other) is str:
             return self.character == other
@@ -106,13 +97,13 @@ class AlphabetCharacter:
             return other is self
 
     def __str__(self):
-        return  self.character
+        return self.character
 
 
 class Rule:
-    def __init__(self, fr, input, to):
+    def __init__(self, fr, symbol, to):
         self.fr = fr
-        self.input = input
+        self.input = symbol
         self.to = to
 
     def __eq__(self, other):
@@ -129,11 +120,11 @@ class ScriptException(Exception):
     def __init__(self, message, error):
         self.message = message
         self.error = error
+
     pass
 
 
 class FiniteStateMachine:
-
     def __init__(self):
         self.states = []
         self.rules = []
@@ -166,7 +157,7 @@ class FiniteStateMachine:
         else:
             raise ScriptException("Trying to add start state that is not defined", ERROR_SEMANTIC)
 
-    def __find_to_rules(self, state, symbol = None):
+    def __find_to_rules(self, state, symbol=None):
         rules = []
         for rule in self.rules:
             if rule.to == state and (symbol is None or rule.input == symbol):
@@ -217,7 +208,8 @@ class FiniteStateMachine:
             for symbol in self.alphabet:
                 rules = self.__find_from_rules(state, symbol)
                 if len(rules) != 1:
-                    print_error("Deterministic rule violated. State: " + str(state) + " symbol: " + str(symbol), ERROR_NOT_DSKA)
+                    print_error("Deterministic rule violated. State: " + str(state) + " symbol: " + str(symbol),
+                                ERROR_NOT_DSKA)
                     return False
 
         non_finishing = self.find_non_finishing()
@@ -277,7 +269,6 @@ class FiniteStateMachine:
         return string
 
 
-
 class Arguments:
     def __init__(self):
         self.input = sys.stdin
@@ -289,61 +280,61 @@ class Arguments:
 
 
 def parse_arguments():
-        parser = argparse.ArgumentParser(prog="mka.py", add_help=False)
-        parser.add_argument('--help',
-                            help='prints this help and exits',
-                            required=False,
-                            action='store_true')
+    parser = argparse.ArgumentParser(prog="mka.py", add_help=False)
+    parser.add_argument('--help',
+                        help='prints this help and exits',
+                        required=False,
+                        action='store_true')
 
-        parser.add_argument('--input',
-                            help="input file",
-                            required=False,
-                            default=sys.stdin)
+    parser.add_argument('--input',
+                        help="input file",
+                        required=False,
+                        default=sys.stdin)
 
-        parser.add_argument('--output',
-                            help="output file",
-                            required=False,
-                            default=sys.stdout)
+    parser.add_argument('--output',
+                        help="output file",
+                        required=False,
+                        default=sys.stdout)
 
-        parser.add_argument('-f',
-                            '--find-non-finishing',
-                            help='find non finishing FSM state',
-                            required=False,
-                            action='store_true')
+    parser.add_argument('-f',
+                        '--find-non-finishing',
+                        help='find non finishing FSM state',
+                        required=False,
+                        action='store_true')
 
-        parser.add_argument('-m',
-                            '--minimize',
-                            help='minimize given FSM',
-                            required=False,
-                            action='store_true')
+    parser.add_argument('-m',
+                        '--minimize',
+                        help='minimize given FSM',
+                        required=False,
+                        action='store_true')
 
-        parser.add_argument('-i', '--case-insensitive',
-                            help='if input should be treated case-insensitive',
-                            required=False,
-                            action='store_true')
+    parser.add_argument('-i', '--case-insensitive',
+                        help='if input should be treated case-insensitive',
+                        required=False,
+                        action='store_true')
 
-        args = parser.parse_args()
-        if args.help:
-            if len(sys.argv) == 2:
-                parser.print_help()
-                exit(EXIT_OK)
-            else:
-                print_error('Invalid combination of parameters. '
-                            'Run help to see the possible params',
-                            ERROR_INVALID_PARAMS)
-
-        if args.minimize and args.find_non_finishing:
-            print_error("Invalid combination of parameters. "
-                        "Run help to see the possible params.",
+    read_args = parser.parse_args()
+    if read_args.help:
+        if len(sys.argv) == 2:
+            parser.print_help()
+            exit(EXIT_OK)
+        else:
+            print_error('Invalid combination of parameters. '
+                        'Run help to see the possible params',
                         ERROR_INVALID_PARAMS)
 
-        arguments = Arguments()
-        arguments.nonFinishing = args.find_non_finishing
-        arguments.caseInsensitive = args.case_insensitive
-        arguments.input = args.input
-        arguments.output = args.output
-        arguments.minimize = args.minimize
-        return arguments
+    if read_args.minimize and read_args.find_non_finishing:
+        print_error("Invalid combination of parameters. "
+                    "Run help to see the possible params.",
+                    ERROR_INVALID_PARAMS)
+
+    arguments = Arguments()
+    arguments.nonFinishing = read_args.find_non_finishing
+    arguments.caseInsensitive = read_args.case_insensitive
+    arguments.input = read_args.input
+    arguments.output = read_args.output
+    arguments.minimize = read_args.minimize
+    return arguments
 
 
 def read(args):
@@ -363,6 +354,7 @@ def read(args):
     else:
         return str(text)
 
+
 def scan(input_text):
     current_state_name = ""
     current_from_state_name = ""
@@ -374,7 +366,7 @@ def scan(input_text):
     state = ScannerStates.BEGIN;
     while i < len(input_text) and part < 6:
         if input_text[i] == '(':
-            i += 1 #prvni znak nas nezajima
+            i += 1  # prvni znak nas nezajima
         if re.match("\s", input_text[i]) and state != ScannerStates.SYMBOL and state != ScannerStates.RULE_SYMBOL:
             i += 1
             continue
@@ -426,7 +418,7 @@ def scan(input_text):
             elif input_text[i] == '}':
                 state = ScannerStates.ALPHA_RULES_SEPARATOR
             else:
-                raise ScriptException("Unexpected character in alphabet section",ERROR_SYNTACTIC)
+                raise ScriptException("Unexpected character in alphabet section", ERROR_SYNTACTIC)
         elif state == ScannerStates.SYMBOL_NEXT:
             if input_text[i] == '\'':
                 state = ScannerStates.SYMBOL
@@ -454,7 +446,8 @@ def scan(input_text):
             if input_text[i] == '\'':
                 state = ScannerStates.RULE_ARROW_1
             else:
-                raise ScriptException("Alphabet symbol has to be 1 character placed between apostrophes", ERROR_SYNTACTIC)
+                raise ScriptException("Alphabet symbol has to be 1 character placed between apostrophes",
+                                      ERROR_SYNTACTIC)
         elif state == ScannerStates.RULE_ARROW_1:
             if input_text[i] == '-':
                 state = ScannerStates.RULE_ARROW_2
@@ -467,13 +460,15 @@ def scan(input_text):
                 raise ScriptException("Arrow has to be placed in rule between symbol and next state", ERROR_SYNTACTIC)
         elif state == ScannerStates.RULE_TO:
             if input_text[i] == ',':
-                fsm.add_rule(State(current_from_state_name), AlphabetCharacter(current_symbol), State(current_to_state_name))
+                fsm.add_rule(State(current_from_state_name), AlphabetCharacter(current_symbol),
+                             State(current_to_state_name))
                 current_from_state_name = ""
                 current_symbol = ""
                 current_to_state_name = ""
                 state = ScannerStates.RULE_FROM
             elif input_text[i] == '}':
-                fsm.add_rule(State(current_from_state_name), AlphabetCharacter(current_symbol), State(current_to_state_name))
+                fsm.add_rule(State(current_from_state_name), AlphabetCharacter(current_symbol),
+                             State(current_to_state_name))
                 current_from_state_name = ""
                 current_symbol = ""
                 current_to_state_name = ""
@@ -513,6 +508,7 @@ def scan(input_text):
         i += 1
     return fsm
 
+
 def write_result(machine, args):
     if args.output != sys.stdout:
         try:
@@ -523,6 +519,7 @@ def write_result(machine, args):
     else:
         args.output.write(str(machine))
     pass
+
 
 try:
     args = parse_arguments()

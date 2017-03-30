@@ -124,6 +124,43 @@ class ScriptException(Exception):
     pass
 
 
+class GroupState:
+    def __init__(self, states):
+        self.states = []
+        for state in states:
+            self.add_state(state)
+
+    def __str__(self):
+        string = ""
+        for state in self.states:
+            if state == self.states[len(self.states) - 1]:
+                string += str(state)
+            else:
+                string += str(state)+"_"
+        return string
+
+    def __len__(self):
+        return len(self.states)
+
+    def contains(self, state):
+        for st in self.states:
+            if st == state:
+                return True
+        return False
+
+    def add_state(self, state):
+        self.states.append(state)
+
+
+    @staticmethod
+    def findGroup(groups, state):
+        for group in groups:
+            if state in group:
+                return group
+        return None
+
+
+
 class FiniteStateMachine:
     def __init__(self):
         self.states = []
@@ -198,6 +235,58 @@ class FiniteStateMachine:
                 if len(rules) == 0:
                     return state
         return None
+
+    def minimize(self):
+        groups = []
+        groups[0] = GroupState(self.final_states)
+        for state in self.states:
+            if state not in self.final_states:
+                groups.append(GroupState([state]))
+
+        split = True
+        while split:
+            split = False
+            for group in groups:
+                group_dic = dict()
+                for symbol in self.alphabet:
+                    for state in group:
+                        rule = self.__find_from_rules(state, symbol)[0]
+                        to_state = rule.to
+                        to_group = GroupState.findGroup(groups, to_state)
+                        if to_group in group_dic:
+                            group_dic[to_group].append(state)
+                        else:
+                            group_dic[to_group] = [state]
+                    if len(group_dic) == 1:
+                        group_dic.clear()
+                    else:
+                        for group, states in group_dic:
+                            groups.append(GroupState(state))
+                        groups.remove(group)
+                        split = True
+                if split:
+                    break
+
+        newFsm = FiniteStateMachine()
+
+        for group in groups:
+            group.states.sort()
+            newFsm.add_state(State(str(group)))
+
+        for symbol in self.alphabet:
+            newFsm.add_alphabet_character(symbol)
+
+        for rule in self.rules:
+            fr = State(str(GroupState.findGroup(groups, rule.fr)))
+            symbol = rule.input
+            to = State(str(GroupState.findGroup(groups, rule.to)))
+            newFsm.add_rule(fr, symbol, to)
+
+        newFsm.set_start(State(str(GroupState.findGroup(groups, self.start))))
+
+        for finals in self.final_states:
+            newFsm.add_final_state(str(GroupState.findGroup(groups, finals)))
+        return newFsm
 
     def is_well_specified(self):
         unreachable = self.find_unreachable()

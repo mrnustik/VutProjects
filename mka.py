@@ -645,7 +645,10 @@ try:
         print_error("Finite state machine not well specified", ERROR_NOT_DSKA)
     if args.nonFinishing:
         non_finishing = machine.find_non_finishing()
-        write_result(str(non_finishing[0]) + "\n", args)
+        if len(non_finishing) != 0:
+            write_result(str(non_finishing[0]) + "\n", args)
+        else:
+            write_result(str(0) + "\n", args)
     else:
         if args.minimize:
             machine = machine.minimize()

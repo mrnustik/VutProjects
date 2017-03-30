@@ -112,6 +112,9 @@ class Rule:
         else:
             return False
 
+    def __hash__(self):
+        return hash(repr(self))
+
     def __str__(self):
         return str(self.fr) + " '" + str(self.input) + "' -> " + str(self.to)
 
@@ -139,8 +142,18 @@ class GroupState:
                 string += str(state)+"_"
         return string
 
+    def __eq__(self, other):
+        return self is other
+
     def __len__(self):
         return len(self.states)
+
+    def __iter__(self):
+        for state in self.states:
+            yield state
+
+    def __hash__(self):
+        return hash(repr(self))
 
     def contains(self, state):
         for st in self.states:
@@ -155,7 +168,7 @@ class GroupState:
     @staticmethod
     def findGroup(groups, state):
         for group in groups:
-            if state in group:
+            if state in group.states:
                 return group
         return None
 
@@ -175,7 +188,8 @@ class FiniteStateMachine:
     def add_rule(self, state_from, character, state_to):
         if state_to in self.states and state_from in self.states and character in self.alphabet:
             rule = Rule(state_from, character, state_to)
-            self.rules.append(rule)
+            if not rule in self.rules:
+                self.rules.append(rule)
         else:
             raise ScriptException("Trying to create rule with invalid parameter", ERROR_SEMANTIC)
 
@@ -232,16 +246,22 @@ class FiniteStateMachine:
         for state in self.states:
             if state != self.start:
                 rules = self.__find_to_rules(state)
-                if len(rules) == 0:
+                rules_valid = False
+                for rule in rules:
+                    if rule.fr != rule.to:
+                       rules_valid = True
+                if len(rules) == 0 or not rules_valid:
                     return state
         return None
 
     def minimize(self):
         groups = []
-        groups[0] = GroupState(self.final_states)
+        groups.append(GroupState(self.final_states))
+        non_final = GroupState([])
         for state in self.states:
             if state not in self.final_states:
-                groups.append(GroupState([state]))
+                non_final.add_state(state)
+        groups.append(non_final)
 
         split = True
         while split:
@@ -260,18 +280,20 @@ class FiniteStateMachine:
                     if len(group_dic) == 1:
                         group_dic.clear()
                     else:
-                        for group, states in group_dic:
-                            groups.append(GroupState(state))
+                        for group1, states in group_dic.items():
+                            groups.append(GroupState(states))
                         groups.remove(group)
                         split = True
+                        break
                 if split:
                     break
 
         newFsm = FiniteStateMachine()
 
         for group in groups:
-            group.states.sort()
+            group.states.sort(key=lambda x: x.name)
             newFsm.add_state(State(str(group)))
+            newFsm.states.sort(key=lambda x: x.name)
 
         for symbol in self.alphabet:
             newFsm.add_alphabet_character(symbol)
@@ -621,7 +643,8 @@ try:
         non_finishing = machine.find_non_finishing()
         write_result(str(non_finishing[0]) + "\n", args)
     else:
-        machine.minimize()
+        if args.minimize:
+            machine = machine.minimize()
         write_result(machine, args)
 except ScriptException as ex:
     print_error(ex.message, ex.error)

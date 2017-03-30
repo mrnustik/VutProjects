@@ -53,8 +53,12 @@ def print_error(message, code):
 
 class State:
     def __init__(self, name):
-
-        self.name = name
+        if len(name) == 1 and re.match("[a-zA-Z]", name):
+            self.name = name
+        elif re.match("[a-zA-Z][_a-zA-Z0-9]*[a-zA-Z0-9]$", name):
+            self.name = name
+        else:
+            raise ScriptException("Name of state has to match this regex [a-zA-Z0-9][_a-zA-Z0-9]*[a-zA-Z0-9]", ERROR_SYNTACTIC)
 
     def __cmp__(self, other):
         if self.name < other.name:

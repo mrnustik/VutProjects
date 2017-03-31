@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     try {
         Socket *socket = new Socket();
         socket->connectSocket(address, PortNumber);
-        socket->send("HELLO md5Hash\n");
+        socket->send("HELLO 676719624ef8bb039111883d573c25f7\n");
         std::string data = "";
         while (true) {
             socket->recieve(data);

@@ -7,6 +7,7 @@
 
 
 #include <string>
+#include <cstring>
 #include <unistd.h>
 #include <sys/socket.h>
 

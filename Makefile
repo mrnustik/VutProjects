@@ -1,6 +1,6 @@
 CC=g++
 CLIENT = ipk-client
-C_FLAGS= -g -std=c++11
+C_FLAGS= -Wall -Wextra -Werror -std=c++11
 LIBRARY=$(wildcard Library/*.cpp)
 OBJECTS=$(LIBRARY:.cpp=.o)
 

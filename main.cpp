@@ -61,7 +61,6 @@ typedef enum {
 
 
 long parseExpression(string expression, bool *error) {
-    int i = 0;
     long leftOperand = 0;
     long rightOperand = 0;
     string numString = "";
@@ -75,7 +74,6 @@ long parseExpression(string expression, bool *error) {
         *error = true;
         return 0;
     }
-    char * tmp = NULL;
     try {
         numString = expression.substr(0, opPosition - 1);
         leftOperand = stol(numString);

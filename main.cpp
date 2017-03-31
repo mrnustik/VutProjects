@@ -14,7 +14,7 @@ long parseExpression(string expression, bool *error);
 int main(int argc, char* argv[]) {
     if(argc != 2)
     {
-        std::cerr << "Invalid argument count";
+        std::cerr << "Invalid argument count" << endl;
         return EXIT_FAILURE;
     }
     const std::string address = argv[1];
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
                 else
                     socket->send("RESULT ERROR\n");
             } else {
-                cerr << "Invalid server message";
+                cerr << "Invalid server message" << endl;
                 exit(EXIT_FAILURE);
             }
         }
@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
     }
     catch (const char* ex)
     {
-        cerr << ex;
+        cerr << ex << endl;
         exit(EXIT_FAILURE);
     }
     return 0;

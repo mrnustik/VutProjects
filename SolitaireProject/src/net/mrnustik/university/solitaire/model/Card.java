@@ -31,8 +31,8 @@ public class Card implements Comparable{
         }
     }
     
-    private Color mColor;
-    private int mValue;
+    private final Color mColor;
+    private final int mValue;
     private boolean mFaceUp = false;
     
     public Card(Color color, int value) {

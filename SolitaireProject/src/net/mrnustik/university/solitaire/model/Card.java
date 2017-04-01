@@ -9,7 +9,8 @@ package net.mrnustik.university.solitaire.model;
  *
  * @author micha
  */
-public class Card {
+public class Card implements Comparable{
+
     public enum Color {
         HEARTS,
         DIAMONDS,
@@ -45,6 +46,17 @@ public class Card {
 
     public int getValue() {
         return mValue;
+    }
+    
+    
+    @Override
+    public int compareTo(Object o) {
+        if(o instanceof Card)
+        {
+            Card card = (Card) o;
+            return card.getValue() - this.getValue();
+        }
+        return Integer.MAX_VALUE;
     }
     
 }

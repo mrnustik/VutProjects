@@ -39,7 +39,9 @@ public abstract class AbstractFactory {
    public abstract CardStacker createPutDownStacker();
    
    /**
-    * @return creates working pack
+    * @param count count of base cards
+    * @param deck deck where the cards will be took from
+    * @return working pack
     */
-   public abstract CardStack createWorkingPack(CardDeck deck);
+   public abstract CardStack createWorkingPack(int count, CardDeck deck);
 }

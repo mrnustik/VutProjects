@@ -41,5 +41,5 @@ public abstract class AbstractFactory {
    /**
     * @return creates working pack
     */
-   public abstract CardStack createWorkingPack();
+   public abstract CardStack createWorkingPack(CardDeck deck);
 }

@@ -16,7 +16,7 @@ import net.mrnustik.university.solitaire.model.collections.CardStacker;
  */
 public class SolitaireStacker implements CardStacker {
 
-    private List<Card> mCards;
+    private final List<Card> mCards;
 
     public SolitaireStacker() {
         mCards = new ArrayList<Card>();

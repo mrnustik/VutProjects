@@ -21,6 +21,7 @@ public class WorkingStack extends SolitaireStacker implements CardStack {
         {
             super.put(deck.pop());
         }
+        get().turnFaceUp();
     }
 
     

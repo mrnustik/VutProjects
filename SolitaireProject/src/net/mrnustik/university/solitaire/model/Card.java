@@ -64,6 +64,10 @@ public class Card implements Comparable{
         mFaceUp = !mFaceUp;
     }
     
+    public boolean similarColorTo(Card card){
+        return card.getColor().similarColorTo(this.getColor());
+    }
+    
     @Override
     public int compareTo(Object o) {
         if(o instanceof Card)

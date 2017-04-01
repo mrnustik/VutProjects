@@ -29,6 +29,12 @@ public interface CardStacker {
     Card pop();
     
     /**
+     * @param index index of the card
+     * @return pops the card from given index
+     */
+    Card pop(int index);
+    
+    /**
      * @return returns top card
      */
     Card get();

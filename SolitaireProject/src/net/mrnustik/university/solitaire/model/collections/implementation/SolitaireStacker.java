@@ -35,11 +35,19 @@ public class SolitaireStacker implements CardStacker {
     @Override
     public Card pop() {
         if(!this.isEmpty()){
-            return mCards.remove(this.size() - 1);
+            return this.pop(this.size() - 1);
         }
         return null;
     }
 
+    @Override
+    public Card pop(int index) {
+        if(!this.isEmpty()){
+            return mCards.remove(index);
+        }
+        return null;
+    }
+    
     @Override
     public Card get() {
         if(!this.isEmpty()){
@@ -60,5 +68,7 @@ public class SolitaireStacker implements CardStacker {
     public boolean put(Card card) {
         return mCards.add(card);
     }
+
+
     
 }

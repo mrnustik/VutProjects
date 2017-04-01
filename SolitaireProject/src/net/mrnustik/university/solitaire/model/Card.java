@@ -28,6 +28,23 @@ public class Card {
                     return color == SPADES || color == CLUBS;
             }
         }
-        
     }
+    
+    private Color mColor;
+    private int mValue;
+    
+    
+    public Card(Color color, int value) {
+        this.mColor = color;
+        this.mValue = value;
+    }
+
+    public Color getColor() {
+        return mColor;
+    }
+
+    public int getValue() {
+        return mValue;
+    }
+    
 }

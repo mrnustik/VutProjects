@@ -33,7 +33,7 @@ public class Card implements Comparable{
     
     private Color mColor;
     private int mValue;
-    
+    private boolean mFaceUp = false;
     
     public Card(Color color, int value) {
         this.mColor = color;
@@ -47,7 +47,22 @@ public class Card implements Comparable{
     public int getValue() {
         return mValue;
     }
+
+    public boolean isFaceUp() {
+        return mFaceUp;
+    }
+
+    public void turnFaceUp() {
+        mFaceUp = true;
+    }
     
+    public void turnFaceDown() {
+        mFaceUp = false;
+    }
+    
+    public void turn() {
+        mFaceUp = !mFaceUp;
+    }
     
     @Override
     public int compareTo(Object o) {

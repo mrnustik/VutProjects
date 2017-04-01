@@ -13,7 +13,7 @@ import net.mrnustik.university.solitaire.model.Card;
  */
 public class TargetStacker extends SolitaireStacker{
 
-    private Card.Color mColor;
+    private final Card.Color mColor;
 
     public TargetStacker(Card.Color mColor) {
         this.mColor = mColor;

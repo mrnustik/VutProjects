@@ -58,5 +58,23 @@ public class Card implements Comparable{
         }
         return Integer.MAX_VALUE;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Card)
+        {
+            Card card = (Card) obj;
+            return card.getValue() == this.getValue() 
+                    && card.getColor() == this.getColor();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return getColor().hashCode() + getValue();
+    }
+    
+    
     
 }

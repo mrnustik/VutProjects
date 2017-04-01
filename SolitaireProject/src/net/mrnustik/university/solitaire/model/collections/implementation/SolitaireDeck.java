@@ -5,6 +5,7 @@
  */
 package net.mrnustik.university.solitaire.model.collections.implementation;
 
+import net.mrnustik.university.solitaire.board.base.AbstractFactory;
 import net.mrnustik.university.solitaire.model.Card;
 import net.mrnustik.university.solitaire.model.collections.CardDeck;
 import net.mrnustik.university.solitaire.model.collections.CardStack;
@@ -15,6 +16,18 @@ import net.mrnustik.university.solitaire.model.collections.CardStack;
  */
 public class SolitaireDeck extends SolitaireStacker implements CardDeck{
 
+    public static CardDeck createStandardCardDeck(AbstractFactory factory)
+    {
+        SolitaireDeck deck = new SolitaireDeck();
+        for(int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.CLUBS, i));} 
+        for(int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.SPADES, i));} 
+        for(int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.HEARTS, i));} 
+        for(int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.DIAMONDS, i));} 
+        return deck;
+    }
+    
+    private SolitaireDeck(){}
+    
     @Override
     public boolean pop(CardStack where) {
         if(!this.isEmpty()) {

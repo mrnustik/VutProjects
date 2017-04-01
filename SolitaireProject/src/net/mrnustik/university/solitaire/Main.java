@@ -5,13 +5,16 @@
  */
 package net.mrnustik.university.solitaire;
 
+import net.mrnustik.university.solitaire.board.SolitaireFactory;
+import net.mrnustik.university.solitaire.model.Board;
+
 /**
  *
  * @author micha
  */
 public class Main {
-    public static void Main(String args[])
+    public static void main(String args[])
     {
-        
+        Board board = new Board(new SolitaireFactory());
     }
 }

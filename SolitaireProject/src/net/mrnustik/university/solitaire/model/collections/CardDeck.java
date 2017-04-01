@@ -5,11 +5,18 @@
  */
 package net.mrnustik.university.solitaire.model.collections;
 
+import net.mrnustik.university.solitaire.model.Card;
+
 /**
  *
  * @author micha
  */
 public interface CardDeck {
+    
+    /**
+     * @return pops the first card from the stack
+     */
+    Card pop();
     
     /**
      * Pops card from CardDeck to CardStack from param. 

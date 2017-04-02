@@ -5,6 +5,7 @@
  */
 package net.mrnustik.university.solitaire.model.collections.implementation;
 
+import java.util.Collections;
 import net.mrnustik.university.solitaire.board.base.AbstractFactory;
 import net.mrnustik.university.solitaire.model.Card;
 import net.mrnustik.university.solitaire.model.collections.CardDeck;
@@ -23,6 +24,7 @@ public class SolitaireDeck extends SolitaireStacker implements CardDeck{
         for(int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.SPADES, i));} 
         for(int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.HEARTS, i));} 
         for(int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.DIAMONDS, i));} 
+        deck.shuffle();
         return deck;
     }
     
@@ -42,6 +44,10 @@ public class SolitaireDeck extends SolitaireStacker implements CardDeck{
             }
         }
         return false;
+    }
+
+    private void shuffle() {
+        Collections.shuffle(mCards);
     }
     
 }

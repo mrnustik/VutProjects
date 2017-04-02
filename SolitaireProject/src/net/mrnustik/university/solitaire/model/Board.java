@@ -5,10 +5,10 @@
  */
 package net.mrnustik.university.solitaire.model;
 
-import net.mrnustik.university.solitaire.board.base.AbstractFactory;
-import net.mrnustik.university.solitaire.model.collections.CardDeck;
-import net.mrnustik.university.solitaire.model.collections.CardStack;
-import net.mrnustik.university.solitaire.model.collections.CardStacker;
+import net.mrnustik.university.solitaire.factory.base.AbstractFactory;
+import net.mrnustik.university.solitaire.collections.CardDeck;
+import net.mrnustik.university.solitaire.collections.CardStack;
+import net.mrnustik.university.solitaire.collections.CardStacker;
 
 /**
  *
@@ -33,6 +33,5 @@ public class Board {
         for(int i = 0; i< this.mWorkingStacks.length; i++){
             this.mWorkingStacks[i] = factory.createWorkingPack(i+1, this.mDeck);
         }
-        
     }
 }

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.mrnustik.university.solitaire.model.collections.implementation;
+package net.mrnustik.university.solitaire.collections.impl;
 
 import java.util.Collections;
-import net.mrnustik.university.solitaire.board.base.AbstractFactory;
+import net.mrnustik.university.solitaire.factory.base.AbstractFactory;
 import net.mrnustik.university.solitaire.model.Card;
-import net.mrnustik.university.solitaire.model.collections.CardDeck;
-import net.mrnustik.university.solitaire.model.collections.CardStack;
+import net.mrnustik.university.solitaire.collections.CardDeck;
+import net.mrnustik.university.solitaire.collections.CardStack;
 
 /**
  *

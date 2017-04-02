@@ -5,7 +5,7 @@
  */
 package net.mrnustik.university.solitaire;
 
-import net.mrnustik.university.solitaire.board.SolitaireFactory;
+import net.mrnustik.university.solitaire.factory.SolitaireFactory;
 import net.mrnustik.university.solitaire.model.Board;
 
 /**

@@ -30,4 +30,9 @@ public class CardView extends JButton {
         else
             return super.getIcon();
     }
+
+    public Card getCard() {
+        return mCard;
+    }
+
 }

@@ -24,5 +24,5 @@ public interface CardDeck {
      * @param where where to put card
      * @return false if is empty
      */
-    boolean pop(CardStack where);
+    boolean pop(CardStacker where);
 }

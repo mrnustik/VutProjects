@@ -5,10 +5,15 @@
  */
 package net.mrnustik.university.solitaire.model;
 
+import net.mrnustik.university.solitaire.command.AbstractCommand;
+import net.mrnustik.university.solitaire.command.Command;
 import net.mrnustik.university.solitaire.factory.base.AbstractFactory;
 import net.mrnustik.university.solitaire.collections.CardDeck;
 import net.mrnustik.university.solitaire.collections.CardStack;
 import net.mrnustik.university.solitaire.collections.CardStacker;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -20,6 +25,8 @@ public class Board {
     private final CardStacker stacker;
     private final CardStacker[] targets;
     private final CardStack[] workingStacks;
+
+    private final List<Command> commandsHistory = new ArrayList<>();
 
     private static final int WORKING_COUNT = 7;
     
@@ -33,6 +40,67 @@ public class Board {
         this.workingStacks = new CardStack[WORKING_COUNT];
         for(int i = 0; i< this.workingStacks.length; i++){
             this.workingStacks[i] = factory.createWorkingPack(i+1, this.deck);
+        }
+    }
+
+    public void undo() {
+        if(commandsHistory.size() > 0)
+        {
+            Command command = commandsHistory.remove(commandsHistory.size() - 1);
+            command.undo();
+        }
+    }
+
+    public boolean flipFromDeck()
+    {
+        Command flipCommand = new FlipCommand();
+        return flipCommand.execute();
+    }
+
+    public boolean fromStackerToTarget(int targetIndex)
+    {
+        Command fromStackerToCardDeck = new AbstractCommand() {
+            @Override
+            public boolean execute() {
+                success = false;
+                Card card = stacker.get();
+                if(card != null)
+                {
+                    if(targets[targetIndex].put(card)) {
+                        success = true;
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void undo() {
+                if(wasSuccessful())
+                {
+                    Card card = targets[targetIndex].pop();
+                    stacker.put(card);
+                }
+            }
+        };
+        fromStackerToCardDeck.execute();
+        if(fromStackerToCardDeck.wasSuccessful())
+            commandsHistory.add(fromStackerToCardDeck);
+        return fromStackerToCardDeck.wasSuccessful();
+    }
+
+    private class FlipCommand extends  AbstractCommand {
+        @Override
+        public boolean execute() {
+            success = true;
+            return deck.pop(stacker);
+        }
+
+        @Override
+        public void undo() {
+            return;
         }
     }
 }

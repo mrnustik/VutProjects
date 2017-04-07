@@ -6,10 +6,11 @@
 package net.mrnustik.university.solitaire.collections.impl;
 
 import java.util.Collections;
+
+import net.mrnustik.university.solitaire.collections.CardStacker;
 import net.mrnustik.university.solitaire.factory.base.AbstractFactory;
 import net.mrnustik.university.solitaire.model.Card;
 import net.mrnustik.university.solitaire.collections.CardDeck;
-import net.mrnustik.university.solitaire.collections.CardStack;
 
 /**
  *
@@ -31,7 +32,7 @@ public class SolitaireDeck extends SolitaireStacker implements CardDeck{
     private SolitaireDeck(){}
     
     @Override
-    public boolean pop(CardStack where) {
+    public boolean pop(CardStacker where) {
         if(!this.isEmpty()) {
             final Card card = this.pop();
             card.turnFaceUp();

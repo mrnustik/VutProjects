@@ -15,23 +15,24 @@ import net.mrnustik.university.solitaire.collections.CardStacker;
  * @author micha
  */
 public class Board {
-    private final CardDeck mDeck;
-    private final CardStacker mStacker;
-    private final CardStacker[] mTargets;
-    private final CardStack[] mWorkingStacks;
+
+    private final CardDeck deck;
+    private final CardStacker stacker;
+    private final CardStacker[] targets;
+    private final CardStack[] workingStacks;
 
     private static final int WORKING_COUNT = 7;
     
     public Board(AbstractFactory factory) {
-        this.mDeck = factory.createCardDeck();
-        this.mStacker = factory.createPutDownStacker();
-        this.mTargets = new CardStacker[4];
-        for(int i = 0; i < this.mTargets.length; i++) {
-            this.mTargets[i] = factory.createTargetStacker(Card.Color.values()[i]);
+        this.deck = factory.createCardDeck();
+        this.stacker = factory.createPutDownStacker();
+        this.targets = new CardStacker[4];
+        for(int i = 0; i < this.targets.length; i++) {
+            this.targets[i] = factory.createTargetStacker(Card.Color.values()[i]);
         }
-        this.mWorkingStacks = new CardStack[WORKING_COUNT];
-        for(int i = 0; i< this.mWorkingStacks.length; i++){
-            this.mWorkingStacks[i] = factory.createWorkingPack(i+1, this.mDeck);
+        this.workingStacks = new CardStack[WORKING_COUNT];
+        for(int i = 0; i< this.workingStacks.length; i++){
+            this.workingStacks[i] = factory.createWorkingPack(i+1, this.deck);
         }
     }
 }

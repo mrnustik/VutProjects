@@ -29,6 +29,23 @@ public class Card implements Comparable{
                     return color == SPADES || color == CLUBS;
             }
         }
+
+        @Override
+        public String toString() {
+            switch(this)
+            {
+                case HEARTS:
+                    return "HEARTS";
+                case DIAMONDS:
+                    return "DIAMONDS";
+                case SPADES:
+                    return "SPADES";
+                case CLUBS:
+                    return "CLUBS";
+                default:
+                    return "";
+            }
+        }
     }
     
     private final Color mColor;
@@ -93,7 +110,9 @@ public class Card implements Comparable{
     public int hashCode() {
         return getColor().hashCode() + getValue();
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return this.getColor().toString() + "_" + this.getValue();
+    }
 }

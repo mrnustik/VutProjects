@@ -113,6 +113,18 @@ public class Card implements Comparable{
 
     @Override
     public String toString() {
-        return this.getColor().toString() + "_" + this.getValue();
+        if(getValue() != 1 && getValue() < 11) return this.getColor().toString() + "_" + this.getValue();
+        else {
+            char c = ' ';
+            if(getValue() == 11)
+                c = 'J';
+            else if(getValue() == 12)
+                c =  'Q';
+            else if(getValue() == 13)
+                c = 'K';
+            else if (getValue() == 1)
+                c = 'A';
+            return this.getColor().toString() + "_" + c;
+        }
     }
 }

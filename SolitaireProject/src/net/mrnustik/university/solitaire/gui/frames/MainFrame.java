@@ -5,8 +5,6 @@ import net.mrnustik.university.solitaire.gui.panels.GamePanel;
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,17 @@ public class MainFrame extends JFrame {
         setTitle("Super solitaire");
         setSize(800,600);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        initLayout();
         initMenuBar();
+        startNewGame();
+    }
+
+    private void initLayout() {
+        GridLayout layout = new GridLayout(2, 2);
+        layout.setHgap(5);
+        layout.setVgap(5);
+        setLayout(layout);
+
     }
 
     private void initMenuBar() {
@@ -34,7 +42,7 @@ public class MainFrame extends JFrame {
         menu.getAccessibleContext().setAccessibleDescription(
                 "The only menu in this program that has menu items");
         menuBar.add(menu);
-        setJMenuBar(menuBar);
+
 
         JMenuItem item = new JMenuItem("New game");
         item.setMnemonic(KeyEvent.VK_CONTROL | KeyEvent.VK_N);
@@ -44,11 +52,23 @@ public class MainFrame extends JFrame {
                 ((JMenuItem)e.getSource()).setEnabled(false);
         });
         menu.add(item);
+
+        setJMenuBar(menuBar);
     }
 
     private void startNewGame()
     {
-        games.add(new GamePanel());
+        if(games.size() > 0) {
+            setLayout(new GridLayout(0,2, 5,5));
+        } else {
+            setLayout(new CardLayout());
+        }
+        GamePanel panel = new GamePanel();
+
+        games.add(panel);
+        add(panel);
+        revalidate();
+        repaint();
     }
 
 }

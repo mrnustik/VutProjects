@@ -17,7 +17,13 @@ public interface CardDeck {
      * @return pops the first card from the stack
      */
     Card pop();
-    
+
+
+    /**
+     * @return returns first card from the stack without deleting it
+     */
+    Card get();
+
     /**
      * Pops card from CardDeck to CardStack from param. 
      * If isEmpty() gets all card from stack to itself. 
@@ -25,4 +31,6 @@ public interface CardDeck {
      * @return false if is empty
      */
     boolean pop(CardStacker where);
+
+
 }

@@ -68,6 +68,7 @@ public class Board {
                 {
                     if(targets[targetIndex].put(card)) {
                         success = true;
+                        stacker.pop();
                         return true;
                     } else {
                         return false;
@@ -89,6 +90,18 @@ public class Board {
         if(fromStackerToCardDeck.wasSuccessful())
             commandsHistory.add(fromStackerToCardDeck);
         return fromStackerToCardDeck.wasSuccessful();
+    }
+
+    public Card getDeckTop() {
+        return deck.get();
+    }
+
+    public Card getStackTop() {
+        return stacker.get();
+    }
+
+    public Card getTargetTop(int i){
+        return targets[i].get();
     }
 
     private class FlipCommand extends  AbstractCommand {

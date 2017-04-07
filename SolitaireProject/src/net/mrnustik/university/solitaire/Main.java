@@ -6,6 +6,7 @@
 package net.mrnustik.university.solitaire;
 
 import net.mrnustik.university.solitaire.factory.SolitaireFactory;
+import net.mrnustik.university.solitaire.gui.MainFrame;
 import net.mrnustik.university.solitaire.model.Board;
 
 /**
@@ -15,6 +16,7 @@ import net.mrnustik.university.solitaire.model.Board;
 public class Main {
     public static void main(String args[])
     {
-        Board board = new Board(new SolitaireFactory());
+        MainFrame frame = new MainFrame();
+        frame.setVisible(true);
     }
 }

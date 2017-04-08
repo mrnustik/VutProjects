@@ -23,7 +23,7 @@ public class GamePanel extends JPanel {
     private Card selected = null;
 
     public GamePanel() {
-        super(new GridLayout(2,6));
+        super(new GridLayout(2,6, 10 ,10));
         board = new Board(new SolitaireFactory());
         setMinimumSize(new Dimension(200,150));
         setBackground(Color.decode("#146a2c"));

@@ -17,6 +17,10 @@ public class CardView extends JButton {
         super();
         setSize(50,100);
         setBorder(null);
+        setBorderPainted(false);
+        setContentAreaFilled(false);
+        setFocusPainted(false);
+        setOpaque(false);
         this.mCard = card;
     }
 
@@ -27,7 +31,7 @@ public class CardView extends JButton {
         if(mCard.isFaceUp()) {
             resource = getClass().getResource("/net/mrnustik/university/solitaire/gui/images/" + mCard.toString() + ".png");
         } else {
-            resource = getClass().getResource("/net/mrnustik/university/solitaire/gui/images/card_default.png");
+            resource = getClass().getResource("/net/mrnustik/university/solitaire/gui/images/CARD_BACK.png");
         }
         if(resource != null)
             return getScaledIcon(new ImageIcon(resource));

@@ -51,7 +51,7 @@ public class GamePanel extends JPanel {
     private void initWorkingStacks() {
         for(int i = 0; i < 7; i++)
         {
-            add(new CardView(board.getStackTop()));
+            add(new CardStackPanel(board.getWorkingStack(i)));
         }
     }
 

@@ -27,7 +27,7 @@ public class MainFrame extends JFrame {
     public MainFrame() throws HeadlessException {
         super();
         games = new ArrayList<>();
-        setTitle("Super solitaire");
+        setTitle("Unicolitaire");
         setSize(800,600);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         initLayout();

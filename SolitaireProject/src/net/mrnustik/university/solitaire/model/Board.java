@@ -57,9 +57,9 @@ public class Board {
         return executeCommand(flipCommand);
     }
 
-    private boolean executeCommand(Command flipCommand) {
-        boolean success = flipCommand.execute();
-        addCommandToHistory(flipCommand);
+    private boolean executeCommand(Command command) {
+        boolean success = command.execute();
+        addCommandToHistory(command);
         return success;
     }
 
@@ -97,6 +97,80 @@ public class Board {
                 return false;
         }
         return true;
+    }
+
+    public void fromWorkingToTarget(int workingIndex, int targetIndex) {
+        Command fromWorkingToTarget = new AbstractCommand() {
+            @Override
+            public boolean execute() {
+                success = false;
+                Card card = workingStacks[workingIndex].get();
+                if(card != null){
+                    success = targets[targetIndex].put(card);
+                    if(success) workingStacks[workingIndex].pop();
+                }
+                return success;
+            }
+
+            @Override
+            public void undo() {
+                if(wasSuccessful())
+                {
+                    //TODO
+                }
+            }
+        };
+        executeCommand(fromWorkingToTarget);
+    }
+
+    public void fromStackerToWorking(int index) {
+        Command fromStackerToWorking = new AbstractCommand() {
+            @Override
+            public boolean execute() {
+                success = false;
+                Card card = stacker.get();
+                if(card != null)
+                {
+                    if(workingStacks[index].put(card)) {
+                        success = true;
+                        stacker.pop();
+                    }
+                }
+                return success;
+            }
+
+            @Override
+            public void undo() {
+                //TODO undo
+            }
+        };
+        executeCommand(fromStackerToWorking);
+    }
+
+    public void fromTargetToWroking(int fromIndex, int toIndex) {
+        Command fromTargetToWorkng = new AbstractCommand() {
+            @Override
+            public boolean execute() {
+                success = false;
+                Card card = targets[fromIndex].get();
+                if(card != null){
+                    success = workingStacks[toIndex].put(card);
+                    if(success)
+                        targets[fromIndex].pop();
+                }
+                return success;
+            }
+
+            @Override
+            public void undo() {
+                if(wasSuccessful())
+                {
+                    //TODO
+                }
+            }
+        };
+        executeCommand(fromTargetToWorkng);
+
     }
 
     private class FlipCommand extends  AbstractCommand {

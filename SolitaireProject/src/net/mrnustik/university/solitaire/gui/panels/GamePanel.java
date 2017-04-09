@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     private CardView stacker;
     private CardView[] targets;
 
-    private Card selected = null;
+    private Selection selection;
     private JLabel scoreLabel;
     private CardStackPanel[] workingStacks;
 
@@ -38,6 +38,7 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
         setMinimumSize(new Dimension(200,150));
         setBackground(Color.decode("#146a2c"));
         initViews();
+        selection = new Selection();
         paintBoard();
     }
 
@@ -73,18 +74,51 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
         }
     }
 
-    private void targetClicked(int index) {
-        if(selected != null)
-        {
-            board.fromStackerToTarget(index);
-        }
-        paintBoard();
-        checkWin();
-        clearSelected();
+    private void initDeck() {
+        deck = new CardView(board.getDeckTop());
+        add(deck);
+        stacker = new CardView(board.getStackTop());
+        add(stacker);
+        deck.addActionListener(l->{
+            board.flipFromDeck();
+            paintBoard();
+        });
+
+        stacker.addActionListener(l->{
+            selection.setCard(stacker.getCard());
+            selection.setType(SelectionType.STACKER);
+        });
     }
 
-    private void clearSelected() {
-        selected = null;
+    private void initMenu() {
+        JPanel gameMenu = new JPanel();
+        gameMenu.setBackground(Color.decode("#146a2c"));
+        gameMenu.setLayout(new BoxLayout(gameMenu, BoxLayout.PAGE_AXIS));
+        add(gameMenu);
+
+        gameMenu.add(Box.createVerticalGlue());
+
+        JButton saveBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/SAVE_ICON.png")));
+        saveBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        saveBtn.addActionListener(l-> showSaveGameDialog());
+        gameMenu.add(saveBtn);
+        gameMenu.add(Box.createVerticalStrut(10));
+        JButton undoBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/UNDO_ICON.png")));
+        undoBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        undoBtn.addActionListener(l->{
+            board.undo();
+            paintBoard();
+        });
+        gameMenu.add(undoBtn);
+        gameMenu.add(Box.createVerticalStrut(10));
+        JButton endBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/DELETE_ICON.png")));
+        endBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        endBtn.addActionListener(l->{
+            MainFrame topFrame = (MainFrame) SwingUtilities.getWindowAncestor(this);
+            topFrame.removeGame(this);
+        });
+        gameMenu.add(endBtn);
+        gameMenu.add(Box.createVerticalGlue());
     }
 
     private void checkWin() {
@@ -97,51 +131,24 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
         }
     }
 
-    private void initDeck() {
-        deck = new CardView(board.getDeckTop());
-        add(deck);
-        stacker = new CardView(board.getStackTop());
-        add(stacker);
-        deck.addActionListener(l->{
-            board.flipFromDeck();
+    private void targetClicked(int index) {
+        if(selection.isValid()) {
+            if(selection.getType() == SelectionType.STACKER) {
+                board.fromStackerToTarget(index);
+            } else if(selection.getType() == SelectionType.WORKING_PACK) {
+                board.fromWorkingToTarget(selection.index, index);
+            }
             paintBoard();
-        });
+            checkWin();
+            selection.reset();
+        } else {
+            selection.setType(SelectionType.TARGET);
+            selection.setIndex(index);
+        }
 
-        stacker.addActionListener(l->{
-            selected = stacker.getCard();
-        });
     }
 
-    private void initMenu() {
-        JPanel gameMenu = new JPanel();
-        gameMenu.setBackground(Color.decode("#146a2c"));
-        gameMenu.setLayout(new BoxLayout(gameMenu, BoxLayout.PAGE_AXIS));
-        add(gameMenu);
 
-        gameMenu.add(Box.createVerticalGlue());
-
-        JButton saveBtn = new JButton("Save game");
-        saveBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        saveBtn.addActionListener(l-> showSaveGameDialog());
-        gameMenu.add(saveBtn);
-        gameMenu.add(Box.createVerticalStrut(10));
-        JButton undoBtn = new JButton("Undo");
-        undoBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        undoBtn.addActionListener(l->{
-            board.undo();
-            paintBoard();
-        });
-        gameMenu.add(undoBtn);
-        gameMenu.add(Box.createVerticalStrut(10));
-        JButton endBtn = new JButton("End game");
-        endBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        endBtn.addActionListener(l->{
-            MainFrame topFrame = (MainFrame) SwingUtilities.getWindowAncestor(this);
-            topFrame.removeGame(this);
-        });
-        gameMenu.add(endBtn);
-        gameMenu.add(Box.createVerticalGlue());
-    }
 
     private void showSaveGameDialog() {
         JFileChooser fileChooser = new JFileChooser();
@@ -164,7 +171,7 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
         }
     }
 
-    public void paintBoard() {
+    private void paintBoard() {
         paintDeck();
 
         paintTargets();
@@ -194,6 +201,68 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
 
     @Override
     public void onCardSelected(Card card, int index) {
-        selected = card;
+        if(selection.isValid()){
+            if(selection.getType() == SelectionType.STACKER) {
+                board.fromStackerToWorking(index);
+            } else if(selection.getType() == SelectionType.TARGET){
+                board.fromTargetToWroking(selection.getIndex(), index);
+            }
+            selection.reset();
+            paintBoard();
+            repaint();
+        } else {
+            selection.setType(SelectionType.WORKING_PACK);
+            selection.setCard(card);
+            selection.setIndex(index);
+        }
+    }
+
+    private enum SelectionType {
+        UNDEFINED,
+        STACKER,
+        TARGET,
+        WORKING_PACK
+    }
+
+
+    class Selection {
+
+        private SelectionType type = SelectionType.UNDEFINED;
+        private int index = -1;
+        private Card card;
+
+        public void reset() {
+            type = SelectionType.UNDEFINED;
+            index = -1;
+        }
+
+        public boolean isValid()
+        {
+            return type != SelectionType.UNDEFINED;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
+
+        public void setType(SelectionType type) {
+            this.type = type;
+        }
+
+        public int getIndex() {
+            return index;
+        }
+
+        public SelectionType getType() {
+            return type;
+        }
+
+        public Card getCard() {
+            return card;
+        }
+
+        public void setCard(Card card) {
+            this.card = card;
+        }
     }
 }

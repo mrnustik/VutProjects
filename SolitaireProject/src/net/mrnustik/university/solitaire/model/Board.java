@@ -90,6 +90,15 @@ public class Board {
 
     public CardStack getWorkingStack(int i) {return workingStacks[i];}
 
+    public boolean isWin() {
+        for(int i = 0;i < 4; i++)
+        {
+            if(targets[i].size() != 13)
+                return false;
+        }
+        return true;
+    }
+
     private class FlipCommand extends  AbstractCommand {
         @Override
         public boolean execute() {

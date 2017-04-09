@@ -61,15 +61,33 @@ public class GamePanel extends JPanel {
         {
             final int index = i;
             targets[i] = new CardView(null);
-            targets[i].addActionListener(l->{
-                if(selected != null)
-                {
-                    board.fromStackerToTarget(index);
-                }
-                paintBoard();
-            });
+            targets[i].addActionListener(l-> targetClicked(index));
 
             add(targets[i]);
+        }
+    }
+
+    private void targetClicked(int index) {
+        if(selected != null)
+        {
+            board.fromStackerToTarget(index);
+        }
+        paintBoard();
+        checkWin();
+        clearSelected();
+    }
+
+    private void clearSelected() {
+        selected = null;
+    }
+
+    private void checkWin() {
+        if(board.isWin())
+        {
+            JOptionPane.showMessageDialog(this,
+                    "You have successfully won this game!",
+                    "Congratulations",
+                    JOptionPane.PLAIN_MESSAGE);
         }
     }
 

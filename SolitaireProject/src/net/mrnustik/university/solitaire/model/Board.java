@@ -21,14 +21,14 @@ import java.util.List;
  */
 public class Board {
 
+    private static final int WORKING_COUNT = 7;
     private final CardDeck deck;
     private final CardStacker stacker;
     private final CardStacker[] targets;
     private final CardStack[] workingStacks;
 
-    private final List<Command> commandsHistory = new ArrayList<>();
 
-    private static final int WORKING_COUNT = 7;
+    private transient List<Command> commandsHistory = new ArrayList<>();
     
     public Board(AbstractFactory factory) {
         this.deck = factory.createCardDeck();
@@ -54,42 +54,26 @@ public class Board {
     public boolean flipFromDeck()
     {
         Command flipCommand = new FlipCommand();
-        return flipCommand.execute();
+        return executeCommand(flipCommand);
+    }
+
+    private boolean executeCommand(Command flipCommand) {
+        boolean success = flipCommand.execute();
+        addCommandToHistory(flipCommand);
+        return success;
     }
 
     public boolean fromStackerToTarget(int targetIndex)
     {
-        Command fromStackerToCardDeck = new AbstractCommand() {
-            @Override
-            public boolean execute() {
-                success = false;
-                Card card = stacker.get();
-                if(card != null)
-                {
-                    if(targets[targetIndex].put(card)) {
-                        success = true;
-                        stacker.pop();
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-                return false;
-            }
+        Command fromStackerToCardDeck = new FromStrackerToTargetCommand(targetIndex);
+        return executeCommand(fromStackerToCardDeck);
+    }
 
-            @Override
-            public void undo() {
-                if(wasSuccessful())
-                {
-                    Card card = targets[targetIndex].pop();
-                    stacker.put(card);
-                }
-            }
-        };
-        fromStackerToCardDeck.execute();
-        if(fromStackerToCardDeck.wasSuccessful())
-            commandsHistory.add(fromStackerToCardDeck);
-        return fromStackerToCardDeck.wasSuccessful();
+    private void addCommandToHistory(Command command) {
+        if(commandsHistory == null)
+            commandsHistory = new ArrayList<>();
+        if(command.wasSuccessful())
+            commandsHistory.add(command);
     }
 
     public Card getDeckTop() {
@@ -104,6 +88,8 @@ public class Board {
         return targets[i].get();
     }
 
+    public CardStack getWorkingStack(int i) {return workingStacks[i];}
+
     private class FlipCommand extends  AbstractCommand {
         @Override
         public boolean execute() {
@@ -113,7 +99,40 @@ public class Board {
 
         @Override
         public void undo() {
-            return;
+            if(wasSuccessful()){
+                deck.returnCard(stacker);
+            }
+        }
+    }
+
+    private class FromStrackerToTargetCommand extends AbstractCommand {
+        private final int targetIndex;
+
+        public FromStrackerToTargetCommand(int targetIndex) {
+            this.targetIndex = targetIndex;
+        }
+
+        @Override
+        public boolean execute() {
+            success = false;
+            Card card = stacker.get();
+            if(card != null)
+            {
+                if(targets[targetIndex].put(card)) {
+                    success = true;
+                    stacker.pop();
+                }
+            }
+            return success;
+        }
+
+        @Override
+        public void undo() {
+            if(wasSuccessful())
+            {
+                Card card = targets[targetIndex].pop();
+                stacker.put(card);
+            }
         }
     }
 }

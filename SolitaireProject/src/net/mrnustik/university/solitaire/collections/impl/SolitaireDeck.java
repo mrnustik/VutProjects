@@ -37,14 +37,21 @@ public class SolitaireDeck extends SolitaireStacker implements CardDeck{
             final Card card = this.pop();
             card.turnFaceUp();
             return where.put(card);
-        } else if (where.isEmpty() == false){
-            while(where.isEmpty() != true){
+        } else if (!where.isEmpty()){
+            while(!where.isEmpty()){
                 Card card = where.pop();
                 card.turnFaceDown();
                 this.put(card);
             }
         }
         return false;
+    }
+
+    @Override
+    public void returnCard(CardStacker stacker) {
+        Card card = stacker.pop();
+        card.turnFaceDown();
+        this.put(card);
     }
 
     private void shuffle() {

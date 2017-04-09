@@ -32,5 +32,8 @@ public interface CardDeck {
      */
     boolean pop(CardStacker where);
 
-
+    /**
+      * @param card returned card
+     */
+    void returnCard(CardStacker card);
 }

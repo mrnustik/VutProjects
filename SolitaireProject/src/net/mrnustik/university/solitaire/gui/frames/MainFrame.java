@@ -1,10 +1,15 @@
 package net.mrnustik.university.solitaire.gui.frames;
 
 import net.mrnustik.university.solitaire.gui.panels.GamePanel;
+import net.mrnustik.university.solitaire.io.BoardLoader;
+import net.mrnustik.university.solitaire.io.json.JsonBoardLoader;
+import net.mrnustik.university.solitaire.model.Board;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +19,10 @@ import java.util.List;
  */
 public class MainFrame extends JFrame {
 
+    private static final int MAX_GAMES_COUNT = 4;
     private final List<GamePanel> games;
+    private JMenuItem newGameItem;
+    private JMenuItem loadGameItem;
 
     public MainFrame() throws HeadlessException {
         super();
@@ -28,7 +36,7 @@ public class MainFrame extends JFrame {
     }
 
     private void initLayout() {
-        GridLayout layout = new GridLayout(2, 2);
+        GridLayout layout = new GridLayout(0, 2);
         layout.setHgap(5);
         layout.setVgap(5);
         setLayout(layout);
@@ -44,31 +52,80 @@ public class MainFrame extends JFrame {
         menuBar.add(menu);
 
 
-        JMenuItem item = new JMenuItem("New game");
-        item.setMnemonic(KeyEvent.VK_CONTROL | KeyEvent.VK_N);
-        item.addActionListener(e -> {
-            startNewGame();
-            if(games.size() == 4)
-                ((JMenuItem)e.getSource()).setEnabled(false);
-        });
-        menu.add(item);
+        newGameItem = new JMenuItem("New game");
+        newGameItem.setMnemonic(KeyEvent.VK_CONTROL | KeyEvent.VK_N);
+        newGameItem.addActionListener((ActionEvent e) -> startNewGame());
+        newGameItem.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+
+        menu.add(newGameItem);
+
+        loadGameItem = new JMenuItem("Load game");
+        loadGameItem.setAccelerator(KeyStroke.getKeyStroke('L', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+        loadGameItem.addActionListener(e-> showLoadGameDialog());
+        menu.add(loadGameItem);
 
         setJMenuBar(menuBar);
     }
 
-    private void startNewGame()
-    {
+    private void showLoadGameDialog() {
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter jsonFilter = new FileNameExtensionFilter("JSON files (*.json)", "json");
+        fileChooser.addChoosableFileFilter(jsonFilter);
+        fileChooser.setFileFilter(jsonFilter);
+        int result = fileChooser.showOpenDialog(this);
+        if(result == JFileChooser.APPROVE_OPTION){
+            loadGame(fileChooser.getSelectedFile().getPath());
+        }
+    }
+
+    private void loadGame(String path) {
+        BoardLoader loader = new JsonBoardLoader();
+        try {
+            Board board = loader.load(path);
+            GamePanel panel = new GamePanel(board);
+            addGamePanel(panel);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Something wrong happened when loading game." + e.getMessage());
+        }
+    }
+
+    private void addGamePanel(GamePanel panel) {
         if(games.size() > 0) {
             setLayout(new GridLayout(0,2, 5,5));
         } else {
             setLayout(new CardLayout());
         }
-        GamePanel panel = new GamePanel();
-
         games.add(panel);
         add(panel);
-        revalidate();
-        repaint();
+        EventQueue.invokeLater(() -> {
+            this.revalidate();
+            this.repaint();
+        });
     }
 
+    private void startNewGame()
+    {
+
+        GamePanel panel = new GamePanel();
+        addGamePanel(panel);
+        checkFull();
+    }
+
+    private void checkFull() {
+        if(games.size() == MAX_GAMES_COUNT){
+            loadGameItem.setEnabled(false);
+            newGameItem.setEnabled(false);
+        } else {
+            loadGameItem.setEnabled(true);
+            newGameItem.setEnabled(true);
+        }
+    }
+
+    public void removeGame(GamePanel gamePanel) {
+        this.remove(gamePanel);
+        games.remove(gamePanel);
+        revalidate();
+        repaint();
+        checkFull();
+    }
 }

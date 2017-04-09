@@ -1,6 +1,7 @@
 package net.mrnustik.university.solitaire.gui.panels;
 
 import net.mrnustik.university.solitaire.factory.SolitaireFactory;
+import net.mrnustik.university.solitaire.gui.frames.MainFrame;
 import net.mrnustik.university.solitaire.gui.view.CardView;
 import net.mrnustik.university.solitaire.io.BoardSaver;
 import net.mrnustik.university.solitaire.io.json.JsonBoardSaver;
@@ -27,13 +28,16 @@ public class GamePanel extends JPanel {
 
 
     public GamePanel() {
+        this(new Board(new SolitaireFactory()));
+    }
+
+    public GamePanel(Board board) {
         super(new GridLayout(2,6, 10 ,10));
-        board = new Board(new SolitaireFactory());
+        this.board = board;
         setMinimumSize(new Dimension(200,150));
         setBackground(Color.decode("#146a2c"));
         initViews();
         paintBoard();
-
     }
 
     private void initViews() {
@@ -94,17 +98,7 @@ public class GamePanel extends JPanel {
 
         JButton saveBtn = new JButton("Save game");
         saveBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        saveBtn.addActionListener(l->{
-            JFileChooser fileChooser = new JFileChooser();
-            FileNameExtensionFilter xmlFilter = new FileNameExtensionFilter("JSON files (*.json)", "json");
-            fileChooser.addChoosableFileFilter(xmlFilter);
-            fileChooser.setFileFilter(xmlFilter);
-            int result = fileChooser.showSaveDialog(this);
-            if(result == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                saveGame(file.getPath());
-            }
-        });
+        saveBtn.addActionListener(l-> showSaveGameDialog());
         gameMenu.add(saveBtn);
         gameMenu.add(Box.createVerticalStrut(10));
         JButton undoBtn = new JButton("Undo");
@@ -118,11 +112,23 @@ public class GamePanel extends JPanel {
         JButton endBtn = new JButton("End game");
         endBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         endBtn.addActionListener(l->{
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            topFrame.remove(this);
+            MainFrame topFrame = (MainFrame) SwingUtilities.getWindowAncestor(this);
+            topFrame.removeGame(this);
         });
         gameMenu.add(endBtn);
         gameMenu.add(Box.createVerticalGlue());
+    }
+
+    private void showSaveGameDialog() {
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter jsonFilter = new FileNameExtensionFilter("JSON files (*.json)", "json");
+        fileChooser.addChoosableFileFilter(jsonFilter);
+        fileChooser.setFileFilter(jsonFilter);
+        int result = fileChooser.showSaveDialog(this);
+        if(result == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            saveGame(file.getPath());
+        }
     }
 
     private void saveGame(String path) {

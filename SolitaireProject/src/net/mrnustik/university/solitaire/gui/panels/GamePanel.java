@@ -16,7 +16,7 @@ import java.io.File;
 /**
  * Created by mrnda on 4/7/2017.
  */
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     private Board board;
 
     private CardView deck;
@@ -25,6 +25,7 @@ public class GamePanel extends JPanel {
 
     private Card selected = null;
     private JLabel scoreLabel;
+    private CardStackPanel[] workingStacks;
 
 
     public GamePanel() {
@@ -32,12 +33,11 @@ public class GamePanel extends JPanel {
     }
 
     public GamePanel(Board board) {
-        super(new GridLayout(2,6, 10 ,10));
+        super(new GridLayout(2,6, 5 ,5));
         this.board = board;
         setMinimumSize(new Dimension(200,150));
         setBackground(Color.decode("#146a2c"));
         initViews();
-        paintBoard();
     }
 
     private void initViews() {
@@ -49,9 +49,13 @@ public class GamePanel extends JPanel {
     }
 
     private void initWorkingStacks() {
+        workingStacks = new CardStackPanel[7];
         for(int i = 0; i < 7; i++)
         {
-            add(new CardStackPanel(board.getWorkingStack(i)));
+            CardStackPanel panel = new CardStackPanel(board.getWorkingStack(i), i);
+            panel.setCardSelectedListener(this);
+            workingStacks[i] = panel;
+            add(panel);
         }
     }
 
@@ -158,7 +162,7 @@ public class GamePanel extends JPanel {
         }
     }
 
-    private void paintBoard() {
+    public void paintBoard() {
         deck.changeCard(board.getDeckTop());
         stacker.changeCard(board.getStackTop());
 
@@ -166,7 +170,17 @@ public class GamePanel extends JPanel {
             targets[i].changeCard(board.getTargetTop(i));
         }
 
+        for(int i = 0; i <  7; i++)
+        {
+            workingStacks[i].setStack(board.getWorkingStack(i));
+        }
+
         revalidate();
         repaint();
+    }
+
+    @Override
+    public void onCardSelected(Card card, int index) {
+        selected = card;
     }
 }

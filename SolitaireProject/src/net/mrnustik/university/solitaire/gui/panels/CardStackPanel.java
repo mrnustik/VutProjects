@@ -8,6 +8,7 @@ import net.mrnustik.university.solitaire.model.Card;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -21,6 +22,8 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
         void onCardSelected(Card card, int index);
     }
 
+
+    private Timer timer;
     private final int index;
     private CardStack stack;
     private CardSelected listener = null;
@@ -28,6 +31,8 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
     public CardStackPanel(CardStack stack, int index) {
         super();
         addComponentListener(this);
+        timer = new Timer(30, e -> paintStack());
+        timer.setRepeats(false);
         this.stack = stack;
         this.index = index;
     }
@@ -66,7 +71,10 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
 
     @Override
     public void componentResized(ComponentEvent e) {
-        paintStack();
+        if(timer.isRunning())
+            timer.restart();
+        else
+            timer.start();
     }
 
     @Override

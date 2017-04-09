@@ -13,16 +13,23 @@ public class CardView extends JButton {
 
     private Card mCard;
 
+    private ImageIcon scaledIcon;
+    private int lastWidth = 0;
+    private boolean cardChanged;
+
     public CardView(Card card) {
         super();
-        setSize(50,100);
+        setSize(100,145);
         setBorder(null);
         setBorderPainted(false);
         setContentAreaFilled(false);
         setFocusPainted(false);
         setOpaque(false);
+        this.cardChanged = true;
         this.mCard = card;
     }
+
+
 
     @Override
     public Icon getIcon() {
@@ -35,15 +42,22 @@ public class CardView extends JButton {
             resource = getClass().getResource("/net/mrnustik/university/solitaire/gui/images/CARD_BACK.png");
 
         if(resource != null)
-            return getScaledIcon(new ImageIcon(resource));
+            if(scaledIcon == null || cardChanged || getWidth() != lastWidth)
+                return getScaledIcon(new ImageIcon(resource));
+            else
+                return scaledIcon;
         else
             return super.getIcon();
     }
 
     private Icon getScaledIcon(ImageIcon icon) {
         Image img = icon.getImage();
-        Image newimg = img.getScaledInstance(getWidth(),-1, Image.SCALE_SMOOTH);
-        icon = new ImageIcon(newimg);
+        if(getWidth() != 0)
+            img = img.getScaledInstance(getWidth(),-1, Image.SCALE_SMOOTH);
+        icon = new ImageIcon(img);
+        cardChanged = false;
+        lastWidth = getWidth();
+        scaledIcon = icon;
         return icon;
     }
 
@@ -52,6 +66,13 @@ public class CardView extends JButton {
     }
 
     public void changeCard(Card card) {
-        this.mCard = card;
+        if(card == null) {
+            this.cardChanged = true;
+            this.mCard = card;
+        }
+        else if(!card.equals(mCard)) {
+            this.cardChanged = true;
+            this.mCard = card;
+        }
     }
 }

@@ -38,6 +38,7 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
         setMinimumSize(new Dimension(200,150));
         setBackground(Color.decode("#146a2c"));
         initViews();
+        paintBoard();
     }
 
     private void initViews() {
@@ -46,6 +47,7 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
         initMenu();
         initTargetPacks();
         initWorkingStacks();
+
     }
 
     private void initWorkingStacks() {
@@ -163,20 +165,31 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     }
 
     public void paintBoard() {
-        deck.changeCard(board.getDeckTop());
-        stacker.changeCard(board.getStackTop());
+        paintDeck();
 
-        for(int i = 0; i < 4; i++) {
-            targets[i].changeCard(board.getTargetTop(i));
-        }
+        paintTargets();
 
+        painWorkingPacks();
+
+        repaint();
+    }
+
+    private void painWorkingPacks() {
         for(int i = 0; i <  7; i++)
         {
             workingStacks[i].setStack(board.getWorkingStack(i));
         }
+    }
 
-        revalidate();
-        repaint();
+    private void paintTargets() {
+        for(int i = 0; i < 4; i++) {
+            targets[i].changeCard(board.getTargetTop(i));
+        }
+    }
+
+    private void paintDeck() {
+        deck.changeCard(board.getDeckTop());
+        stacker.changeCard(board.getStackTop());
     }
 
     @Override

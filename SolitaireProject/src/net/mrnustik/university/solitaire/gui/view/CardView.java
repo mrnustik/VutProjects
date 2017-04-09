@@ -11,11 +11,14 @@ import java.net.URL;
  */
 public class CardView extends JButton {
 
-    private Card mCard;
+    private static ImageIcon scaledBackIcon;
 
+    private Card mCard;
     private ImageIcon scaledIcon;
     private int lastWidth = 0;
+    private int lastHeight = 0;
     private boolean cardChanged;
+
 
     public CardView(Card card) {
         super();
@@ -38,25 +41,37 @@ public class CardView extends JButton {
             resource = getClass().getResource("/net/mrnustik/university/solitaire/gui/images/CARD_EMPTY.png");
         else if(mCard.isFaceUp())
             resource = getClass().getResource("/net/mrnustik/university/solitaire/gui/images/" + mCard.toString() + ".png");
-        else
+        else {
+            if(!shouldRedraw() && scaledBackIcon != null) return scaledBackIcon;
             resource = getClass().getResource("/net/mrnustik/university/solitaire/gui/images/CARD_BACK.png");
-
+        }
         if(resource != null)
-            if(scaledIcon == null || cardChanged || getWidth() != lastWidth)
-                return getScaledIcon(new ImageIcon(resource));
+            if(shouldRedraw()) {
+                ImageIcon icon = getScaledIcon(new ImageIcon(resource));
+                if (mCard != null && !mCard.isFaceUp()) scaledBackIcon = icon;
+                return icon;
+            }
             else
-                return scaledIcon;
+                return this.scaledIcon;
         else
             return super.getIcon();
     }
 
-    private Icon getScaledIcon(ImageIcon icon) {
+    private boolean shouldRedraw() {
+        return scaledIcon == null || cardChanged || getWidth() != lastWidth || getHeight() != lastHeight;
+    }
+
+    private ImageIcon getScaledIcon(ImageIcon icon) {
         Image img = icon.getImage();
+
+
         if(getWidth() != 0)
             img = img.getScaledInstance(getWidth(),-1, Image.SCALE_SMOOTH);
+
         icon = new ImageIcon(img);
         cardChanged = false;
-        lastWidth = getWidth();
+        lastWidth = img.getWidth(this);
+        lastHeight = img.getHeight(this);
         scaledIcon = icon;
         return icon;
     }

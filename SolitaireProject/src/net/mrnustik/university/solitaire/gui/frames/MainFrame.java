@@ -100,8 +100,6 @@ public class MainFrame extends JFrame {
         EventQueue.invokeLater(() -> {
             this.revalidate();
             this.repaint();
-            this.pack();
-            panel.paintBoard();
         });
     }
 

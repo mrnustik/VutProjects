@@ -16,7 +16,7 @@ import java.io.File;
 /**
  * Created by mrnda on 4/7/2017.
  */
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     private Board board;
 
     private CardView deck;
@@ -52,7 +52,8 @@ public class GamePanel extends JPanel {
         workingStacks = new CardStackPanel[7];
         for(int i = 0; i < 7; i++)
         {
-            CardStackPanel panel = new CardStackPanel(board.getWorkingStack(i));
+            CardStackPanel panel = new CardStackPanel(board.getWorkingStack(i), i);
+            panel.setCardSelectedListener(this);
             workingStacks[i] = panel;
             add(panel);
         }
@@ -176,5 +177,10 @@ public class GamePanel extends JPanel {
 
         revalidate();
         repaint();
+    }
+
+    @Override
+    public void onCardSelected(Card card, int index) {
+        selected = card;
     }
 }

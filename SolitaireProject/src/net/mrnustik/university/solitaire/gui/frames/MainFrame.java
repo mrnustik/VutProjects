@@ -90,19 +90,22 @@ public class MainFrame extends JFrame {
     }
 
     private void addGamePanel(GamePanel panel) {
-        games.add(panel);
-        add(panel);
-        revalidate();
-        repaint();
-    }
-
-    private void startNewGame()
-    {
         if(games.size() > 0) {
             setLayout(new GridLayout(0,2, 5,5));
         } else {
             setLayout(new CardLayout());
         }
+        games.add(panel);
+        add(panel);
+        EventQueue.invokeLater(() -> {
+            this.revalidate();
+            this.repaint();
+        });
+    }
+
+    private void startNewGame()
+    {
+
         GamePanel panel = new GamePanel();
         addGamePanel(panel);
         checkFull();

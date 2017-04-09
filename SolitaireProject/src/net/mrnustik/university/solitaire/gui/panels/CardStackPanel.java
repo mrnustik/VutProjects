@@ -18,8 +18,6 @@ public class CardStackPanel extends JPanel {
     public CardStackPanel(CardStack stack) {
         super(new OverlapLayout(new Point(0,20)));
         this.stack = stack;
-
-        paintStack();
     }
 
     public void setStack(CardStack stack) {
@@ -34,10 +32,8 @@ public class CardStackPanel extends JPanel {
         for(int i = 0; i < stack.size(); i++)
         {
             CardView cardView = new CardView(stack.get(i));
-            cardView.setPreferredSize(new Dimension(165,240));
-            cardView.setMinimumSize(new Dimension(35, 48));
+            cardView.setPreferredSize(new Dimension(getWidth(), (getWidth()/165) * 240));
             add(cardView);
-
 
             y += 20;
         }

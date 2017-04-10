@@ -173,6 +173,28 @@ public class Board {
 
     }
 
+    public void fromWorkingToWorking(int fromIndex, int toIndex, Card card) {
+        Command fromWorkingToWorking = new AbstractCommand() {
+            @Override
+            public boolean execute() {
+                success = false;
+                CardStacker movingStacker = workingStacks[fromIndex].getStack(card);
+                if(movingStacker != null) {
+                    success = workingStacks[toIndex].put(movingStacker);
+                    if(success)
+                        workingStacks[fromIndex].pop(card);
+                }
+                return success;
+            }
+
+            @Override
+            public void undo() {
+
+            }
+        };
+        executeCommand(fromWorkingToWorking);
+    }
+
     private class FlipCommand extends  AbstractCommand {
         @Override
         public boolean execute() {

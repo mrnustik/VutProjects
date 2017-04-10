@@ -24,4 +24,10 @@ public interface CardStack extends CardStacker {
      * @return true if operation was successful
      */
     boolean put(CardStacker stack);
+
+    /**
+     * @param card card untile the stack should be taken
+     * @return stacker until that card
+     */
+    CardStacker getStack(Card card);
 }

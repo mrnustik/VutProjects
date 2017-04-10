@@ -50,4 +50,5 @@ public interface CardStacker {
      * @return true if operation was successful
      */
     boolean put(Card card);
+
 }

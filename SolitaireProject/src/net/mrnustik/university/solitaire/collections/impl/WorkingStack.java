@@ -78,7 +78,21 @@ public class WorkingStack extends SolitaireStacker implements CardStack {
                 return false;
             }
         }
-        return false;
+        return true;
     }
-     
+
+    @Override
+    public CardStacker getStack(Card card) {
+        int index = mCards.lastIndexOf(card);
+        if(index >= 0)
+        {
+            CardStacker stacker = new SolitaireStacker();
+            for(int i = index; i < this.size(); i++) {
+                stacker.put(this.get(i));
+            }
+            return stacker;
+        }
+        return null;
+    }
+
 }

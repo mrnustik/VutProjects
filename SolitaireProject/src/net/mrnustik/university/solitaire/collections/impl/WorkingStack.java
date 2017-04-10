@@ -48,7 +48,7 @@ public class WorkingStack extends SolitaireStacker implements CardStack {
             for(int i = index; i < this.size(); i++) {
                 stacker.put(this.get(i));
             }
-            for(int i = 0; i < stacker.size(); i++) { this.pop(i+index);}
+            for(int i = this.size() - 1; i >= index; i--) { this.pop(i);}
             return stacker;
         }
         return null;

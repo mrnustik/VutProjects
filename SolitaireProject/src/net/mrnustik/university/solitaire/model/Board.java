@@ -135,13 +135,16 @@ public class Board {
 
             @Override
             public void undo() {
-                //TODO undo
+                if(wasSuccessful()) {
+                    Card card = workingStacks[index].pop();
+                    stacker.put(card);
+                }
             }
         };
         executeCommand(fromStackerToWorking);
     }
 
-    public void fromTargetToWroking(int fromIndex, int toIndex) {
+    public void fromTargetToWorking(int fromIndex, int toIndex) {
         Command fromTargetToWorkng = new AbstractCommand() {
             @Override
             public boolean execute() {
@@ -158,7 +161,8 @@ public class Board {
             @Override
             public void undo() {
                 if (wasSuccessful()) {
-                    //TODO
+                    Card card = workingStacks[toIndex].pop();
+                    targets[fromIndex].put(card);
                 }
             }
         };

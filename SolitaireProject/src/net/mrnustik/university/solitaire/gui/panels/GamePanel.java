@@ -200,7 +200,7 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
             if (selection.getType() == SelectionType.STACKER) {
                 board.fromStackerToWorking(index);
             } else if (selection.getType() == SelectionType.TARGET) {
-                board.fromTargetToWroking(selection.getIndex(), index);
+                board.fromTargetToWorking(selection.getIndex(), index);
             } else if (selection.getType() == SelectionType.WORKING_PACK) {
                 board.fromWorkingToWorking(selection.getIndex(), index, selection.getCard());
             }

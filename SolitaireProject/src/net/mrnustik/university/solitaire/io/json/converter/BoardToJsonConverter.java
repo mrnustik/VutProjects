@@ -21,6 +21,7 @@ public class BoardToJsonConverter implements Converter<Board, String> {
         builder.registerTypeAdapter(CardDeck.class, new JsonInterfaceAdapter<CardDeck>());
         builder.registerTypeAdapter(CardStack.class, new JsonInterfaceAdapter<CardStack>());
         builder.registerTypeAdapter(CardStacker.class, new JsonInterfaceAdapter<CardStacker>());
+        builder.setPrettyPrinting();
         builder.setVersion(1.0);
         gson = builder.create();
     }

@@ -8,7 +8,6 @@ import net.mrnustik.university.solitaire.model.Board;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 
 /**
@@ -20,8 +19,7 @@ public class JsonBoardLoader implements BoardLoader {
     @Override
     public Board load(String path) throws FileNotFoundException {
         File file = new File(path);
-        if(!file.exists())
-        {
+        if (!file.exists()) {
             throw new FileNotFoundException("File " + path + " was not found");
         }
         try {

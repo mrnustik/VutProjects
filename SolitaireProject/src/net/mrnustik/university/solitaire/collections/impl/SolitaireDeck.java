@@ -5,40 +5,47 @@
  */
 package net.mrnustik.university.solitaire.collections.impl;
 
-import java.util.Collections;
-
+import net.mrnustik.university.solitaire.collections.CardDeck;
 import net.mrnustik.university.solitaire.collections.CardStacker;
 import net.mrnustik.university.solitaire.factory.base.AbstractFactory;
 import net.mrnustik.university.solitaire.model.Card;
-import net.mrnustik.university.solitaire.collections.CardDeck;
+
+import java.util.Collections;
 
 /**
- *
  * @author micha
  */
-public class SolitaireDeck extends SolitaireStacker implements CardDeck{
+public class SolitaireDeck extends SolitaireStacker implements CardDeck {
 
-    public static CardDeck createStandardCardDeck(AbstractFactory factory)
-    {
+    private SolitaireDeck() {
+    }
+
+    public static CardDeck createStandardCardDeck(AbstractFactory factory) {
         SolitaireDeck deck = new SolitaireDeck();
-        for(int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.CLUBS, i));} 
-        for(int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.SPADES, i));} 
-        for(int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.HEARTS, i));} 
-        for(int i = 1; i <= 13; i++) { deck.put(factory.createCard(Card.Color.DIAMONDS, i));} 
+        for (int i = 1; i <= 13; i++) {
+            deck.put(factory.createCard(Card.Color.CLUBS, i));
+        }
+        for (int i = 1; i <= 13; i++) {
+            deck.put(factory.createCard(Card.Color.SPADES, i));
+        }
+        for (int i = 1; i <= 13; i++) {
+            deck.put(factory.createCard(Card.Color.HEARTS, i));
+        }
+        for (int i = 1; i <= 13; i++) {
+            deck.put(factory.createCard(Card.Color.DIAMONDS, i));
+        }
         deck.shuffle();
         return deck;
     }
-    
-    private SolitaireDeck(){}
-    
+
     @Override
     public boolean pop(CardStacker where) {
-        if(!this.isEmpty()) {
+        if (!this.isEmpty()) {
             final Card card = this.pop();
             card.turnFaceUp();
             return where.put(card);
-        } else if (!where.isEmpty()){
-            while(!where.isEmpty()){
+        } else if (!where.isEmpty()) {
+            while (!where.isEmpty()) {
                 Card card = where.pop();
                 card.turnFaceDown();
                 this.put(card);
@@ -57,5 +64,5 @@ public class SolitaireDeck extends SolitaireStacker implements CardDeck{
     private void shuffle() {
         Collections.shuffle(mCards);
     }
-    
+
 }

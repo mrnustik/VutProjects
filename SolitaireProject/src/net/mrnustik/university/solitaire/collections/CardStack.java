@@ -8,17 +8,16 @@ package net.mrnustik.university.solitaire.collections;
 import net.mrnustik.university.solitaire.model.Card;
 
 /**
- *
  * @author micha
  */
 public interface CardStack extends CardStacker {
-    
-    /**   
+
+    /**
      * @param card card until what the stack should be taken
      * @return stack of cards until given card
      */
     CardStacker pop(Card card);
-    
+
     /**
      * @param stack stack to be put on the deck
      * @return true if operation was successful

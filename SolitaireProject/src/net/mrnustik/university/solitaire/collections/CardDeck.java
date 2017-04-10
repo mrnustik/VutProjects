@@ -8,11 +8,10 @@ package net.mrnustik.university.solitaire.collections;
 import net.mrnustik.university.solitaire.model.Card;
 
 /**
- *
  * @author micha
  */
 public interface CardDeck {
-    
+
     /**
      * @return pops the first card from the stack
      */
@@ -25,15 +24,16 @@ public interface CardDeck {
     Card get();
 
     /**
-     * Pops card from CardDeck to CardStack from param. 
-     * If isEmpty() gets all card from stack to itself. 
+     * Pops card from CardDeck to CardStack from param.
+     * If isEmpty() gets all card from stack to itself.
+     *
      * @param where where to put card
      * @return false if is empty
      */
     boolean pop(CardStacker where);
 
     /**
-      * @param card returned card
+     * @param card returned card
      */
     void returnCard(CardStacker card);
 }

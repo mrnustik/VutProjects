@@ -33,9 +33,9 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     }
 
     public GamePanel(Board board) {
-        super(new GridLayout(2,6, 5 ,5));
+        super(new GridLayout(2, 6, 5, 5));
         this.board = board;
-        setMinimumSize(new Dimension(200,150));
+        setMinimumSize(new Dimension(200, 150));
         setBackground(Color.decode("#146a2c"));
         initViews();
         selection = new Selection();
@@ -43,7 +43,7 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     }
 
     private void initViews() {
-        setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         initDeck();
         initMenu();
         initTargetPacks();
@@ -53,8 +53,7 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
 
     private void initWorkingStacks() {
         workingStacks = new CardStackPanel[7];
-        for(int i = 0; i < 7; i++)
-        {
+        for (int i = 0; i < 7; i++) {
             CardStackPanel panel = new CardStackPanel(board.getWorkingStack(i), i);
             panel.setCardSelectedListener(this);
             workingStacks[i] = panel;
@@ -64,11 +63,10 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
 
     private void initTargetPacks() {
         targets = new CardView[4];
-        for(int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             final int index = i;
             targets[i] = new CardView(null);
-            targets[i].addActionListener(l-> targetClicked(index));
+            targets[i].addActionListener(l -> targetClicked(index));
 
             add(targets[i]);
         }
@@ -79,12 +77,12 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
         add(deck);
         stacker = new CardView(board.getStackTop());
         add(stacker);
-        deck.addActionListener(l->{
+        deck.addActionListener(l -> {
             board.flipFromDeck();
             paintBoard();
         });
 
-        stacker.addActionListener(l->{
+        stacker.addActionListener(l -> {
             selection.setCard(stacker.getCard());
             selection.setType(SelectionType.STACKER);
         });
@@ -100,12 +98,12 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
 
         JButton saveBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/SAVE_ICON.png")));
         saveBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        saveBtn.addActionListener(l-> showSaveGameDialog());
+        saveBtn.addActionListener(l -> showSaveGameDialog());
         gameMenu.add(saveBtn);
         gameMenu.add(Box.createVerticalStrut(10));
         JButton undoBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/UNDO_ICON.png")));
         undoBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        undoBtn.addActionListener(l->{
+        undoBtn.addActionListener(l -> {
             board.undo();
             paintBoard();
         });
@@ -113,7 +111,7 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
         gameMenu.add(Box.createVerticalStrut(10));
         JButton endBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/DELETE_ICON.png")));
         endBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        endBtn.addActionListener(l->{
+        endBtn.addActionListener(l -> {
             MainFrame topFrame = (MainFrame) SwingUtilities.getWindowAncestor(this);
             topFrame.removeGame(this);
         });
@@ -122,8 +120,7 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     }
 
     private void checkWin() {
-        if(board.isWin())
-        {
+        if (board.isWin()) {
             JOptionPane.showMessageDialog(this,
                     "You have successfully won this game!",
                     "Congratulations",
@@ -132,10 +129,10 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     }
 
     private void targetClicked(int index) {
-        if(selection.isValid()) {
-            if(selection.getType() == SelectionType.STACKER) {
+        if (selection.isValid()) {
+            if (selection.getType() == SelectionType.STACKER) {
                 board.fromStackerToTarget(index);
-            } else if(selection.getType() == SelectionType.WORKING_PACK) {
+            } else if (selection.getType() == SelectionType.WORKING_PACK) {
                 board.fromWorkingToTarget(selection.index, index);
             }
             paintBoard();
@@ -149,14 +146,13 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     }
 
 
-
     private void showSaveGameDialog() {
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter jsonFilter = new FileNameExtensionFilter("JSON files (*.json)", "json");
         fileChooser.addChoosableFileFilter(jsonFilter);
         fileChooser.setFileFilter(jsonFilter);
         int result = fileChooser.showSaveDialog(this);
-        if(result == JFileChooser.APPROVE_OPTION) {
+        if (result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
             saveGame(file.getPath());
         }
@@ -182,14 +178,13 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     }
 
     private void painWorkingPacks() {
-        for(int i = 0; i <  7; i++)
-        {
+        for (int i = 0; i < 7; i++) {
             workingStacks[i].setStack(board.getWorkingStack(i));
         }
     }
 
     private void paintTargets() {
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             targets[i].changeCard(board.getTargetTop(i));
         }
     }
@@ -201,12 +196,12 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
 
     @Override
     public void onCardSelected(Card card, int index) {
-        if(selection.isValid()){
-            if(selection.getType() == SelectionType.STACKER) {
+        if (selection.isValid()) {
+            if (selection.getType() == SelectionType.STACKER) {
                 board.fromStackerToWorking(index);
-            } else if(selection.getType() == SelectionType.TARGET){
+            } else if (selection.getType() == SelectionType.TARGET) {
                 board.fromTargetToWroking(selection.getIndex(), index);
-            } else if(selection.getType() == SelectionType.WORKING_PACK) {
+            } else if (selection.getType() == SelectionType.WORKING_PACK) {
                 board.fromWorkingToWorking(selection.getIndex(), index, selection.getCard());
             }
             selection.reset();
@@ -233,30 +228,29 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
         private int index = -1;
         private Card card;
 
-        public void reset() {
+        void reset() {
             type = SelectionType.UNDEFINED;
             index = -1;
         }
 
-        public boolean isValid()
-        {
+        boolean isValid() {
             return type != SelectionType.UNDEFINED;
         }
 
-        public void setIndex(int index) {
-            this.index = index;
-        }
-
-        public void setType(SelectionType type) {
-            this.type = type;
-        }
-
-        public int getIndex() {
+        int getIndex() {
             return index;
         }
 
-        public SelectionType getType() {
+        void setIndex(int index) {
+            this.index = index;
+        }
+
+        SelectionType getType() {
             return type;
+        }
+
+        void setType(SelectionType type) {
+            this.type = type;
         }
 
         public Card getCard() {

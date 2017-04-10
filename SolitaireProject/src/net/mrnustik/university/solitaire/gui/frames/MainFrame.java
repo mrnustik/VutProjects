@@ -7,7 +7,6 @@ import net.mrnustik.university.solitaire.model.Board;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -28,7 +27,7 @@ public class MainFrame extends JFrame {
         super();
         games = new ArrayList<>();
         setTitle("Unicolitaire");
-        setSize(800,600);
+        setSize(800, 600);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         initLayout();
         initMenuBar();
@@ -55,13 +54,13 @@ public class MainFrame extends JFrame {
         newGameItem = new JMenuItem("New game");
         newGameItem.setMnemonic(KeyEvent.VK_CONTROL | KeyEvent.VK_N);
         newGameItem.addActionListener((ActionEvent e) -> startNewGame());
-        newGameItem.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
+        newGameItem.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
         menu.add(newGameItem);
 
         loadGameItem = new JMenuItem("Load game");
-        loadGameItem.setAccelerator(KeyStroke.getKeyStroke('L', Toolkit.getDefaultToolkit ().getMenuShortcutKeyMask()));
-        loadGameItem.addActionListener(e-> showLoadGameDialog());
+        loadGameItem.setAccelerator(KeyStroke.getKeyStroke('L', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        loadGameItem.addActionListener(e -> showLoadGameDialog());
         menu.add(loadGameItem);
 
         setJMenuBar(menuBar);
@@ -73,7 +72,7 @@ public class MainFrame extends JFrame {
         fileChooser.addChoosableFileFilter(jsonFilter);
         fileChooser.setFileFilter(jsonFilter);
         int result = fileChooser.showOpenDialog(this);
-        if(result == JFileChooser.APPROVE_OPTION){
+        if (result == JFileChooser.APPROVE_OPTION) {
             loadGame(fileChooser.getSelectedFile().getPath());
         }
     }
@@ -90,8 +89,8 @@ public class MainFrame extends JFrame {
     }
 
     private void addGamePanel(GamePanel panel) {
-        if(games.size() > 0) {
-            setLayout(new GridLayout(0,2, 5,5));
+        if (games.size() > 0) {
+            setLayout(new GridLayout(0, 2, 5, 5));
         } else {
             setLayout(new CardLayout());
         }
@@ -103,8 +102,7 @@ public class MainFrame extends JFrame {
         });
     }
 
-    private void startNewGame()
-    {
+    private void startNewGame() {
 
         GamePanel panel = new GamePanel();
         addGamePanel(panel);
@@ -112,7 +110,7 @@ public class MainFrame extends JFrame {
     }
 
     private void checkFull() {
-        if(games.size() == MAX_GAMES_COUNT){
+        if (games.size() == MAX_GAMES_COUNT) {
             loadGameItem.setEnabled(false);
             newGameItem.setEnabled(false);
         } else {

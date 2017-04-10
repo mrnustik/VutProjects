@@ -5,18 +5,17 @@
  */
 package net.mrnustik.university.solitaire.model;
 
-import net.mrnustik.university.solitaire.command.AbstractCommand;
-import net.mrnustik.university.solitaire.command.Command;
-import net.mrnustik.university.solitaire.factory.base.AbstractFactory;
 import net.mrnustik.university.solitaire.collections.CardDeck;
 import net.mrnustik.university.solitaire.collections.CardStack;
 import net.mrnustik.university.solitaire.collections.CardStacker;
+import net.mrnustik.university.solitaire.command.AbstractCommand;
+import net.mrnustik.university.solitaire.command.Command;
+import net.mrnustik.university.solitaire.factory.base.AbstractFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author micha
  */
 public class Board {
@@ -29,50 +28,46 @@ public class Board {
 
 
     private transient List<Command> commandsHistory = new ArrayList<>();
-    
+
     public Board(AbstractFactory factory) {
         this.deck = factory.createCardDeck();
         this.stacker = factory.createPutDownStacker();
         this.targets = new CardStacker[4];
-        for(int i = 0; i < this.targets.length; i++) {
+        for (int i = 0; i < this.targets.length; i++) {
             this.targets[i] = factory.createTargetStacker(Card.Color.values()[i]);
         }
         this.workingStacks = new CardStack[WORKING_COUNT];
-        for(int i = 0; i< this.workingStacks.length; i++){
-            this.workingStacks[i] = factory.createWorkingPack(i+1, this.deck);
+        for (int i = 0; i < this.workingStacks.length; i++) {
+            this.workingStacks[i] = factory.createWorkingPack(i + 1, this.deck);
         }
     }
 
     public void undo() {
-        if(commandsHistory.size() > 0)
-        {
+        if (commandsHistory.size() > 0) {
             Command command = commandsHistory.remove(commandsHistory.size() - 1);
             command.undo();
         }
     }
 
-    public boolean flipFromDeck()
-    {
+    public void flipFromDeck() {
         Command flipCommand = new FlipCommand();
-        return executeCommand(flipCommand);
+        executeCommand(flipCommand);
     }
 
-    private boolean executeCommand(Command command) {
+    private void executeCommand(Command command) {
         boolean success = command.execute();
         addCommandToHistory(command);
-        return success;
     }
 
-    public boolean fromStackerToTarget(int targetIndex)
-    {
+    public void fromStackerToTarget(int targetIndex) {
         Command fromStackerToCardDeck = new FromStrackerToTargetCommand(targetIndex);
-        return executeCommand(fromStackerToCardDeck);
+        executeCommand(fromStackerToCardDeck);
     }
 
     private void addCommandToHistory(Command command) {
-        if(commandsHistory == null)
+        if (commandsHistory == null)
             commandsHistory = new ArrayList<>();
-        if(command.wasSuccessful())
+        if (command.wasSuccessful())
             commandsHistory.add(command);
     }
 
@@ -84,16 +79,17 @@ public class Board {
         return stacker.get();
     }
 
-    public Card getTargetTop(int i){
+    public Card getTargetTop(int i) {
         return targets[i].get();
     }
 
-    public CardStack getWorkingStack(int i) {return workingStacks[i];}
+    public CardStack getWorkingStack(int i) {
+        return workingStacks[i];
+    }
 
     public boolean isWin() {
-        for(int i = 0;i < 4; i++)
-        {
-            if(targets[i].size() != 13)
+        for (int i = 0; i < 4; i++) {
+            if (targets[i].size() != 13)
                 return false;
         }
         return true;
@@ -105,17 +101,16 @@ public class Board {
             public boolean execute() {
                 success = false;
                 Card card = workingStacks[workingIndex].get();
-                if(card != null){
+                if (card != null) {
                     success = targets[targetIndex].put(card);
-                    if(success) workingStacks[workingIndex].pop();
+                    if (success) workingStacks[workingIndex].pop();
                 }
                 return success;
             }
 
             @Override
             public void undo() {
-                if(wasSuccessful())
-                {
+                if (wasSuccessful()) {
                     //TODO
                 }
             }
@@ -129,9 +124,8 @@ public class Board {
             public boolean execute() {
                 success = false;
                 Card card = stacker.get();
-                if(card != null)
-                {
-                    if(workingStacks[index].put(card)) {
+                if (card != null) {
+                    if (workingStacks[index].put(card)) {
                         success = true;
                         stacker.pop();
                     }
@@ -153,9 +147,9 @@ public class Board {
             public boolean execute() {
                 success = false;
                 Card card = targets[fromIndex].get();
-                if(card != null){
+                if (card != null) {
                     success = workingStacks[toIndex].put(card);
-                    if(success)
+                    if (success)
                         targets[fromIndex].pop();
                 }
                 return success;
@@ -163,8 +157,7 @@ public class Board {
 
             @Override
             public void undo() {
-                if(wasSuccessful())
-                {
+                if (wasSuccessful()) {
                     //TODO
                 }
             }
@@ -179,9 +172,9 @@ public class Board {
             public boolean execute() {
                 success = false;
                 CardStacker movingStacker = workingStacks[fromIndex].getStack(card);
-                if(movingStacker != null) {
+                if (movingStacker != null) {
                     success = workingStacks[toIndex].put(movingStacker);
-                    if(success)
+                    if (success)
                         workingStacks[fromIndex].pop(card);
                 }
                 return success;
@@ -195,7 +188,7 @@ public class Board {
         executeCommand(fromWorkingToWorking);
     }
 
-    private class FlipCommand extends  AbstractCommand {
+    private class FlipCommand extends AbstractCommand {
         @Override
         public boolean execute() {
             success = true;
@@ -204,7 +197,7 @@ public class Board {
 
         @Override
         public void undo() {
-            if(wasSuccessful()){
+            if (wasSuccessful()) {
                 deck.returnCard(stacker);
             }
         }
@@ -213,7 +206,7 @@ public class Board {
     private class FromStrackerToTargetCommand extends AbstractCommand {
         private final int targetIndex;
 
-        public FromStrackerToTargetCommand(int targetIndex) {
+        FromStrackerToTargetCommand(int targetIndex) {
             this.targetIndex = targetIndex;
         }
 
@@ -221,9 +214,8 @@ public class Board {
         public boolean execute() {
             success = false;
             Card card = stacker.get();
-            if(card != null)
-            {
-                if(targets[targetIndex].put(card)) {
+            if (card != null) {
+                if (targets[targetIndex].put(card)) {
                     success = true;
                     stacker.pop();
                 }
@@ -233,8 +225,7 @@ public class Board {
 
         @Override
         public void undo() {
-            if(wasSuccessful())
-            {
+            if (wasSuccessful()) {
                 Card card = targets[targetIndex].pop();
                 stacker.put(card);
             }

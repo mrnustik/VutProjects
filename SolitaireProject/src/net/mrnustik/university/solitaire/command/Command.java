@@ -6,6 +6,7 @@ package net.mrnustik.university.solitaire.command;
 public interface Command {
     /**
      * Executes the command.
+     *
      * @return true if command was successfull
      */
     boolean execute();

@@ -8,12 +8,10 @@ package net.mrnustik.university.solitaire;
 import net.mrnustik.university.solitaire.gui.frames.MainFrame;
 
 /**
- *
  * @author micha
  */
 public class Main {
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         MainFrame frame = new MainFrame();
         frame.setVisible(true);
     }

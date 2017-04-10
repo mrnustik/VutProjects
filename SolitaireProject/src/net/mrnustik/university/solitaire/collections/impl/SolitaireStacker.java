@@ -5,23 +5,23 @@
  */
 package net.mrnustik.university.solitaire.collections.impl;
 
+import net.mrnustik.university.solitaire.collections.CardStacker;
+import net.mrnustik.university.solitaire.model.Card;
+
 import java.util.ArrayList;
 import java.util.List;
-import net.mrnustik.university.solitaire.model.Card;
-import net.mrnustik.university.solitaire.collections.CardStacker;
 
 /**
- *
  * @author micha
  */
 public class SolitaireStacker implements CardStacker {
 
-    protected final List<Card> mCards;
+    final List<Card> mCards;
 
     public SolitaireStacker() {
-        mCards = new ArrayList<Card>();
+        mCards = new ArrayList<>();
     }
-    
+
     @Override
     public int size() {
         return mCards.size();
@@ -34,7 +34,7 @@ public class SolitaireStacker implements CardStacker {
 
     @Override
     public Card pop() {
-        if(!this.isEmpty()){
+        if (!this.isEmpty()) {
             return this.pop(this.size() - 1);
         }
         return null;
@@ -42,15 +42,15 @@ public class SolitaireStacker implements CardStacker {
 
     @Override
     public Card pop(int index) {
-        if(!this.isEmpty()){
+        if (!this.isEmpty()) {
             return mCards.remove(index);
         }
         return null;
     }
-    
+
     @Override
     public Card get() {
-        if(!this.isEmpty()){
+        if (!this.isEmpty()) {
             return mCards.get(this.size() - 1);
         }
         return null;
@@ -58,7 +58,7 @@ public class SolitaireStacker implements CardStacker {
 
     @Override
     public Card get(int index) {
-        if(index < this.size()) {
+        if (index < this.size()) {
             return mCards.get(index);
         }
         return null;
@@ -70,5 +70,4 @@ public class SolitaireStacker implements CardStacker {
     }
 
 
-    
 }

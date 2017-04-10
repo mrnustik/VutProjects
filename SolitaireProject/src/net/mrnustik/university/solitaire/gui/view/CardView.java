@@ -22,7 +22,7 @@ public class CardView extends JButton {
 
     public CardView(Card card) {
         super();
-        setSize(100,145);
+        setSize(100, 145);
         setBorder(null);
         setBorderPainted(false);
         setContentAreaFilled(false);
@@ -33,25 +33,23 @@ public class CardView extends JButton {
     }
 
 
-
     @Override
     public Icon getIcon() {
         URL resource = null;
-        if(mCard == null)
+        if (mCard == null)
             resource = getClass().getResource("/net/mrnustik/university/solitaire/gui/images/CARD_EMPTY.png");
-        else if(mCard.isFaceUp())
+        else if (mCard.isFaceUp())
             resource = getClass().getResource("/net/mrnustik/university/solitaire/gui/images/" + mCard.toString() + ".png");
         else {
-            if(!shouldRedraw() && scaledBackIcon != null) return scaledBackIcon;
+            if (!shouldRedraw() && scaledBackIcon != null) return scaledBackIcon;
             resource = getClass().getResource("/net/mrnustik/university/solitaire/gui/images/CARD_BACK.png");
         }
-        if(resource != null)
-            if(shouldRedraw()) {
+        if (resource != null)
+            if (shouldRedraw()) {
                 ImageIcon icon = getScaledIcon(new ImageIcon(resource));
                 if (mCard != null && !mCard.isFaceUp()) scaledBackIcon = icon;
                 return icon;
-            }
-            else
+            } else
                 return this.scaledIcon;
         else
             return super.getIcon();
@@ -65,8 +63,8 @@ public class CardView extends JButton {
         Image img = icon.getImage();
 
 
-        if(getWidth() != 0)
-            img = img.getScaledInstance(getWidth(),-1, Image.SCALE_SMOOTH);
+        if (getWidth() != 0)
+            img = img.getScaledInstance(getWidth(), -1, Image.SCALE_SMOOTH);
 
         icon = new ImageIcon(img);
         cardChanged = false;
@@ -81,11 +79,10 @@ public class CardView extends JButton {
     }
 
     public void changeCard(Card card) {
-        if(card == null) {
+        if (card == null) {
             this.cardChanged = true;
-            this.mCard = card;
-        }
-        else if(!card.equals(mCard)) {
+            this.mCard = null;
+        } else if (!card.equals(mCard)) {
             this.cardChanged = true;
             this.mCard = card;
         }

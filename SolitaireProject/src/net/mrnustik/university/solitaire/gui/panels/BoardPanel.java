@@ -147,8 +147,10 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
             } else if (selection.getType() == Selection.SelectionType.WORKING_PACK) {
                 success = board.fromWorkingToTarget(selection.getIndex(), index);
             }
-            paintBoard();
-            checkWin();
+            if(success) {
+                paintBoard();
+                checkWin();
+            }
             selection.reset();
         } else {
             selection.setType(Selection.SelectionType.TARGET);
@@ -223,8 +225,10 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
             } else if (selection.getType() == Selection.SelectionType.WORKING_PACK) {
                 success = board.fromWorkingToWorking(selection.getIndex(), index, selection.getCard());
             }
-            paintBoard();
-            repaint();
+            if(success) {
+                paintBoard();
+                repaint();
+            }
             selection.reset();
         } else {
             selection.setType(Selection.SelectionType.WORKING_PACK);

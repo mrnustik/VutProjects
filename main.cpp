@@ -4,8 +4,8 @@
 #include <iomanip>
 #include <sstream>
 #include <openssl/crypto.h>
-#include "Socket.h"
-
+#include "Library/Socket.h"
+#include "Library/MD5.h"
 const std::string PortNumber = "55555";
 
 using namespace std;
@@ -42,7 +42,6 @@ int main(int argc, char* argv[]) {
 					std::stringstream stream;
 					stream << fixed << setprecision(2) << result;
 					std::string result = stream.str();
-					cout << result << endl;
 					socket->send("RESULT " + result + "\n");
 				}
                 else
@@ -71,12 +70,7 @@ typedef enum {
 
 string getMD5Hash(string userName)
 {
-	unsigned char digest[32];
-	MD5_CTX context; 
-	MD5_Init(&c);
-	MD5_Update(&c, userName.c_str(), userName.length());
-	MD5_Final(digest, &c);
-	return string(digest);
+    return md5(userName);
 }
 
 double parseExpression(string expression, bool *error) {

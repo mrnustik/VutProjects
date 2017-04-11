@@ -11,6 +11,7 @@ public class FlipCommand extends AbstractCommand {
 
     private CardStacker stacker;
     private CardDeck deck;
+    private boolean turnedStacker = false;
 
     public FlipCommand(CardStacker stacker, CardDeck deck) {
         this.stacker = stacker;
@@ -21,13 +22,20 @@ public class FlipCommand extends AbstractCommand {
     @Override
     public boolean execute() {
         success = true;
+        turnedStacker = deck.isEmpty() && !stacker.isEmpty();
         return deck.pop(stacker);
     }
 
     @Override
     public void undo() {
         if (wasSuccessful()) {
-            deck.returnCard(stacker);
+            if(turnedStacker) {
+                while(!deck.isEmpty()) {
+                    deck.pop(stacker);
+                }
+            } else {
+                deck.returnCard(stacker);
+            }
         }
     }
 }

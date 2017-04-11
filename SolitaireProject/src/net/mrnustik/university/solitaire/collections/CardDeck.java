@@ -36,4 +36,9 @@ public interface CardDeck {
      * @param card returned card
      */
     void returnCard(CardStacker card);
+
+    /**
+     * @return true if the deck is empty
+     */
+    boolean isEmpty();
 }

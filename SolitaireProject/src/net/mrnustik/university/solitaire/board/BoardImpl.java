@@ -22,11 +22,16 @@ import java.util.List;
 public class BoardImpl implements Board {
 
     private static final int WORKING_COUNT = 7;
+    public static final int POINTS_STACKER_TO_TARGET = 10;
+    public static final int POINTS_WORKING_TO_TARGET = 10;
+    public static final int POINTS_STACKER_TO_WORKING = 5;
+    public static final int POINTS_TARGET_TO_WORKING = -15;
     private final CardDeck deck;
     private final CardStacker stacker;
     private final CardStacker[] targets;
     private final CardStack[] workingStacks;
 
+    private int score = 0;
 
     private transient List<Command> commandsHistory = new ArrayList<>();
 
@@ -73,9 +78,24 @@ public class BoardImpl implements Board {
     }
 
     @Override
+    public int getScore() {
+        return this.score;
+    }
+
+    private void addScore(int addition)
+    {
+        if(score + addition > 0) {
+            this.score += addition;
+        } else {
+            this.score = 0;
+        }
+    }
+
+    @Override
     public void undo() {
         if (commandsHistory.size() > 0) {
             Command command = commandsHistory.remove(commandsHistory.size() - 1);
+            addScore(-command.getScore());
             command.undo();
         }
     }
@@ -83,8 +103,10 @@ public class BoardImpl implements Board {
     private void addCommandToHistory(Command command) {
         if (commandsHistory == null)
             commandsHistory = new ArrayList<>();
-        if (command.wasSuccessful())
+        if (command.wasSuccessful()) {
+            addScore(command.getScore());
             commandsHistory.add(command);
+        }
     }
 
     private boolean executeCommand(Command command) {
@@ -102,24 +124,28 @@ public class BoardImpl implements Board {
     @Override
     public boolean fromStackerToTarget(int targetIndex) {
         Command command = new FromStackerToTargetCommand(stacker, targets[targetIndex]);
+        command.setScore(POINTS_STACKER_TO_TARGET);
         return executeCommand(command);
     }
 
     @Override
     public boolean fromWorkingToTarget(int workingIndex, int targetIndex) {
         Command command = new FromWorkingToTargetCommand(workingStacks[workingIndex], targets[targetIndex]);
+        command.setScore(POINTS_WORKING_TO_TARGET);
         return executeCommand(command);
     }
 
     @Override
     public boolean fromStackerToWorking(int index) {
         Command command = new FromStackerToWorkingCommand(stacker, workingStacks[index]);
+        command.setScore(POINTS_STACKER_TO_WORKING);
         return executeCommand(command);
     }
 
     @Override
     public boolean fromTargetToWorking(int fromIndex, int toIndex) {
         Command command = new FromTargetToWorking(targets[fromIndex], workingStacks[toIndex]);
+        command.setScore(POINTS_TARGET_TO_WORKING);
         return executeCommand(command);
     }
 

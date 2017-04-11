@@ -17,6 +17,8 @@ public interface Board {
 
     boolean isWin();
 
+    int getScore();
+
     void undo();
 
     boolean flipFromDeck();

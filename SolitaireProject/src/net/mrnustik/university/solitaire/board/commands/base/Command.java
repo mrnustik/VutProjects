@@ -20,4 +20,8 @@ public interface Command {
      * @return true if command was successful
      */
     boolean wasSuccessful();
+
+    void setScore(int points);
+
+    int getScore();
 }

@@ -94,32 +94,40 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     private void initMenu() {
         JPanel gameMenu = new JPanel();
         gameMenu.setBackground(Color.decode("#146a2c"));
-        gameMenu.setLayout(new BoxLayout(gameMenu, BoxLayout.PAGE_AXIS));
+        gameMenu.setLayout(new GridBagLayout());
         add(gameMenu);
 
-        gameMenu.add(Box.createVerticalGlue());
-
-        JButton saveBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/SAVE_ICON.png")));
-        saveBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 3;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        scoreLabel = new JLabel("Score: 0", SwingConstants.CENTER);
+        scoreLabel.setForeground(Color.white);
+        gameMenu.add(scoreLabel, constraints);
+        JButton saveBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/SAVE_ICON.png")));saveBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         saveBtn.addActionListener(l -> showSaveGameDialog());
-        gameMenu.add(saveBtn);
-        gameMenu.add(Box.createVerticalStrut(10));
+        saveBtn.setMaximumSize(new Dimension(20,20));
+        constraints.gridy = 1;
+        constraints.gridx = 0;
+        constraints.gridwidth = 1;
+        gameMenu.add(saveBtn, constraints);
         JButton undoBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/UNDO_ICON.png")));
-        undoBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        undoBtn.setMaximumSize(new Dimension(20,20));
         undoBtn.addActionListener(l -> {
             board.undo();
             paintBoard();
         });
-        gameMenu.add(undoBtn);
-        gameMenu.add(Box.createVerticalStrut(10));
+        constraints.gridx = 1;
+        gameMenu.add(undoBtn, constraints);
         JButton endBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/DELETE_ICON.png")));
-        endBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        endBtn.setMaximumSize(new Dimension(20,20));
         endBtn.addActionListener(l -> {
             MainFrame topFrame = (MainFrame) SwingUtilities.getWindowAncestor(this);
             topFrame.removeGame(this);
         });
-        gameMenu.add(endBtn);
-        gameMenu.add(Box.createVerticalGlue());
+        constraints.gridx = 2;
+        gameMenu.add(endBtn, constraints);
     }
 
     private void checkWin() {
@@ -176,12 +184,18 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
 
         paintTargets();
 
-        painWorkingPacks();
+        paintWorkingPacks();
+
+        paintScore();
 
         repaint();
     }
 
-    private void painWorkingPacks() {
+    private void paintScore() {
+        this.scoreLabel.setText("Score: "+ board.getScore());
+    }
+
+    private void paintWorkingPacks() {
         for (int i = 0; i < 7; i++) {
             workingStacks[i].setStack(board.getWorkingStack(i));
         }

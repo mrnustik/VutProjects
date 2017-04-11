@@ -10,6 +10,7 @@ public class Selection {
 
     public enum SelectionType {
         UNDEFINED,
+        DECK,
         STACKER,
         TARGET,
         WORKING_PACK

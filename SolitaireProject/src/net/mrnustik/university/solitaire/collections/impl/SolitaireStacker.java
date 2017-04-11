@@ -69,5 +69,10 @@ public class SolitaireStacker implements CardStacker {
         return mCards.add(card);
     }
 
+    @Override
+    public boolean canPut(Card card) {
+        return true;
+    }
+
 
 }

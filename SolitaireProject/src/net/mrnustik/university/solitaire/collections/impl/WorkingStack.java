@@ -52,14 +52,7 @@ public class WorkingStack extends SolitaireStacker implements CardStack {
 
     @Override
     public boolean put(Card card) {
-        if (isEmpty()) {
-            if (card.getValue() == 13) return super.put(card);
-        } else {
-            if (get().compareTo(card) == -1 && !get().similarColorTo(card)) {
-                return super.put(card);
-            }
-        }
-        return false;
+        return canPut(card) && super.put(card);
     }
 
 
@@ -104,4 +97,16 @@ public class WorkingStack extends SolitaireStacker implements CardStack {
         super.put(card);
     }
 
+
+    @Override
+    public boolean canPut(Card card) {
+        if(isEmpty()){
+            if(card.getValue() == 13) return true;
+        } else {
+            if (get().compareTo(card) == -1 && !get().similarColorTo(card)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

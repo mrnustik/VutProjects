@@ -20,15 +20,20 @@ public class TargetStacker extends SolitaireStacker {
 
     @Override
     public boolean put(Card card) {
-        if (card.getColor() == this.mColor) {
-            if (this.isEmpty()) {
-                if (card.getValue() == 1)
-                    return super.put(card);
-            } else if (this.get().compareTo(card) == 1) {
-                return super.put(card);
+        return this.canPut(card) && super.put(card);
+    }
+
+    @Override
+    public boolean canPut(Card card) {
+        if(card.getColor() == this.mColor) {
+            if(this.isEmpty()){
+                if(card.getValue() == 1){
+                    return true;
+                }
+            } else if(this.get().compareTo(card) == 1) {
+                return true;
             }
         }
         return false;
     }
-
 }

@@ -1,6 +1,6 @@
 package net.mrnustik.university.solitaire.io;
 
-import net.mrnustik.university.solitaire.model.Board;
+import net.mrnustik.university.solitaire.board.Board;
 
 import java.io.IOException;
 

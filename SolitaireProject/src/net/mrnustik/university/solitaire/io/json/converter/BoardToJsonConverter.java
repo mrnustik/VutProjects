@@ -7,7 +7,7 @@ import net.mrnustik.university.solitaire.collections.CardStack;
 import net.mrnustik.university.solitaire.collections.CardStacker;
 import net.mrnustik.university.solitaire.io.converter.Converter;
 import net.mrnustik.university.solitaire.io.json.JsonInterfaceAdapter;
-import net.mrnustik.university.solitaire.model.Board;
+import net.mrnustik.university.solitaire.board.Board;
 
 /**
  * Created by mrnda on 4/7/2017.

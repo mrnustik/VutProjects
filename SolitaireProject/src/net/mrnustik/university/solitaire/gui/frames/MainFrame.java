@@ -3,7 +3,7 @@ package net.mrnustik.university.solitaire.gui.frames;
 import net.mrnustik.university.solitaire.gui.panels.GamePanel;
 import net.mrnustik.university.solitaire.io.BoardLoader;
 import net.mrnustik.university.solitaire.io.json.JsonBoardLoader;
-import net.mrnustik.university.solitaire.model.Board;
+import net.mrnustik.university.solitaire.board.Board;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;

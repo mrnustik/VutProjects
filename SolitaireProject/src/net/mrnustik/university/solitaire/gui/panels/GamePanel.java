@@ -5,7 +5,7 @@ import net.mrnustik.university.solitaire.gui.frames.MainFrame;
 import net.mrnustik.university.solitaire.gui.view.CardView;
 import net.mrnustik.university.solitaire.io.BoardSaver;
 import net.mrnustik.university.solitaire.io.json.JsonBoardSaver;
-import net.mrnustik.university.solitaire.model.Board;
+import net.mrnustik.university.solitaire.board.Board;
 import net.mrnustik.university.solitaire.model.Card;
 
 import javax.swing.*;

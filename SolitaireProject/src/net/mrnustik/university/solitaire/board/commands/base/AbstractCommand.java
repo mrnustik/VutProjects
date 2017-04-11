@@ -1,4 +1,4 @@
-package net.mrnustik.university.solitaire.command;
+package net.mrnustik.university.solitaire.board.commands.base;
 
 /**
  * Created by mrnda on 4/7/2017.

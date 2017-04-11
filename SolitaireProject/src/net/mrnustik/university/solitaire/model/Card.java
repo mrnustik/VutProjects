@@ -5,6 +5,8 @@
  */
 package net.mrnustik.university.solitaire.model;
 
+import net.mrnustik.university.solitaire.collections.CardStacker;
+
 /**
  * @author micha
  */

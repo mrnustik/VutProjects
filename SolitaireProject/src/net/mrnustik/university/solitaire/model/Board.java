@@ -97,11 +97,16 @@ public class Board {
 
     public void fromWorkingToTarget(int workingIndex, int targetIndex) {
         Command fromWorkingToTarget = new AbstractCommand() {
+            boolean wasTurned = false;
+
             @Override
             public boolean execute() {
                 success = false;
                 Card card = workingStacks[workingIndex].get();
                 if (card != null) {
+                    if(workingStacks[workingIndex].size() != 1){
+                        wasTurned = !workingStacks[workingIndex].get(workingStacks[workingIndex].size() - 2).isFaceUp();
+                    }
                     success = targets[targetIndex].put(card);
                     if (success) workingStacks[workingIndex].pop();
                 }
@@ -111,7 +116,9 @@ public class Board {
             @Override
             public void undo() {
                 if (wasSuccessful()) {
-                    //TODO
+                    if(wasTurned)
+                        workingStacks[workingIndex].get().turnFaceDown();
+                    workingStacks[workingIndex].putWithoutCheck(targets[targetIndex].pop());
                 }
             }
         };
@@ -172,9 +179,15 @@ public class Board {
 
     public void fromWorkingToWorking(int fromIndex, int toIndex, Card card) {
         Command fromWorkingToWorking = new AbstractCommand() {
+            boolean wasTurned = false;
+
             @Override
             public boolean execute() {
                 success = false;
+                int indexOfCard = workingStacks[fromIndex].lastIndexOf(card);
+                if(indexOfCard > 0) {
+                    wasTurned = !workingStacks[fromIndex].get(indexOfCard - 1).isFaceUp();
+                }
                 CardStacker movingStacker = workingStacks[fromIndex].getStack(card);
                 if (movingStacker != null) {
                     success = workingStacks[toIndex].put(movingStacker);
@@ -186,7 +199,12 @@ public class Board {
 
             @Override
             public void undo() {
-
+                if(wasSuccessful()) {
+                    if(wasTurned && !workingStacks[fromIndex].isEmpty())
+                        workingStacks[fromIndex].get().turnFaceDown();
+                    CardStacker stack = workingStacks[toIndex].pop(card);
+                    workingStacks[fromIndex].putWithoutCheck(stack);
+                }
             }
         };
         executeCommand(fromWorkingToWorking);

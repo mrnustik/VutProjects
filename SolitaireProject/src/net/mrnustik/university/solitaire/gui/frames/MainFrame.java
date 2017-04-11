@@ -89,17 +89,21 @@ public class MainFrame extends JFrame {
     }
 
     private void addGamePanel(GamePanel panel) {
-        if (games.size() > 0) {
-            setLayout(new GridLayout(0, 2, 5, 5));
-        } else {
-            setLayout(new CardLayout());
-        }
         games.add(panel);
         add(panel);
+        checkLayout();
         EventQueue.invokeLater(() -> {
             this.revalidate();
             this.repaint();
         });
+    }
+
+    private void checkLayout() {
+        if (games.size() > 1) {
+            setLayout(new GridLayout(0, 2, 5, 5));
+        } else {
+            setLayout(new CardLayout());
+        }
     }
 
     private void startNewGame() {
@@ -122,6 +126,7 @@ public class MainFrame extends JFrame {
     public void removeGame(GamePanel gamePanel) {
         this.remove(gamePanel);
         games.remove(gamePanel);
+        checkLayout();
         revalidate();
         repaint();
         checkFull();

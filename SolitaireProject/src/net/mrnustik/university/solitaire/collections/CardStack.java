@@ -25,8 +25,24 @@ public interface CardStack extends CardStacker {
     boolean put(CardStacker stack);
 
     /**
+     * @param stack puts the stack without checking
+     */
+    void putWithoutCheck(CardStacker stack);
+
+    /**
      * @param card card untile the stack should be taken
      * @return stacker until that card
      */
     CardStacker getStack(Card card);
+
+    /**
+     * @param card Card to get index of
+     * @return index of card
+     */
+    int lastIndexOf(Card card);
+
+    /**
+     * @param card puts the card on deck without checking
+     */
+    void putWithoutCheck(Card card);
 }

@@ -36,7 +36,7 @@ public class WorkingStack extends SolitaireStacker implements CardStack {
 
     @Override
     public CardStacker pop(Card card) {
-        int index = mCards.lastIndexOf(card);
+        int index = lastIndexOf(card);
         if (index >= 0) {
             CardStacker stacker = new SolitaireStacker();
             for (int i = index; i < this.size(); i++) {
@@ -74,8 +74,16 @@ public class WorkingStack extends SolitaireStacker implements CardStack {
     }
 
     @Override
+    public void putWithoutCheck(CardStacker stack) {
+        for (int i = 0; i < stack.size(); i++) {
+
+            super.put(stack.get(i));
+        }
+    }
+
+    @Override
     public CardStacker getStack(Card card) {
-        int index = mCards.lastIndexOf(card);
+        int index = lastIndexOf(card);
         if (index >= 0) {
             CardStacker stacker = new SolitaireStacker();
             for (int i = index; i < this.size(); i++) {
@@ -84,6 +92,16 @@ public class WorkingStack extends SolitaireStacker implements CardStack {
             return stacker;
         }
         return null;
+    }
+
+    @Override
+    public int lastIndexOf(Card card) {
+        return mCards.lastIndexOf(card);
+    }
+
+    @Override
+    public void putWithoutCheck(Card card) {
+        super.put(card);
     }
 
 }

@@ -1,15 +1,19 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include "Library/Socket.h"
+#include <iomanip>
+#include <sstream>
+#include <openssl/crypto.h>
+#include "Socket.h"
 
 const std::string PortNumber = "55555";
 
 using namespace std;
 
 
-long parseExpression(string expression, bool *error);
+double parseExpression(string expression, bool *error);
 
+string getMD5Hash(string userName);
 
 int main(int argc, char* argv[]) {
     if(argc != 2)
@@ -21,7 +25,8 @@ int main(int argc, char* argv[]) {
     try {
         Socket *socket = new Socket();
         socket->connectSocket(address, PortNumber);
-        socket->send("HELLO 676719624ef8bb039111883d573c25f7\n");
+		string hash = getMD5Hash("xmrnus01");
+        socket->send("HELLO "+hash+"\n");
         std::string data = "";
         while (true) {
             socket->recieve(data);
@@ -31,10 +36,15 @@ int main(int argc, char* argv[]) {
             } else if (data.find("SOLVE ") != string::npos) {
                 data = data.substr(6);
                 bool error = false;
-                int result = 0;
+                double result = 0;
                 result = parseExpression(data, &error);
-                if(error == false)
-                    socket->send("RESULT "+to_string(result)+"\n");
+				if (error == false) {
+					std::stringstream stream;
+					stream << fixed << setprecision(2) << result;
+					std::string result = stream.str();
+					cout << result << endl;
+					socket->send("RESULT " + result + "\n");
+				}
                 else
                     socket->send("RESULT ERROR\n");
             } else {
@@ -59,8 +69,17 @@ typedef enum {
     MUL
 } Operation;
 
+string getMD5Hash(string userName)
+{
+	unsigned char digest[32];
+	MD5_CTX context; 
+	MD5_Init(&c);
+	MD5_Update(&c, userName.c_str(), userName.length());
+	MD5_Final(digest, &c);
+	return string(digest);
+}
 
-long parseExpression(string expression, bool *error) {
+double parseExpression(string expression, bool *error) {
     long leftOperand = 0;
     long rightOperand = 0;
     string numString = "";
@@ -86,7 +105,7 @@ long parseExpression(string expression, bool *error) {
         *error = true;
         return 0;
     }
-    long result = 0;
+    double result = 0;
 
     switch(o)
     {

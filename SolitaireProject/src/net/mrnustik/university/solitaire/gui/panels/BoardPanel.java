@@ -107,7 +107,7 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         scoreLabel = new JLabel("Score: 0", SwingConstants.CENTER);
         scoreLabel.setForeground(Color.white);
         gameMenu.add(scoreLabel, constraints);
-        JButton saveBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/SAVE_ICON.png")));saveBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JButton saveBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/SAVE_ICON.png")));
         saveBtn.addActionListener(l -> showSaveGameDialog());
         constraints.gridy = 1;
         constraints.gridx = 0;
@@ -129,7 +129,7 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         constraints.gridx = 0;
         gameMenu.add(endBtn, constraints);
 
-        JButton hintButton = new JButton("Hint");
+        JButton hintButton = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/gui/images/HINT_ICON.png")));
         hintButton.addActionListener(l -> hintClicked());
         constraints.gridy = 2;
         constraints.gridx = 1;

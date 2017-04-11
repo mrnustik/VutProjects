@@ -1,9 +1,10 @@
 package net.mrnustik.university.solitaire.gui.frames;
 
+import net.mrnustik.university.solitaire.board.Board;
 import net.mrnustik.university.solitaire.gui.panels.BoardPanel;
 import net.mrnustik.university.solitaire.io.BoardLoader;
 import net.mrnustik.university.solitaire.io.json.JsonBoardLoader;
-import net.mrnustik.university.solitaire.board.Board;
+import net.mrnustik.university.solitaire.board.BoardImpl;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;

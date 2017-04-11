@@ -1,6 +1,7 @@
 package net.mrnustik.university.solitaire.io;
 
 import net.mrnustik.university.solitaire.board.Board;
+import net.mrnustik.university.solitaire.board.BoardImpl;
 
 import java.io.FileNotFoundException;
 

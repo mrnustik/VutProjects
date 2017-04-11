@@ -1,10 +1,11 @@
 package net.mrnustik.university.solitaire.io.json;
 
+import net.mrnustik.university.solitaire.board.Board;
 import net.mrnustik.university.solitaire.io.BoardLoader;
 import net.mrnustik.university.solitaire.io.converter.Converter;
 import net.mrnustik.university.solitaire.io.file.FileUtils;
 import net.mrnustik.university.solitaire.io.json.converter.JsonToBoardConverter;
-import net.mrnustik.university.solitaire.board.Board;
+import net.mrnustik.university.solitaire.board.BoardImpl;
 
 import java.io.File;
 import java.io.FileNotFoundException;

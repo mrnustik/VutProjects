@@ -55,4 +55,5 @@ public interface CardStacker {
      * @return true if card can be put on
      */
     boolean canPut(Card card);
+
 }

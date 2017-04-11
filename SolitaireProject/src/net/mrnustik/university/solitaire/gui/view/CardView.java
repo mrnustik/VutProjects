@@ -24,9 +24,7 @@ public class CardView extends JButton {
         super();
         setSize(100, 145);
         setBorder(null);
-        setBorderPainted(false);
         setContentAreaFilled(false);
-        setFocusPainted(false);
         setOpaque(false);
         this.cardChanged = true;
         this.mCard = card;
@@ -86,5 +84,16 @@ public class CardView extends JButton {
             this.cardChanged = true;
             this.mCard = card;
         }
+    }
+
+    public void highlight() {
+        this.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
+        this.repaint();
+        Timer timer = new Timer(500, l->{
+           this.setBorder(null);
+           this.repaint();
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 }

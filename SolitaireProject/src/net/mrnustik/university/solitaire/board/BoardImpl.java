@@ -82,6 +82,115 @@ public class BoardImpl implements Board {
         return this.score;
     }
 
+    @Override
+    public Hint getHint() {
+        Hint hint = null;
+        hint = findMoveWorkingToTarget();
+        if(hint == null)
+            hint = findMoveStackerToTarget();
+        if(hint == null)
+            hint = findMoveStackerToWorking();
+        if(hint == null)
+            hint = findMoveWorkingToWorking();
+        if(hint == null) {
+            if(!deck.isEmpty() || !stacker.isEmpty()) {
+                Selection select = new Selection();
+                select.setType(Selection.SelectionType.DECK);
+                hint = new Hint(select, null);
+            }
+        }
+
+        return hint;
+    }
+
+    private Hint findMoveTargetToWorking() {
+        for(int i = 0; i < targets.length; i++){
+            Card card = targets[i].get();
+            if(card != null) {
+                for (int j = 0; j < workingStacks.length; j++) {
+                    CardStack working = workingStacks[j];
+                    if (working.canPut(card)) {
+                        Selection fromSelection = new Selection(Selection.SelectionType.TARGET, i);
+                        Selection toSelection = new Selection(Selection.SelectionType.WORKING_PACK, j, working.get());
+                        return new Hint(fromSelection, toSelection);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private Hint findMoveWorkingToWorking() {
+        for(int i = 0; i < workingStacks.length; i++){
+            CardStack working = workingStacks[i];
+            for(int j = 0; j < workingStacks.length; j++){
+                if(i == j) continue;
+                for(int k = 0; k < working.size(); k++){
+                    Card card = working.get(k);
+                    if(card != null) {
+                        if (!card.isFaceUp()) continue;
+                        CardStack toWorking = workingStacks[j];
+                        if (toWorking.canPut(card)) {
+                            Selection fromSelection = new Selection(Selection.SelectionType.WORKING_PACK, i, card);
+                            Selection toSelection = new Selection(Selection.SelectionType.WORKING_PACK, j, toWorking.get());
+                            return new Hint(fromSelection, toSelection);
+                        }
+                        break;
+                    }
+
+                }
+            }
+        }
+        return null;
+    }
+
+    private Hint findMoveStackerToWorking() {
+        Card card = getStackTop();
+        if(card != null) {
+            for(int i = 0; i < workingStacks.length; i++){
+                CardStacker working = workingStacks[i];
+                if(working.canPut(card)){
+                    Selection fromSelection = new Selection(Selection.SelectionType.STACKER, 0);
+                    Selection toSelection = new Selection(Selection.SelectionType.WORKING_PACK, i, working.get());
+                    return new Hint(fromSelection, toSelection);
+                }
+            }
+        }
+        return null;
+    }
+
+    private Hint findMoveStackerToTarget() {
+        Card card = getStackTop();
+        if(card != null) {
+            for(int i = 0; i< targets.length; i++) {
+                CardStacker target = targets[i];
+                if(target.canPut(card)){
+                    Selection fromSelection = new Selection(Selection.SelectionType.STACKER, 0);
+                    Selection toSelection = new Selection(Selection.SelectionType.TARGET, i);
+                    return new Hint(fromSelection, toSelection);
+                }
+            }
+        }
+        return null;
+    }
+
+    private Hint findMoveWorkingToTarget() {
+        for (int i = 0; i < workingStacks.length; i++) {
+            Card card = workingStacks[i].get();
+            if(card != null) {
+                for (int j = 0; j < targets.length; j++) {
+                    CardStacker target = targets[j];
+                    if (target.canPut(card)) {
+                        Selection fromSelection = new Selection(Selection.SelectionType.WORKING_PACK, i, card);
+                        Selection toSelection = new Selection(Selection.SelectionType.TARGET, j);
+                        return new Hint(fromSelection, toSelection);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     private void addScore(int addition)
     {
         if(score + addition > 0) {

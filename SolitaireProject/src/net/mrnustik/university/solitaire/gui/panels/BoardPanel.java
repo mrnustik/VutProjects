@@ -1,6 +1,7 @@
 package net.mrnustik.university.solitaire.gui.panels;
 
 import net.mrnustik.university.solitaire.board.Board;
+import net.mrnustik.university.solitaire.board.Hint;
 import net.mrnustik.university.solitaire.board.Selection;
 import net.mrnustik.university.solitaire.factory.SolitaireFactory;
 import net.mrnustik.university.solitaire.gui.frames.MainFrame;
@@ -126,8 +127,13 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         });
         constraints.gridy = 2;
         constraints.gridx = 0;
-        constraints.gridwidth = 2;
         gameMenu.add(endBtn, constraints);
+
+        JButton hintButton = new JButton("Hint");
+        hintButton.addActionListener(l -> hintClicked());
+        constraints.gridy = 2;
+        constraints.gridx = 1;
+        gameMenu.add(hintButton, constraints);
     }
 
     private void checkWin() {
@@ -159,6 +165,35 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
 
     }
 
+    private void hintClicked() {
+        Hint hint = board.getHint();
+        if(hint != null) {
+            highlightHint(hint);
+        }
+    }
+
+    private void highlightHint(Hint hint) {
+        if(hint.getFromSelection() != null){
+            highlightSelection(hint.getFromSelection());
+        }
+        if(hint.getToSelection() != null){
+            highlightSelection(hint.getToSelection());
+        }
+    }
+
+    private void highlightSelection(Selection selection) {
+        if(selection.getType() == Selection.SelectionType.DECK){
+            deck.highlight();
+        } else if(selection.getType() == Selection.SelectionType.STACKER) {
+            stacker.highlight();
+        } else if(selection.getType() == Selection.SelectionType.TARGET) {
+            int index = selection.getIndex();
+            targets[index].highlight();
+        } else if(selection.getType() == Selection.SelectionType.WORKING_PACK) {
+            int index = selection.getIndex();
+            workingStacks[index].highlight(selection.getCard());
+        }
+    }
 
     private void showSaveGameDialog() {
         JFileChooser fileChooser = new JFileChooser();

@@ -8,6 +8,8 @@ import net.mrnustik.university.solitaire.model.Card;
  */
 public class Selection {
 
+
+
     public enum SelectionType {
         UNDEFINED,
         DECK,
@@ -19,6 +21,20 @@ public class Selection {
     private SelectionType type = SelectionType.UNDEFINED;
     private int index = -1;
     private Card card;
+
+    public Selection() {
+        this(SelectionType.UNDEFINED, -1);
+    }
+
+    public Selection(SelectionType type, int index) {
+        this(type, index, null);
+    }
+
+    public Selection(SelectionType type, int index, Card card) {
+        this.type = type;
+        this.index = index;
+        this.card = card;
+    }
 
     public void reset() {
         type = SelectionType.UNDEFINED;

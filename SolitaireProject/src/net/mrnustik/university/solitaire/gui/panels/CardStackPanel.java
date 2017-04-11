@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by micha on 09.04.2017.
@@ -20,6 +22,8 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
     private CardStack stack;
     private CardSelected listener = null;
 
+    private final List<CardView> cards;
+
     CardStackPanel(CardStack stack, int index) {
         super();
         addComponentListener(this);
@@ -27,6 +31,7 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
         timer.setRepeats(false);
         this.stack = stack;
         this.index = index;
+        this.cards = new ArrayList<>();
     }
 
     void setCardSelectedListener(CardSelected listener) {
@@ -40,6 +45,7 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
 
     private void paintStack() {
         removeAll();
+        cards.clear();
         int y = 0;
         if (stack.size() == 0) {
             addCard(0, 0, null);
@@ -64,6 +70,7 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
                 listener.onCardSelected(cardView.getCard(), index);
             }
         });
+        cards.add(cardView);
         add(cardView, new Integer(i));
     }
 
@@ -88,6 +95,22 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
     @Override
     public void componentHidden(ComponentEvent e) {
 
+    }
+
+    public void highlight(Card highlightCard) {
+        boolean highlight = false;
+        for (CardView card :
+                this.cards) {
+
+            Card realCard = card.getCard();
+            if(realCard == null){
+                highlight = true;
+            } else if(realCard.equals(highlightCard)) {
+                highlight = true;
+            }
+            if(highlight)
+                card.highlight();
+        }
     }
 
     public interface CardSelected {

@@ -57,8 +57,10 @@ public class SolitaireDeck extends SolitaireStacker implements CardDeck {
     @Override
     public void returnCard(CardStacker stacker) {
         Card card = stacker.pop();
-        card.turnFaceDown();
-        this.put(card);
+        if(card != null){
+            card.turnFaceDown();
+            this.put(card);
+        }
     }
 
     private void shuffle() {

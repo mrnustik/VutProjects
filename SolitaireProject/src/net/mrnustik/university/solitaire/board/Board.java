@@ -81,42 +81,42 @@ public class Board {
             commandsHistory.add(command);
     }
 
-    private void executeCommand(Command command) {
+    private boolean executeCommand(Command command) {
         boolean success = command.execute();
         addCommandToHistory(command);
+        return success;
     }
 
-    public void flipFromDeck() {
+    public boolean flipFromDeck() {
         Command command = new FlipCommand(stacker, deck);
-        executeCommand(command);
+        return executeCommand(command);
     }
 
-    public void fromStackerToTarget(int targetIndex) {
+    public boolean fromStackerToTarget(int targetIndex) {
         Command command = new FromStackerToTargetCommand(stacker, targets[targetIndex]);
-        executeCommand(command);
+        return executeCommand(command);
     }
 
-    public void fromWorkingToTarget(int workingIndex, int targetIndex) {
+    public boolean fromWorkingToTarget(int workingIndex, int targetIndex) {
         Command command = new FromWorkingToTargetCommand(workingStacks[workingIndex], targets[targetIndex]);
-        executeCommand(command);
+        return executeCommand(command);
     }
 
-    public void fromStackerToWorking(int index) {
+    public boolean fromStackerToWorking(int index) {
         Command command = new FromStackerToWorkingCommand(stacker, workingStacks[index]);
-        executeCommand(command);
+        return executeCommand(command);
     }
 
-    public void fromTargetToWorking(int fromIndex, int toIndex) {
+    public boolean fromTargetToWorking(int fromIndex, int toIndex) {
         Command command = new FromTargetToWorking(targets[fromIndex], workingStacks[toIndex]);
-        executeCommand(command);
-
+        return executeCommand(command);
     }
 
-    public void fromWorkingToWorking(int fromIndex, int toIndex, Card card) {
+    public boolean fromWorkingToWorking(int fromIndex, int toIndex, Card card) {
         Command command = new FromWorkingToWorkingCommand(workingStacks[fromIndex],
                 workingStacks[toIndex],
                 card);
-        executeCommand(command);
+        return executeCommand(command);
     }
 
 }

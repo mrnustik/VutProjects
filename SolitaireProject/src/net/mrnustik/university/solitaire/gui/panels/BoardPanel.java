@@ -16,7 +16,7 @@ import java.io.File;
 /**
  * Created by mrnda on 4/7/2017.
  */
-public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
+public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     private Board board;
 
     private CardView deck;
@@ -28,11 +28,11 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     private CardStackPanel[] workingStacks;
 
 
-    public GamePanel() {
+    public BoardPanel() {
         this(new Board(new SolitaireFactory()));
     }
 
-    public GamePanel(Board board) {
+    public BoardPanel(Board board) {
         super(new GridLayout(2, 6, 5, 5));
         this.board = board;
         setMinimumSize(new Dimension(200, 150));
@@ -80,9 +80,11 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
         deck.addActionListener(l -> {
             board.flipFromDeck();
             paintBoard();
+            selection.reset();
         });
 
         stacker.addActionListener(l -> {
+            selection.reset();
             selection.setCard(stacker.getCard());
             selection.setType(SelectionType.STACKER);
         });
@@ -130,10 +132,11 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
 
     private void targetClicked(int index) {
         if (selection.isValid()) {
+            boolean success = false;
             if (selection.getType() == SelectionType.STACKER) {
-                board.fromStackerToTarget(index);
+                success = board.fromStackerToTarget(index);
             } else if (selection.getType() == SelectionType.WORKING_PACK) {
-                board.fromWorkingToTarget(selection.index, index);
+                success = board.fromWorkingToTarget(selection.index, index);
             }
             paintBoard();
             checkWin();
@@ -197,16 +200,17 @@ public class GamePanel extends JPanel implements CardStackPanel.CardSelected {
     @Override
     public void onCardSelected(Card card, int index) {
         if (selection.isValid()) {
+            boolean success = false;
             if (selection.getType() == SelectionType.STACKER) {
-                board.fromStackerToWorking(index);
+                success = board.fromStackerToWorking(index);
             } else if (selection.getType() == SelectionType.TARGET) {
-                board.fromTargetToWorking(selection.getIndex(), index);
+                success = board.fromTargetToWorking(selection.getIndex(), index);
             } else if (selection.getType() == SelectionType.WORKING_PACK) {
-                board.fromWorkingToWorking(selection.getIndex(), index, selection.getCard());
+                success = board.fromWorkingToWorking(selection.getIndex(), index, selection.getCard());
             }
-            selection.reset();
             paintBoard();
             repaint();
+            selection.reset();
         } else {
             selection.setType(SelectionType.WORKING_PACK);
             selection.setCard(card);

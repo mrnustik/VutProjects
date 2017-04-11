@@ -1,6 +1,6 @@
 package net.mrnustik.university.solitaire.gui.frames;
 
-import net.mrnustik.university.solitaire.gui.panels.GamePanel;
+import net.mrnustik.university.solitaire.gui.panels.BoardPanel;
 import net.mrnustik.university.solitaire.io.BoardLoader;
 import net.mrnustik.university.solitaire.io.json.JsonBoardLoader;
 import net.mrnustik.university.solitaire.board.Board;
@@ -19,7 +19,7 @@ import java.util.List;
 public class MainFrame extends JFrame {
 
     private static final int MAX_GAMES_COUNT = 4;
-    private final List<GamePanel> games;
+    private final List<BoardPanel> games;
     private JMenuItem newGameItem;
     private JMenuItem loadGameItem;
 
@@ -81,14 +81,14 @@ public class MainFrame extends JFrame {
         BoardLoader loader = new JsonBoardLoader();
         try {
             Board board = loader.load(path);
-            GamePanel panel = new GamePanel(board);
+            BoardPanel panel = new BoardPanel(board);
             addGamePanel(panel);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Something wrong happened when loading game." + e.getMessage());
         }
     }
 
-    private void addGamePanel(GamePanel panel) {
+    private void addGamePanel(BoardPanel panel) {
         games.add(panel);
         add(panel);
         checkLayout();
@@ -108,7 +108,7 @@ public class MainFrame extends JFrame {
 
     private void startNewGame() {
 
-        GamePanel panel = new GamePanel();
+        BoardPanel panel = new BoardPanel();
         addGamePanel(panel);
         checkFull();
     }
@@ -123,9 +123,9 @@ public class MainFrame extends JFrame {
         }
     }
 
-    public void removeGame(GamePanel gamePanel) {
-        this.remove(gamePanel);
-        games.remove(gamePanel);
+    public void removeGame(BoardPanel boardPanel) {
+        this.remove(boardPanel);
+        games.remove(boardPanel);
         checkLayout();
         revalidate();
         repaint();

@@ -1,0 +1,360 @@
+{
+  "deck": {
+    "type": "net.mrnustik.university.solitaire.collections.impl.SolitaireDeck",
+    "data": {
+      "mCards": [
+        {
+          "mColor": "SPADES",
+          "mValue": 11,
+          "mFaceUp": false
+        }
+      ]
+    }
+  },
+  "stacker": {
+    "type": "net.mrnustik.university.solitaire.collections.impl.SolitaireStacker",
+    "data": {
+      "mCards": [
+        {
+          "mColor": "SPADES",
+          "mValue": 4,
+          "mFaceUp": true
+        },
+        {
+          "mColor": "DIAMONDS",
+          "mValue": 7,
+          "mFaceUp": true
+        },
+        {
+          "mColor": "DIAMONDS",
+          "mValue": 9,
+          "mFaceUp": true
+        },
+        {
+          "mColor": "CLUBS",
+          "mValue": 5,
+          "mFaceUp": true
+        },
+        {
+          "mColor": "SPADES",
+          "mValue": 6,
+          "mFaceUp": true
+        }
+      ]
+    }
+  },
+  "targets": [
+    {
+      "type": "net.mrnustik.university.solitaire.collections.impl.TargetStacker",
+      "data": {
+        "mColor": "HEARTS",
+        "mCards": [
+          {
+            "mColor": "HEARTS",
+            "mValue": 1,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "HEARTS",
+            "mValue": 2,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "HEARTS",
+            "mValue": 3,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "HEARTS",
+            "mValue": 4,
+            "mFaceUp": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "net.mrnustik.university.solitaire.collections.impl.TargetStacker",
+      "data": {
+        "mColor": "DIAMONDS",
+        "mCards": [
+          {
+            "mColor": "DIAMONDS",
+            "mValue": 1,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "DIAMONDS",
+            "mValue": 2,
+            "mFaceUp": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "net.mrnustik.university.solitaire.collections.impl.TargetStacker",
+      "data": {
+        "mColor": "SPADES",
+        "mCards": [
+          {
+            "mColor": "SPADES",
+            "mValue": 1,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "SPADES",
+            "mValue": 2,
+            "mFaceUp": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "net.mrnustik.university.solitaire.collections.impl.TargetStacker",
+      "data": {
+        "mColor": "CLUBS",
+        "mCards": []
+      }
+    }
+  ],
+  "workingStacks": [
+    {
+      "type": "net.mrnustik.university.solitaire.collections.impl.WorkingStack",
+      "data": {
+        "mCards": [
+          {
+            "mColor": "DIAMONDS",
+            "mValue": 13,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 12,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "HEARTS",
+            "mValue": 11,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 10,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "HEARTS",
+            "mValue": 9,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "SPADES",
+            "mValue": 8,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "HEARTS",
+            "mValue": 7,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 6,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "HEARTS",
+            "mValue": 5,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 4,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "DIAMONDS",
+            "mValue": 3,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 2,
+            "mFaceUp": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "net.mrnustik.university.solitaire.collections.impl.WorkingStack",
+      "data": {
+        "mCards": []
+      }
+    },
+    {
+      "type": "net.mrnustik.university.solitaire.collections.impl.WorkingStack",
+      "data": {
+        "mCards": [
+          {
+            "mColor": "HEARTS",
+            "mValue": 13,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 13,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "DIAMONDS",
+            "mValue": 12,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 11,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "HEARTS",
+            "mValue": 10,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "SPADES",
+            "mValue": 9,
+            "mFaceUp": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "net.mrnustik.university.solitaire.collections.impl.WorkingStack",
+      "data": {
+        "mCards": [
+          {
+            "mColor": "SPADES",
+            "mValue": 13,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 7,
+            "mFaceUp": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "net.mrnustik.university.solitaire.collections.impl.WorkingStack",
+      "data": {
+        "mCards": [
+          {
+            "mColor": "HEARTS",
+            "mValue": 12,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 8,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "DIAMONDS",
+            "mValue": 10,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "HEARTS",
+            "mValue": 8,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "SPADES",
+            "mValue": 7,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "DIAMONDS",
+            "mValue": 6,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "SPADES",
+            "mValue": 5,
+            "mFaceUp": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "net.mrnustik.university.solitaire.collections.impl.WorkingStack",
+      "data": {
+        "mCards": [
+          {
+            "mColor": "DIAMONDS",
+            "mValue": 5,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "SPADES",
+            "mValue": 3,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "DIAMONDS",
+            "mValue": 4,
+            "mFaceUp": true
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 3,
+            "mFaceUp": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "net.mrnustik.university.solitaire.collections.impl.WorkingStack",
+      "data": {
+        "mCards": [
+          {
+            "mColor": "DIAMONDS",
+            "mValue": 11,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 9,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "SPADES",
+            "mValue": 12,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "HEARTS",
+            "mValue": 6,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "CLUBS",
+            "mValue": 1,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "SPADES",
+            "mValue": 10,
+            "mFaceUp": false
+          },
+          {
+            "mColor": "DIAMONDS",
+            "mValue": 8,
+            "mFaceUp": true
+          }
+        ]
+      }
+    }
+  ],
+  "score": 155
+}

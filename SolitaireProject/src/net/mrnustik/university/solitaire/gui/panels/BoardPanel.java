@@ -1,6 +1,7 @@
 package net.mrnustik.university.solitaire.gui.panels;
 
 import net.mrnustik.university.solitaire.board.Board;
+import net.mrnustik.university.solitaire.board.Selection;
 import net.mrnustik.university.solitaire.factory.SolitaireFactory;
 import net.mrnustik.university.solitaire.gui.frames.MainFrame;
 import net.mrnustik.university.solitaire.gui.view.CardView;
@@ -87,7 +88,7 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         stacker.addActionListener(l -> {
             selection.reset();
             selection.setCard(stacker.getCard());
-            selection.setType(SelectionType.STACKER);
+            selection.setType(Selection.SelectionType.STACKER);
         });
     }
 
@@ -141,16 +142,16 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     private void targetClicked(int index) {
         if (selection.isValid()) {
             boolean success = false;
-            if (selection.getType() == SelectionType.STACKER) {
+            if (selection.getType() == Selection.SelectionType.STACKER) {
                 success = board.fromStackerToTarget(index);
-            } else if (selection.getType() == SelectionType.WORKING_PACK) {
-                success = board.fromWorkingToTarget(selection.index, index);
+            } else if (selection.getType() == Selection.SelectionType.WORKING_PACK) {
+                success = board.fromWorkingToTarget(selection.getIndex(), index);
             }
             paintBoard();
             checkWin();
             selection.reset();
         } else {
-            selection.setType(SelectionType.TARGET);
+            selection.setType(Selection.SelectionType.TARGET);
             selection.setIndex(index);
         }
 
@@ -215,68 +216,22 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     public void onCardSelected(Card card, int index) {
         if (selection.isValid()) {
             boolean success = false;
-            if (selection.getType() == SelectionType.STACKER) {
+            if (selection.getType() == Selection.SelectionType.STACKER) {
                 success = board.fromStackerToWorking(index);
-            } else if (selection.getType() == SelectionType.TARGET) {
+            } else if (selection.getType() == Selection.SelectionType.TARGET) {
                 success = board.fromTargetToWorking(selection.getIndex(), index);
-            } else if (selection.getType() == SelectionType.WORKING_PACK) {
+            } else if (selection.getType() == Selection.SelectionType.WORKING_PACK) {
                 success = board.fromWorkingToWorking(selection.getIndex(), index, selection.getCard());
             }
             paintBoard();
             repaint();
             selection.reset();
         } else {
-            selection.setType(SelectionType.WORKING_PACK);
+            selection.setType(Selection.SelectionType.WORKING_PACK);
             selection.setCard(card);
             selection.setIndex(index);
         }
     }
 
-    private enum SelectionType {
-        UNDEFINED,
-        STACKER,
-        TARGET,
-        WORKING_PACK
-    }
 
-
-    class Selection {
-
-        private SelectionType type = SelectionType.UNDEFINED;
-        private int index = -1;
-        private Card card;
-
-        void reset() {
-            type = SelectionType.UNDEFINED;
-            index = -1;
-        }
-
-        boolean isValid() {
-            return type != SelectionType.UNDEFINED;
-        }
-
-        int getIndex() {
-            return index;
-        }
-
-        void setIndex(int index) {
-            this.index = index;
-        }
-
-        SelectionType getType() {
-            return type;
-        }
-
-        void setType(SelectionType type) {
-            this.type = type;
-        }
-
-        public Card getCard() {
-            return card;
-        }
-
-        public void setCard(Card card) {
-            this.card = card;
-        }
-    }
 }

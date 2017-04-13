@@ -13,5 +13,5 @@ clean:
 	$(CC) $(C_FLAGS) -c -o $@ $<
 
 $(CLIENT): main.o $(OBJECTS)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ -lcrypto
 

@@ -3,9 +3,8 @@
 #include <cstdlib>
 #include <iomanip>
 #include <sstream>
-#include <openssl/crypto.h>
+#include <openssl/md5.h>
 #include "Library/Socket.h"
-#include "Library/MD5.h"
 const std::string PortNumber = "55555";
 
 using namespace std;
@@ -70,7 +69,15 @@ typedef enum {
 
 string getMD5Hash(string userName)
 {
-    return md5(userName);
+    unsigned char digest[MD5_DIGEST_LENGTH];
+    MD5((unsigned char*)userName.c_str(), userName.length(), digest);
+    char mdString[33];
+    for(int i = 0; i < 16; i++)
+	sprintf(&mdString[i*2], "%02x", (unsigned int) digest[i]);
+
+    string result = "";
+    result.append(mdString);	
+    return result;
 }
 
 double parseExpression(string expression, bool *error) {

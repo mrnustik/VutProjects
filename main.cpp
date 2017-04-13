@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <sstream>
+#include <cmath>
 #include <openssl/crypto.h>
 #include "Library/Socket.h"
 #include "Library/MD5.h"
@@ -10,6 +11,7 @@ const std::string PortNumber = "55555";
 
 using namespace std;
 
+double TruncateNumber(double In, unsigned int Digits);
 
 double parseExpression(string expression, bool *error);
 
@@ -118,8 +120,14 @@ double parseExpression(string expression, bool *error) {
                 *error = true;
                 return 0;
             }
-            result = leftOperand / rightOperand;
+            result = ((double) leftOperand) / ((double)rightOperand);
     }
 
-    return result;
+    return TruncateNumber(result, 2);
+}
+
+double TruncateNumber(double In, unsigned int Digits)
+{
+    double f=pow(10, Digits);
+    return ((int)(In*f))/f;
 }

@@ -44,35 +44,51 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
     }
 
     private void paintStack() {
-        removeAll();
-        cards.clear();
         int y = 0;
+        int index;
         if (stack.size() == 0) {
-            addCard(0, 0, null);
+            index = 1;
+            cards.get(0).changeCard(null);
+        } else {
+            for (index = 0; index < stack.size(); index++) {
+                Card card = stack.get(index);
+                CardView view;
+                if (index < cards.size()) {
+                    view = cards.get(index);
+                } else {
+                    view = new CardView(card);
+                    cards.add(view);
+                    add(view, new Integer(index));
+                    view.addActionListener(l -> {
+                        cardClicked(l.getSource());
+                    });
+                }
+                view.setVisible(true);
+                view.setCard(card);
+                view.setBounds(0, y, getSize().width, (getSize().width * 240) / 165);
+                if (card.isFaceUp())
+                    y += 20;
+                else
+                    y += 5;
+            }
         }
-        for (int index = 0; index < stack.size(); index++) {
-            Card card = stack.get(index);
-            addCard(y, index, card);
-            if (card.isFaceUp())
-                y += 20;
-            else
-                y += 5;
+        if(index < cards.size()){
+            for(; index < cards.size(); index++){
+                CardView view = cards.get(index);
+                view.setVisible(false);
+            }
         }
-        revalidate();
-        repaint();
     }
 
-    private void addCard(int y, int i, Card card) {
-        final CardView cardView = new CardView(card);
-        cardView.setBounds(0, y, getSize().width, (getSize().width * 240) / 165);
-        cardView.addActionListener((ActionEvent l) -> {
-            if (listener != null) {
-                listener.onCardSelected(cardView.getCard(), index);
+    private void cardClicked(Object source) {
+        if(source instanceof CardView) {
+            CardView view = (CardView) source;
+            if(listener != null){
+                listener.onCardSelected(view.getCard(), index);
             }
-        });
-        cards.add(cardView);
-        add(cardView, new Integer(i));
+        }
     }
+
 
     @Override
     public void componentResized(ComponentEvent e) {

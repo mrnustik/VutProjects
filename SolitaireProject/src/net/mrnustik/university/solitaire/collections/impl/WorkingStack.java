@@ -97,6 +97,19 @@ public class WorkingStack extends SolitaireStacker implements CardStack {
         super.put(card);
     }
 
+    @Override
+    public int hashCode() {
+        return this.mCards.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof WorkingStack){
+            WorkingStack stack = (WorkingStack) obj;
+            return this.mCards.equals(stack.mCards);
+        }
+        return false;
+    }
 
     @Override
     public boolean canPut(Card card) {

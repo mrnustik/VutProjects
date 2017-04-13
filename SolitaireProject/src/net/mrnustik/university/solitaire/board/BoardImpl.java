@@ -232,16 +232,36 @@ public class BoardImpl implements Board {
 
     @Override
     public boolean fromStackerToTarget(int targetIndex) {
-        Command command = new FromStackerToTargetCommand(stacker, targets[targetIndex]);
-        command.setScore(POINTS_STACKER_TO_TARGET);
-        return executeCommand(command);
+        Card card = stacker.get();
+        CardStacker target = getTargetStackerForCard(card);
+        if(target != null) {
+            Command command = new FromStackerToTargetCommand(stacker, target);
+            command.setScore(POINTS_STACKER_TO_TARGET);
+            return executeCommand(command);
+        }
+        return false;
+    }
+
+    private CardStacker getTargetStackerForCard(Card card) {
+        for(int i = 0; i< targets.length; i++){
+            if(targets[i].canPut(card))
+            {
+                return targets[i];
+            }
+        }
+        return null;
     }
 
     @Override
     public boolean fromWorkingToTarget(int workingIndex, int targetIndex) {
-        Command command = new FromWorkingToTargetCommand(workingStacks[workingIndex], targets[targetIndex]);
-        command.setScore(POINTS_WORKING_TO_TARGET);
-        return executeCommand(command);
+        Card card = workingStacks[workingIndex].get();
+        CardStacker target = getTargetStackerForCard(card);
+        if(target != null) {
+            Command command = new FromWorkingToTargetCommand(workingStacks[workingIndex], target);
+            command.setScore(POINTS_WORKING_TO_TARGET);
+            return executeCommand(command);
+        }
+        return false;
     }
 
     @Override

@@ -82,8 +82,9 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         add(stacker);
         deck.addActionListener(l -> {
             board.flipFromDeck();
-            paintBoard();
+            paintDeck();
             selection.reset();
+            repaint();
         });
 
         stacker.addActionListener(l -> {
@@ -154,7 +155,14 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
                 success = board.fromWorkingToTarget(selection.getIndex(), index);
             }
             if(success) {
-                paintBoard();
+                if(selection.getType() == Selection.SelectionType.STACKER){
+                    paintDeck();
+                } else if(selection.getType() == Selection.SelectionType.WORKING_PACK){
+                    paintWorkingPacks();
+                }
+                paintTargets();
+                paintScore();
+                repaint();
                 checkWin();
             }
             selection.reset();
@@ -224,8 +232,6 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         paintWorkingPacks();
 
         paintScore();
-
-        repaint();
     }
 
     private void paintScore() {
@@ -247,6 +253,7 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     private void paintDeck() {
         deck.changeCard(board.getDeckTop());
         stacker.changeCard(board.getStackTop());
+        repaint();
     }
 
     @Override
@@ -262,7 +269,6 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
             }
             if(success) {
                 paintBoard();
-                repaint();
             }
             selection.reset();
         } else {

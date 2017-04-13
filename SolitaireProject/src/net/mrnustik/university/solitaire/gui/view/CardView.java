@@ -76,6 +76,11 @@ public class CardView extends JButton {
         return mCard;
     }
 
+    public void setCard(Card card){
+        this.cardChanged = true;
+        this.mCard = card;
+    }
+
     public void changeCard(Card card) {
         if (card == null) {
             this.cardChanged = true;

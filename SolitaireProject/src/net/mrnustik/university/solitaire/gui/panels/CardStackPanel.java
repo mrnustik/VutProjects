@@ -27,7 +27,7 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
     CardStackPanel(CardStack stack, int index) {
         super();
         addComponentListener(this);
-        timer = new Timer(30, e -> paintStack());
+        timer = new Timer(0, e->{paintStack();});
         timer.setRepeats(false);
         this.stack = stack;
         this.index = index;

@@ -14,6 +14,8 @@ The client ends the connection after it receives \fBBYE\fR message with \fISECRE
 .TP
 .BR \fIADDRESS\fR
 IPv4/IPv6 address of the master server.
+.SH BUGS
+The client stores the data into int data type. Depending on your architecture the numbers send from the server may overflow size of int and the client will send \fBRESULT ERROR\fR To server.
 .SH EXAMPLES
 To connect to the reference server, use it like this:
 .PP

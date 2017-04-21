@@ -5,6 +5,7 @@
 #include <sstream>
 #include <openssl/md5.h>
 #include <cmath>
+#include "Library/Command.h"
 #include "Library/Socket.h"
 
 const std::string Login = "xmrnus01";
@@ -12,9 +13,6 @@ const std::string PortNumber = "55555";
 
 using namespace std;
 //--------- function declaration ---------------------
-double truncateNumber(double In, unsigned int Digits);
-
-double parseExpression(string expression, bool *error);
 
 string getMD5Hash(string userName);
 
@@ -56,22 +54,25 @@ int main(int argc, char* argv[]) {
                 bool error = false;
                 double result = 0;
 		//try parse the expression
-                result = parseExpression(data, &error);				
-		if (error == false) 
-		{
-			//get the result in defined precision
-			std::stringstream stream;
-			stream << fixed << setprecision(2) << result;
-			std::string result = stream.str();
-
-			//send the result
-			socket->send("RESULT " + result + "\n");
-		}
-                else 
-		{	
-		    //or send the error
-                    socket->send("RESULT ERROR\n");
-		}
+                Command* command = Command::parse(data);
+                if(command != nullptr)
+                {
+                    result = command->execute(&error);
+                    if (error == false) 
+                    {
+                        //get the result in defined precision
+                        std::stringstream stream;
+                        stream << fixed << setprecision(2) << result;
+                        std::string result = stream.str();
+                        //send the result
+                        socket->send("RESULT " + result + "\n");
+                    }
+                    else 
+                    {	
+                        //or send the error
+                        socket->send("RESULT ERROR\n");
+                    }
+                }
             } else {
                 cerr << "Invalid server message" << endl;
                 exit(EXIT_FAILURE);
@@ -87,12 +88,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 //enum used to represent math operations when counting
-typedef enum {
-    ADD,
-    SUB,
-    DIV,
-    MUL
-} Operation;
+
 
 //C++ wrapper around MD5 function of openssl
 string getMD5Hash(string userName)
@@ -109,62 +105,4 @@ string getMD5Hash(string userName)
 }
 
 
-//parse expression and return result or *error set to true
-double parseExpression(string expression, bool *error) {
-    long leftOperand = 0;
-    long rightOperand = 0;
-    string numString = "";
-    Operation o;
-    unsigned long opPosition = -1;
-    if((opPosition = expression.find('+')) != string::npos) o = ADD;
-    else if((opPosition = expression.find('-')) != string::npos) o = SUB;
-    else if((opPosition = expression.find('*')) != string::npos) o = MUL;
-    else if((opPosition = expression.find('/')) != string::npos) o = DIV;
-    else {
-        *error = true;
-        return 0;
-    }
-    try {
-        numString = expression.substr(0, opPosition - 1);
-        leftOperand = stol(numString);
 
-        numString = expression.substr(opPosition + 1);
-        rightOperand = stol(numString);
-    }
-    catch (...)
-    {
-        *error = true;
-        return 0;
-    }
-    double result = 0;
-
-    switch(o)
-    {
-        case ADD:
-            result = leftOperand + rightOperand;
-            break;
-        case SUB:
-            result = leftOperand - rightOperand;
-            break;
-        case MUL:
-            result = leftOperand * rightOperand;
-            break;
-        case DIV:
-            if(rightOperand == 0)
-            {
-                *error = true;
-                return 0;
-            }
-            result = ((double) leftOperand) / ((double)rightOperand);
-    }
-
-    return truncateNumber(result, 2);
-}
-
-
-//function used to truncate number on x Digits
-double truncateNumber(double In, unsigned int Digits)
-{
-    double f=pow(10, Digits);
-    return ((int)(In*f))/f;
-}

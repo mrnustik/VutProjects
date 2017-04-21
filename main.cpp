@@ -27,33 +27,33 @@ int main(int argc, char* argv[]) {
     const std::string address = argv[1];
     try {
 
-	//creates socket wrapper
+        //creates socket wrapper
         Socket *socket = new Socket();
 
-	//connects to socket defined in address
+        //connects to socket defined in address
         socket->connectSocket(address, PortNumber);
 
-	//count the hash and send HELLO hash
-	string hash = getMD5Hash(Login);
+        //count the hash and send HELLO hash
+        string hash = getMD5Hash(Login);
         socket->send("HELLO "+hash+"\n");
 
-	//read and parse the data
+        //read and parse the data
         std::string data = "";
         while (true) {
-  	    //wrapper returns received data or empty string if connection closes
+            //wrapper returns received data or empty string if connection closes
             socket->recieve(data);
-	     
-	    //check for BYE or SOLVE message
+            
+            //check for BYE or SOLVE message
             if (data.find("BYE ") != string::npos) {
-		//print the "secret"
+                //print the "secret"
                 cout << data.substr(4);
                 break;
             } else if (data.find("SOLVE ") != string::npos) {
-		//get the equation 
+                //get the equation 
                 data = data.substr(6);
                 bool error = false;
                 double result = 0;
-		//try parse the expression
+                //try parse the expression
                 Command* command = Command::parse(data);
                 if(command != nullptr)
                 {
@@ -74,11 +74,10 @@ int main(int argc, char* argv[]) {
                     }
                 }
             } else {
-                cerr << "Invalid server message" << endl;
-                exit(EXIT_FAILURE);
+                //ignore
             }
         }
-        socket->closeSocket();
+            socket->closeSocket();
     }
     catch (const char* ex) //catch errors from the wrapper class
     {

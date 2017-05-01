@@ -7,19 +7,45 @@ import java.awt.*;
 import java.net.URL;
 
 /**
- * Created by mrnda on 07/04/2017.
+ * JButton that is used for Card representation
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class CardView extends JButton {
 
+    /**
+     * Scaled version of the back image icon
+     */
     private static ImageIcon scaledBackIcon;
 
+    /**
+     * Currently shown card
+     */
     private Card mCard;
+
+    /**
+     * Scaled icon of the currently shown card
+     */
     private ImageIcon scaledIcon;
+
+    /**
+     * Last width of the picture. Check whether to repaint.
+     */
     private int lastWidth = 0;
+
+    /**
+     * Last height of the picture. Check whether to repaint.
+     */
     private int lastHeight = 0;
+
+    /**
+     * Indicator for force repainting picture.
+     */
     private boolean cardChanged;
 
-
+    /**
+     * Creates CardView for specified card
+     * @param card card to be represented by this view
+     */
     public CardView(Card card) {
         super();
         setSize(100, 145);
@@ -30,7 +56,10 @@ public class CardView extends JButton {
         this.mCard = card;
     }
 
-
+    /**
+     * Retrieves card icon from file, scales it to the best version and stores it for later use
+     * @return Icon of the card
+     */
     @Override
     public Icon getIcon() {
         URL resource = null;
@@ -53,10 +82,19 @@ public class CardView extends JButton {
             return super.getIcon();
     }
 
+    /**
+     * Check whether the icon should be redrawed
+     * @return true if the card should be redrawed
+     */
     private boolean shouldRedraw() {
         return scaledIcon == null || cardChanged || getWidth() != lastWidth || getHeight() != lastHeight;
     }
 
+    /**
+     * Scales the card icon to suitable size.
+     * @param icon Image to be resized
+     * @return resized image
+     */
     private ImageIcon getScaledIcon(ImageIcon icon) {
         Image img = icon.getImage();
 
@@ -72,16 +110,28 @@ public class CardView extends JButton {
         return icon;
     }
 
+    /**
+     * Getter for currently viewed card
+     * @return currently viewed card
+     */
     public Card getCard() {
         return mCard;
     }
 
+    /**
+     * Setter for viewed card. Forces repaint
+     * @param card to be viewed
+     */
     public void setCard(Card card){
         this.cardChanged = true;
         this.mCard = card;
         repaint();
     }
 
+    /**
+     * Changes card. Performs check whether card is not the same.
+     * @param card to be changed to
+     */
     public void changeCard(Card card) {
         if (card == null) {
             this.cardChanged = true;
@@ -94,6 +144,9 @@ public class CardView extends JButton {
             repaint();
     }
 
+    /**
+     * Highlights the card. Draws a yellow rectangle around it.
+     */
     public void highlight() {
         this.setBorder(BorderFactory.createLineBorder(Color.orange, 5));
         this.repaint();

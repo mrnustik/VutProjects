@@ -16,15 +16,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by mrnda on 4/7/2017.
+ * Main JFrame object of the application.
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class MainFrame extends JFrame {
 
+    /**
+     * Maximum count of the games, that can be played simultaneously
+     */
     private static final int MAX_GAMES_COUNT = 4;
+
+    /**
+     * List of currently running games
+     */
     private final List<BoardPanel> games;
+
+    /**
+     * Menu item for new game creation
+     */
     private JMenuItem newGameItem;
+
+    /**
+     * Menu item for loading new game
+     */
     private JMenuItem loadGameItem;
 
+    /**
+     * Creates the initial board
+     * @throws HeadlessException when the app is started in headless environment (without GUI)
+     */
     public MainFrame() throws HeadlessException {
         super();
         games = new ArrayList<>();
@@ -36,6 +56,9 @@ public class MainFrame extends JFrame {
         startNewGame();
     }
 
+    /**
+     * Initializes layout of the JFrame
+     */
     private void initLayout() {
         GridLayout layout = new GridLayout(0, 2);
         layout.setHgap(5);
@@ -44,6 +67,9 @@ public class MainFrame extends JFrame {
 
     }
 
+    /**
+     * Initializes all things in menu bar
+     */
     private void initMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("File");
@@ -68,6 +94,10 @@ public class MainFrame extends JFrame {
         setJMenuBar(menuBar);
     }
 
+    /**
+     * Shows JFileChooser dialog for opening the save game file
+     * @see JFileChooser
+     */
     private void showLoadGameDialog() {
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter jsonFilter = new FileNameExtensionFilter("JSON files (*.json)", "json");
@@ -79,6 +109,10 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Loads game specified in path
+     * @param path to the save game
+     */
     private void loadGame(String path) {
         BoardLoader loader = new JsonBoardLoader();
         try {
@@ -90,6 +124,10 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Adds panel of a game to the JFrame
+     * @param panel to be add to the game
+     */
     private void addGamePanel(BoardPanel panel) {
         games.add(panel);
         add(panel);
@@ -100,6 +138,9 @@ public class MainFrame extends JFrame {
         });
     }
 
+    /**
+     *  Changes the layout manager of the JFrame if there is too many games.
+     */
     private void checkLayout() {
         if (games.size() > 1) {
             setLayout(new GridLayout(0, 2, 5, 5));
@@ -108,6 +149,9 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Creates new game objects
+     */
     private void startNewGame() {
 
         BoardPanel panel = new BoardPanel();
@@ -115,6 +159,9 @@ public class MainFrame extends JFrame {
         checkFull();
     }
 
+    /**
+     * Checks whether the game plan is not full and disables the menu items when it is.
+     */
     private void checkFull() {
         if (games.size() == MAX_GAMES_COUNT) {
             loadGameItem.setEnabled(false);
@@ -125,6 +172,10 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Removes game from the game panel
+     * @param boardPanel game to be removed
+     */
     public void removeGame(BoardPanel boardPanel) {
         this.remove(boardPanel);
         games.remove(boardPanel);

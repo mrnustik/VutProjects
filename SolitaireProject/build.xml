@@ -2,6 +2,7 @@
 <project name="Solitaire Project" default="jar">
     <property name="lib.dir" value="lib"/>
     <property name="src.dir" value="src"/>
+    <property name="doc.dir" value="doc"/>
     <property name="build.dir" value="build"/>
     <property name="dest.dir" value="dest-client"/>
     <property name="build.jar" value="${dest.dir}/ija-client.jar"/>
@@ -20,8 +21,15 @@
             </mapper>
     </pathconvert>
 
+    <target name="clean">
+        <delete includeEmptyDirs="true">
+            <fileset dir="${build.dir}" includes="**/*" defaultexcludes="false"/> 
+            <fileset dir="${doc.dir}" includes="**/*" defaultexcludes="false"/> 
+            <fileset dir="${dest.dir}" includes="**/*" defaultexcludes="false"/> 
+        </delete>
+    </target>
 
-    <target name="compile" description="Compile the java source, generate jar file and generate javadoc">
+    <target name="build">
         <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath">
             <compilerarg line="-encoding utf-8"/>
         </javac>
@@ -29,14 +37,30 @@
             <fileset dir="${src.dir}"
                         includes="**/*.png"/>
         </copy>
+    </target>
+
+    <target name="doc">
+        <javadoc sourcepath="${src.dir}"
+                 destdir="${doc.dir}"
+                 access="private"/>
+    </target>
+
+    <target name="jar">
         <jar destfile="${build.jar}">
-            <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
-            <fileset dir="${build.dir}" includes="**/*.class,**/*.png"/>
+            <zipgroupfileset    dir="${lib.dir}" 
+                                includes="*.jar"/>
+            <fileset    dir="${build.dir}" 
+                        includes="**/*.class,**/*.png"/>
             <manifest>
                 <attribute name="Main-Class" value="net.mrnustik.university.solitaire.Main"/>
                 <attribute name="Class-Path" value="${mf.classpath}"/>
             </manifest>
         </jar>
+    </target>
+
+    <target name="compile" 
+            depends="build,doc,jar"
+            description="Compile the java source, generate jar file and generate javadoc">
     </target>
 
 </project>

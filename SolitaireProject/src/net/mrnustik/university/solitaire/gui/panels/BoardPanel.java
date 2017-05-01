@@ -171,9 +171,17 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     }
 
     private void hintClicked() {
-        Hint hint = board.getBestHint();
-        if(hint != null) {
-            highlightHint(hint);
+
+        java.util.List<Hint> hints = board.getAllHints();
+        int delay = 0;
+        for(Hint hint : hints)
+        {
+            Timer timer = new Timer(delay, actionEvent->{
+                highlightHint(hint);
+            });
+            timer.start();
+            timer.setRepeats(false);
+            delay += 1000;
         }
     }
 

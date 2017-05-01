@@ -17,24 +17,70 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author micha
+ * Implementation of game board object.
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class BoardImpl implements Board {
 
+    /**
+     * Count of the working stacks in a game.
+     */
     private static final int WORKING_COUNT = 7;
-    public static final int POINTS_STACKER_TO_TARGET = 10;
-    public static final int POINTS_WORKING_TO_TARGET = 10;
-    public static final int POINTS_STACKER_TO_WORKING = 5;
-    public static final int POINTS_TARGET_TO_WORKING = -15;
+
+    /**
+     * Points received for moving card from stacker to target stacker
+     */
+    private static final int POINTS_STACKER_TO_TARGET = 10;
+
+    /**
+     * Points received for moving card from working stack to target stacker
+     */
+    private static final int POINTS_WORKING_TO_TARGET = 10;
+
+    /**
+     * Points received for moving card from stacker to working stack
+     */
+    private static final int POINTS_STACKER_TO_WORKING = 5;
+
+    /**
+     * Points removed for moving card from target stacker to working stack
+     */
+    private static final int POINTS_TARGET_TO_WORKING = -15;
+
+    /**
+     * Standard deck containing cards
+     */
     private final CardDeck deck;
+
+    /**
+     * Put off stacker that will be used by the deck
+     */
     private final CardStacker stacker;
+
+    /**
+     * Array of target stackers
+     */
     private final CardStacker[] targets;
+
+    /**
+     * Array of working stackers
+     */
     private final CardStack[] workingStacks;
 
+    /**
+     * Current game score
+     */
     private int score = 0;
 
+    /**
+     * History of command that have been successfully performed
+     */
     private transient List<Command> commandsHistory = new ArrayList<>();
 
+    /**
+     * Creates Board using given factory
+     * @param factory factory used for creation of basic objects
+     */
     public BoardImpl(AbstractFactory factory) {
         this.deck = factory.createCardDeck();
         this.stacker = factory.createPutDownStacker();
@@ -48,26 +94,41 @@ public class BoardImpl implements Board {
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public Card getDeckTop() {
         return deck.get();
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
-    public Card getStackTop() {
+    public Card getStackerTop() {
         return stacker.get();
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public Card getTargetTop(int i) {
         return targets[i].get();
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public CardStack getWorkingStack(int i) {
         return workingStacks[i];
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public boolean isWin() {
         for (int i = 0; i < 4; i++) {
@@ -77,11 +138,17 @@ public class BoardImpl implements Board {
         return true;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public int getScore() {
         return this.score;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public Hint getBestHint() {
         Hint hint = null;
@@ -103,6 +170,9 @@ public class BoardImpl implements Board {
         return hint;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public List<Hint> getAllHints() {
         List<Hint> hints = new ArrayList<>();
@@ -121,7 +191,10 @@ public class BoardImpl implements Board {
         return hints;
     }
 
-
+    /**
+     * Finds available move between two working stacks
+     * @return list of hints containing available moves
+     */
     private List<Hint> findMoveWorkingToWorking() {
         List<Hint> hints = new ArrayList<>();
         for(int i = 0; i < workingStacks.length; i++){
@@ -146,9 +219,13 @@ public class BoardImpl implements Board {
         return hints;
     }
 
+    /**
+     * Finds all available moves between stacker and working stacks
+     * @return list of available moves
+     */
     private List<Hint> findMoveStackerToWorking() {
         List<Hint> hints = new ArrayList<>();
-        Card card = getStackTop();
+        Card card = getStackerTop();
         if(card != null) {
             for(int i = 0; i < workingStacks.length; i++){
                 CardStacker working = workingStacks[i];
@@ -162,9 +239,13 @@ public class BoardImpl implements Board {
         return hints;
     }
 
+    /**
+     * Finds all available moves from stacker to target stacks
+     * @return list of available moves
+     */
     private List<Hint> findMoveStackerToTarget() {
         List<Hint> hints = new ArrayList<>();
-        Card card = getStackTop();
+        Card card = getStackerTop();
         if(card != null) {
             for(int i = 0; i< targets.length; i++) {
                 CardStacker target = targets[i];
@@ -178,6 +259,10 @@ public class BoardImpl implements Board {
         return hints;
     }
 
+    /**
+     * Finds all moves from working stacks to target stackers
+     * @return list of available moves
+     */
     private List<Hint> findMoveWorkingToTarget() {
         List<Hint> hints = new ArrayList<>();
         for (int i = 0; i < workingStacks.length; i++) {
@@ -196,6 +281,10 @@ public class BoardImpl implements Board {
         return hints;
     }
 
+    /**
+     * Increases/Decreases the score. Lowest possible value of score is 0.
+     * @param addition number that should be added to the score
+     */
     private void addScore(int addition)
     {
         if(score + addition > 0) {
@@ -205,6 +294,9 @@ public class BoardImpl implements Board {
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public void undo() {
         if (commandsHistory.size() > 0) {
@@ -214,6 +306,10 @@ public class BoardImpl implements Board {
         }
     }
 
+    /**
+     * Adds command to the history if it was successful.
+     * @param command that should be added to history
+     */
     private void addCommandToHistory(Command command) {
         if (commandsHistory == null)
             commandsHistory = new ArrayList<>();
@@ -223,18 +319,29 @@ public class BoardImpl implements Board {
         }
     }
 
+    /**
+     * Executes command
+     * @param command to be executed
+     * @return true if command was successfull
+     */
     private boolean executeCommand(Command command) {
         boolean success = command.execute();
         addCommandToHistory(command);
         return success;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public boolean flipFromDeck() {
         Command command = new FlipCommand(stacker, deck);
         return executeCommand(command);
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public boolean fromStackerToTarget(int targetIndex) {
         Card card = stacker.get();
@@ -247,6 +354,11 @@ public class BoardImpl implements Board {
         return false;
     }
 
+    /**
+     * Finds target stacker where the card can be put on
+     * @param card to be put on
+     * @return true if there is an available target stacker
+     */
     private CardStacker getTargetStackerForCard(Card card) {
         for(int i = 0; i< targets.length; i++){
             if(targets[i].canPut(card))
@@ -257,6 +369,9 @@ public class BoardImpl implements Board {
         return null;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public boolean fromWorkingToTarget(int workingIndex, int targetIndex) {
         Card card = workingStacks[workingIndex].get();
@@ -269,6 +384,9 @@ public class BoardImpl implements Board {
         return false;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public boolean fromStackerToWorking(int index) {
         Command command = new FromStackerToWorkingCommand(stacker, workingStacks[index]);
@@ -276,6 +394,9 @@ public class BoardImpl implements Board {
         return executeCommand(command);
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public boolean fromTargetToWorking(int fromIndex, int toIndex) {
         Command command = new FromTargetToWorking(targets[fromIndex], workingStacks[toIndex]);
@@ -283,6 +404,9 @@ public class BoardImpl implements Board {
         return executeCommand(command);
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public boolean fromWorkingToWorking(int fromIndex, int toIndex, Card card) {
         Command command = new FromWorkingToWorkingCommand(workingStacks[fromIndex],

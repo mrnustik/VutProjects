@@ -81,7 +81,7 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     private void initDeck() {
         deck = new CardView(board.getDeckTop());
         add(deck);
-        stacker = new CardView(board.getStackTop());
+        stacker = new CardView(board.getStackerTop());
         add(stacker);
         deck.addActionListener(l -> {
             board.flipFromDeck();
@@ -266,7 +266,7 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
 
     private void paintDeck() {
         deck.changeCard(board.getDeckTop());
-        stacker.changeCard(board.getStackTop());
+        stacker.changeCard(board.getStackerTop());
         repaint();
     }
 

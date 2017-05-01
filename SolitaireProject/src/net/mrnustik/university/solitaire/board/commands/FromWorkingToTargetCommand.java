@@ -6,19 +6,42 @@ import net.mrnustik.university.solitaire.board.commands.base.AbstractCommand;
 import net.mrnustik.university.solitaire.model.Card;
 
 /**
- * Created by mrnda on 11/04/2017.
+ * Command for moving cards from working stack to target stacker
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class FromWorkingToTargetCommand extends AbstractCommand {
-    
+
+    /**
+     * Working stack where the card will be taken from
+     */
     private final CardStack working;
+
+    /**
+     * Target stacker where the card should be put on
+     */
     private final CardStacker target;
+
+    /**
+     * Indicator whether the working stack top card was turned
+     */
     private boolean wasTurned = false;
 
+    /**
+     * Creates the command
+     * @param working where the card will be taken from
+     * @param target where the card should be put on
+     * @see CardStack
+     * @see CardStacker
+     */
     public FromWorkingToTargetCommand(CardStack working, CardStacker target) {
         this.working = working;
         this.target = target;
     }
 
+    /**
+     * Moves the card from working stack to target stacker.
+     * @return true if operation was successful
+     */
     @Override
     public boolean execute() {
         success = false;
@@ -33,6 +56,9 @@ public class FromWorkingToTargetCommand extends AbstractCommand {
         return success;
     }
 
+    /**
+     * If the command was successful, it will move the card back from target stack to working stacker
+     */
     @Override
     public void undo() {
         if (wasSuccessful()) {

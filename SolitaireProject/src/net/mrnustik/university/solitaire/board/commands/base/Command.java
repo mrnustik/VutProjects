@@ -1,18 +1,19 @@
 package net.mrnustik.university.solitaire.board.commands.base;
 
 /**
- * Created by mrnda on 4/7/2017.
+ * Command design pattern interface
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public interface Command {
+
     /**
-     * Executes the command.
-     *
+     * Executes the command
      * @return true if command was successfull
      */
     boolean execute();
 
     /**
-     * Reverts back the command.
+     * Reverts back the changes done by command.
      */
     void undo();
 
@@ -21,7 +22,15 @@ public interface Command {
      */
     boolean wasSuccessful();
 
+    /**
+     * Add points to the command execution
+     * @param points score to be given to the command
+     */
     void setScore(int points);
 
+    /**
+     * @return score of the command
+     * @see Command#setScore(int)
+     */
     int getScore();
 }

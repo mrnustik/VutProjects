@@ -95,9 +95,9 @@ public class CardView extends JButton {
     }
 
     public void highlight() {
-        this.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
+        this.setBorder(BorderFactory.createLineBorder(Color.orange, 5));
         this.repaint();
-        Timer timer = new Timer(500, l->{
+        Timer timer = new Timer(450, l->{
            this.setBorder(null);
            this.repaint();
         });

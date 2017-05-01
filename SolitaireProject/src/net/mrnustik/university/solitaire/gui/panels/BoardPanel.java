@@ -26,6 +26,9 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     private CardView stacker;
     private CardView[] targets;
 
+    int repaintWorkingIndex1 = -2;
+    int repaintWorkingIndex2 = -2;
+
     private Selection selection;
     private JLabel scoreLabel;
     private CardStackPanel[] workingStacks;
@@ -153,16 +156,10 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
                 success = board.fromStackerToTarget(index);
             } else if (selection.getType() == Selection.SelectionType.WORKING_PACK) {
                 success = board.fromWorkingToTarget(selection.getIndex(), index);
+                repaintWorkingIndex1 = selection.getIndex();
             }
             if(success) {
-                if(selection.getType() == Selection.SelectionType.STACKER){
-                    paintDeck();
-                } else if(selection.getType() == Selection.SelectionType.WORKING_PACK){
-                    paintWorkingPacks();
-                }
-                paintTargets();
-                paintScore();
-                repaint();
+                paintBoard();
                 checkWin();
             }
             selection.reset();
@@ -239,9 +236,18 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     }
 
     private void paintWorkingPacks() {
-        for (int i = 0; i < 7; i++) {
-            workingStacks[i].setStack(board.getWorkingStack(i));
+        if(repaintWorkingIndex1 == -2 && repaintWorkingIndex2 == -2) {
+            for (int i = 0; i < 7; i++) {
+                workingStacks[i].setStack(board.getWorkingStack(i));
+            }
+        } else {
+            if(repaintWorkingIndex1 >= 0 && repaintWorkingIndex1 < 7)
+                workingStacks[repaintWorkingIndex1].setStack(board.getWorkingStack(repaintWorkingIndex1));
+            if(repaintWorkingIndex2 >= 0 && repaintWorkingIndex2 < 7)
+                workingStacks[repaintWorkingIndex2].setStack(board.getWorkingStack(repaintWorkingIndex2));
         }
+        repaintWorkingIndex1 = -2;
+        repaintWorkingIndex2 = -2;
     }
 
     private void paintTargets() {
@@ -266,8 +272,10 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
                 success = board.fromTargetToWorking(selection.getIndex(), index);
             } else if (selection.getType() == Selection.SelectionType.WORKING_PACK) {
                 success = board.fromWorkingToWorking(selection.getIndex(), index, selection.getCard());
+                repaintWorkingIndex2 = selection.getIndex();
             }
             if(success) {
+                repaintWorkingIndex1 = index;
                 paintBoard();
             }
             selection.reset();

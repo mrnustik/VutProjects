@@ -48,6 +48,9 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
         int index;
         if (stack.size() == 0) {
             index = 1;
+            if(cards.size() == 0){
+                createCardView(0,null);
+            }
             cards.get(0).setCard(null);
         } else {
             for (index = 0; index < stack.size(); index++) {
@@ -56,12 +59,7 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
                 if (index < cards.size()) {
                     view = cards.get(index);
                 } else {
-                    view = new CardView(card);
-                    cards.add(view);
-                    add(view, new Integer(index));
-                    view.addActionListener(l -> {
-                        cardClicked(l.getSource());
-                    });
+                    view = createCardView(index, card);
                 }
                 view.setVisible(true);
                 view.setCard(card);
@@ -78,6 +76,17 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
                 view.setVisible(false);
             }
         }
+        repaint();
+    }
+
+    private CardView createCardView(int index, Card card) {
+        CardView view = new CardView(card);
+        cards.add(view);
+        add(view, new Integer(index));
+        view.addActionListener(l -> {
+            cardClicked(l.getSource());
+        });
+        return view;
     }
 
     private void cardClicked(Object source) {

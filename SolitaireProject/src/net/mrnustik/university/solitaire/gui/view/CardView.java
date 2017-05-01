@@ -79,6 +79,7 @@ public class CardView extends JButton {
     public void setCard(Card card){
         this.cardChanged = true;
         this.mCard = card;
+        repaint();
     }
 
     public void changeCard(Card card) {
@@ -89,6 +90,8 @@ public class CardView extends JButton {
             this.cardChanged = true;
             this.mCard = card;
         }
+        if(cardChanged)
+            repaint();
     }
 
     public void highlight() {

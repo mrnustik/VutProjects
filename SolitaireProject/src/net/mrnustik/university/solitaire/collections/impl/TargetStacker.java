@@ -7,22 +7,41 @@ package net.mrnustik.university.solitaire.collections.impl;
 
 import net.mrnustik.university.solitaire.model.Card;
 
+
 /**
- * @author micha
+ * Stacker with one specified target color. Cards only in order by their value can be put there.
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class TargetStacker extends SolitaireStacker {
 
+    /**
+     * Color of which cards can be only put on this stacker
+     */
     private final Card.Color mColor;
 
+    /**
+     * Creates the stacker with color specified
+     * @param mColor color of which cards can be only put on this stacker
+     */
     public TargetStacker(Card.Color mColor) {
         this.mColor = mColor;
     }
 
+    /**
+     * Tries to put the card on stacker, based on result of {@link TargetStacker#canPut(Card)}
+     * @param card Card to be put on the stacker
+     * @return true if card was put on the stacker
+     */
     @Override
     public boolean put(Card card) {
         return this.canPut(card) && super.put(card);
     }
 
+    /**
+     * Checks whether the card has good color and value (top card + 1) to be put on this stacker.
+     * @param card card to put on
+     * @return true if card can be put on the stacker
+     */
     @Override
     public boolean canPut(Card card) {
         if(card.getColor() == this.mColor) {

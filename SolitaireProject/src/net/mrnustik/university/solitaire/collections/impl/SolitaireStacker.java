@@ -12,26 +12,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author micha
+ * Put off stacker used for basic one card operations
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class SolitaireStacker implements CardStacker {
 
+    /**
+     * List of cards in stacker
+     */
     final List<Card> mCards;
 
+    /**
+     * Creates the stacker
+     */
     public SolitaireStacker() {
         mCards = new ArrayList<>();
     }
 
+    /**
+     * Retrieves count of cards in stacker
+     * @return count of cards in stacker
+     */
     @Override
     public int size() {
         return mCards.size();
     }
 
+    /**
+     * Checks whether stacker is empty
+     * @return true if stacker is empty
+     */
     @Override
     public boolean isEmpty() {
         return mCards.isEmpty();
     }
 
+    /**
+     * Removes top card from stacker
+     * @return returns top card or null if empty
+     */
     @Override
     public Card pop() {
         if (!this.isEmpty()) {
@@ -40,6 +59,11 @@ public class SolitaireStacker implements CardStacker {
         return null;
     }
 
+    /**
+     * Removes card on specified index from stacker
+     * @param index index of the card
+     * @return specified card or null
+     */
     @Override
     public Card pop(int index) {
         if (!this.isEmpty()) {
@@ -48,6 +72,10 @@ public class SolitaireStacker implements CardStacker {
         return null;
     }
 
+    /**
+     * Retrieves the top card from stacker without removing it
+     * @return top card of the stacker or null if empty
+     */
     @Override
     public Card get() {
         if (!this.isEmpty()) {
@@ -56,6 +84,11 @@ public class SolitaireStacker implements CardStacker {
         return null;
     }
 
+    /**
+     * Retrieves the card specified in index from stacker without removing it
+     * @param index index of the card
+     * @return specified card or null if the index is too big
+     */
     @Override
     public Card get(int index) {
         if (index < this.size()) {
@@ -64,11 +97,21 @@ public class SolitaireStacker implements CardStacker {
         return null;
     }
 
+    /**
+     * Adds card on stack
+     * @param card Card to be put on the stacker
+     * @return true if card can be put in there
+     */
     @Override
     public boolean put(Card card) {
         return mCards.add(card);
     }
 
+    /**
+     * Checks whether the card can be put on the stack
+     * @param card card to put on
+     * @return always true
+     */
     @Override
     public boolean canPut(Card card) {
         return true;

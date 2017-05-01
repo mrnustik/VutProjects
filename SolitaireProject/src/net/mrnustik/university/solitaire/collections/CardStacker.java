@@ -8,7 +8,8 @@ package net.mrnustik.university.solitaire.collections;
 import net.mrnustik.university.solitaire.model.Card;
 
 /**
- * @author micha
+ * Representation of a card stack where only one card can be moved at a time
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public interface CardStacker {
 

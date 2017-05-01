@@ -8,7 +8,8 @@ package net.mrnustik.university.solitaire.collections;
 import net.mrnustik.university.solitaire.model.Card;
 
 /**
- * @author micha
+ * Representation for stack of cards, where multiple cards can be moved
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public interface CardStack extends CardStacker {
 
@@ -25,7 +26,7 @@ public interface CardStack extends CardStacker {
     boolean put(CardStacker stack);
 
     /**
-     * @param stack puts the stack without checking
+     * @param stack puts the stack without checking constraints
      */
     void putWithoutCheck(CardStacker stack);
 

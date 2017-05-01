@@ -373,6 +373,7 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     public void onCardSelected(Card card, int index) {
         if (selection.isValid()) {
             boolean success = false;
+            if(selection.getCard().equals(card) && selection.getIndex() == index) return;
             if (selection.getType() == Selection.SelectionType.STACKER) {
                 success = board.fromStackerToWorking(index);
             } else if (selection.getType() == Selection.SelectionType.TARGET) {

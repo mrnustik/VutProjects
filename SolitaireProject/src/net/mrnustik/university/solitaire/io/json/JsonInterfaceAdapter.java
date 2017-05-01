@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
  * When serializing, it interrupts serializing process and adds class metadata to the file.
  * When deserializing, it loads the metadata stored before and creates actual classes based on them.
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
+ * @param <T> type of the interface where the metadata will be added
  */
 public final class JsonInterfaceAdapter<T> implements JsonSerializer<T>, JsonDeserializer<T> {
 

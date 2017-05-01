@@ -8,9 +8,16 @@ package net.mrnustik.university.solitaire;
 import net.mrnustik.university.solitaire.gui.frames.MainFrame;
 
 /**
- * @author micha
+ * Main class of the application. Used as entry point of the application.
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class Main {
+
+    /**
+     * Entry point method of the applications.
+     * Just starts the gui and sets it to visible.
+     * @param args arguments from command line
+     */
     public static void main(String args[]) {
         
         MainFrame frame = new MainFrame();

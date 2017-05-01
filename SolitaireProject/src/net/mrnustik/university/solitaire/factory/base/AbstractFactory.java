@@ -11,7 +11,8 @@ import net.mrnustik.university.solitaire.collections.CardStacker;
 import net.mrnustik.university.solitaire.model.Card;
 
 /**
- * @author micha
+ * Abstract factory design pattern used for creation of basic objects inside the game.
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public abstract class AbstractFactory {
     /**

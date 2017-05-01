@@ -9,7 +9,7 @@ package net.mrnustik.university.solitaire.model;
 /**
  * Class representing one classic playing Card.
  * @version 1.0
- * @author micha
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class Card implements Comparable {
 

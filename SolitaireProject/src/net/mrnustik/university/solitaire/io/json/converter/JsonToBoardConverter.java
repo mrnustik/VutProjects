@@ -11,12 +11,19 @@ import net.mrnustik.university.solitaire.io.json.JsonInterfaceAdapter;
 import net.mrnustik.university.solitaire.board.BoardImpl;
 
 /**
- * Created by mrnda on 4/7/2017.
+ * Converter used to convert JSON String to board.
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class JsonToBoardConverter implements Converter<String, Board> {
 
+    /**
+     * Gson access wrapper
+     */
     private final Gson gson;
 
+    /**
+     * Constructor of the converter
+     */
     public JsonToBoardConverter() {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(CardDeck.class, new JsonInterfaceAdapter<CardDeck>());
@@ -27,6 +34,11 @@ public class JsonToBoardConverter implements Converter<String, Board> {
         this.gson = builder.create();
     }
 
+    /**
+     * Converts JSON string into Board.
+     * @param source JSON format string representing Board
+     * @return board represented in source
+     */
     @Override
     public Board convert(String source) {
         return gson.fromJson(source, BoardImpl.class);

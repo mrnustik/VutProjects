@@ -11,10 +11,18 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by mrnda on 4/7/2017.
+ * Class used to save Board into JSON.
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
+ * @see BoardSaver
  */
 public class JsonBoardSaver implements BoardSaver {
 
+    /**
+     * Method, that saves Board given in parameters to a JSON file specified in path.
+     * @param path where the board should be saved
+     * @param board to be saved
+     * @throws IOException when can't write to file
+     */
     @Override
     public void save(String path, Board board) throws IOException {
         Converter<Board, String> converter = new BoardToJsonConverter();

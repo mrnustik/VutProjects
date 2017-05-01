@@ -12,11 +12,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * Created by mrnda on 4/7/2017.
+ * Class used for board loading from JSON file.
+ * @author Mrnda (Michal Mrnuštík, xmrnus01)
+ * @see BoardLoader
  */
 public class JsonBoardLoader implements BoardLoader {
 
-
+    /**
+     * Loads the board from JSON file specified in path.
+     * @param path to board save file
+     * @return loaded Board
+     * @throws FileNotFoundException when file specified in path was not found
+     */
     @Override
     public Board load(String path) throws FileNotFoundException {
         File file = new File(path);

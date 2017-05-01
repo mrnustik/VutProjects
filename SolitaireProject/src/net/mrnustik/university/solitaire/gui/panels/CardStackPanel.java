@@ -48,7 +48,7 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
         int index;
         if (stack.size() == 0) {
             index = 1;
-            cards.get(0).changeCard(null);
+            cards.get(0).setCard(null);
         } else {
             for (index = 0; index < stack.size(); index++) {
                 Card card = stack.get(index);

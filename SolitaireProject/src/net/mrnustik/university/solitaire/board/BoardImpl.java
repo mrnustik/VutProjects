@@ -83,15 +83,15 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public Hint getHint() {
+    public Hint getBestHint() {
         Hint hint = null;
-        hint = findMoveWorkingToTarget();
+        hint = findMoveWorkingToTarget().get(0);
         if(hint == null)
-            hint = findMoveStackerToTarget();
+            hint = findMoveStackerToTarget().get(0);
         if(hint == null)
-            hint = findMoveStackerToWorking();
+            hint = findMoveStackerToWorking().get(0);
         if(hint == null)
-            hint = findMoveWorkingToWorking();
+            hint = findMoveWorkingToWorking().get(0);
         if(hint == null) {
             if(!deck.isEmpty() || !stacker.isEmpty()) {
                 Selection select = new Selection();
@@ -103,24 +103,27 @@ public class BoardImpl implements Board {
         return hint;
     }
 
-    private Hint findMoveTargetToWorking() {
-        for(int i = 0; i < targets.length; i++){
-            Card card = targets[i].get();
-            if(card != null) {
-                for (int j = 0; j < workingStacks.length; j++) {
-                    CardStack working = workingStacks[j];
-                    if (working.canPut(card)) {
-                        Selection fromSelection = new Selection(Selection.SelectionType.TARGET, i);
-                        Selection toSelection = new Selection(Selection.SelectionType.WORKING_PACK, j, working.get());
-                        return new Hint(fromSelection, toSelection);
-                    }
-                }
+    @Override
+    public List<Hint> getAllHints() {
+        List<Hint> hints = new ArrayList<>();
+        hints.addAll(findMoveStackerToTarget());
+        hints.addAll(findMoveStackerToWorking());
+        hints.addAll(findMoveWorkingToWorking());
+        hints.addAll(findMoveWorkingToTarget());
+        if(hints.size() == 0)
+        {
+            if(!deck.isEmpty() || !stacker.isEmpty()) {
+                Selection select = new Selection();
+                select.setType(Selection.SelectionType.DECK);
+                hints.add(new Hint(select, null));
             }
         }
-        return null;
+        return hints;
     }
 
-    private Hint findMoveWorkingToWorking() {
+
+    private List<Hint> findMoveWorkingToWorking() {
+        List<Hint> hints = new ArrayList<>();
         for(int i = 0; i < workingStacks.length; i++){
             CardStack working = workingStacks[i];
             for(int j = 0; j < workingStacks.length; j++){
@@ -133,18 +136,18 @@ public class BoardImpl implements Board {
                         if (toWorking.canPut(card)) {
                             Selection fromSelection = new Selection(Selection.SelectionType.WORKING_PACK, i, card);
                             Selection toSelection = new Selection(Selection.SelectionType.WORKING_PACK, j, toWorking.get());
-                            return new Hint(fromSelection, toSelection);
+                            hints.add(new Hint(fromSelection, toSelection));
                         }
-                        break;
                     }
 
                 }
             }
         }
-        return null;
+        return hints;
     }
 
-    private Hint findMoveStackerToWorking() {
+    private List<Hint> findMoveStackerToWorking() {
+        List<Hint> hints = new ArrayList<>();
         Card card = getStackTop();
         if(card != null) {
             for(int i = 0; i < workingStacks.length; i++){
@@ -152,14 +155,15 @@ public class BoardImpl implements Board {
                 if(working.canPut(card)){
                     Selection fromSelection = new Selection(Selection.SelectionType.STACKER, 0);
                     Selection toSelection = new Selection(Selection.SelectionType.WORKING_PACK, i, working.get());
-                    return new Hint(fromSelection, toSelection);
+                    hints.add(new Hint(fromSelection, toSelection));
                 }
             }
         }
-        return null;
+        return hints;
     }
 
-    private Hint findMoveStackerToTarget() {
+    private List<Hint> findMoveStackerToTarget() {
+        List<Hint> hints = new ArrayList<>();
         Card card = getStackTop();
         if(card != null) {
             for(int i = 0; i< targets.length; i++) {
@@ -167,14 +171,15 @@ public class BoardImpl implements Board {
                 if(target.canPut(card)){
                     Selection fromSelection = new Selection(Selection.SelectionType.STACKER, 0);
                     Selection toSelection = new Selection(Selection.SelectionType.TARGET, i);
-                    return new Hint(fromSelection, toSelection);
+                    hints.add(new Hint(fromSelection, toSelection));
                 }
             }
         }
-        return null;
+        return hints;
     }
 
-    private Hint findMoveWorkingToTarget() {
+    private List<Hint> findMoveWorkingToTarget() {
+        List<Hint> hints = new ArrayList<>();
         for (int i = 0; i < workingStacks.length; i++) {
             Card card = workingStacks[i].get();
             if(card != null) {
@@ -183,12 +188,12 @@ public class BoardImpl implements Board {
                     if (target.canPut(card)) {
                         Selection fromSelection = new Selection(Selection.SelectionType.WORKING_PACK, i, card);
                         Selection toSelection = new Selection(Selection.SelectionType.TARGET, j);
-                        return new Hint(fromSelection, toSelection);
+                        hints.add(new Hint(fromSelection, toSelection));
                     }
                 }
             }
         }
-        return null;
+        return hints;
     }
 
     private void addScore(int addition)

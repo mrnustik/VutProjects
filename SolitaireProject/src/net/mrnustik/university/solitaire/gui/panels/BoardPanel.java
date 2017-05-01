@@ -171,7 +171,7 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     }
 
     private void hintClicked() {
-        Hint hint = board.getHint();
+        Hint hint = board.getBestHint();
         if(hint != null) {
             highlightHint(hint);
         }

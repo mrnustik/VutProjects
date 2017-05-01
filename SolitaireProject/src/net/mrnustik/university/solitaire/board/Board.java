@@ -3,6 +3,8 @@ package net.mrnustik.university.solitaire.board;
 import net.mrnustik.university.solitaire.collections.CardStack;
 import net.mrnustik.university.solitaire.model.Card;
 
+import java.util.List;
+
 /**
  * Created by mrnda on 11/04/2017.
  */
@@ -19,7 +21,9 @@ public interface Board {
 
     int getScore();
 
-    Hint getHint();
+    Hint getBestHint();
+
+    List<Hint> getAllHints();
 
     void undo();
 

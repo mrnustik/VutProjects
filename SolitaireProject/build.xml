@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project name="Solitaire Project" default="jar">
+    <property name="lib.dir" value="lib"/>
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="dest.dir" value="dest-client"/>
+    <property name="build.jar" value="${dest.dir}/ija-client.jar"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="*.jar"/>
+    </path>
+
+    <pathconvert property="mf.classpath" pathsep=" ">
+            <path refid="classpath"/>
+            <mapper>
+                    <chainedmapper>
+                            <flattenmapper/>
+                            <globmapper from="*.jar" to="${lib.dir}/*.jar"/>
+                    </chainedmapper>
+            </mapper>
+    </pathconvert>
+
+
+    <target name="compile" description="Compile the java source, generate jar file and generate javadoc">
+        <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="classpath">
+            <compilerarg line="-encoding utf-8"/>
+        </javac>
+        <copy todir="${build.dir}">
+            <fileset dir="${src.dir}"
+                        includes="**/*.png"/>
+        </copy>
+        <jar destfile="${build.jar}">
+            <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
+            <fileset dir="${build.dir}" includes="**/*.class,**/*.png"/>
+            <manifest>
+                <attribute name="Main-Class" value="net.mrnustik.university.solitaire.Main"/>
+                <attribute name="Class-Path" value="${mf.classpath}"/>
+            </manifest>
+        </jar>
+    </target>
+
+</project>

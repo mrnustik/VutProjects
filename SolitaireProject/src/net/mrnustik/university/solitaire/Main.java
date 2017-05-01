@@ -12,12 +12,9 @@ import net.mrnustik.university.solitaire.gui.frames.MainFrame;
  */
 public class Main {
     public static void main(String args[]) {
-        try {
-            MainFrame frame = new MainFrame();
-            frame.setVisible(true);
-        } catch (Exception e) {
-            System.out.println("Something terrible happened.");
-            System.out.println(e.getMessage());
-        }
+        
+        MainFrame frame = new MainFrame();
+        frame.setVisible(true);
+        
     }
 }

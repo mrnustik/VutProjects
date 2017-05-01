@@ -63,4 +63,11 @@
             description="Compile the java source, generate jar file and generate javadoc">
     </target>
 
+    <target name="run"
+            depends="compile"
+            description="Run the application">
+            <java   fork="true"
+                    jar="${build.jar}"/>
+    </target>
+
 </project>

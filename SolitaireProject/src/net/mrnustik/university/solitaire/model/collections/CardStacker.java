@@ -9,6 +9,7 @@ import net.mrnustik.university.solitaire.model.card.Card;
 
 /**
  * Representation of a card stack where only one card can be moved at a time
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")

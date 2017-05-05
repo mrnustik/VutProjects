@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Main JFrame object of the application.
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class MainFrame extends JFrame {
@@ -42,6 +43,7 @@ public class MainFrame extends JFrame {
 
     /**
      * Creates the initial board
+     *
      * @throws HeadlessException when the app is started in headless environment (without GUI)
      */
     public MainFrame() throws HeadlessException {
@@ -95,6 +97,7 @@ public class MainFrame extends JFrame {
 
     /**
      * Shows JFileChooser dialog for opening the save game file
+     *
      * @see JFileChooser
      */
     private void showLoadGameDialog() {
@@ -110,6 +113,7 @@ public class MainFrame extends JFrame {
 
     /**
      * Loads game specified in path
+     *
      * @param path to the save game
      */
     private void loadGame(String path) {
@@ -125,6 +129,7 @@ public class MainFrame extends JFrame {
 
     /**
      * Adds panel of a game to the JFrame
+     *
      * @param panel to be add to the game
      */
     private void addGamePanel(BoardPanel panel) {
@@ -138,7 +143,7 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     *  Changes the layout manager of the JFrame if there is too many games.
+     * Changes the layout manager of the JFrame if there is too many games.
      */
     private void checkLayout() {
         if (games.size() > 1) {
@@ -173,6 +178,7 @@ public class MainFrame extends JFrame {
 
     /**
      * Removes game from the game panel
+     *
      * @param boardPanel game to be removed
      */
     public void removeGame(BoardPanel boardPanel) {

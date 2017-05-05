@@ -4,6 +4,7 @@ import net.mrnustik.university.solitaire.model.card.Card;
 
 /**
  * Selection representation object.
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class Selection {
@@ -60,7 +61,8 @@ public class Selection {
 
     /**
      * Crates the selection with type and index specified
-     * @param type of the selection
+     *
+     * @param type  of the selection
      * @param index of the target/working stack
      */
     public Selection(SelectionType type, int index) {
@@ -69,9 +71,10 @@ public class Selection {
 
     /**
      * Creates the selection with type, index and card specified
-     * @param type of the selection
+     *
+     * @param type  of the selection
      * @param index of the target/working stack
-     * @param card selected card
+     * @param card  selected card
      */
     public Selection(SelectionType type, int index, Card card) {
         this.type = type;
@@ -90,6 +93,7 @@ public class Selection {
 
     /**
      * Validity check of the selection
+     *
      * @return true if the selection is valid
      */
     public boolean isValid() {
@@ -98,6 +102,7 @@ public class Selection {
 
     /**
      * Index getter for the selection
+     *
      * @return index of the target/working stack
      */
     public int getIndex() {
@@ -106,6 +111,7 @@ public class Selection {
 
     /**
      * Index setter for the selection
+     *
      * @param index of the target/working stack
      */
     public void setIndex(int index) {
@@ -114,6 +120,7 @@ public class Selection {
 
     /**
      * Type getter for the selection
+     *
      * @return type of the selection
      */
     public SelectionType getType() {
@@ -122,6 +129,7 @@ public class Selection {
 
     /**
      * Type setter for the selection
+     *
      * @param type of the selection
      */
     public void setType(SelectionType type) {
@@ -130,6 +138,7 @@ public class Selection {
 
     /**
      * Selected card getter for the selection
+     *
      * @return selected card
      */
     public Card getCard() {
@@ -138,6 +147,7 @@ public class Selection {
 
     /**
      * Changes selected card for the selection
+     *
      * @param card selected card
      */
     public void setCard(Card card) {

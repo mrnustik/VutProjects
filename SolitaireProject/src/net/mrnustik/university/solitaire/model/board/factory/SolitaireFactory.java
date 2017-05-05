@@ -17,12 +17,14 @@ import net.mrnustik.university.solitaire.model.card.Card;
 
 /**
  * Factory design pattern used for creation of basic objects inside the game.
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class SolitaireFactory extends AbstractFactory {
 
     /**
      * Creates card with specified color and value
+     *
      * @param color color of the card
      * @param value value of the card (1 - 13)
      * @return specified card or null if value is not between 1  and 13
@@ -34,7 +36,7 @@ public class SolitaireFactory extends AbstractFactory {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public CardDeck createCardDeck() {
@@ -42,7 +44,7 @@ public class SolitaireFactory extends AbstractFactory {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public CardStacker createTargetStacker(Card.Color color) {
@@ -50,7 +52,7 @@ public class SolitaireFactory extends AbstractFactory {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public CardStacker createPutDownStacker() {
@@ -58,7 +60,7 @@ public class SolitaireFactory extends AbstractFactory {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public CardStack createWorkingPack(int count, CardDeck deck) {

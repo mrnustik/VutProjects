@@ -11,6 +11,7 @@ import net.mrnustik.university.solitaire.model.io.json.JsonInterfaceAdapter;
 
 /**
  * Converter for converting Board to JSON format string
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  * @see Converter
  */
@@ -37,6 +38,7 @@ public class BoardToJsonConverter implements Converter<Board, String> {
 
     /**
      * Converts Board given in param to JSON string
+     *
      * @param source board to be converted
      * @return JSON format String representation of Board given as source
      */

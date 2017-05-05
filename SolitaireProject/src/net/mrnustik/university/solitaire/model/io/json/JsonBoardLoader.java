@@ -12,6 +12,7 @@ import java.io.IOException;
 
 /**
  * Class used for board loading from JSON file.
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  * @see BoardLoader
  */
@@ -19,6 +20,7 @@ public class JsonBoardLoader implements BoardLoader {
 
     /**
      * Loads the board from JSON file specified in path.
+     *
      * @param path to board save file
      * @return loaded Board
      * @throws FileNotFoundException when file specified in path was not found

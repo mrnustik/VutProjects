@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * JLayeredPane used to represent stack of cards
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 class CardStackPanel extends JLayeredPane implements ComponentListener {
@@ -43,12 +44,13 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
 
     /**
      * Creates the panel with initial stack and gives it its index.
+     *
      * @param index of the working stack
      */
     CardStackPanel(int index) {
         super();
         addComponentListener(this);
-        this.timer = new Timer(30, l->paintStack());
+        this.timer = new Timer(30, l -> paintStack());
         this.timer.setRepeats(false);
         this.timer.stop();
         this.index = index;
@@ -57,6 +59,7 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
 
     /**
      * Sets the event listener for card selection
+     *
      * @param listener listener of the selection
      */
     void setCardSelectedListener(CardSelected listener) {
@@ -65,6 +68,7 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
 
     /**
      * Changes the current stack of cards
+     *
      * @param stack to be shown
      */
     void setStack(CardStack stack) {
@@ -80,8 +84,8 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
         int index;
         if (stack.size() == 0) {
             index = 1;
-            if(cards.size() == 0){
-                createCardView(0,null);
+            if (cards.size() == 0) {
+                createCardView(0, null);
             }
             cards.get(0).setCard(null);
         } else {
@@ -102,8 +106,8 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
                     y += 5;
             }
         }
-        if(index < cards.size()){
-            for(; index < cards.size(); index++){
+        if (index < cards.size()) {
+            for (; index < cards.size(); index++) {
                 CardView view = cards.get(index);
                 view.setVisible(false);
             }
@@ -113,8 +117,9 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
 
     /**
      * Creates CardView and adds it to the panel
+     *
      * @param index z index of the card
-     * @param card card model
+     * @param card  card model
      * @return created CardView
      */
     private CardView createCardView(int index, Card card) {
@@ -127,12 +132,13 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
 
     /**
      * Event listener, that passes the event to the {@link CardStackPanel#listener}
+     *
      * @param source source of the event
      */
     private void cardClicked(Object source) {
-        if(source instanceof CardView) {
+        if (source instanceof CardView) {
             CardView view = (CardView) source;
-            if(listener != null){
+            if (listener != null) {
                 listener.onCardSelected(view.getCard(), index);
             }
         }
@@ -140,11 +146,12 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
 
     /**
      * Event listener for resizing of the panel
+     *
      * @param e event arguments
      */
     @Override
     public void componentResized(ComponentEvent e) {
-        if(stack != null) {
+        if (stack != null) {
             if (timer.isRunning())
                 timer.restart();
             else
@@ -169,6 +176,7 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
 
     /**
      * Highlights the cards in stack until specified card
+     *
      * @param highlightCard last card to be highlighted
      */
     void highlight(Card highlightCard) {
@@ -177,12 +185,12 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
                 this.cards) {
 
             Card realCard = card.getCard();
-            if(realCard == null){
+            if (realCard == null) {
                 highlight = true;
-            } else if(realCard.equals(highlightCard)) {
+            } else if (realCard.equals(highlightCard)) {
                 highlight = true;
             }
-            if(highlight)
+            if (highlight)
                 card.highlight();
         }
     }
@@ -193,7 +201,8 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
     public interface CardSelected {
         /**
          * Method called when the card selection event happens
-         * @param card card that was selected
+         *
+         * @param card  card that was selected
          * @param index of the working stack
          */
         void onCardSelected(Card card, int index);

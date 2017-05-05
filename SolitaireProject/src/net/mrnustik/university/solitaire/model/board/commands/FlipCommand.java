@@ -6,6 +6,7 @@ import net.mrnustik.university.solitaire.model.board.commands.base.AbstractComma
 
 /**
  * Command for flipping card from Deck on Stack
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class FlipCommand extends AbstractCommand {
@@ -27,8 +28,9 @@ public class FlipCommand extends AbstractCommand {
 
     /**
      * Creates the command instance
+     *
      * @param stacker where cards will turned on.
-     * @param deck where the cards will be taken from.
+     * @param deck    where the cards will be taken from.
      * @see CardStacker
      * @see CardDeck
      */
@@ -39,6 +41,7 @@ public class FlipCommand extends AbstractCommand {
 
     /**
      * Turns the card from deck to stacker
+     *
      * @return true if command was successful
      */
     @Override
@@ -54,8 +57,8 @@ public class FlipCommand extends AbstractCommand {
     @Override
     public void undo() {
         if (wasSuccessful()) {
-            if(turnedStacker) {
-                while(!deck.isEmpty()) {
+            if (turnedStacker) {
+                while (!deck.isEmpty()) {
                     deck.pop(stacker);
                 }
             } else {

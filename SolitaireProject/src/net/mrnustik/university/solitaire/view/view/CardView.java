@@ -8,6 +8,7 @@ import java.net.URL;
 
 /**
  * JButton that is used for Card representation
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class CardView extends JButton {
@@ -44,6 +45,7 @@ public class CardView extends JButton {
 
     /**
      * Creates CardView for specified card
+     *
      * @param card card to be represented by this view
      */
     public CardView(Card card) {
@@ -58,6 +60,7 @@ public class CardView extends JButton {
 
     /**
      * Retrieves card icon from file, scales it to the best version and stores it for later use
+     *
      * @return Icon of the card
      */
     @Override
@@ -84,6 +87,7 @@ public class CardView extends JButton {
 
     /**
      * Check whether the icon should be redrawed
+     *
      * @return true if the card should be redrawed
      */
     private boolean shouldRedraw() {
@@ -92,6 +96,7 @@ public class CardView extends JButton {
 
     /**
      * Scales the card icon to suitable size.
+     *
      * @param icon Image to be resized
      * @return resized image
      */
@@ -112,6 +117,7 @@ public class CardView extends JButton {
 
     /**
      * Getter for currently viewed card
+     *
      * @return currently viewed card
      */
     public Card getCard() {
@@ -120,9 +126,10 @@ public class CardView extends JButton {
 
     /**
      * Setter for viewed card. Forces repaint
+     *
      * @param card to be viewed
      */
-    public void setCard(Card card){
+    public void setCard(Card card) {
         this.cardChanged = true;
         this.mCard = card;
         repaint();
@@ -130,6 +137,7 @@ public class CardView extends JButton {
 
     /**
      * Changes card. Performs check whether card is not the same.
+     *
      * @param card to be changed to
      */
     public void changeCard(Card card) {
@@ -140,7 +148,7 @@ public class CardView extends JButton {
             this.cardChanged = true;
             this.mCard = card;
         }
-        if(cardChanged)
+        if (cardChanged)
             repaint();
     }
 
@@ -148,11 +156,11 @@ public class CardView extends JButton {
      * Highlights the card. Draws a yellow rectangle around it.
      */
     public void highlight() {
-        this.setBorder(BorderFactory.createLineBorder(Color.red,  5));
+        this.setBorder(BorderFactory.createLineBorder(Color.red, 5));
         this.repaint();
-        Timer timer = new Timer(450, l->{
-           this.setBorder(null);
-           this.repaint();
+        Timer timer = new Timer(450, l -> {
+            this.setBorder(null);
+            this.repaint();
         });
         timer.setRepeats(false);
         timer.start();

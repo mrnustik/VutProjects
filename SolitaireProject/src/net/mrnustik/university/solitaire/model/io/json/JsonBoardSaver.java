@@ -11,6 +11,7 @@ import java.io.IOException;
 
 /**
  * Class used to save Board into JSON.
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  * @see BoardSaver
  */
@@ -18,7 +19,8 @@ public class JsonBoardSaver implements BoardSaver {
 
     /**
      * Method, that saves Board given in parameters to a JSON file specified in path.
-     * @param path where the board should be saved
+     *
+     * @param path  where the board should be saved
      * @param board to be saved
      * @throws IOException when can't write to file
      */

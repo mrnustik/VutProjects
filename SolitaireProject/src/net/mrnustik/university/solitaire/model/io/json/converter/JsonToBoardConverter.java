@@ -12,6 +12,7 @@ import net.mrnustik.university.solitaire.model.board.BoardImpl;
 
 /**
  * Converter used to convert JSON String to board.
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class JsonToBoardConverter implements Converter<String, Board> {
@@ -36,6 +37,7 @@ public class JsonToBoardConverter implements Converter<String, Board> {
 
     /**
      * Converts JSON string into Board.
+     *
      * @param source JSON format string representing Board
      * @return board represented in source
      */

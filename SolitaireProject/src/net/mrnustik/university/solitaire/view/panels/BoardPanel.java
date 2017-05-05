@@ -21,6 +21,7 @@ import java.lang.reflect.Executable;
 
 /**
  * JPanel used to describe layout of the single game
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class BoardPanel extends JPanel implements BoardView, CardStackPanel.CardSelected {
@@ -64,6 +65,7 @@ public class BoardPanel extends JPanel implements BoardView, CardStackPanel.Card
 
     /**
      * Creates the panel with game, that is specified in param.
+     *
      * @param board that should be loaded into panel
      */
     public BoardPanel(Board board) {
@@ -178,18 +180,19 @@ public class BoardPanel extends JPanel implements BoardView, CardStackPanel.Card
 
     /**
      * Highlights selected card
+     *
      * @param selection to be highlighted
      */
     @Override
     public void highlightSelection(Selection selection) {
-        if(selection.getType() == Selection.SelectionType.DECK){
+        if (selection.getType() == Selection.SelectionType.DECK) {
             deckView.highlight();
-        } else if(selection.getType() == Selection.SelectionType.STACKER) {
+        } else if (selection.getType() == Selection.SelectionType.STACKER) {
             stackView.highlight();
-        } else if(selection.getType() == Selection.SelectionType.TARGET) {
+        } else if (selection.getType() == Selection.SelectionType.TARGET) {
             int index = selection.getIndex();
             targets[index].highlight();
-        } else if(selection.getType() == Selection.SelectionType.WORKING_PACK) {
+        } else if (selection.getType() == Selection.SelectionType.WORKING_PACK) {
             int index = selection.getIndex();
             workingStacks[index].highlight(selection.getCard());
         }
@@ -208,6 +211,7 @@ public class BoardPanel extends JPanel implements BoardView, CardStackPanel.Card
 
     /**
      * Shows score in the {@link BoardPanel#scoreLabel}
+     *
      * @param score points achieved by player
      */
     @Override
@@ -217,7 +221,8 @@ public class BoardPanel extends JPanel implements BoardView, CardStackPanel.Card
 
     /**
      * Fills the {@link BoardPanel#deckView} and {@link BoardPanel#stackView} with new values
-     * @param deck card that is on top of a deck
+     *
+     * @param deck    card that is on top of a deck
      * @param stacker card that is on top of a stacker
      */
     @Override
@@ -228,7 +233,8 @@ public class BoardPanel extends JPanel implements BoardView, CardStackPanel.Card
 
     /**
      * Fills the target deck on given index in {@link BoardPanel#targets} with proper data.
-     * @param card that is on top of target stacker
+     *
+     * @param card  that is on top of target stacker
      * @param index of the target stack to be repainted
      */
     @Override
@@ -238,6 +244,7 @@ public class BoardPanel extends JPanel implements BoardView, CardStackPanel.Card
 
     /**
      * Fills the working stack on given index in {@link BoardPanel#workingStacks} with proper data.
+     *
      * @param stack to be painted
      * @param index of the stack
      */
@@ -248,6 +255,7 @@ public class BoardPanel extends JPanel implements BoardView, CardStackPanel.Card
 
     /**
      * Shows JFileChooser dialog for game saving.
+     *
      * @see JFileChooser
      */
     private void showSaveGameDialog() {
@@ -268,7 +276,8 @@ public class BoardPanel extends JPanel implements BoardView, CardStackPanel.Card
 
     /**
      * Event called from working stack when a card has been selected
-     * @param card selected card
+     *
+     * @param card  selected card
      * @param index index of the working stack
      */
     @Override

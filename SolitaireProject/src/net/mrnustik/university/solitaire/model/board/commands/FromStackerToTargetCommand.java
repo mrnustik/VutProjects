@@ -6,6 +6,7 @@ import net.mrnustik.university.solitaire.model.card.Card;
 
 /**
  * Command for moving cards from Stacker to Target decks.
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class FromStackerToTargetCommand extends AbstractCommand {
@@ -22,8 +23,9 @@ public class FromStackerToTargetCommand extends AbstractCommand {
 
     /**
      * Creates the command
+     *
      * @param stacker where the card will be taken from
-     * @param target where the card will be put on
+     * @param target  where the card will be put on
      * @see CardStacker
      */
     public FromStackerToTargetCommand(CardStacker stacker, CardStacker target) {
@@ -33,6 +35,7 @@ public class FromStackerToTargetCommand extends AbstractCommand {
 
     /**
      * Moves the card from stacker to target
+     *
      * @return true if operation was successful
      */
     @Override

@@ -9,6 +9,7 @@ import net.mrnustik.university.solitaire.view.frames.MainFrame;
 
 /**
  * Main class of the application. Used as entry point of the application.
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 class Main {
@@ -16,12 +17,13 @@ class Main {
     /**
      * Entry point method of the applications.
      * Just starts the view and sets it to visible.
+     *
      * @param args arguments from command line
      */
     public static void main(String args[]) {
-        
+
         MainFrame frame = new MainFrame();
         frame.setVisible(true);
-        
+
     }
 }

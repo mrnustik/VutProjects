@@ -95,7 +95,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public Card getDeckTop() {
@@ -103,7 +103,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public Card getStackerTop() {
@@ -111,7 +111,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public Card getTargetTop(int i) {
@@ -119,7 +119,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public CardStack getWorkingStack(int i) {
@@ -127,7 +127,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean isWin() {
@@ -139,7 +139,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public int getScore() {
@@ -147,7 +147,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public Hint getBestHint() {
@@ -171,7 +171,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public List<Hint> getAllHints() {
@@ -298,7 +298,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public void undo() {
@@ -334,7 +334,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean flipFromDeck() {
@@ -343,7 +343,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean fromStackerToTarget() {
@@ -372,7 +372,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean fromWorkingToTarget(int workingIndex) {
@@ -387,7 +387,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean fromStackerToWorking(int index) {
@@ -397,7 +397,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean fromTargetToWorking(int fromIndex, int toIndex) {
@@ -407,7 +407,7 @@ public class BoardImpl implements Board {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     @Override
     public boolean fromWorkingToWorking(int fromIndex, int toIndex, Card card) {

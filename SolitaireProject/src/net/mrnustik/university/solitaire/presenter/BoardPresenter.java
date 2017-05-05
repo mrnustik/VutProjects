@@ -35,7 +35,8 @@ public class BoardPresenter {
 
     /**
      * Creates presenter for given view and board
-     * @param view to be used for presenting using this class
+     *
+     * @param view  to be used for presenting using this class
      * @param board to be presented using this class
      */
     public BoardPresenter(BoardView view, Board board) {
@@ -48,7 +49,7 @@ public class BoardPresenter {
     /**
      * Event handler called when deck is clicked
      */
-    public void deckClicked(){
+    public void deckClicked() {
         this.board.flipFromDeck();
         repaintDeck();
     }
@@ -56,17 +57,18 @@ public class BoardPresenter {
     /**
      * Event handler called when stacker is clicked
      */
-    public void stackerClicked(){
+    public void stackerClicked() {
         this.selection.reset();
         this.selection.setType(Selection.SelectionType.STACKER);
     }
 
     /**
      * Event handler called when target stacker is clicked
+     *
      * @param index of the target stacker
      */
-    public void targetClicked(int index){
-        if(this.selection.isValid()) {
+    public void targetClicked(int index) {
+        if (this.selection.isValid()) {
             switch (this.selection.getType()) {
                 case STACKER:
                     board.fromStackerToTarget();
@@ -82,7 +84,7 @@ public class BoardPresenter {
             }
             repaintScore();
             this.selection.reset();
-            if(this.board.isWin()) {
+            if (this.board.isWin()) {
                 view.showWin();
             }
         } else {
@@ -93,12 +95,13 @@ public class BoardPresenter {
 
     /**
      * Event handler called when working stack is clicked
+     *
      * @param index of the working stack
-     * @param card that has been clicked
+     * @param card  that has been clicked
      */
-    public void workingClicked(int index, Card card){
-        if(this.selection.isValid()) {
-            if(selection.getType() == Selection.SelectionType.WORKING_PACK
+    public void workingClicked(int index, Card card) {
+        if (this.selection.isValid()) {
+            if (selection.getType() == Selection.SelectionType.WORKING_PACK
                     && selection.getIndex() == index
                     && selection.getCard().equals(card)) return;
             switch (this.selection.getType()) {
@@ -130,10 +133,10 @@ public class BoardPresenter {
     /**
      * Repaints the whole {@link #view}
      */
-    private void repaint(){
+    private void repaint() {
         repaintDeck();
         repaintTargets();
-        for(int index = 0; index < BoardImpl.WORKING_COUNT; index++){
+        for (int index = 0; index < BoardImpl.WORKING_COUNT; index++) {
             repaintWorkingStack(index);
         }
         repaintScore();
@@ -148,6 +151,7 @@ public class BoardPresenter {
 
     /**
      * Repaints the working stack on index in {@link #view}
+     *
      * @param index of the working stack
      */
     private void repaintWorkingStack(int index) {
@@ -158,7 +162,7 @@ public class BoardPresenter {
      * Repaints all target stack in {@link #view}
      */
     private void repaintTargets() {
-        for(int index = 0; index < 4; index++)
+        for (int index = 0; index < 4; index++)
             view.repaintTargets(board.getTargetTop(index), index);
     }
 
@@ -171,6 +175,7 @@ public class BoardPresenter {
 
     /**
      * Saves the board data
+     *
      * @param path to file where the board should be stored
      * @throws IOException when exception occurs in {@link BoardSaver#save(String, Board)}
      */
@@ -193,15 +198,15 @@ public class BoardPresenter {
     public void hintClicked() {
         List<Hint> hints = this.board.getAllHints();
         int delay = 0;
-        for (Hint hint:
-             hints) {
-            if(hint.getFromSelection() != null) {
+        for (Hint hint :
+                hints) {
+            if (hint.getFromSelection() != null) {
                 Timer timer = new Timer(delay, l -> view.highlightSelection(hint.getFromSelection()));
                 timer.setRepeats(false);
                 timer.start();
             }
             delay += 100;
-            if(hint.getToSelection() != null) {
+            if (hint.getToSelection() != null) {
                 Timer timer = new Timer(delay, l -> view.highlightSelection(hint.getToSelection()));
                 timer.setRepeats(false);
                 timer.start();

@@ -12,6 +12,7 @@ import net.mrnustik.university.solitaire.model.card.Card;
 
 /**
  * Abstract factory design pattern used for creation of basic objects inside the game.
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public abstract class AbstractFactory {

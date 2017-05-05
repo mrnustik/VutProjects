@@ -14,6 +14,7 @@ import java.util.Collections;
 
 /**
  * Standard card deck used for a game of Solitaire (Klondike)
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class SolitaireDeck extends SolitaireStacker implements CardDeck {
@@ -26,6 +27,7 @@ public class SolitaireDeck extends SolitaireStacker implements CardDeck {
 
     /**
      * Factory method used for creation of standard (52 card) deck
+     *
      * @param factory used for creation of cards
      * @return standard card deck with 52 cards
      */
@@ -50,6 +52,7 @@ public class SolitaireDeck extends SolitaireStacker implements CardDeck {
     /**
      * Removes first card from deck and puts it on specified stacker.
      * If deck is empty it tries to get all cards from the stacker back.
+     *
      * @param where where to put card
      * @return true if both stack and deck are not empty
      */
@@ -71,12 +74,13 @@ public class SolitaireDeck extends SolitaireStacker implements CardDeck {
 
     /**
      * Returns card from specified stacker onto deck.
+     *
      * @param stacker where the card should be taken from
      */
     @Override
     public void returnCard(CardStacker stacker) {
         Card card = stacker.pop();
-        if(card != null){
+        if (card != null) {
             card.turnFaceDown();
             this.put(card);
         }

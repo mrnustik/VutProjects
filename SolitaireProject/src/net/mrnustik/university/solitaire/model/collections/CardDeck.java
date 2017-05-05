@@ -9,6 +9,7 @@ import net.mrnustik.university.solitaire.model.card.Card;
 
 /**
  * Representation of a standard card deck
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public interface CardDeck {
@@ -27,6 +28,7 @@ public interface CardDeck {
     /**
      * Pops card from CardDeck to CardStack from param.
      * If isEmpty() gets all card from stack to itself
+     *
      * @param where where to put card
      * @return false if is empty
      */

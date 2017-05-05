@@ -8,13 +8,15 @@ package net.mrnustik.university.solitaire.model.card;
 
 /**
  * Class representing one classic playing Card.
- * @version 1.0
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
+ * @version 1.0
  */
 public class Card implements Comparable {
 
     /**
      * Color of the Card.
+     *
      * @see Card.Color
      */
     private final Color mColor;
@@ -31,6 +33,7 @@ public class Card implements Comparable {
 
     /**
      * Basic constructor for Card creation
+     *
      * @param color of the card
      * @param value of the card
      */
@@ -41,6 +44,7 @@ public class Card implements Comparable {
 
     /**
      * Getter method for Card color getting
+     *
      * @return card color {@link Card#mValue}
      * @see Card.Color
      */
@@ -50,6 +54,7 @@ public class Card implements Comparable {
 
     /**
      * Getter method for Card value getting
+     *
      * @return card value {@link Card#mValue}
      */
     public int getValue() {
@@ -58,6 +63,7 @@ public class Card implements Comparable {
 
     /**
      * Getter method for Card face up indicator
+     *
      * @return true if Card lies face up {@link Card#mFaceUp}
      */
     public boolean isFaceUp() {
@@ -90,6 +96,7 @@ public class Card implements Comparable {
 
     /**
      * Method for checking whether the card is the same base color as card given in parameters.
+     *
      * @param card to be compared with
      * @return true if both cards are red or black, false otherwise
      * @see Card.Color#similarColorTo(Card.Color)
@@ -100,6 +107,7 @@ public class Card implements Comparable {
 
     /**
      * Compares two cards based on their value.
+     *
      * @param o card that this card should be compared to
      * @return value of given card minus value of this card
      * @see Card#getValue()
@@ -115,6 +123,7 @@ public class Card implements Comparable {
 
     /**
      * Checks if two Cards are equal.
+     *
      * @param obj card to be equaled to
      * @return true if card have same color and value
      */
@@ -131,6 +140,7 @@ public class Card implements Comparable {
     /**
      * Hashcode computation method for this card
      * Counted as hashCode of color + value of the card.
+     *
      * @return computed hash code.
      * @see Card#getColor()
      * @see Card#getValue()
@@ -143,6 +153,7 @@ public class Card implements Comparable {
     /**
      * Method for getting string representation of this Card.
      * Format of the output is VALUE_COLOR.
+     *
      * @return string representation of object
      * @see Card#getValue()
      * @see Card#getColor()
@@ -188,6 +199,7 @@ public class Card implements Comparable {
         /**
          * Method used to check whether two colors are similar.
          * Similar is meant in a classic color world (red and black)
+         *
          * @param color to be compared to
          * @return true if both colors are red or black, false otherwise
          */
@@ -205,6 +217,7 @@ public class Card implements Comparable {
 
         /**
          * Method to retrieve String represenation of Color
+         *
          * @return string representation of color
          * @see String
          */

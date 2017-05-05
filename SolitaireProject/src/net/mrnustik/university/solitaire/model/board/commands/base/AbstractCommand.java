@@ -24,6 +24,7 @@ public abstract class AbstractCommand implements Command {
 
     /**
      * Sets the score of command
+     *
      * @param points score to be given to the command
      */
     @Override

@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Put off stacker used for basic one card operations
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class SolitaireStacker implements CardStacker {
@@ -31,6 +32,7 @@ public class SolitaireStacker implements CardStacker {
 
     /**
      * Retrieves count of cards in stacker
+     *
      * @return count of cards in stacker
      */
     @Override
@@ -40,6 +42,7 @@ public class SolitaireStacker implements CardStacker {
 
     /**
      * Checks whether stacker is empty
+     *
      * @return true if stacker is empty
      */
     @Override
@@ -49,6 +52,7 @@ public class SolitaireStacker implements CardStacker {
 
     /**
      * Removes top card from stacker
+     *
      * @return returns top card or null if empty
      */
     @Override
@@ -61,6 +65,7 @@ public class SolitaireStacker implements CardStacker {
 
     /**
      * Removes card on specified index from stacker
+     *
      * @param index index of the card
      * @return specified card or null
      */
@@ -74,6 +79,7 @@ public class SolitaireStacker implements CardStacker {
 
     /**
      * Retrieves the top card from stacker without removing it
+     *
      * @return top card of the stacker or null if empty
      */
     @Override
@@ -86,6 +92,7 @@ public class SolitaireStacker implements CardStacker {
 
     /**
      * Retrieves the card specified in index from stacker without removing it
+     *
      * @param index index of the card
      * @return specified card or null if the index is too big
      */
@@ -99,6 +106,7 @@ public class SolitaireStacker implements CardStacker {
 
     /**
      * Adds card on stack
+     *
      * @param card Card to be put on the stacker
      * @return true if card can be put in there
      */
@@ -109,6 +117,7 @@ public class SolitaireStacker implements CardStacker {
 
     /**
      * Checks whether the card can be put on the stack
+     *
      * @param card card to put on
      * @return always true
      */

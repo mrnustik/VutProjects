@@ -9,6 +9,7 @@ import net.mrnustik.university.solitaire.model.card.Card;
 
 /**
  * Representation for stack of cards, where multiple cards can be moved
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public interface CardStack extends CardStacker {

@@ -7,6 +7,7 @@ import net.mrnustik.university.solitaire.model.card.Card;
 
 /**
  * Command for moving cards from working stack to target stacker
+ *
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
 public class FromWorkingToTargetCommand extends AbstractCommand {
@@ -28,8 +29,9 @@ public class FromWorkingToTargetCommand extends AbstractCommand {
 
     /**
      * Creates the command
+     *
      * @param working where the card will be taken from
-     * @param target where the card should be put on
+     * @param target  where the card should be put on
      * @see CardStack
      * @see CardStacker
      */
@@ -40,6 +42,7 @@ public class FromWorkingToTargetCommand extends AbstractCommand {
 
     /**
      * Moves the card from working stack to target stacker.
+     *
      * @return true if operation was successful
      */
     @Override

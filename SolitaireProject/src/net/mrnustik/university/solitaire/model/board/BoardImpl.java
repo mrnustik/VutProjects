@@ -177,9 +177,9 @@ public class BoardImpl implements Board {
     public List<Hint> getAllHints() {
         List<Hint> hints = new ArrayList<>();
         hints.addAll(findMoveStackerToTarget());
+        hints.addAll(findMoveWorkingToTarget());
         hints.addAll(findMoveStackerToWorking());
         hints.addAll(findMoveWorkingToWorking());
-        hints.addAll(findMoveWorkingToTarget());
         if(hints.size() == 0)
         {
             if(!deck.isEmpty() || !stacker.isEmpty()) {
@@ -204,13 +204,16 @@ public class BoardImpl implements Board {
                 for(int k = 0; k < working.size(); k++){
                     Card card = working.get(k);
                     if(card != null) {
+
                         if (!card.isFaceUp()) continue;
                         CardStack toWorking = workingStacks[j];
+                        if(k == 0 && toWorking.size() == 0) break;
                         if (toWorking.canPut(card)) {
                             Selection fromSelection = new Selection(Selection.SelectionType.WORKING_PACK, i, card);
                             Selection toSelection = new Selection(Selection.SelectionType.WORKING_PACK, j, toWorking.get());
                             hints.add(new Hint(fromSelection, toSelection));
                         }
+                        break;
                     }
 
                 }

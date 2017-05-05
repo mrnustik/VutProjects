@@ -18,12 +18,26 @@ import java.util.List;
  */
 public class BoardPresenter {
 
+    /**
+     * Board that is represented by this presenter
+     */
     private final Board board;
 
+    /**
+     * View presenter is using to show data
+     */
     private final BoardView view;
 
+    /**
+     * Actual selection
+     */
     private Selection selection;
 
+    /**
+     * Creates presenter for given view and board
+     * @param view to be used for presenting using this class
+     * @param board to be presented using this class
+     */
     public BoardPresenter(BoardView view, Board board) {
         this.board = board;
         this.view = view;
@@ -31,16 +45,26 @@ public class BoardPresenter {
         this.repaint();
     }
 
+    /**
+     * Event handler called when deck is clicked
+     */
     public void deckClicked(){
         this.board.flipFromDeck();
         repaintDeck();
     }
 
+    /**
+     * Event handler called when stacker is clicked
+     */
     public void stackerClicked(){
         this.selection.reset();
         this.selection.setType(Selection.SelectionType.STACKER);
     }
 
+    /**
+     * Event handler called when target stacker is clicked
+     * @param index of the target stacker
+     */
     public void targetClicked(int index){
         if(this.selection.isValid()) {
             switch (this.selection.getType()) {
@@ -67,8 +91,11 @@ public class BoardPresenter {
         }
     }
 
-
-
+    /**
+     * Event handler called when working stack is clicked
+     * @param index of the working stack
+     * @param card that has been clicked
+     */
     public void workingClicked(int index, Card card){
         if(this.selection.isValid()) {
             if(selection.getType() == Selection.SelectionType.WORKING_PACK
@@ -100,6 +127,9 @@ public class BoardPresenter {
         }
     }
 
+    /**
+     * Repaints the whole {@link #view}
+     */
     private void repaint(){
         repaintDeck();
         repaintTargets();
@@ -108,33 +138,58 @@ public class BoardPresenter {
         }
         repaintScore();
     }
+
+    /**
+     * Repaints the score in {@link #view}.
+     */
     private void repaintScore() {
         view.showScore(board.getScore());
     }
 
+    /**
+     * Repaints the working stack on index in {@link #view}
+     * @param index of the working stack
+     */
     private void repaintWorkingStack(int index) {
         view.repaintWorking(board.getWorkingStack(index), index);
     }
 
+    /**
+     * Repaints all target stack in {@link #view}
+     */
     private void repaintTargets() {
         for(int index = 0; index < 4; index++)
             view.repaintTargets(board.getTargetTop(index), index);
     }
 
+    /**
+     * Repaints the stacker and deck in {@link #view}
+     */
     private void repaintDeck() {
         view.repaintDeck(board.getDeckTop(), board.getStackerTop());
     }
 
+    /**
+     * Saves the board data
+     * @param path to file where the board should be stored
+     * @throws IOException when exception occurs in {@link BoardSaver#save(String, Board)}
+     */
     public void saveBoard(String path) throws IOException {
         BoardSaver saver = new JsonBoardSaver();
         saver.save(path, this.board);
     }
 
+    /**
+     * Event handler called when undo is clicked
+     */
     public void undoClicked() {
         this.board.undo();
         repaint();
     }
 
+    /**
+     * Event handler called when the hint is clicked
+     */
     public void hintClicked() {
         List<Hint> hints = this.board.getAllHints();
         int delay = 0;

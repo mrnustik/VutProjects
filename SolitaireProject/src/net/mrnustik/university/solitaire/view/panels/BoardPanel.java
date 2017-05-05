@@ -25,7 +25,9 @@ import java.lang.reflect.Executable;
  */
 public class BoardPanel extends JPanel implements BoardView, CardStackPanel.CardSelected {
 
-
+    /**
+     * Presenter working with data in given view
+     */
     private final BoardPresenter presenter;
 
     /**
@@ -193,6 +195,9 @@ public class BoardPanel extends JPanel implements BoardView, CardStackPanel.Card
         }
     }
 
+    /**
+     * Shows win game JOptionPane dialog
+     */
     @Override
     public void showWin() {
         JOptionPane.showMessageDialog(this,
@@ -201,22 +206,41 @@ public class BoardPanel extends JPanel implements BoardView, CardStackPanel.Card
                 JOptionPane.PLAIN_MESSAGE);
     }
 
+    /**
+     * Shows score in the {@link BoardPanel#scoreLabel}
+     * @param score points achieved by player
+     */
     @Override
     public void showScore(int score) {
         scoreLabel.setText(String.format("Score: %d", score));
     }
 
+    /**
+     * Fills the {@link BoardPanel#deckView} and {@link BoardPanel#stackView} with new values
+     * @param deck card that is on top of a deck
+     * @param stacker card that is on top of a stacker
+     */
     @Override
     public void repaintDeck(Card deck, Card stacker) {
         deckView.changeCard(deck);
         stackView.changeCard(stacker);
     }
 
+    /**
+     * Fills the target deck on given index in {@link BoardPanel#targets} with proper data.
+     * @param card that is on top of target stacker
+     * @param index of the target stack to be repainted
+     */
     @Override
     public void repaintTargets(Card card, int index) {
         targets[index].changeCard(card);
     }
 
+    /**
+     * Fills the working stack on given index in {@link BoardPanel#workingStacks} with proper data.
+     * @param stack to be painted
+     * @param index of the stack
+     */
     @Override
     public void repaintWorking(CardStack stack, int index) {
         workingStacks[index].setStack(stack);

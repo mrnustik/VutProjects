@@ -1,9 +1,11 @@
 package net.mrnustik.university.solitaire.view.panels;
 
 import net.mrnustik.university.solitaire.model.board.Board;
-import net.mrnustik.university.solitaire.model.board.Hint;
 import net.mrnustik.university.solitaire.model.board.Selection;
 import net.mrnustik.university.solitaire.model.board.factory.SolitaireFactory;
+import net.mrnustik.university.solitaire.model.collections.CardStack;
+import net.mrnustik.university.solitaire.presenter.BoardPresenter;
+import net.mrnustik.university.solitaire.view.BoardView;
 import net.mrnustik.university.solitaire.view.frames.MainFrame;
 import net.mrnustik.university.solitaire.view.view.CardView;
 import net.mrnustik.university.solitaire.model.io.BoardSaver;
@@ -15,30 +17,29 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
+import java.lang.reflect.Executable;
 
 /**
  * JPanel used to describe layout of the single game
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
-public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
+public class BoardPanel extends JPanel implements BoardView, CardStackPanel.CardSelected {
+
+
+    private final BoardPresenter presenter;
 
     /**
-     * Board object of currently played game
+     * View representing the deckView of cards
      */
-    private final Board board;
+    private CardView deckView;
 
     /**
-     * View representing the deck of cards
+     * View representing the put-down stackView of cards
      */
-    private CardView deck;
+    private CardView stackView;
 
     /**
-     * View representing the put-down stacker of cards
-     */
-    private CardView stacker;
-
-    /**
-     * View representing the target stacker
+     * View representing the target stackView
      */
     private CardView[] targets;
 
@@ -46,20 +47,6 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
      * View representing the working stacks
      */
     private CardStackPanel[] workingStacks;
-
-    /**
-     * Index of the working stack that should be repainted
-     */
-    private int repaintWorkingIndex1 = -2;
-    /**
-     * Index of the second working stack that should repainted
-     */
-    private int repaintWorkingIndex2 = -2;
-
-    /**
-     * Current selection
-     */
-    private final Selection selection;
 
     /**
      * Label showing current score
@@ -79,12 +66,10 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
      */
     public BoardPanel(Board board) {
         super(new GridLayout(2, 6, 5, 5));
-        this.board = board;
         setMinimumSize(new Dimension(200, 150));
         setBackground(Color.decode("#146a2c"));
         initViews();
-        selection = new Selection();
-        paintBoard();
+        this.presenter = new BoardPresenter(this, board);
     }
 
     /**
@@ -96,7 +81,6 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         initMenu();
         initTargetStacks();
         initWorkingStacks();
-
     }
 
     /**
@@ -105,7 +89,7 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     private void initWorkingStacks() {
         workingStacks = new CardStackPanel[7];
         for (int i = 0; i < 7; i++) {
-            CardStackPanel panel = new CardStackPanel(board.getWorkingStack(i), i);
+            CardStackPanel panel = new CardStackPanel(i);
             panel.setCardSelectedListener(this);
             workingStacks[i] = panel;
             add(panel);
@@ -120,32 +104,21 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         for (int i = 0; i < 4; i++) {
             final int index = i;
             targets[i] = new CardView(null);
-            targets[i].addActionListener(l -> targetClicked(index));
-
+            targets[i].addActionListener(l -> presenter.targetClicked(index));
             add(targets[i]);
         }
     }
 
     /**
-     * Initializes the deck and put-down stacker view
+     * Initializes the deck and put-down stack view
      */
     private void initDeck() {
-        deck = new CardView(board.getDeckTop());
-        add(deck);
-        stacker = new CardView(board.getStackerTop());
-        add(stacker);
-        deck.addActionListener(l -> {
-            board.flipFromDeck();
-            paintDeck();
-            selection.reset();
-            repaint();
-        });
-
-        stacker.addActionListener(l -> {
-            selection.reset();
-            selection.setCard(stacker.getCard());
-            selection.setType(Selection.SelectionType.STACKER);
-        });
+        deckView = new CardView(null);
+        add(deckView);
+        stackView = new CardView(null);
+        add(stackView);
+        deckView.addActionListener(l -> presenter.deckClicked());
+        stackView.addActionListener(l -> presenter.stackerClicked());
     }
 
     /**
@@ -162,22 +135,27 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         constraints.gridy = 0;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
+
+        //score label
         scoreLabel = new JLabel("Score: 0", SwingConstants.CENTER);
         scoreLabel.setForeground(Color.white);
         gameMenu.add(scoreLabel, constraints);
+
+        //save button
         JButton saveBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/view/images/SAVE_ICON.png")));
         saveBtn.addActionListener(l -> showSaveGameDialog());
         constraints.gridy = 1;
         constraints.gridx = 0;
         constraints.gridwidth = 1;
         gameMenu.add(saveBtn, constraints);
+
+        //undo button
         JButton undoBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/view/images/UNDO_ICON.png")));
-        undoBtn.addActionListener(l -> {
-            board.undo();
-            paintBoard();
-        });
+        undoBtn.addActionListener(l -> presenter.undoClicked());
         constraints.gridx = 1;
         gameMenu.add(undoBtn, constraints);
+
+        //end button
         JButton endBtn = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/view/images/DELETE_ICON.png")));
         endBtn.addActionListener(l -> {
             MainFrame topFrame = (MainFrame) SwingUtilities.getWindowAncestor(this);
@@ -187,88 +165,25 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         constraints.gridx = 0;
         gameMenu.add(endBtn, constraints);
 
+        //hint button
         JButton hintButton = new JButton(new ImageIcon(getClass().getResource("/net/mrnustik/university/solitaire/view/images/HINT_ICON.png")));
-        hintButton.addActionListener(l -> hintClicked());
+        hintButton.addActionListener(l -> presenter.hintClicked());
         constraints.gridy = 2;
         constraints.gridx = 1;
         gameMenu.add(hintButton, constraints);
     }
 
-    /**
-     * Checks whether the game has been won and shows the winning dialog
-     */
-    private void checkWin() {
-        if (board.isWin()) {
-            JOptionPane.showMessageDialog(this,
-                    "You have successfully won this game!",
-                    "Congratulations",
-                    JOptionPane.PLAIN_MESSAGE);
-        }
-    }
-
-    /**
-     * Event handler for target stacker view clicked
-     * @param index of the stacker that has been clicked on
-     */
-    private void targetClicked(int index) {
-        if (selection.isValid()) {
-            boolean success = false;
-            if (selection.getType() == Selection.SelectionType.STACKER) {
-                success = board.fromStackerToTarget();
-            } else if (selection.getType() == Selection.SelectionType.WORKING_PACK) {
-                success = board.fromWorkingToTarget(selection.getIndex());
-                repaintWorkingIndex1 = selection.getIndex();
-            }
-            if(success) {
-                paintBoard();
-                checkWin();
-            }
-            selection.reset();
-        } else {
-            selection.setType(Selection.SelectionType.TARGET);
-            selection.setIndex(index);
-        }
-
-    }
-
-    /**
-     * Event handler for hint button clicked
-     */
-    private void hintClicked() {
-
-        java.util.List<Hint> hints = board.getAllHints();
-        int delay = 0;
-        for(Hint hint : hints)
-        {
-            Timer timer = new Timer(delay, actionEvent-> highlightHint(hint));
-            timer.start();
-            timer.setRepeats(false);
-            delay += 1000;
-        }
-    }
-
-    /**
-     * Highlights hint on the board.
-     * @param hint to be highlighted
-     */
-    private void highlightHint(Hint hint) {
-        if(hint.getFromSelection() != null){
-            highlightSelection(hint.getFromSelection());
-        }
-        if(hint.getToSelection() != null){
-            highlightSelection(hint.getToSelection());
-        }
-    }
 
     /**
      * Highlights selected card
      * @param selection to be highlighted
      */
-    private void highlightSelection(Selection selection) {
+    @Override
+    public void highlightSelection(Selection selection) {
         if(selection.getType() == Selection.SelectionType.DECK){
-            deck.highlight();
+            deckView.highlight();
         } else if(selection.getType() == Selection.SelectionType.STACKER) {
-            stacker.highlight();
+            stackView.highlight();
         } else if(selection.getType() == Selection.SelectionType.TARGET) {
             int index = selection.getIndex();
             targets[index].highlight();
@@ -276,6 +191,35 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
             int index = selection.getIndex();
             workingStacks[index].highlight(selection.getCard());
         }
+    }
+
+    @Override
+    public void showWin() {
+        JOptionPane.showMessageDialog(this,
+                "You have successfully won this game!",
+                "Congratulations",
+                JOptionPane.PLAIN_MESSAGE);
+    }
+
+    @Override
+    public void showScore(int score) {
+        scoreLabel.setText(String.format("Score: %d", score));
+    }
+
+    @Override
+    public void repaintDeck(Card deck, Card stacker) {
+        deckView.changeCard(deck);
+        stackView.changeCard(stacker);
+    }
+
+    @Override
+    public void repaintTargets(Card card, int index) {
+        targets[index].changeCard(card);
+    }
+
+    @Override
+    public void repaintWorking(CardStack stack, int index) {
+        workingStacks[index].setStack(stack);
     }
 
     /**
@@ -290,78 +234,12 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         int result = fileChooser.showSaveDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            saveGame(file.getPath());
-        }
-    }
-
-    /**
-     * Saves game specified into file specified in path
-     * @param path to save file
-     * @see BoardSaver
-     */
-    private void saveGame(String path) {
-        BoardSaver saver = new JsonBoardSaver();
-        try {
-            saver.save(path, board);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Something wrong happened when saving." + e.getMessage());
-        }
-    }
-
-    /**
-     * Repaints the BoardPanel based on the current board state.
-     */
-    private void paintBoard() {
-        paintDeck();
-
-        paintTargets();
-
-        paintWorkingPacks();
-
-        paintScore();
-    }
-
-    /**
-     * Paints the current score into score label.
-     */
-    private void paintScore() {
-        this.scoreLabel.setText("Score: "+ board.getScore());
-    }
-
-    /**
-     * Repaints working stacks based on current state of the games.
-     */
-    private void paintWorkingPacks() {
-        if(repaintWorkingIndex1 == -2 && repaintWorkingIndex2 == -2) {
-            for (int i = 0; i < 7; i++) {
-                workingStacks[i].setStack(board.getWorkingStack(i));
+            try {
+                presenter.saveBoard(file.getPath());
+            } catch (Exception ignored) {
+                JOptionPane.showMessageDialog(this, "An error occurred during saving.");
             }
-        } else {
-            if(repaintWorkingIndex1 >= 0 && repaintWorkingIndex1 < 7)
-                workingStacks[repaintWorkingIndex1].setStack(board.getWorkingStack(repaintWorkingIndex1));
-            if(repaintWorkingIndex2 >= 0 && repaintWorkingIndex2 < 7)
-                workingStacks[repaintWorkingIndex2].setStack(board.getWorkingStack(repaintWorkingIndex2));
         }
-        repaintWorkingIndex1 = -2;
-        repaintWorkingIndex2 = -2;
-    }
-
-    /**
-     * Repaints target stack based on the current state of the game.
-     */
-    private void paintTargets() {
-        for (int i = 0; i < 4; i++) {
-            targets[i].changeCard(board.getTargetTop(i));
-        }
-    }
-
-    /**
-     * Repaints the game deck based on the current state of the deck.
-     */
-    private void paintDeck() {
-        deck.changeCard(board.getDeckTop());
-        stacker.changeCard(board.getStackerTop());
-        repaint();
     }
 
     /**
@@ -371,27 +249,7 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
      */
     @Override
     public void onCardSelected(Card card, int index) {
-        if (selection.isValid()) {
-            boolean success = false;
-            if(selection.getCard().equals(card) && selection.getIndex() == index) return;
-            if (selection.getType() == Selection.SelectionType.STACKER) {
-                success = board.fromStackerToWorking(index);
-            } else if (selection.getType() == Selection.SelectionType.TARGET) {
-                success = board.fromTargetToWorking(selection.getIndex(), index);
-            } else if (selection.getType() == Selection.SelectionType.WORKING_PACK) {
-                success = board.fromWorkingToWorking(selection.getIndex(), index, selection.getCard());
-                repaintWorkingIndex2 = selection.getIndex();
-            }
-            if(success) {
-                repaintWorkingIndex1 = index;
-                paintBoard();
-            }
-            selection.reset();
-        } else {
-            selection.setType(Selection.SelectionType.WORKING_PACK);
-            selection.setCard(card);
-            selection.setIndex(index);
-        }
+        presenter.workingClicked(index, card);
     }
 
 

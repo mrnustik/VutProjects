@@ -43,15 +43,14 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
 
     /**
      * Creates the panel with initial stack and gives it its index.
-     * @param stack to be represented
      * @param index of the working stack
      */
-    CardStackPanel(CardStack stack, int index) {
+    CardStackPanel(int index) {
         super();
         addComponentListener(this);
-        timer = new Timer(30, e -> paintStack());
-        timer.setRepeats(false);
-        this.stack = stack;
+        this.timer = new Timer(30, l->paintStack());
+        this.timer.setRepeats(false);
+        this.timer.stop();
         this.index = index;
         this.cards = new ArrayList<>();
     }
@@ -145,10 +144,12 @@ class CardStackPanel extends JLayeredPane implements ComponentListener {
      */
     @Override
     public void componentResized(ComponentEvent e) {
-        if (timer.isRunning())
-            timer.restart();
-        else
-            timer.start();
+        if(stack != null) {
+            if (timer.isRunning())
+                timer.restart();
+            else
+                timer.start();
+        }
     }
 
     @Override

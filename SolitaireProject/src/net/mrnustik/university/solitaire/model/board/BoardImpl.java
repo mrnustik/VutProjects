@@ -25,7 +25,7 @@ public class BoardImpl implements Board {
     /**
      * Count of the working stacks in a game.
      */
-    private static final int WORKING_COUNT = 7;
+    public static final int WORKING_COUNT = 7;
 
     /**
      * Points received for moving card from stacker to target stacker

@@ -148,7 +148,7 @@ public class CardView extends JButton {
      * Highlights the card. Draws a yellow rectangle around it.
      */
     public void highlight() {
-        this.setBorder(BorderFactory.createLineBorder(Color.orange, 5));
+        this.setBorder(BorderFactory.createLineBorder(Color.red,  5));
         this.repaint();
         Timer timer = new Timer(450, l->{
            this.setBorder(null);

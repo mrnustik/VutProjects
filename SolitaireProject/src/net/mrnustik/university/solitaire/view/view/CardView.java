@@ -62,7 +62,7 @@ public class CardView extends JButton {
      */
     @Override
     public Icon getIcon() {
-        URL resource = null;
+        URL resource;
         if (mCard == null)
             resource = getClass().getResource("/net/mrnustik/university/solitaire/view/images/CARD_EMPTY.png");
         else if (mCard.isFaceUp())

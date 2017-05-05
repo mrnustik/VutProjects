@@ -25,7 +25,7 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     /**
      * Board object of currently played game
      */
-    private Board board;
+    private final Board board;
 
     /**
      * View representing the deck of cards
@@ -50,16 +50,16 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
     /**
      * Index of the working stack that should be repainted
      */
-    int repaintWorkingIndex1 = -2;
+    private int repaintWorkingIndex1 = -2;
     /**
      * Index of the second working stack that should repainted
      */
-    int repaintWorkingIndex2 = -2;
+    private int repaintWorkingIndex2 = -2;
 
     /**
      * Current selection
      */
-    private Selection selection;
+    private final Selection selection;
 
     /**
      * Label showing current score
@@ -214,9 +214,9 @@ public class BoardPanel extends JPanel implements CardStackPanel.CardSelected {
         if (selection.isValid()) {
             boolean success = false;
             if (selection.getType() == Selection.SelectionType.STACKER) {
-                success = board.fromStackerToTarget(index);
+                success = board.fromStackerToTarget();
             } else if (selection.getType() == Selection.SelectionType.WORKING_PACK) {
-                success = board.fromWorkingToTarget(selection.getIndex(), index);
+                success = board.fromWorkingToTarget(selection.getIndex());
                 repaintWorkingIndex1 = selection.getIndex();
             }
             if(success) {

@@ -53,6 +53,7 @@ public interface Board {
      * Computes hint for the best possible move in this stage of the game
      * @return best hint for a move
      */
+    @SuppressWarnings("unused")
     Hint getBestHint();
 
     /**
@@ -70,22 +71,21 @@ public interface Board {
      * Turns card from the deck to the stacker
      * @return true if operation was successful
      */
+    @SuppressWarnings("UnusedReturnValue")
     boolean flipFromDeck();
 
     /**
      * Moves card from stacker to target stacker
-     * @param targetIndex index of the target stacker
      * @return true if operation was successful
      */
-    boolean fromStackerToTarget(int targetIndex);
+    boolean fromStackerToTarget();
 
     /**
      * Moves card from working stack to target stacker
      * @param workingIndex index of the working stack where the card will be taken from
-     * @param targetIndex index of the target stacker where the card will be put on
      * @return true if operation was successful
      */
-    boolean fromWorkingToTarget(int workingIndex, int targetIndex);
+    boolean fromWorkingToTarget(int workingIndex);
 
     /**
      * Moves card from target stacker to working stack

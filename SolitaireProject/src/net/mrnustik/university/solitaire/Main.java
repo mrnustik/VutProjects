@@ -11,7 +11,7 @@ import net.mrnustik.university.solitaire.view.frames.MainFrame;
  * Main class of the application. Used as entry point of the application.
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
-public class Main {
+class Main {
 
     /**
      * Entry point method of the applications.

@@ -14,7 +14,7 @@ import java.util.List;
  * JLayeredPane used to represent stack of cards
  * @author Mrnda (Michal Mrnuštík, xmrnus01)
  */
-public class CardStackPanel extends JLayeredPane implements ComponentListener {
+class CardStackPanel extends JLayeredPane implements ComponentListener {
 
     /**
      * Index of the workings stack
@@ -24,7 +24,7 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
     /**
      * Timer used for redrawing after resize
      */
-    private Timer timer;
+    private final Timer timer;
 
     /**
      * Stack to be shown in the panel
@@ -122,9 +122,7 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
         CardView view = new CardView(card);
         cards.add(view);
         add(view, new Integer(index));
-        view.addActionListener(l -> {
-            cardClicked(l.getSource());
-        });
+        view.addActionListener(l -> cardClicked(l.getSource()));
         return view;
     }
 
@@ -172,7 +170,7 @@ public class CardStackPanel extends JLayeredPane implements ComponentListener {
      * Highlights the cards in stack until specified card
      * @param highlightCard last card to be highlighted
      */
-    public void highlight(Card highlightCard) {
+    void highlight(Card highlightCard) {
         boolean highlight = false;
         for (CardView card :
                 this.cards) {

@@ -13,12 +13,12 @@ public class FlipCommand extends AbstractCommand {
     /**
      * Stacker where cards will turned on.
      */
-    private CardStacker stacker;
+    private final CardStacker stacker;
 
     /**
      * Deck where the cards will be taken from.
      */
-    private CardDeck deck;
+    private final CardDeck deck;
 
     /**
      * Indicator whether the stacker was turned back on deck

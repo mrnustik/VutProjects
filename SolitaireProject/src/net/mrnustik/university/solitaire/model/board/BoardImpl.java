@@ -151,7 +151,7 @@ public class BoardImpl implements Board {
      */
     @Override
     public Hint getBestHint() {
-        Hint hint = null;
+        Hint hint;
         hint = findMoveWorkingToTarget().get(0);
         if(hint == null)
             hint = findMoveStackerToTarget().get(0);
@@ -343,7 +343,7 @@ public class BoardImpl implements Board {
      * @inheritDoc
      */
     @Override
-    public boolean fromStackerToTarget(int targetIndex) {
+    public boolean fromStackerToTarget() {
         Card card = stacker.get();
         CardStacker target = getTargetStackerForCard(card);
         if(target != null) {
@@ -360,10 +360,9 @@ public class BoardImpl implements Board {
      * @return true if there is an available target stacker
      */
     private CardStacker getTargetStackerForCard(Card card) {
-        for(int i = 0; i< targets.length; i++){
-            if(targets[i].canPut(card))
-            {
-                return targets[i];
+        for (CardStacker target : targets) {
+            if (target.canPut(card)) {
+                return target;
             }
         }
         return null;
@@ -373,7 +372,7 @@ public class BoardImpl implements Board {
      * @inheritDoc
      */
     @Override
-    public boolean fromWorkingToTarget(int workingIndex, int targetIndex) {
+    public boolean fromWorkingToTarget(int workingIndex) {
         Card card = workingStacks[workingIndex].get();
         CardStacker target = getTargetStackerForCard(card);
         if(target != null) {

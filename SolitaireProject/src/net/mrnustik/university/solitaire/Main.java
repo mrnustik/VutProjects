@@ -5,7 +5,7 @@
  */
 package net.mrnustik.university.solitaire;
 
-import net.mrnustik.university.solitaire.gui.frames.MainFrame;
+import net.mrnustik.university.solitaire.view.frames.MainFrame;
 
 /**
  * Main class of the application. Used as entry point of the application.
@@ -15,7 +15,7 @@ public class Main {
 
     /**
      * Entry point method of the applications.
-     * Just starts the gui and sets it to visible.
+     * Just starts the view and sets it to visible.
      * @param args arguments from command line
      */
     public static void main(String args[]) {

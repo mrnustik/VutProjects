@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "Logger.h"
 
 
 Application::Application(const Arguments* arguments): arguments(arguments) 
@@ -11,6 +12,15 @@ int Application::Run()
 	{
 		this->PrintHelp();
 		return 0;
+	}
+	if(this->arguments->network.networkAddress != 0)
+	{
+		IpNetworkEnumerator enumerator = arguments->network.GetEnumerator();
+		while(enumerator.MoveNext())
+		{
+			auto currentAddress = enumerator.Current();
+			Logger::Debug("Scanning", "Currently on: " + currentAddress.ToString());
+		}
 	}
 	return 0;
 }

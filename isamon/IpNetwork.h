@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-
+#include "IpNetworkEnumerator.h"
 
 class IpNetwork
 {
@@ -10,8 +10,11 @@ public:
 	~IpNetwork();
 	std::string ToString() const;
 	static IpNetwork FromCidr(std::string cidr);
-private:
+	IpNetworkEnumerator GetEnumerator() const;
 	unsigned int networkAddress;
 	unsigned short cidrMask;
+	unsigned int FirstAddress() const;
+	unsigned int BroadcastAddress() const;
+
 };
 

@@ -7,7 +7,7 @@
 class IpAddress
 {
 public:
-	IpAddress();
+	IpAddress(unsigned int address);
 	~IpAddress();
 	struct in_addr ToInAddr();
 	virtual std::string ToString();

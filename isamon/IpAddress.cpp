@@ -4,10 +4,9 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-IpAddress::IpAddress() : address(0)
+IpAddress::IpAddress(unsigned int address) : address(address)
 {
 }
-
 
 IpAddress::~IpAddress()
 {

@@ -65,6 +65,7 @@
     <ClCompile Include="Arguments.cpp" />
     <ClCompile Include="IpAddress.cpp" />
     <ClCompile Include="IpNetwork.cpp" />
+    <ClCompile Include="IpNetworkEnumerator.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -73,6 +74,7 @@
     <ClInclude Include="Arguments.h" />
     <ClInclude Include="IpAddress.h" />
     <ClInclude Include="IpNetwork.h" />
+    <ClInclude Include="IpNetworkEnumerator.h" />
     <ClInclude Include="Logger.h" />
   </ItemGroup>
   <ItemDefinitionGroup />

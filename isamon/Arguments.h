@@ -11,8 +11,9 @@
 
 class Arguments {
 public:
-    Arguments();
+	Arguments();
     bool flagHelp;
+	int interfaceNumber;
     std::string interfaceName;
     bool flagTcp;
     bool flagUdp;

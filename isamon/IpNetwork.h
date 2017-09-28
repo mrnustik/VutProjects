@@ -5,12 +5,13 @@
 class IpNetwork
 {
 public:
-	IpNetwork(const unsigned int networkAddress, const unsigned short cidrMask);
+	IpNetwork();
+	IpNetwork(unsigned int networkAddress, unsigned short cidrMask);
 	~IpNetwork();
 	std::string ToString() const;
 	static IpNetwork FromCidr(std::string cidr);
 private:
-	const unsigned int networkAddress;
-	const unsigned short cidrMask;
+	unsigned int networkAddress;
+	unsigned short cidrMask;
 };
 

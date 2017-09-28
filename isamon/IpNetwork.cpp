@@ -1,9 +1,14 @@
 #include "IpNetwork.h"
 
 #include <sstream>
+#include "Logger.h"
 
 
-IpNetwork::IpNetwork(const unsigned int networkAddress, const unsigned short cidrMask) : networkAddress(networkAddress), cidrMask(cidrMask)
+IpNetwork::IpNetwork(): networkAddress(0), cidrMask(0)
+{
+}
+
+IpNetwork::IpNetwork(unsigned int networkAddress, unsigned short cidrMask) : networkAddress(networkAddress), cidrMask(cidrMask)
 {
 }
 
@@ -32,9 +37,10 @@ IpNetwork IpNetwork::FromCidr(std::string cidr)
 	short secondOctet;
 	short thirdOctet;
 	short fourthOctet;
-	const unsigned short cidrMask;
+	unsigned short cidrMask;
 	int result = sscanf(cidr.c_str(), "%i.%i.%i.%i/%i", &firstOctet, &secondOctet, &thirdOctet, &fourthOctet, &cidrMask);
 	if (result != 5) throw new std::exception();
-	const unsigned int ipAddress = (firstOctet << 24) | (secondOctet << 16) | (thirdOctet << 8) | firstOctet;
-	return IpNetwork(ipAddress, cidrMask);
+	unsigned int ipAddress = (firstOctet << 24) | (secondOctet << 16) | (thirdOctet << 8) | fourthOctet;
+	IpNetwork network(ipAddress, cidrMask);
+	return network;
 }

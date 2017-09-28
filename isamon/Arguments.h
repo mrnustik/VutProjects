@@ -7,7 +7,7 @@
 
 #include <string>
 #include <iostream>
-#include "Logger.h"
+#include "IpNetwork.h"
 
 class Arguments {
 public:
@@ -18,6 +18,7 @@ public:
     bool flagUdp;
     int portNumber;
     int maxRtt;
+	IpNetwork network;
     static const int AllPorts = -1;
     static Arguments* ParseArguments(int argc, char* argv[]);
 private:

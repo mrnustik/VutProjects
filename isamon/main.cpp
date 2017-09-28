@@ -5,9 +5,10 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 	const auto arguments = Arguments::ParseArguments(argc, argv);
-    if(arguments == nullptr){
+    if(arguments == nullptr)
+	{
         return 1;
     }
 	Application application(arguments);
-    return 0;
+	return application.Run();
 }

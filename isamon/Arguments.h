@@ -19,8 +19,10 @@ public:
     int portNumber;
     int maxRtt;
     static const int AllPorts = -1;
-    static Arguments* parseArguments(int argc, char* argv[]);
+    static Arguments* ParseArguments(int argc, char* argv[]);
+	static Arguments* GetInstance();
 private:
+	static Arguments* instance;
     std::string networkString;
 };
 

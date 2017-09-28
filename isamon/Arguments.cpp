@@ -4,7 +4,7 @@
 
 #include "Arguments.h"
 
-Arguments *Arguments::parseArguments(int argc, char **argv) {
+Arguments *Arguments::ParseArguments(int argc, char *argv[]) {
     auto *arguments = new Arguments;
     for (int i = 0; i < argc; ++i) {
 	    const std::string currentArg(argv[i]);
@@ -57,7 +57,13 @@ Arguments *Arguments::parseArguments(int argc, char **argv) {
         }
 
     }
+	Arguments::instance = arguments;
     return arguments;
+}
+
+Arguments* Arguments::GetInstance()
+{
+	return Arguments::instance;
 }
 
 Arguments::Arguments() {

@@ -61,12 +61,12 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
-    <ClCompile Include="..\..\isa\Arguments.cpp" />
-    <ClCompile Include="..\..\isa\main.cpp" />
+    <ClCompile Include="Arguments.cpp" />
     <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\isa\Arguments.h" />
+    <ClInclude Include="Arguments.h" />
     <ClInclude Include="Logger.h" />
   </ItemGroup>
   <ItemDefinitionGroup />

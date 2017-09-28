@@ -57,13 +57,7 @@ Arguments *Arguments::ParseArguments(int argc, char *argv[]) {
         }
 
     }
-	Arguments::instance = arguments;
     return arguments;
-}
-
-Arguments* Arguments::GetInstance()
-{
-	return Arguments::instance;
 }
 
 Arguments::Arguments() {

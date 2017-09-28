@@ -13,7 +13,7 @@ class Arguments {
 public:
 	Arguments();
     bool flagHelp;
-	int interfaceNumber;
+	unsigned int interfaceNumber;
     std::string interfaceName;
     bool flagTcp;
     bool flagUdp;

@@ -4,6 +4,7 @@
 
 #include "Arguments.h"
 #include "Logger.h"
+#include "NetworkHelper.h"
 
 Arguments* Arguments::ParseArguments(int argc, char* argv[])
 {
@@ -94,6 +95,7 @@ Arguments* Arguments::ParseArguments(int argc, char* argv[])
 				Logger::Error("Arguments", "Missing interface argument");
 			}
 			arguments->interfaceName = std::string(argv[i]);
+			arguments->interfaceNumber = NetworkHelper::GetNetworkInterfaceNumber(arguments->interfaceName);
 		}
 		else
 		{
@@ -106,6 +108,7 @@ Arguments* Arguments::ParseArguments(int argc, char* argv[])
 	Logger::Debug("Arguments", "TCP: " + std::to_string(arguments->flagTcp));
 	Logger::Debug("Arguments", "UDP: " + std::to_string(arguments->flagUdp));
 	Logger::Debug("Arguments", "Interface name: " + arguments->interfaceName);
+	Logger::Debug("Arguments", "Interface number: " + std::to_string(arguments->interfaceNumber));
 	Logger::Debug("Arguments", "IP network: " + arguments->network.ToString());
 	Logger::Debug("Arguments", "Port number: " + std::to_string(arguments->portNumber));
 	Logger::Debug("Arguments", "Maximum RTT: " + std::to_string(arguments->maxRtt));
@@ -119,6 +122,7 @@ Arguments::Arguments() : network(IpNetwork::FromCidr("0.0.0.0/0"))
 	this->flagUdp = false;
 	this->networkString = "";
 	this->interfaceName = "";
+	this->interfaceNumber = 0;
 	this->maxRtt = -1;
 	this->portNumber = AllPorts;
 }

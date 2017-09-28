@@ -7,7 +7,7 @@
 Arguments *Arguments::parseArguments(int argc, char **argv) {
     auto *arguments = new Arguments;
     for (int i = 0; i < argc; ++i) {
-        std::string currentArg(argv[i]);
+	    const std::string currentArg(argv[i]);
         if(currentArg == "-h" || currentArg == "--help"){
             arguments->flagHelp = true;
         } else if(currentArg == "-t"){
@@ -16,39 +16,39 @@ Arguments *Arguments::parseArguments(int argc, char **argv) {
             arguments->flagUdp = true;
         } else if(currentArg == "-p" || currentArg == "--port") {
             if (++i >= argc) {
-                std::cerr << "Missing port number";
+				Logger::Error("Arguments", "Missing port number argument");
                 return nullptr;
             }
-            std::string port(argv[i]);
+	        const std::string port(argv[i]);
             try {
                 arguments->portNumber = stoi(port);
             } catch (...) {
-                std::cerr << "Could not parse port number." << argv[i];
+				Logger::Error("Arguments", "Invalid port number argument");
                 return nullptr;
             }
             if (arguments->portNumber < 0 || arguments->portNumber > 65535) {
-                std::cerr << "Invalid port number: " << arguments->portNumber;
+				Logger::Error("Arguments", "Invalid port number argument");
                 return nullptr;
             }
         } else if(currentArg == "-w" || currentArg == "--wait") {
             if (++i >= argc) {
-                std::cerr << "Missing maximum RTT";
+				Logger::Error("Arguments", "Missing maximum RTT argument");
                 return nullptr;
             }
-            std::string wait(argv[i]);
+	        const std::string wait(argv[i]);
             try {
                 arguments->maxRtt = stoi(wait);
             } catch (...) {
-                std::cerr << "Could not parse maximum RTT: " << argv[i];
+				Logger::Error("Arguments", "Invalid maximum RTT argument");
                 return nullptr;
             }
             if (arguments->maxRtt < 0) {
-                std::cerr << "Invalid maximum RTT: " << arguments->portNumber;
+				Logger::Error("Arguments", "Invalid maximum RTT argument");
                 return nullptr;
             }
         } else if(currentArg == "-n" || currentArg == "--network"){
             if(++i >= argc) {
-                std::cerr << "Missing network defininiton";
+				Logger::Error("Arguments", "Missing network describing argument");
                 return nullptr;
             }
         } else {
@@ -66,6 +66,6 @@ Arguments::Arguments() {
     this->flagUdp = false;
     this->networkString = "";
     this->interfaceName = "";
-    this->maxRtt = 1000;
+    this->maxRtt = -1;
     this->portNumber = AllPorts;
 }

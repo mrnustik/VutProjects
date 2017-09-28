@@ -63,21 +63,25 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Arguments.cpp" />
+    <ClCompile Include="ICMPSender.cpp" />
     <ClCompile Include="IpAddress.cpp" />
     <ClCompile Include="IpNetwork.cpp" />
     <ClCompile Include="IpNetworkEnumerator.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetworkHelper.cpp" />
+    <ClCompile Include="SocketSender.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Arguments.h" />
+    <ClInclude Include="ICMPSender.h" />
     <ClInclude Include="IpAddress.h" />
     <ClInclude Include="IpNetwork.h" />
     <ClInclude Include="IpNetworkEnumerator.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="NetworkHelper.h" />
+    <ClInclude Include="SocketSender.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

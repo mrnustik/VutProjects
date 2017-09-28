@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "Logger.h"
+#include "ICMPSender.h"
 
 
 Application::Application(const Arguments* arguments): arguments(arguments) 
@@ -16,10 +17,12 @@ int Application::Run()
 	if(this->arguments->network.networkAddress != 0)
 	{
 		IpNetworkEnumerator enumerator = arguments->network.GetEnumerator();
+		ICMPSender sender(arguments);
 		while(enumerator.MoveNext())
 		{
 			auto currentAddress = enumerator.Current();
 			Logger::Debug("Scanning", "Currently on: " + currentAddress.ToString());
+			sender.SendPing(currentAddress);
 		}
 	}
 	return 0;

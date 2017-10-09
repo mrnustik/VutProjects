@@ -71,6 +71,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetworkHelper.cpp" />
     <ClCompile Include="SocketSender.cpp" />
+    <ClCompile Include="TCPScanner.cpp" />
+    <ClCompile Include="UdpScanner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -82,6 +84,8 @@
     <ClInclude Include="Logger.h" />
     <ClInclude Include="NetworkHelper.h" />
     <ClInclude Include="SocketSender.h" />
+    <ClInclude Include="TCPScanner.h" />
+    <ClInclude Include="UdpScanner.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

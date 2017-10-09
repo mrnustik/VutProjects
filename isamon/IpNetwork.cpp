@@ -38,10 +38,11 @@ IpNetwork IpNetwork::FromCidr(std::string cidr)
 	int secondOctet;
 	int thirdOctet;
 	int fourthOctet;
+	char del1, del2, del3, del4;
 	unsigned short cidrMask;
-	int result = sscanf(cidr.c_str(), "%d.%d.%d.%d/%d", &firstOctet, &secondOctet, &thirdOctet, &fourthOctet, &cidrMask);
-	if (result != 5) throw new std::exception();
-	unsigned int ipAddress = (firstOctet << 24) | (secondOctet << 16) | (thirdOctet << 8) | fourthOctet;
+	std::stringstream stream(cidr);
+	stream >> firstOctet >> del1 >> secondOctet >> del2 >> thirdOctet >> del3 >> fourthOctet >> del4 >> cidrMask;
+	unsigned int ipAddress = ((firstOctet & 255) << 24) | ((secondOctet & 255) << 16) | ((thirdOctet & 255) << 8) | (fourthOctet & 255);
 	IpNetwork network(ipAddress, cidrMask);
 	return network;
 }

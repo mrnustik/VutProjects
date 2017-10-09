@@ -6,14 +6,8 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <netdb.h>
+#include "Logger.h"
 
-
-#define PACKETSIZE	64
-struct ICMPPacket
-{
-	struct icmphdr hdr;
-	char msg[PACKETSIZE - sizeof(struct icmphdr)];
-};
 
 ICMPSender::ICMPSender(const Arguments* arguments): arguments(arguments) {
 }
@@ -25,49 +19,75 @@ ICMPSender::~ICMPSender()
 
 bool ICMPSender::SendPing(IpAddress& address)
 {
-	int socketNumber;
-	struct sockaddr_in socketAddress;
-	struct ICMPPacket packet;
-	struct sockaddr_in r_addr;
-	struct timeval t;
-	char recieveBuffer[1024];
-	auto proto = getprotobyname("ICMP");
-	t.tv_usec = arguments->maxRtt;
-	fd_set socks;
-	bzero(&socketAddress, sizeof(socketAddress));
-	bzero(&packet, sizeof(packet));
-	GetSocketAddress(address, &socketAddress);
-	auto addressLength = sizeof(socketAddress.sin_addr);
-	if((socketNumber = socket(AF_INET, SOCK_RAW, proto->p_proto)) < 0)
+	struct icmphdr icmp_hdr;
+	struct sockaddr_in addr;
+	struct timeval timeout = { 3, 0 }; //wait max 3 seconds for a reply
+	memset(&icmp_hdr, 0, sizeof icmp_hdr);
+	memset(&addr, 0, sizeof addr);
+	int socketFd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+	if (socketFd < 0)
 	{
-		int err = errno;
-		switch (errno)
-		{
-		case EACCES:
-			break;
-		case EINVAL:
-			break;
-		}
-		std::cout << strerror(err);
-		//TODO Add socket exception
+		std::cout << strerror(errno) << std::endl;
+		Logger::Error("ICMPScanner", "Could not open socket");
 		throw new std::exception();
 	}
-	packet.hdr.type = ICMP_ECHO;
-	packet.hdr.un.echo.id = getpid();
-	packet.msg[0] = 0;
-	packet.hdr.un.echo.sequence = 1;
-	packet.hdr.checksum = this->Checksum(&packet, sizeof(packet));
-	FD_ZERO(&socks);
-	FD_SET(socketNumber, &socks);
-	sendto(socketNumber, &packet, sizeof(packet), 0, (struct sockaddr*)&socketAddress, sizeof(socketAddress));
-	select(socketNumber + 1, &socks, nullptr, nullptr, &t);
-	recvfrom(socketNumber, recieveBuffer, sizeof(recieveBuffer), 0, (struct sockaddr*) &socketAddress, (socklen_t *) &addressLength);
+	GetSocketAddress(address, &addr);
+	icmp_hdr.type = ICMP_ECHO;
+	icmp_hdr.un.echo.id = IcmpEchoId;
 
+	unsigned char buffer[1024];
+	int result = 0;
+	fd_set read_set;
+	socklen_t len;
+	struct icmphdr recieved_header;
+
+	icmp_hdr.un.echo.sequence = 1;
+	icmp_hdr.checksum = this->Checksum(&icmp_hdr, sizeof icmp_hdr);
+	memcpy(buffer, &icmp_hdr, sizeof icmp_hdr);
+	result = sendto(socketFd, buffer, sizeof icmp_hdr,
+		0, (struct sockaddr*)&addr, sizeof addr);
+	if (result <= 0)
+	{
+		Logger::Debug("ICMPScanner", "Cant send");
+		return false;
+	}
+	Logger::Debug("ICMPScanner", "ECHO sent");
+	memset(&read_set, 0, sizeof read_set);
+	FD_SET(socketFd, &read_set);
+
+	//wait for a reply with a timeout
+	result = select(socketFd + 1, &read_set, NULL, NULL, &timeout);
+	if (result == 0) {
+		Logger::Debug("ICMPScanner", "Select timeout");
+		return false;
+	}
+	else if (result < 0) {
+		Logger::Debug("ICMPScanner", "Select timeout");
+		return false;
+	}
+
+	//we don't care about the sender address in this example..
+	len = 0;
+	result = recvfrom(socketFd, buffer, sizeof buffer, 0, (struct sockaddr*)&addr, &len);
+	if (result <= 0) {
+		return false;
+	}
+	if (result < sizeof recieved_header) {
+		return false;
+	}
+	memcpy(&recieved_header, buffer + (result - 8), sizeof recieved_header);
+	if (recieved_header.type == ICMP_ECHOREPLY && recieved_header.un.echo.id == IcmpEchoId) {
+		Logger::Debug("ICMPScanner", "Echo reply");
+		return true;
+	}
+	else {
+		Logger::Debug("ICMPScanner", "Invalid ICMP messager");
+	}
+	return false;
 }
 
 void ICMPSender::GetSocketAddress(IpAddress& address, struct sockaddr_in * socketAddress)
 {
 	socketAddress->sin_addr = address.ToInAddr();
-	socketAddress->sin_port = 0;
 	socketAddress->sin_family = AF_INET;
 }

@@ -20,5 +20,6 @@ public:
 private:
 	Logger();
 	static void WriteOutput(Colour outputColour, std::string category, std::string message);
+	static const bool IsDebug = false;
 };
 

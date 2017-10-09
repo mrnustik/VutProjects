@@ -12,5 +12,7 @@ public:
 private:
 	void GetSocketAddress(IpAddress& address, struct sockaddr_in * socketAddress);
 	const Arguments* arguments;
+protected:
+	static const int IcmpEchoId = 1234;
 };
 

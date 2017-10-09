@@ -29,6 +29,7 @@ Logger::~Logger()
 
 void Logger::WriteOutput(Colour outputColour, std::string category, std::string message)
 {
+	if (!IsDebug) return;
 	std::string colourFormat;
 	switch (outputColour)
 	{

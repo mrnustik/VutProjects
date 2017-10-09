@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "Logger.h"
 #include "ICMPSender.h"
-#include "TcpScanner.h"
+#include "TCPScanner.h"
 #include "UdpScanner.h"
 
 
@@ -35,8 +35,19 @@ int Application::Run()
 						{
 							Logger::Debug("TCP Port", "Open port on: " + currentAddress.ToString() + ":" + std::to_string(port));
 							std::cout << currentAddress.ToString() << " TCP " << port << std::endl;
+							continue;
+						}
+					} 
+					if (arguments->flagUdp)
+					{
+						if (udpScanner.Scan(currentAddress, port))
+						{
+							Logger::Debug("UDP Port", "Open port on: " + currentAddress.ToString() + ":" + std::to_string(port));
+							std::cout << currentAddress.ToString() << " UDP " << port << std::endl;
+							continue;
 						}
 					}
+					
 				}
 			}
 		}

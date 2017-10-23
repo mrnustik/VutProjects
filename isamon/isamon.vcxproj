@@ -63,6 +63,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Arguments.cpp" />
+    <ClCompile Include="ArpScanner.cpp" />
     <ClCompile Include="ICMPSender.cpp" />
     <ClCompile Include="IpAddress.cpp" />
     <ClCompile Include="IpNetwork.cpp" />
@@ -77,6 +78,7 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Arguments.h" />
+    <ClInclude Include="ArpScanner.h" />
     <ClInclude Include="ICMPSender.h" />
     <ClInclude Include="IpAddress.h" />
     <ClInclude Include="IpNetwork.h" />
@@ -87,7 +89,11 @@
     <ClInclude Include="TCPScanner.h" />
     <ClInclude Include="UdpScanner.h" />
   </ItemGroup>
-  <ItemDefinitionGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <LibraryDependencies>pcap</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

@@ -10,7 +10,7 @@ public:
 	IpAddress(unsigned int address);
 	~IpAddress();
 	struct in_addr ToInAddr();
-	virtual std::string ToString();
+	std::string ToString() const;
 private:
 	unsigned int address;
 };

@@ -19,7 +19,7 @@ in_addr IpAddress::ToInAddr()
 	return addr;
 }
 
-std::string IpAddress::ToString()
+std::string IpAddress::ToString() const
 {
 	short fourthOctet = this->address & 255;
 	short thirdOctet = (this->address >> 8) & 255;

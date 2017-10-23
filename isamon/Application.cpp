@@ -3,6 +3,8 @@
 #include "ICMPSender.h"
 #include "TCPScanner.h"
 #include "UdpScanner.h"
+#include "ArpScanner.h"
+
 
 
 Application::Application(const Arguments* arguments): arguments(arguments) 
@@ -16,10 +18,11 @@ int Application::Run()
 		this->PrintHelp();
 		return 0;
 	}
-	if(this->arguments->network.networkAddress != 0)
+	if (this->arguments->network.networkAddress != 0)
 	{
 		IpNetworkEnumerator enumerator = arguments->network.GetEnumerator();
-		ICMPSender pingSender(arguments);
+		ArpScanner arpScanner(arguments);
+		IcmpSender pingSender(arguments);
 		TcpScanner tcpScanner(arguments);
 		UdpScanner udpScanner(arguments);
 		while(enumerator.MoveNext())
@@ -28,14 +31,13 @@ int Application::Run()
 			Logger::Debug("Scanning", "Currently on: " + currentAddress.ToString());
 			if (pingSender.SendPing(currentAddress)) {
 				std::cout << currentAddress.ToString() << std::endl;
-				for (int port = 0; port <= 65535; port++)
+				for (int port = 1; port <= 65535; port++)
 				{
 					if (arguments->flagTcp) {
 						if (tcpScanner.Scan(currentAddress, port))
 						{
 							Logger::Debug("TCP Port", "Open port on: " + currentAddress.ToString() + ":" + std::to_string(port));
 							std::cout << currentAddress.ToString() << " TCP " << port << std::endl;
-							continue;
 						}
 					} 
 					if (arguments->flagUdp)
@@ -44,7 +46,6 @@ int Application::Run()
 						{
 							Logger::Debug("UDP Port", "Open port on: " + currentAddress.ToString() + ":" + std::to_string(port));
 							std::cout << currentAddress.ToString() << " UDP " << port << std::endl;
-							continue;
 						}
 					}
 					

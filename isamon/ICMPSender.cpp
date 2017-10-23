@@ -9,19 +9,19 @@
 #include "Logger.h"
 
 
-ICMPSender::ICMPSender(const Arguments* arguments): arguments(arguments) {
+IcmpSender::IcmpSender(const Arguments* arguments): arguments(arguments) {
 }
 
 
-ICMPSender::~ICMPSender()
+IcmpSender::~IcmpSender()
 {
 }
 
-bool ICMPSender::SendPing(IpAddress& address)
+bool IcmpSender::SendPing(IpAddress& address)
 {
 	struct icmphdr icmp_hdr;
 	struct sockaddr_in addr;
-	struct timeval timeout = { 3, 0 }; //wait max 3 seconds for a reply
+	struct timeval timeout = { arguments->maxRtt / 1000 , arguments->maxRtt % 1000 }; //wait max 3 seconds for a reply
 	memset(&icmp_hdr, 0, sizeof icmp_hdr);
 	memset(&addr, 0, sizeof addr);
 	int socketFd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
@@ -40,7 +40,6 @@ bool ICMPSender::SendPing(IpAddress& address)
 	fd_set read_set;
 	socklen_t len;
 	struct icmphdr recieved_header;
-
 	icmp_hdr.un.echo.sequence = 1;
 	icmp_hdr.checksum = this->Checksum(&icmp_hdr, sizeof icmp_hdr);
 	memcpy(buffer, &icmp_hdr, sizeof icmp_hdr);
@@ -65,7 +64,7 @@ bool ICMPSender::SendPing(IpAddress& address)
 		Logger::Debug("ICMPScanner", "Select timeout");
 		return false;
 	}
-
+	//usleep(arguments->maxRtt);
 	//we don't care about the sender address in this example..
 	len = 0;
 	result = recvfrom(socketFd, buffer, sizeof buffer, 0, (struct sockaddr*)&addr, &len);
@@ -75,7 +74,10 @@ bool ICMPSender::SendPing(IpAddress& address)
 	if (result < sizeof recieved_header) {
 		return false;
 	}
-	memcpy(&recieved_header, buffer + (result - 8), sizeof recieved_header);
+	struct ip *ip_header = (ip*)buffer;
+	const int ipLength = ip_header->ip_hl << 2;
+
+	memcpy(&recieved_header, buffer + ipLength, sizeof recieved_header);
 	if (recieved_header.type == ICMP_ECHOREPLY && recieved_header.un.echo.id == IcmpEchoId) {
 		Logger::Debug("ICMPScanner", "Echo reply");
 		return true;
@@ -86,7 +88,7 @@ bool ICMPSender::SendPing(IpAddress& address)
 	return false;
 }
 
-void ICMPSender::GetSocketAddress(IpAddress& address, struct sockaddr_in * socketAddress)
+void IcmpSender::GetSocketAddress(IpAddress& address, struct sockaddr_in * socketAddress)
 {
 	socketAddress->sin_addr = address.ToInAddr();
 	socketAddress->sin_family = AF_INET;

@@ -43,7 +43,6 @@ IpNetwork IpNetwork::FromCidr(std::string cidr)
 	std::stringstream stream(cidr);
 	stream >> firstOctet >> del1 >> secondOctet >> del2 >> thirdOctet >> del3 >> fourthOctet >> del4 >> cidrMask;
 	unsigned int ipAddress = ((firstOctet & 255) << 24) | ((secondOctet & 255) << 16) | ((thirdOctet & 255) << 8) | (fourthOctet & 255);
-
 	IpNetwork network(ipAddress, cidrMask);
 	return network;
 }

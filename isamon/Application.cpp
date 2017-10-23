@@ -29,7 +29,7 @@ int Application::Run()
 		{
 			auto currentAddress = enumerator.Current();
 			Logger::Debug("Scanning", "Currently on: " + currentAddress.ToString());
-			if (pingSender.SendPing(currentAddress)) {
+			if (arpScanner.ScanAddress(currentAddress) || pingSender.SendPing(currentAddress)) {
 				std::cout << currentAddress.ToString() << std::endl;
 				for (int port = 1; port <= 65535; port++)
 				{

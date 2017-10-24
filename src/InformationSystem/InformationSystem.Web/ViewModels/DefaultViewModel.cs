@@ -15,7 +15,7 @@ namespace InformationSystem.Web.ViewModels
 
 		public DefaultViewModel()
 		{
-			Title = "Hello from DotVVM!";
+			Title = "Hello from IIS project!";
 		}
     }
 }

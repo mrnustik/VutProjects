@@ -31,6 +31,11 @@ namespace InformationSystem.Web
         {
             loggerFactory.AddConsole();
 
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+
             // use DotVVM
             var dotvvmConfiguration = app.UseDotVVM<DotvvmStartup>(env.ContentRootPath);
             

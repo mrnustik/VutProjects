@@ -2,6 +2,6 @@
   "name": "informationsystem.web",
   "private": true,
   "dependencies": {
-
+    "bootstrap": "v3.3.7"
   }
 }

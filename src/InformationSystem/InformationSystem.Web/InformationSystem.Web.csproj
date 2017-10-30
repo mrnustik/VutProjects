@@ -13,14 +13,16 @@
         </Content>
         <!--Include Custom Control Views-->
         <Content Include="**/*.dotcontrol" Exclude="obj/**/*.*;bin/**/*.*">
-            <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+          <CopyToPublishDirectory>Always</CopyToPublishDirectory>
         </Content>
     </ItemGroup>
     <ItemGroup>
         <None Remove="dotvvm_serialized_config.json.tmp" />
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="wwwroot\" />
+      <Folder Include="wwwroot\">
+        <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      </Folder>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />

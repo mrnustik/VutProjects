@@ -4,14 +4,14 @@
 <dot:Content ContentPlaceHolderID="MainContent">
 
     <form>
-        <div>
-            Email: <dot:TextBox Text="{value: Email}" Type="Email" />
+        <div class="form-group">
+            Email: <dot:TextBox class="form-control" Text="{value: Email}" Type="Email" />
         </div>
-        <div>
-            Password: <dot:TextBox Text="{value: Password}" Type="Password" />
+        <div class="form-group">
+            Password: <dot:TextBox class="form-control" Text="{value: Password}" Type="Password" />
         </div>
-        <dot:RouteLink Text="Register" RouteName="Authentication_Register"/>
-        <dot:Button Text="Sign In" Click="{command: SingInAsync()}"/>
+        <dot:RouteLink class="btn btn-default" Text="Register" RouteName="Authentication_Register"/>
+        <dot:Button class="btn btn-default" Text="Sign In" Click="{command: SingInAsync()}"/>
         <dot:ValidationSummary/>
     </form>
 </dot:Content>

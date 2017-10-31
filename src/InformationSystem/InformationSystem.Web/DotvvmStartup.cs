@@ -27,6 +27,9 @@ namespace InformationSystem.Web
 
         private void ConfigureResources(DotvvmConfiguration config, string applicationPath)
         {
+            config.Resources.Register("jquery", new ScriptResource(new UrlResourceLocation("https://code.jquery.com/jquery-3.2.1.slim.min.js")));
+            config.Resources.Register("bootstrap-js", new ScriptResource(new UrlResourceLocation("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js")){Dependencies = new []{"jquery"}});
+            config.Resources.Register("bootstrap", new StylesheetResource(new UrlResourceLocation("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")){Dependencies = new []{"bootstrap-js"}});
             // register custom resources and adjust paths to the built-in resources
         }
     }

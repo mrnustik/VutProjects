@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <title>InformationSystem.Web</title>
+    <dot:RequiredResource Name="bootstrap"/>
 </head>
 <body>
     <div>

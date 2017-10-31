@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace InformationSystem.DAL.Entities
 {
@@ -6,7 +8,7 @@ namespace InformationSystem.DAL.Entities
     {
         [Required]
         public string CarIdentification { get; set; }
-        [Required]
-        public virtual UserEntity Owner { get; set; }
+        [ForeignKey("OwnerId")]
+        public virtual IdentityUser Owner { get; set; }
     }
 }

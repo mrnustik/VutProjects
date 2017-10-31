@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace InformationSystem.DAL.Entities
 {
@@ -14,8 +17,8 @@ namespace InformationSystem.DAL.Entities
         public DateTime ReservationTime { get; set; }
         [Required]
         public int Duration { get; set; }
-        [Required]
-        public virtual UserEntity Mechanic { get; set; }
+        [ForeignKey("MechanicId")]
+        public IdentityUser Mechanic { get; set; }
         [Required]
         public virtual CarEntity Car { get; set; }
         public IList<UsedMaterialEntity> UsedMaterials { get; set; } = new List<UsedMaterialEntity>();

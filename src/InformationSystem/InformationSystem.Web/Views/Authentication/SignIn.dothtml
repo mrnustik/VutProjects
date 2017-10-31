@@ -1,0 +1,18 @@
+﻿@viewModel InformationSystem.Web.ViewModels.Authentication.SignInViewModel, InformationSystem.Web
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content ContentPlaceHolderID="MainContent">
+
+    <form>
+        <div>
+            Email: <dot:TextBox Text="{value: Email}" Type="Email" />
+        </div>
+        <div>
+            Password: <dot:TextBox Text="{value: Password}" Type="Password" />
+        </div>
+        <dot:RouteLink Text="Register" RouteName="Authentication_Register"/>
+        <dot:Button Text="Sign In" Click="{command: SingInAsync()}"/>
+        <dot:ValidationSummary/>
+    </form>
+</dot:Content>
+

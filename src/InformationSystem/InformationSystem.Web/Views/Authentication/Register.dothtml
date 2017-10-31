@@ -1,0 +1,21 @@
+﻿@viewModel InformationSystem.Web.ViewModels.Authentication.RegisterViewModel, InformationSystem.Web
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content ContentPlaceHolderID="MainContent">
+
+    <form>
+        <div>
+            Email: <dot:TextBox Text="{value: Email}" Type="Email" />
+        </div>
+        <div>
+            Password: <dot:TextBox Text="{value: Password}" Type="Password" />
+        </div>
+        <div>
+            Confirm Pasword: <dot:TextBox Text="{value: ConfirmPassword}" Type="Password" />
+        </div>
+        <dot:Button Text="Register" Click="{command: RegisterAsync()}" IsSubmitButton="true" />
+        <dot:ValidationSummary />
+    </form>
+
+</dot:Content>
+

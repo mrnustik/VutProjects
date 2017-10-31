@@ -1,6 +1,15 @@
 ﻿@viewModel InformationSystem.Web.ViewModels.DefaultViewModel, InformationSystem.Web
 @masterPage Views/MasterPage.dotmaster
+
 <dot:Content ContentPlaceHolderID="MainContent">
 
-	<h1>{{value: Title}}</h1>
+    <h1>{{value: Title}}</h1>
+    <div>
+        <dot:AuthenticatedView>
+            <AuthenticatedTemplate>
+                Hello {{value: UserName}}, Role: {{value: UserRole}}.
+            </AuthenticatedTemplate>
+        </dot:AuthenticatedView>
+    </div>
+    <dot:RouteLink Text="User Authorized test" RouteName="Mechanic_Test" />
 </dot:Content>

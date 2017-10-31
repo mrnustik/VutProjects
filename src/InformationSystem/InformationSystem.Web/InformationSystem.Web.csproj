@@ -26,11 +26,22 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />
-        <PackageReference Include="DotVVM.AspNetCore" Version="1.1.6.3" />
+        <PackageReference Include="DotVVM.AspNetCore" Version="1.1.7" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
         
     </ItemGroup>
     <ItemGroup>
-        <DotNetCliToolReference Include="DotVVM.Compiler.Light" Version="1.1.5" />
+        <DotNetCliToolReference Include="DotVVM.Compiler.Light" Version="1.1.7" />
+        <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\InformationSystem.BL\InformationSystem.BL.csproj" />
+      <ProjectReference Include="..\InformationSystem.DAL\InformationSystem.DAL.csproj" />
     </ItemGroup>
 </Project>

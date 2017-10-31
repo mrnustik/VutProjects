@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\InformationSystem.DAL\InformationSystem.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

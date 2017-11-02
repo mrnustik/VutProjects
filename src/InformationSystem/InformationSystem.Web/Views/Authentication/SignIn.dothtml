@@ -1,18 +1,32 @@
 ﻿@viewModel InformationSystem.Web.ViewModels.Authentication.SignInViewModel, InformationSystem.Web
 @masterPage Views/MasterPage.dotmaster
 
-<dot:Content ContentPlaceHolderID="MainContent">
-
-    <form>
-        <div class="form-group">
-            Email: <dot:TextBox class="form-control" Text="{value: Email}" Type="Email" />
-        </div>
-        <div class="form-group">
-            Password: <dot:TextBox class="form-control" Text="{value: Password}" Type="Password" />
-        </div>
-        <dot:RouteLink class="btn btn-default" Text="Register" RouteName="Authentication_Register"/>
-        <dot:Button class="btn btn-default" Text="Sign In" Click="{command: SingInAsync()}"/>
-        <dot:ValidationSummary/>
-    </form>
+<dot:Content ContentPlaceHolderID="MainContent">    
+    <dot:ValidationSummary/>
+    <div>
+        <form id="sign-in-form">
+            <div class="form-group">
+                Email: <dot:TextBox class="form-control" Text="{value: SignInEmail}" Type="Email" />
+            </div>
+            <div class="form-group">
+                Password: <dot:TextBox class="form-control" Text="{value: SignInPassword}" Type="Password" />
+            </div>
+            <dot:Button class="btn btn-default" Text="Sign In" Click="{command: SignInAsync()}"/>
+        </form>
+    </div>
+    <div>
+        <form id="register-form">
+            <div class="form-group">
+                Email: <dot:TextBox class="form-control" Text="{value: RegisterEmail}" Type="Email" />
+            </div>
+            <div class="form-group">
+                Password: <dot:TextBox class="form-control" Text="{value: RegisterPassword}" Type="Password" />
+            </div>
+            <div class="form-group">
+                Confirm Pasword: <dot:TextBox class="form-control" Text="{value: RegisterConfirmPassword}" Type="Password" />
+            </div>
+            <dot:Button class="btn btn-default" ButtonTagName="button" Text="Register" Click="{command: RegisterAsync()}" IsSubmitButton="true" />
+        </form>
+    </div>
 </dot:Content>
 

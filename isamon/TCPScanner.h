@@ -1,9 +1,9 @@
 #pragma once
 #include "IpAddress.h"
-#include "SocketSender.h"
+#include "ScannerBase.h"
 #include "Arguments.h"
 
-class TcpScanner : SocketSender
+class TcpScanner : ScannerBase
 {
 public:
 	TcpScanner();

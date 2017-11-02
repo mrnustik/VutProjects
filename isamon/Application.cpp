@@ -1,13 +1,14 @@
+#include <vector>
 #include "Application.h"
 #include "Logger.h"
 #include "ICMPSender.h"
 #include "TCPScanner.h"
 #include "UdpScanner.h"
 #include "ArpScanner.h"
+#include "NetworkHelper.h"
 
 
-
-Application::Application(const Arguments* arguments): arguments(arguments) 
+Application::Application(const Arguments* arguments): arguments(arguments)
 {
 }
 
@@ -20,38 +21,29 @@ int Application::Run()
 	}
 	if (this->arguments->network.networkAddress != 0)
 	{
-		IpNetworkEnumerator enumerator = arguments->network.GetEnumerator();
-		ArpScanner arpScanner(arguments);
-		IcmpSender pingSender(arguments);
+		//ArpScanner arpScanner(arguments);
+		IcmpScanner pingSender(arguments);
 		TcpScanner tcpScanner(arguments);
 		UdpScanner udpScanner(arguments);
-		while(enumerator.MoveNext())
+        std::vector<IpAddress> knownHosts;
+		auto adapter = NetworkHelper::GetConnectedAdapter(arguments->network);
+		if(adapter.empty())
 		{
-			auto currentAddress = enumerator.Current();
-			Logger::Debug("Scanning", "Currently on: " + currentAddress.ToString());
-			if (arpScanner.ScanAddress(currentAddress) || pingSender.SendPing(currentAddress)) {
-				std::cout << currentAddress.ToString() << std::endl;
-				for (int port = 1; port <= 65535; port++)
-				{
-					if (arguments->flagTcp) {
-						if (tcpScanner.Scan(currentAddress, port))
-						{
-							Logger::Debug("TCP Port", "Open port on: " + currentAddress.ToString() + ":" + std::to_string(port));
-							std::cout << currentAddress.ToString() << " TCP " << port << std::endl;
-						}
-					} 
-					if (arguments->flagUdp)
-					{
-						if (udpScanner.Scan(currentAddress, port))
-						{
-							Logger::Debug("UDP Port", "Open port on: " + currentAddress.ToString() + ":" + std::to_string(port));
-							std::cout << currentAddress.ToString() << " UDP " << port << std::endl;
-						}
-					}
-					
-				}
-			}
+            //not local use ICMP scanning
+            knownHosts = pingSender.ScanNetwork(this->arguments->network);
 		}
+        else
+        {
+            //local use ARP scanning
+            //arpScanner = pingSender->ScanNetwork(this->arguments->network, adapter);
+        }
+        Logger::Debug("Hosts", "Found: " + std::to_string(knownHosts.size()) + " hosts");
+        for (auto iterator = knownHosts.begin(); iterator != knownHosts.end(); ++iterator)
+        {
+            auto address = *iterator;
+            std::cout << address.ToString() << std::endl;
+        }
+        knownHosts.clear();
 	}
 	return 0;
 }
@@ -71,3 +63,4 @@ void Application::PrintHelp()
 Application::~Application()
 {
 }
+

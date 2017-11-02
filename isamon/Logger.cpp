@@ -1,3 +1,4 @@
+#include <cstring>
 #include "Logger.h"
 
 
@@ -15,6 +16,13 @@ void Logger::Warning(const std::string category, const std::string message)
 void Logger::Error(const std::string category, const std::string message)
 {
 	WriteOutput(Red, category, message);
+}
+
+
+void Logger::Error(std::string category, std::string message, int errNumber) {
+	WriteOutput(Red, category, message);
+	auto errorMessage = std::string(strerror(errNumber));
+	WriteOutput(Red, "Message", errorMessage);
 }
 
 
@@ -49,3 +57,4 @@ void Logger::WriteOutput(Colour outputColour, std::string category, std::string 
 	std::cerr << colourFormat + "[" + category + "]: " + message + "\033[0m" << std::endl;
 
 }
+

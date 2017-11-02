@@ -10,5 +10,6 @@ public:
 private:
 	void PrintHelp();
 	const Arguments* arguments;
+
 };
 

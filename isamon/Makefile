@@ -11,8 +11,8 @@ clean:
 	rm -f $(OBJECTS) $(CLIENT)
 
 $(OBJ_DIR)/%.o: %.cpp
-	$(CC) $(C_FLAGS) -c -o $@ $<
+	$(CC) $(C_FLAGS) -c -o $@ $< -lpcap -lpthread
 
 $(CLIENT): $(OBJECTS)
-	$(CC) $(CFLAGS) -o $@ $^ -lpcap
+	$(CC) $(CFLAGS) -o $@ $^ -lpcap -lpthread
 

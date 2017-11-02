@@ -38,12 +38,12 @@ void* UdpScanner::CraftPacket(pcap_if_t* device, const IpAddress& address, int p
 	memcpy(data, "UDPAB", strlen("UDPAB"));
 	bpf_u_int32 ip_raw;
 	bpf_u_int32 subnet_mask_raw;
-	int result = pcap_lookupnet(device->name, &ip_raw, &subnet_mask_raw, ErrorBuffer);
-	if (result != 0)
-	{
-		Logger::Error("UDP Create packet", "Can't lookup device" + std::string(device->name));
-		return nullptr;
-	}
+//	int result = pcap_lookupnet(device->name, &ip_raw, &subnet_mask_raw, ErrorBuffer);
+//	if (result != 0)
+//	{
+//		Logger::Error("UDP Create packet", "Can't lookup device" + std::string(device->name));
+//		return nullptr;
+//	}
 	iphdr* ipHeader = (iphdr*)buffer;
 	ipHeader->ihl = 5;
 	ipHeader->version = 4;
@@ -93,79 +93,12 @@ void OnRecieve(u_char *user, const struct pcap_pkthdr *h, const u_char *bytes)
 
 bool UdpScanner::Scan(IpAddress& address, int port)
 {
-	pcap_if_t* devices;
-	auto result = pcap_findalldevs(&devices, ErrorBuffer);
-	if (result != 0)
-	{
-		Logger::Error("UDP Scanning", "Find all devices");
-		Logger::Error("PCAP_BUFFER", ErrorBuffer);
-		return false;
-	}
-
-	for (pcap_if_t* device = devices; device != nullptr; device = device->next)
-	{
-		if (device->name == "any") continue;
-		if (arguments->interfaceName.empty() || arguments->interfaceName == device->name)
-		{
-			bpf_program filter;
-			pcap_pkthdr receivedPacket;
-			Logger::Debug("UDP Scanning", "PCAP_DEVICE = " + std::string(device->name));
-			auto packet = this->CraftPacket(device, address, port);
-			bpf_u_int32 subnet_mask, ip;
-
-			if (pcap_lookupnet(device->name, &ip, &subnet_mask, ErrorBuffer) == -1) {
-				printf("Could not get information for device: %s\n", device->name);
-				ip = 0;
-				subnet_mask = 0;
-			}
-
-			pcap_t* handle = pcap_open_live(device->name, BUFSIZ, 1, 1000, ErrorBuffer);
-
-			//Logger::Debug("UDP Scanning", "Sent packet of size " + std::to_string(sizeSent));
-			result = pcap_compile(handle, &filter, "icmp", 1, subnet_mask);
-			if (pcap_datalink(handle) != DLT_EN10MB) continue;
-			if (result != 0)
-			{
-				std::cerr << pcap_geterr(handle);
-				continue;
-			}
-			result = pcap_setfilter(handle, &filter);
-			if (result != 0)
-			{
-				std::cerr << pcap_geterr(handle);
-				continue;
-			}
-			pcap_setnonblock(handle, 1, ErrorBuffer);
-			//if (arguments->maxRtt > 0)
-			//{
-			//	pcap_set_timeout(handle, arguments->maxRtt);
-			//}
-			unsigned char user[] = "user";
-			auto res = pcap_dispatch(handle, 100, &OnRecieve, user);
-			std::cout << std::to_string(res);
-
-			// open send UDP socket
-			int sendfd;
-			if ((sendfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0)
-			{
-				perror("*** socket(,,IPPROTO_UDP) failed ***n");
-				exit(-1);
-			}
-			sockaddr_in servaddr;
-			GetSocketAddress(address, &servaddr, port);
-			if (sendto(sendfd, "buf", 3, 0, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0)
-			{
-				perror("*** sendto() failed ***");
-			}
-
-
-			unsigned int microseconds = 10000000;
-
-			usleep(microseconds);
-
-			pcap_breakloop(handle);
-		}
-	}
+	int udpSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	struct sockaddr_in servaddr;
+	GetSocketAddress(address, &servaddr, port);
+	connect(udpSocket, (struct sockaddr*)&servaddr, sizeof(servaddr));
+	send(udpSocket, "buffer", 6, 0);
+	close(udpSocket);
 	return false;
 }
 

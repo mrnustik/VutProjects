@@ -4,7 +4,7 @@
 #include "Logger.h"
 #include <cstring>
 #include <sys/ioctl.h> 
-#include <pcap/pcap.h>
+#include <pcap.h>
 #include <net/if.h>
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -64,6 +64,8 @@ void pcapCallback(u_char *user, const struct pcap_pkthdr *header,const u_char *p
 
 	packet_t *arp_packet = (packet_t *)(packet);
 
+	Logger::Debug("Arp scan", "Pcap receievd");
+
 	/* We are only interested ARP replies. */
 	if (arp_packet->arp.opcode != ntohs(2))
 		return;
@@ -73,120 +75,121 @@ void pcapCallback(u_char *user, const struct pcap_pkthdr *header,const u_char *p
 
 bool ArpScanner::ScanAddress(IpAddress& address)
 {
-	uint8_t my_ethaddr[6];
-	char filter[1024];
-	struct bpf_program bpf;
-	int socketFd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
-	struct ifreq ifr = { 0 };
-	if(socketFd < 0)
-	{
-		int err = errno;
-		Logger::Error("ArpScanner", "Can't create socket");
-		Logger::Error("ArpScanner", std::string(strerror(err)));
-		return false;
-	}
-	std::string ifaceName;
-	if(arguments->interfaceName.empty())
-	{
-		ifaceName = std::string(pcap_lookupdev(ErrorBuffer));
-	}
-	else
-	{
-		ifaceName = arguments->interfaceName;
-	}
-	Logger::Debug("Arp scan", "Getting MAC...");
-	snprintf(ifr.ifr_name, sizeof(ifr.ifr_name), "%s", ifaceName.c_str());
-	if(ioctl(socketFd, SIOCGIFHWADDR, &ifr) < 0)
-	{
-		Logger::Error("Arp scan", "Cant find mac address");
-		return false;
-	}
+//	uint8_t my_ethaddr[6];
+//	char filter[1024];
+//	struct bpf_program bpf;
+//	int socketFd = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+//	struct ifreq ifr = { 0 };
+//	if(socketFd < 0)
+//	{
+//		int err = errno;
+//		Logger::Error("ArpScanner", "Can't create socket");
+//		Logger::Error("ArpScanner", std::string(strerror(err)));
+//		return false;
+//	}
+//	std::string ifaceName;
+//	if(arguments->interfaceName.empty())
+//	{
+//		ifaceName = std::string(pcap_lookupdev(ErrorBuffer));
+//	}
+//	else
+//	{
+//		ifaceName = arguments->interfaceName;
+//	}
+//	Logger::Debug("Arp scan", "Getting MAC...");
+//	snprintf(ifr.ifr_name, sizeof(ifr.ifr_name), "%s", ifaceName.c_str());
+//	if(ioctl(socketFd, SIOCGIFHWADDR, &ifr) < 0)
+//	{
+//		Logger::Error("Arp scan", "Cant find mac address");
+//		return false;
+//	}
+//
+//	memcpy(my_ethaddr, ifr.ifr_hwaddr.sa_data, sizeof(my_ethaddr));
+//
+//	Logger::Debug("Arp scan", "Getting IP...");
+//	strncpy(ifr.ifr_name, ifaceName.c_str(), IFNAMSIZ - 1);
+//	if (ioctl(socketFd, SIOCGIFADDR, &ifr) < 0)
+//	{
+//		Logger::Error("Arp scan", "Can't get IP");
+//		return false;
+//	}
+//	uint32_t my_ipaddr = ((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr.s_addr;
+//
+//	Logger::Debug("Arp scan", "Starting PCAP");
+//	pcap_t *pcap = pcap_open_live(ifaceName.c_str(), 64, 1, 1, ErrorBuffer);
+//	if (pcap == NULL) {
+//		return false;
+//	}
+//	snprintf(filter, sizeof(filter),
+//		"arp and ether dst %02x:%02x:%02x:%02x:%02x:%02x",
+//		my_ethaddr[0], my_ethaddr[1], my_ethaddr[2],
+//		my_ethaddr[3], my_ethaddr[4], my_ethaddr[5]);
+//	if (pcap_compile(pcap, &bpf, filter, 1, 0) < 0)
+//	{
+//		pcap_close(pcap);
+//		Logger::Error("Arp scan", "failed to compile pcap filter");
+//		return false;
+//	}
+//	if (pcap_setfilter(pcap, &bpf) < 0)
+//	{
+//		pcap_close(pcap);
+//		Logger::Error("Arp scan", "failed to set pcap filter");
+//		return  false;
+//	}
+//
+//	if (pcap_setnonblock(pcap, 1, ErrorBuffer) < 0)
+//	{
+//		pcap_close(pcap);
+//		Logger::Error("Arp scan", "failed to set pcap to non blocking");
+//	}
+//
+//	packet_t packet;
+//	memset(packet.eth.dst_mac, 0xff, sizeof(packet.eth.dst_mac));
+//	memcpy(packet.eth.src_mac, &my_ethaddr, sizeof(my_ethaddr));
+//	packet.eth.type[0] = ETH_P_ARP / 256;
+//	packet.eth.type[1] = ETH_P_ARP % 256;
+//
+//	packet.arp.htype = htons(1);             // 1 == Ethernet
+//	packet.arp.ptype = htons(ETH_P_IP);
+//	packet.arp.hlen = MAC_SIZE;
+//	packet.arp.plen = IPV4_SIZE;
+//	packet.arp.opcode = htons(1);
+//	memcpy(packet.arp.sender_mac, &my_ethaddr, sizeof(my_ethaddr));
+//	memcpy(packet.arp.sender_ip, &my_ipaddr, sizeof(my_ipaddr));
+//	memset(packet.arp.target_mac, 0x00, MAC_SIZE);
+//	inet_pton(AF_INET, address.ToString().c_str(), packet.arp.target_ip);
+//
+//	struct sockaddr_ll device;
+//	if ((device.sll_ifindex = if_nametoindex(ifaceName.c_str())) == 0) {
+//		Logger::Error("Arp scan", "Getting iface_number");
+//		return false;
+//	}
+//	struct sockaddr_ll socket_address;
+//	socket_address.sll_family = AF_PACKET;
+//	socket_address.sll_protocol = htons(ETH_P_ARP);
+//	socket_address.sll_pkttype = (PACKET_BROADCAST);
+//	socket_address.sll_halen = MAC_SIZE;
+//	socket_address.sll_ifindex = if_nametoindex(ifaceName.c_str());
+//	socket_address.sll_addr[6] = 0x00;
+//	socket_address.sll_addr[7] = 0x00;
+//	memcpy(device.sll_addr, my_ethaddr, MAC_SIZE);
+//	device.sll_family = AF_PACKET;
+//	device.sll_halen = 6;
+//	found = false;
+//	auto result = sendto(socketFd, &packet, sizeof(packet), 0, (struct sockaddr*)&socket_address, sizeof(device));
+//	if(result < 0)
+//	{
+//		perror("sendto()");
+//		Logger::Error("Arp scan", "failed sending");
+//
+//	}
+//	for (int i = 0; i < arguments->maxRtt/1000; i++) {
+//		pcap_dispatch(pcap, -1, pcapCallback, NULL);
+//		sleep(i);
+//	}
+//
+//	close(socketFd);
+//	pcap_close(pcap);
 
-	memcpy(my_ethaddr, ifr.ifr_hwaddr.sa_data, sizeof(my_ethaddr));
-	
-	Logger::Debug("Arp scan", "Getting IP...");
-	strncpy(ifr.ifr_name, ifaceName.c_str(), IFNAMSIZ - 1);
-	if (ioctl(socketFd, SIOCGIFADDR, &ifr) < 0) 
-	{
-		Logger::Error("Arp scan", "Can't get IP");
-		return false;
-	}
-	uint32_t my_ipaddr = ((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr.s_addr;
-	
-	Logger::Debug("Arp scan", "Starting PCAP");
-	pcap_t *pcap = pcap_open_live(ifaceName.c_str(), 64, 1, 1, ErrorBuffer);
-	if (pcap == NULL) {
-		return false;
-	}
-	snprintf(filter, sizeof(filter),
-		"arp and ether dst %02x:%02x:%02x:%02x:%02x:%02x",
-		my_ethaddr[0], my_ethaddr[1], my_ethaddr[2],
-		my_ethaddr[3], my_ethaddr[4], my_ethaddr[5]);
-	if (pcap_compile(pcap, &bpf, filter, 1, 0) < 0) 
-	{
-		pcap_close(pcap);
-		Logger::Error("Arp scan", "failed to compile pcap filter");
-		return false;
-	}
-	if (pcap_setfilter(pcap, &bpf) < 0) 
-	{
-		pcap_close(pcap);
-		Logger::Error("Arp scan", "failed to set pcap filter");
-		return  false;
-	}
-
-	if (pcap_setnonblock(pcap, 1, ErrorBuffer) < 0)
-	{
-		pcap_close(pcap);
-		Logger::Error("Arp scan", "failed to set pcap to non blocking");
-	}
-
-	packet_t packet;
-	memset(packet.eth.dst_mac, 0xff, sizeof(packet.eth.dst_mac));
-	memcpy(packet.eth.src_mac, &my_ethaddr, sizeof(my_ethaddr));
-	packet.eth.type[0] = ETH_P_ARP / 256;
-	packet.eth.type[1] = ETH_P_ARP % 256;
-
-	packet.arp.htype = htons(1);             // 1 == Ethernet
-	packet.arp.ptype = htons(ETH_P_IP);
-	packet.arp.hlen = MAC_SIZE;
-	packet.arp.plen = IPV4_SIZE;
-	packet.arp.opcode = htons(1);
-	memcpy(packet.arp.sender_mac, &my_ethaddr, sizeof(my_ethaddr));
-	memcpy(packet.arp.sender_ip, &my_ipaddr, sizeof(my_ipaddr));
-	memset(packet.arp.target_mac, 0x00, MAC_SIZE);
-	inet_pton(AF_INET, address.ToString().c_str(), packet.arp.target_ip);
-
-	struct sockaddr_ll device;
-	if ((device.sll_ifindex = if_nametoindex(ifaceName.c_str())) == 0) {
-		Logger::Error("Arp scan", "Getting iface_number");
-		return false;
-	}
-	struct sockaddr_ll socket_address;
-	socket_address.sll_family = AF_PACKET;
-	socket_address.sll_protocol = htons(ETH_P_ARP);
-	socket_address.sll_pkttype = (PACKET_BROADCAST);
-	socket_address.sll_halen = MAC_SIZE;
-	socket_address.sll_addr[6] = 0x00;
-	socket_address.sll_addr[7] = 0x00;
-	memcpy(device.sll_addr, my_ethaddr, MAC_SIZE);
-	device.sll_family = AF_PACKET;
-	device.sll_halen = 6;
-	found = false;
-	auto result = sendto(socketFd, &packet, sizeof(packet), 0, (struct sockaddr*)&device, sizeof(device));
-	if(result < 0)
-	{
-		perror("sendto()");
-		Logger::Error("Arp scan", "failed sending");
-		
-	}
-	for (int i = 0; i < arguments->maxRtt; i+= 100) {
-		pcap_dispatch(pcap, -1, pcapCallback, NULL);
-		usleep(i);
-	}
-	
-	close(socketFd);
-	pcap_close(pcap);
-
-	return found;
+	return false;
 }

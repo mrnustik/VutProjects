@@ -2,22 +2,20 @@
 #include "Arguments.h"
 #include <netinet/ip_icmp.h>
 #include <cstring>
-#include <string.h>
-#include <sys/time.h>
-#include <unistd.h>
-#include <netdb.h>
+#include <thread>
+#include <future>
 #include "Logger.h"
 
 
-IcmpSender::IcmpSender(const Arguments* arguments): arguments(arguments) {
+IcmpScanner::IcmpScanner(const Arguments* arguments): arguments(arguments), ipVector(){
 }
 
 
-IcmpSender::~IcmpSender()
+IcmpScanner::~IcmpScanner()
 {
 }
 
-bool IcmpSender::SendPing(IpAddress& address)
+bool IcmpScanner::SendPing(IpAddress& address)
 {
 	struct icmphdr icmp_hdr;
 	struct sockaddr_in addr;
@@ -79,17 +77,104 @@ bool IcmpSender::SendPing(IpAddress& address)
 
 	memcpy(&recieved_header, buffer + ipLength, sizeof recieved_header);
 	if (recieved_header.type == ICMP_ECHOREPLY && recieved_header.un.echo.id == IcmpEchoId) {
-		Logger::Debug("ICMPScanner", "Echo reply");
+		//Logger::Debug("ICMPScanner", "Echo reply");
 		return true;
 	}
-	else {
-		Logger::Debug("ICMPScanner", "Invalid ICMP messager");
+	else
+	{
+		//Logger::Debug("ICMPScanner", "Invalid ICMP messager");
 	}
 	return false;
 }
 
-void IcmpSender::GetSocketAddress(IpAddress& address, struct sockaddr_in * socketAddress)
+void IcmpScanner::GetSocketAddress(IpAddress& address, struct sockaddr_in * socketAddress)
 {
 	socketAddress->sin_addr = address.ToInAddr();
 	socketAddress->sin_family = AF_INET;
+}
+
+
+
+std::vector<IpAddress> IcmpScanner::ScanNetwork(IpNetwork network) {
+    std::vector<IpAddress> ipVector;
+
+    unsigned char buffer[1024];
+
+    auto socket = this->OpenSocket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+    //this->SetNonBlocking(socket);
+
+    auto enumerator = network.GetEnumerator();
+    while (enumerator.MoveNext()) {
+        //Send ICMP Echo to broadcast address
+        auto address = enumerator.Current();
+        SendIcmpEcho(socket, address);
+        Logger::Debug("ICMP Scan", "ICMP send to address " + address.ToString());
+    }
+
+    fd_set readFileDescriptors{};
+    FD_SET(socket, &readFileDescriptors);
+    while(true) {
+        //Initialize timeout
+        struct timeval timeout{};
+        timeout.tv_sec = this->arguments->maxRtt / 1000;
+        timeout.tv_usec = this->arguments->maxRtt % 1000;
+
+        //Select if incoming messages
+        struct icmphdr receivedHeader{};
+        auto result = select(socket + 1, &readFileDescriptors, NULL, NULL, &timeout);
+        if (result <= 0) {
+            Logger::Debug("ICMPScanner", "Select timeout");
+            break;
+        }
+
+        //Receive incoming message
+        result = recv(socket, buffer, sizeof buffer, 0);
+        if (result <= 0) {
+            continue;
+        }
+        if (result < sizeof receivedHeader) {
+            continue;
+        }
+
+        //Read the ip header
+        auto *ip_header = (ip *) buffer;
+        const int ipLength = ip_header->ip_hl << 2;
+        //Read the ICMP message
+        memcpy(&receivedHeader, buffer + ipLength, sizeof receivedHeader);
+
+        //Is valid ICMP echo reply?
+        if (receivedHeader.type == ICMP_ECHOREPLY && receivedHeader.un.echo.id == IcmpEchoId) {
+            ipVector.emplace_back(ntohl(ip_header->ip_src.s_addr));
+            Logger::Debug("ICMPScanner", "Echo reply");
+        } else {
+            Logger::Debug("ICMPScanner", "Invalid ICMP message");
+        }
+    }
+    CloseSocket(socket);
+	return ipVector;
+}
+
+ssize_t IcmpScanner::SendIcmpEcho(int socket, IpAddress &toAddress) {
+	char buffer[256];
+	struct sockaddr_in address{};
+	bzero(&address, sizeof(address));
+	GetSocketAddress(toAddress, &address);
+
+	//Create ICMP echo header
+	struct icmphdr icmp_hdr{};
+	icmp_hdr.type = ICMP_ECHO;
+	icmp_hdr.un.echo.id = IcmpEchoId;
+	icmp_hdr.un.echo.sequence = 1;
+	icmp_hdr.checksum = Checksum(&icmp_hdr, sizeof icmp_hdr);
+	memcpy(buffer, &icmp_hdr, sizeof icmp_hdr);
+
+	//Send the request to broadcast
+	auto result = sendto(socket, buffer, sizeof(icmp_hdr), 0, (struct sockaddr*) &address, sizeof(address));
+	if(result < 0){
+		int err = errno;
+		Logger::Error("ICMP Scan", "Can't send ICMP Echo message", err);
+		throw std::exception();
+	}
+
+	return result;
 }

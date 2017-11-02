@@ -7,6 +7,7 @@ public:
 	IpNetworkEnumerator(unsigned firstAddress, unsigned broadcastAddress);
 	~IpNetworkEnumerator();
 	bool MoveNext();
+	bool HasNext();
 	IpAddress Current() const;
 	void Reset();
 private:

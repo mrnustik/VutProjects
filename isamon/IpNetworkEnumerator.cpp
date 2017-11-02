@@ -31,3 +31,9 @@ void IpNetworkEnumerator::Reset()
 {
 	this->position = -1;
 }
+
+bool IpNetworkEnumerator::HasNext()
+{
+	unsigned int currentAddress = firstAddress + this->position;
+	return currentAddress + 1 <= broadcastAddress;
+}

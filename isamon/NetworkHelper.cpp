@@ -1,4 +1,5 @@
-﻿#include "NetworkHelper.h"
+﻿#include "Application.h"
+#include "NetworkHelper.h"
 
 #include <net/if.h>
 
@@ -12,4 +13,8 @@ unsigned int NetworkHelper::GetNetworkInterfaceNumber(std::string name)
 		throw new std::exception();
 	}
 	return index;
+}
+
+std::string NetworkHelper::GetConnectedAdapter(IpNetwork network) {
+	return std::string();
 }

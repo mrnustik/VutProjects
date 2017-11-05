@@ -123,6 +123,6 @@ Arguments::Arguments() : network(IpNetwork::FromCidr("0.0.0.0/0"))
 	this->networkString = "";
 	this->interfaceName = "";
 	this->interfaceNumber = 0;
-	this->maxRtt = -1;
+	this->maxRtt = 10000;
 	this->portNumber = AllPorts;
 }

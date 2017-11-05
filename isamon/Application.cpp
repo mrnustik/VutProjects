@@ -37,7 +37,6 @@ int Application::Run()
 			Logger::Debug("Application", "Adapter " + adapter);
             //local use ARP scanning
             knownHosts = arpScanner.ScanNetwork(this->arguments->network, adapter);
-            exit(0);
         }
         Logger::Debug("Hosts", "Found: " + std::to_string(knownHosts.size()) + " hosts");
         for (auto iterator = knownHosts.begin(); iterator != knownHosts.end(); ++iterator)

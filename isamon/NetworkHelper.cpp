@@ -7,6 +7,7 @@
 #include <cstring>
 #include <sys/ioctl.h>
 #include <linux/if_ether.h>
+#include <unistd.h>
 
 #define MAC_SIZE        ( 6 * sizeof(uint8_t) )
 
@@ -55,5 +56,16 @@ void NetworkHelper::GetMacAddress(uint8_t *address, std::string iNetName){
         Logger::Error("Network Helper", "Getting MAC address", errno);
     }
     memcpy(address, ifRequest.ifr_ifru.ifru_hwaddr.sa_data, MAC_SIZE);
+    close(sock);
+}
 
+IpAddress NetworkHelper::GetDeviceAddress(std::string ifaceName) {
+    int sock = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL));
+    ifreq ifrequest;
+    strncpy(ifrequest.ifr_name , ifaceName.c_str() , IFNAMSIZ -1);
+    if ( ioctl (sock, SIOCGIFADDR, &ifrequest) < 0 ) {
+        Logger::Error("ioctl", "Get IP address", errno);
+    }
+    close(sock);
+    return IpAddress(ntohl(((struct sockaddr_in *)&ifrequest.ifr_addr)->sin_addr.s_addr));
 }

@@ -15,7 +15,5 @@ public:
 
 private:
 	const Arguments* arguments;
-	char ErrorBuffer[PCAP_ERRBUF_SIZE];
-	bool found;
 };
 

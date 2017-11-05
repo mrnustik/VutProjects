@@ -1,28 +1,11 @@
 ﻿#include "UdpScanner.h"
 #include "Logger.h"
-#include <pcap/pcap.h>
-#include <pcap/namedb.h>
 #include <cstring>
 #include <netinet/ip_icmp.h>
-#include <unistd.h>
-#include <netdb.h>
-#include <netinet/ip.h>
 #include <netinet/udp.h>
-#include <cstdio>
 #include <vector>
 #include <algorithm>
-static char ErrorBuffer[PCAP_ERRBUF_SIZE];
-const static int PacketSize = sizeof(iphdr) + sizeof(udphdr) + 5;
 
-
-struct pseudo_header
-{
-	u_int32_t source_address;
-	u_int32_t dest_address;
-	u_int8_t placeholder;
-	u_int8_t protocol;
-	u_int16_t udp_length;
-};
 
 UdpScanner::UdpScanner(const Arguments* arguments) : arguments(arguments)
 {
@@ -30,13 +13,6 @@ UdpScanner::UdpScanner(const Arguments* arguments) : arguments(arguments)
 
 UdpScanner::~UdpScanner()
 {
-}
-
-void OnRecieve(u_char *user, const struct pcap_pkthdr *h, const u_char *bytes)
-{
-	std::cout << user;
-	std::cout << h->len;
-	std::cout << bytes;
 }
 
 

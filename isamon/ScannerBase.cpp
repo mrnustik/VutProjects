@@ -1,16 +1,10 @@
 #include <vector>
 #include <cstring>
 #include "TCPScanner.h"
-#include "ICMPSender.h"
-#include "ScannerBase.h"
 #include "Logger.h"
 #include <unistd.h>
-#include <exception>
-#include <sys/socket.h>
 #include <fcntl.h>
 #include <net/if.h>
-
-#define HOSTNAME_SIZE 256
 
 ScannerBase::ScannerBase()
 {

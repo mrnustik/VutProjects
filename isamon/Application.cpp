@@ -27,6 +27,7 @@ int Application::Run()
             std::vector<IpAddress> knownHosts;
             auto adapter = NetworkHelper::GetConnectedAdapter(arguments->network);
             if (adapter.empty()) {
+                Logger::Debug("Application", "Adapter not found, scanning with ICMP");
                 //not local use ICMP scanning
                 knownHosts = pingSender.ScanNetwork(this->arguments->network);
             } else {

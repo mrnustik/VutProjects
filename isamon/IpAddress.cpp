@@ -1,8 +1,6 @@
 #include "IpAddress.h"
 
 #include <sstream>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 
 IpAddress::IpAddress(unsigned int address) : address(address)
 {

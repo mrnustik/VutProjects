@@ -14,5 +14,4 @@ $(OBJ_DIR)/%.o: %.cpp
 	$(CC) $(C_FLAGS) -c -o $@ $< 
 
 $(CLIENT): $(OBJECTS)
-	$(CC) $(CFLAGS) -o $@ $^ -lpcap -lpthread
-
+	$(CC) $(CFLAGS) -o $@ $^ -lpcap 

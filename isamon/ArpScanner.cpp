@@ -1,19 +1,12 @@
 ﻿#include "ArpScanner.h"
 
-#include <ifaddrs.h>
 #include "Logger.h"
 #include "NetworkHelper.h"
 #include <cstring>
-#include <sys/ioctl.h> 
-#include <pcap.h>
 #include <net/if.h>
-#include <sys/types.h>
-#include <netinet/in.h>
 #include <net/if_arp.h>
 #include <netpacket/packet.h>   // struct sockaddr_ll
 #include <net/ethernet.h>       // ETHER_ADD_LEN, ETH_P_*
-#include <netinet/if_ether.h>   // struct ether_arp
-#include <linux/if_ether.h>     // ETH_P_ARP = 0x0806
 #include <unistd.h>
 
 
@@ -55,7 +48,7 @@ std::vector<IpAddress> ArpScanner::ScanNetwork(IpNetwork network, std::string ad
 	struct sockaddr_ll device;
     bzero(&device, sizeof(device));
     int socket = OpenSocket( AF_PACKET, SOCK_RAW, htons(ETH_P_ALL) );
-
+    BindSocketToInterface(socket, adapter);
 	device.sll_ifindex = if_nametoindex(adapter.c_str());
 	memcpy(&device.sll_addr, macAddress, 6*sizeof(uint8_t));
     device.sll_family = AF_PACKET;

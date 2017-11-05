@@ -10,7 +10,6 @@ class IcmpScanner : ScannerBase
 public:
 	IcmpScanner(const Arguments* arguments);
 	~IcmpScanner();
-	bool SendPing(IpAddress& address);
 
 	std::vector<IpAddress> ScanNetwork(IpNetwork network);
 

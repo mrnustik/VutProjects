@@ -8,11 +8,6 @@ void Logger::Debug(const std::string category, const std::string message)
 	WriteOutput(Green, category, message);
 }
 
-void Logger::Warning(const std::string category, const std::string message)
-{
-	WriteOutput(Yellow, category, message);
-}
-
 void Logger::Error(const std::string category, const std::string message)
 {
 	WriteOutput(Red, category, message);

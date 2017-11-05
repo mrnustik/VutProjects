@@ -4,6 +4,7 @@
 #include <cstring>
 #include <thread>
 #include <future>
+#include <pcap.h>
 #include "Logger.h"
 
 
@@ -87,70 +88,69 @@ bool IcmpScanner::SendPing(IpAddress& address)
 	return false;
 }
 
-void IcmpScanner::GetSocketAddress(IpAddress& address, struct sockaddr_in * socketAddress)
-{
-	socketAddress->sin_addr = address.ToInAddr();
-	socketAddress->sin_family = AF_INET;
-}
-
-
 
 std::vector<IpAddress> IcmpScanner::ScanNetwork(IpNetwork network) {
     std::vector<IpAddress> ipVector;
-
+    char pcapBuffer[PCAP_ERRBUF_SIZE];
     unsigned char buffer[1024];
+    pcap_if_t* devices,* device;
+    pcap_findalldevs(&devices, pcapBuffer);
+    for(device = devices; device != nullptr; device = device->next) {
+        if(strcmp(device->name, "any") == 0) continue;
+        if(!arguments->interfaceName.empty() && arguments->interfaceName != device->name) continue;
+        auto socket = this->OpenSocket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
 
-    auto socket = this->OpenSocket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
-    //this->SetNonBlocking(socket);
+        BindSocketToInterface(socket, device->name);
 
-    auto enumerator = network.GetEnumerator();
-    while (enumerator.MoveNext()) {
-        //Send ICMP Echo to broadcast address
-        auto address = enumerator.Current();
-        SendIcmpEcho(socket, address);
-        Logger::Debug("ICMP Scan", "ICMP send to address " + address.ToString());
+        auto enumerator = network.GetEnumerator();
+        while (enumerator.MoveNext()) {
+            //Send ICMP Echo to broadcast address
+            auto address = enumerator.Current();
+            SendIcmpEcho(socket, address);
+            Logger::Debug("ICMP Scan", "ICMP send to address " + address.ToString());
+        }
+
+        fd_set readFileDescriptors{};
+        FD_SET(socket, &readFileDescriptors);
+        while (true) {
+            //Initialize timeout
+            struct timeval timeout{};
+            timeout.tv_sec = this->arguments->maxRtt / 1000;
+            timeout.tv_usec = this->arguments->maxRtt % 1000;
+
+            //Select if incoming messages
+            struct icmphdr receivedHeader{};
+            auto result = select(socket + 1, &readFileDescriptors, NULL, NULL, &timeout);
+            if (result <= 0) {
+                Logger::Debug("ICMPScanner", "Select timeout");
+                break;
+            }
+
+            //Receive incoming message
+            result = recv(socket, buffer, sizeof buffer, 0);
+            if (result <= 0) {
+                continue;
+            }
+            if (result < sizeof receivedHeader) {
+                continue;
+            }
+
+            //Read the ip header
+            auto *ip_header = (ip *) buffer;
+            const int ipLength = ip_header->ip_hl << 2;
+            //Read the ICMP message
+            memcpy(&receivedHeader, buffer + ipLength, sizeof receivedHeader);
+
+            //Is valid ICMP echo reply?
+            if (receivedHeader.type == ICMP_ECHOREPLY && receivedHeader.un.echo.id == IcmpEchoId) {
+                ipVector.emplace_back(ntohl(ip_header->ip_src.s_addr));
+                Logger::Debug("ICMPScanner", "Echo reply");
+            } else {
+                Logger::Debug("ICMPScanner", "Invalid ICMP message");
+            }
+        }
+        CloseSocket(socket);
     }
-
-    fd_set readFileDescriptors{};
-    FD_SET(socket, &readFileDescriptors);
-    while(true) {
-        //Initialize timeout
-        struct timeval timeout{};
-        timeout.tv_sec = this->arguments->maxRtt / 1000;
-        timeout.tv_usec = this->arguments->maxRtt % 1000;
-
-        //Select if incoming messages
-        struct icmphdr receivedHeader{};
-        auto result = select(socket + 1, &readFileDescriptors, NULL, NULL, &timeout);
-        if (result <= 0) {
-            Logger::Debug("ICMPScanner", "Select timeout");
-            break;
-        }
-
-        //Receive incoming message
-        result = recv(socket, buffer, sizeof buffer, 0);
-        if (result <= 0) {
-            continue;
-        }
-        if (result < sizeof receivedHeader) {
-            continue;
-        }
-
-        //Read the ip header
-        auto *ip_header = (ip *) buffer;
-        const int ipLength = ip_header->ip_hl << 2;
-        //Read the ICMP message
-        memcpy(&receivedHeader, buffer + ipLength, sizeof receivedHeader);
-
-        //Is valid ICMP echo reply?
-        if (receivedHeader.type == ICMP_ECHOREPLY && receivedHeader.un.echo.id == IcmpEchoId) {
-            ipVector.emplace_back(ntohl(ip_header->ip_src.s_addr));
-            Logger::Debug("ICMPScanner", "Echo reply");
-        } else {
-            Logger::Debug("ICMPScanner", "Invalid ICMP message");
-        }
-    }
-    CloseSocket(socket);
 	return ipVector;
 }
 

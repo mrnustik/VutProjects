@@ -42,6 +42,10 @@ int Application::Run()
         {
             auto address = *iterator;
             std::cout << address.ToString() << std::endl;
+            if(arguments->flagTcp)
+            {
+                tcpScanner.Scan(address);
+            }
         }
         knownHosts.clear();
 	}

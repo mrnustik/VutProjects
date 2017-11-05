@@ -15,8 +15,7 @@ public:
 	std::vector<IpAddress> ScanNetwork(IpNetwork network);
 
 private:
-	void GetSocketAddress(IpAddress& address, struct sockaddr_in * socketAddress);
-	const Arguments* arguments;
+    const Arguments* arguments;
 protected:
 	static const int IcmpEchoId = 1234;
 	ssize_t SendIcmpEcho(int socket, IpAddress &toAddress);

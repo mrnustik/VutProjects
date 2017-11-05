@@ -1,9 +1,14 @@
+#include <vector>
+#include <cstring>
+#include "TCPScanner.h"
+#include "ICMPSender.h"
 #include "ScannerBase.h"
 #include "Logger.h"
 #include <unistd.h>
 #include <exception>
 #include <sys/socket.h>
 #include <fcntl.h>
+#include <net/if.h>
 
 #define HOSTNAME_SIZE 256
 
@@ -40,8 +45,9 @@ unsigned short ScannerBase::Checksum(void* buffer, int bufferSize)
 	{
 		sum += *(unsigned char*)buf;
 	}
-	sum = (sum >> 16) + (sum & 0xFFFF);
-	sum += (sum >> 16);
+    while (sum>>16) {
+        sum = (sum & 0xffff) + (sum >> 16);
+    }
 	return (unsigned short) ~sum;
 }
 
@@ -53,11 +59,11 @@ int ScannerBase::OpenSocket(int domain, int type, int protocol) {
 		Logger::Error("Socket", "Can't open socket", err);
 		throw std::exception();
 	}
+    if(sockNumber > maximumSocketNumber)
+        maximumSocketNumber = sockNumber;
 	openSocketCount++;
 	return sockNumber;
 }
-
-
 
 bool ScannerBase::CanOpenSocket() {
 	return openSocketCount + 1 <= MaximumSocketsCount;
@@ -71,4 +77,30 @@ void ScannerBase::CloseSocket(int socketNumber) {
 void ScannerBase::SetNonBlocking(int socketFd) {
     int flags = fcntl(socketFd, F_GETFL, 0);
     fcntl(socketFd, F_SETFL, flags | O_NONBLOCK);
+}
+
+void ScannerBase::GetSocketAddress(IpAddress& address, struct sockaddr_in * socketAddress)
+{
+	socketAddress->sin_addr = address.ToInAddr();
+	socketAddress->sin_family = AF_INET;
+}
+
+void ScannerBase::GetSocketAddress(IpAddress &address, int port, struct sockaddr_in *socketAddress) {
+    socketAddress->sin_addr = address.ToInAddr();
+    socketAddress->sin_family = AF_INET;
+    socketAddress->sin_port = htons(static_cast<uint16_t>(port));
+}
+
+int ScannerBase::GetMaximumSocketNumber() {
+    return this->maximumSocketNumber;
+}
+
+void ScannerBase::BindSocketToInterface(int socket, std::string interfaceName) {
+    struct ifreq ifRequest;
+    memset(&ifRequest, 0, sizeof(ifRequest));
+    memcpy(&ifRequest.ifr_name,interfaceName.c_str(), sizeof(ifRequest.ifr_name));
+    if (setsockopt(socket, SOL_SOCKET, SO_BINDTODEVICE, (void*) &ifRequest, sizeof(ifRequest)) < 0) {
+        Logger::Error("Socket", "Can't bind to device: " + interfaceName);
+    }
+    return;
 }

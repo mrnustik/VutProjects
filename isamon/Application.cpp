@@ -21,7 +21,7 @@ int Application::Run()
 	}
 	if (this->arguments->network.networkAddress != 0)
 	{
-		//ArpScanner arpScanner(arguments);
+		ArpScanner arpScanner(arguments);
 		IcmpScanner pingSender(arguments);
 		TcpScanner tcpScanner(arguments);
 		UdpScanner udpScanner(arguments);
@@ -34,8 +34,10 @@ int Application::Run()
 		}
         else
         {
+			Logger::Debug("Application", "Adapter " + adapter);
             //local use ARP scanning
-            //arpScanner = pingSender->ScanNetwork(this->arguments->network, adapter);
+            knownHosts = arpScanner.ScanNetwork(this->arguments->network, adapter);
+            exit(0);
         }
         Logger::Debug("Hosts", "Found: " + std::to_string(knownHosts.size()) + " hosts");
         for (auto iterator = knownHosts.begin(); iterator != knownHosts.end(); ++iterator)

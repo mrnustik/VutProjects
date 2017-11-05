@@ -63,4 +63,8 @@ unsigned int IpNetwork::BroadcastAddress() const
 	return networkAddress | oneBits;
 }
 
+IpAddress IpNetwork::NetworkAddress() const {
+	return IpAddress(networkAddress);
+}
+
 

@@ -13,6 +13,7 @@ public:
 	IpNetworkEnumerator GetEnumerator() const;
 	unsigned int networkAddress;
 	unsigned short cidrMask;
+	IpAddress NetworkAddress() const;
 	unsigned int FirstAddress() const;
 	unsigned int BroadcastAddress() const;
 

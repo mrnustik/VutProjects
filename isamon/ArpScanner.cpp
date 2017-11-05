@@ -2,6 +2,7 @@
 
 #include <ifaddrs.h>
 #include "Logger.h"
+#include "NetworkHelper.h"
 #include <cstring>
 #include <sys/ioctl.h> 
 #include <pcap.h>
@@ -14,36 +15,7 @@
 #include <linux/if_ether.h>     // ETH_P_ARP = 0x0806
 #include <unistd.h>
 
-#define HDR_SIZE_ETH      14
-#define HDR_SIZE_ARP      28
-#define MAC_SIZE        ( 6 * sizeof(uint8_t) )     // X bajtů pro uchování MAC
-#define IPV4_SIZE       ( 4 * sizeof(uint8_t) )     // X bajtů pro uchování IPv4
-#define IPV4_LEN        ( 15 * sizeof(char) )       // Délka IPv4 ve stringu
 
-typedef struct {
-	// ~~~ Ethernet hlavička
-	struct {	                //  OFFSET		Bajt
-		uint8_t dst_mac[6];		//  0 -  5		+6
-		uint8_t src_mac[6];		//  6 - 11		+6
-		uint8_t type[2];		// 12 - 13		+2
-	} eth;
-
-	// ~~~ ARP hlavička
-	struct {					//  OFFSET		Bajt
-		uint16_t htype;         // 14 - 15		+2
-		uint16_t ptype;			// 16 - 17		+2
-		uint8_t hlen;			// 18 - 18		+1
-		uint8_t plen;			// 19 - 19		+1
-		uint16_t opcode;		// 20 - 21		+2
-		uint8_t sender_mac[6];	// 22 - 27		+6
-		uint8_t sender_ip[4];	// 28 - 31		+4
-		uint8_t target_mac[6];	// 32 - 37		+6
-		uint8_t target_ip[4];	// 38 - 41		+4
-	} arp;
-
-	// ~~~ ARP hlavička
-	uint8_t padding[36];          // 44 - XX
-} packet_t;
 
 ArpScanner::ArpScanner(const Arguments* arguments):arguments(arguments)
 {
@@ -55,23 +27,23 @@ ArpScanner::~ArpScanner()
 
 static bool found = false;
 
-void pcapCallback(u_char *user, const struct pcap_pkthdr *header,const u_char *packet)
-{
-	struct ether_arp *ether_arp;
-	u_char eth_str[19];
-	u_char ip_str[17];
-	uint32_t ip;
-
-	packet_t *arp_packet = (packet_t *)(packet);
-
-	Logger::Debug("Arp scan", "Pcap receievd");
-
-	/* We are only interested ARP replies. */
-	if (arp_packet->arp.opcode != ntohs(2))
-		return;
-
-	found = true;
-}
+//void pcapCallback(u_char *user, const struct pcap_pkthdr *header,const u_char *packet)
+//{
+//	struct ether_arp *ether_arp;
+//	u_char eth_str[19];
+//	u_char ip_str[17];
+//	uint32_t ip;
+//
+//	packet_t *arp_packet = (packet_t *)(packet);
+//
+//	Logger::Debug("Arp scan", "Pcap receievd");
+//
+//	/* We are only interested ARP replies. */
+//	if (arp_packet->arp.opcode != ntohs(2))
+//		return;
+//
+//	found = true;
+//}
 
 bool ArpScanner::ScanAddress(IpAddress& address)
 {
@@ -192,4 +164,34 @@ bool ArpScanner::ScanAddress(IpAddress& address)
 //	pcap_close(pcap);
 
 	return false;
+}
+
+typedef struct {
+	struct {	                //  OFFSET		Bajt
+		uint8_t dst_mac[6];		//  0 -  5		+6
+		uint8_t src_mac[6];		//  6 - 11		+6
+		uint8_t type[2];		// 12 - 13		+2
+	} eth;
+	struct {					//  OFFSET		Bajt
+		uint16_t htype;         // 14 - 15		+2
+		uint16_t ptype;			// 16 - 17		+2
+		uint8_t hlen;			// 18 - 18		+1
+		uint8_t plen;			// 19 - 19		+1
+		uint16_t opcode;		// 20 - 21		+2
+		uint8_t sender_mac[6];	// 22 - 27		+6
+		uint8_t sender_ip[4];	// 28 - 31		+4
+		uint8_t target_mac[6];	// 32 - 37		+6
+		uint8_t target_ip[4];	// 38 - 41		+4
+	} arp;
+
+	uint8_t padding[36];          // 44 - XX
+} packet_t;
+
+std::vector<IpAddress> ArpScanner::ScanNetwork(IpNetwork network, std::string adapter) {
+	uint8_t macAddress[6];
+	NetworkHelper::GetMacAddress(macAddress, adapter);
+	struct sockaddr_ll device = { 0 };
+	device.sll_ifindex = if_nametoindex(adapter.c_str());
+	memcpy(&device.sll_addr, macAddress, 6*sizeof(uint8_t));
+
 }

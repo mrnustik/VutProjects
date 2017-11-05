@@ -10,10 +10,8 @@ class ArpScanner : ScannerBase
 public:
 	ArpScanner(const Arguments* arguments);
 	~ArpScanner();
-	
-	bool ScanAddress(IpAddress&  address);
 
-    std::vector<IpAddress> ScanNetwork(IpNetwork network, std::string adapter);
+	std::vector<IpAddress> ScanNetwork(IpNetwork network, std::string adapter);
 
 private:
 	const Arguments* arguments;

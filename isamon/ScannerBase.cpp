@@ -21,18 +21,6 @@ ScannerBase::~ScannerBase()
 {
 }
 
-in_addr* ScannerBase::GetMyIpAddress()
-{
-	char hostname[HOSTNAME_SIZE];
-	int result = gethostname(hostname, HOSTNAME_SIZE);
-	if(result < 0)
-	{
-		//TODO change erxception
-		throw new std::exception();
-	}
-	
-}
-
 unsigned short ScannerBase::Checksum(void* buffer, int bufferSize)
 {
 	unsigned short *buf = (unsigned short*) buffer;
@@ -65,10 +53,6 @@ int ScannerBase::OpenSocket(int domain, int type, int protocol) {
 	return sockNumber;
 }
 
-bool ScannerBase::CanOpenSocket() {
-	return openSocketCount + 1 <= MaximumSocketsCount;
-}
-
 void ScannerBase::CloseSocket(int socketNumber) {
 	close(socketNumber);
 	openSocketCount--;
@@ -89,10 +73,6 @@ void ScannerBase::GetSocketAddress(IpAddress &address, int port, struct sockaddr
     socketAddress->sin_addr = address.ToInAddr();
     socketAddress->sin_family = AF_INET;
     socketAddress->sin_port = htons(static_cast<uint16_t>(port));
-}
-
-int ScannerBase::GetMaximumSocketNumber() {
-    return this->maximumSocketNumber;
 }
 
 void ScannerBase::BindSocketToInterface(int socket, std::string interfaceName) {

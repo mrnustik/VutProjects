@@ -120,8 +120,8 @@ Arguments::Arguments() : network(IpNetwork::FromCidr("0.0.0.0/0"))
 	this->flagHelp = false;
 	this->flagTcp = false;
 	this->flagUdp = false;
-	this->networkString = "";
-	this->interfaceName = "";
+	this->networkString = std::string("");
+	this->interfaceName = std::string("");
 	this->interfaceNumber = 0;
 	this->maxRtt = 10000;
 	this->portNumber = AllPorts;

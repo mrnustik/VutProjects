@@ -27,11 +27,6 @@ ArpScanner::~ArpScanner()
 }
 
 
-bool ArpScanner::ScanAddress(IpAddress& address){
-
-	return false;
-}
-
 typedef struct {
 	struct {	                //  OFFSET		Bajt
 		uint8_t dst_mac[6];		//  0 -  5		+6
@@ -51,13 +46,14 @@ typedef struct {
 	} arp;
 
 	uint8_t padding[36];          // 44 - XX
-} packet_t;
+} arpEthPacket;
 
 std::vector<IpAddress> ArpScanner::ScanNetwork(IpNetwork network, std::string adapter) {
     std::vector<IpAddress> addressVector;
 	uint8_t macAddress[6];
 	NetworkHelper::GetMacAddress(macAddress, adapter);
-	struct sockaddr_ll device = { 0 };
+	struct sockaddr_ll device;
+    bzero(&device, sizeof(device));
     int socket = OpenSocket( AF_PACKET, SOCK_RAW, htons(ETH_P_ALL) );
 
 	device.sll_ifindex = if_nametoindex(adapter.c_str());
@@ -66,7 +62,8 @@ std::vector<IpAddress> ArpScanner::ScanNetwork(IpNetwork network, std::string ad
     device.sll_halen = 6;
     IpAddress deviceIp = NetworkHelper::GetDeviceAddress(adapter);
 
-    packet_t packet{};
+    arpEthPacket packet;
+    bzero(&packet, sizeof(packet));
     uint8_t dstAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
     memcpy(packet.eth.dst_mac, dstAddress , sizeof(dstAddress));
     memcpy(packet.eth.src_mac, macAddress, sizeof(macAddress));
@@ -90,18 +87,20 @@ std::vector<IpAddress> ArpScanner::ScanNetwork(IpNetwork network, std::string ad
         auto currentAddress = enumerator.Current();
         auto dstIp = currentAddress.ToInAddr().s_addr;
         memcpy(packet.arp.target_ip, &dstIp, sizeof(dstIp));
-        if (sendto(socket, &packet, sizeof(packet_t), 0, (struct sockaddr *)&device, sizeof(struct sockaddr_ll)) <= 0)
+        if (sendto(socket, &packet, sizeof(arpEthPacket), 0, (struct sockaddr *)&device, sizeof(struct sockaddr_ll)) <= 0)
         {
             Logger::Error("Arp Scanner", "Sending", errno);
         }
     }
     char buffer[256];
 
-    fd_set readFileDescriptors{};
+    fd_set readFileDescriptors;
+    bzero(&readFileDescriptors, sizeof(readFileDescriptors));
     FD_SET(socket, &readFileDescriptors);
     while (true) {
         //Initialize timeout
-        struct timeval timeout{};
+        struct timeval timeout;
+        bzero(&timeout, sizeof(timeout));
         timeout.tv_sec = this->arguments->maxRtt / 1000;
         timeout.tv_usec = this->arguments->maxRtt % 1000;
 
@@ -112,7 +111,7 @@ std::vector<IpAddress> ArpScanner::ScanNetwork(IpNetwork network, std::string ad
             break;
         }
         int bufferSize = read(socket, buffer, sizeof(buffer));
-        auto *arpHeader = (packet_t *) (buffer);
+        auto *arpHeader = (arpEthPacket *) (buffer);
 
         if (ntohs(arpHeader->arp.opcode) == ARPOP_REPLY) {
             Logger::Debug("ARP Scan", "Reply");

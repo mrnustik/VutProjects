@@ -1,18 +1,9 @@
 #include "TCPScanner.h"
 #include "Logger.h"
 #include <cstring>
-#include <unistd.h>
-#include <netdb.h>
-#include "Arguments.h"
-#include "ScannerBase.h"
-#include <netinet/tcp.h>
+#include <algorithm>
 #include <netinet/ip.h>
-#include <unistd.h>
-#include <fcntl.h>
 #include <vector>
-#include <sys/timeb.h>
-#include <pcap.h>
-#include <net/if.h>
 
 TcpScanner::TcpScanner(const Arguments* arguments): arguments(arguments) {
 }
@@ -27,6 +18,7 @@ void TcpScanner::Scan(IpAddress address)
     char pcapBuffer[PCAP_ERRBUF_SIZE];
     pcap_if_t* devices,* device;
     pcap_findalldevs(&devices, pcapBuffer);
+    std::vector<uint16_t > openPorts;
     for(device = devices; device != nullptr; device = device->next) {
         if(strcmp(device->name, "any") == 0) continue;
         if(!arguments->interfaceName.empty() && arguments->interfaceName != device->name) continue;
@@ -70,7 +62,8 @@ void TcpScanner::Scan(IpAddress address)
             tcph.dest = htons(port);
             TCPPseudoHeader pseudoHeader = CreatePseudoHeader(device,address, tcph);
             tcph.check = Checksum(&pseudoHeader, sizeof(TCPPseudoHeader));
-            struct sockaddr_in socketAddress = {};
+            struct sockaddr_in socketAddress;
+            bzero(&socketAddress, sizeof(socketAddress));
             GetSocketAddress(address, port, &socketAddress);
             memcpy(buffer, &iph, sizeof(iph));
             memcpy(buffer + sizeof(iph), &tcph, sizeof(tcph));
@@ -78,16 +71,19 @@ void TcpScanner::Scan(IpAddress address)
             tcph.check = 0;
         }
 
-        fd_set readFileDescriptors{};
+        fd_set readFileDescriptors;
+        bzero(&readFileDescriptors, sizeof(readFileDescriptors));
         FD_SET(socket, &readFileDescriptors);
         while (true) {
             //Initialize timeout
-            struct timeval timeout{};
+            struct timeval timeout;
+            bzero(&timeout, sizeof(timeout));
             timeout.tv_sec = this->arguments->maxRtt / 1000;
             timeout.tv_usec = this->arguments->maxRtt % 1000;
 
             //Select if incoming messages
-            struct tcphdr receivedHeader{};
+            struct tcphdr receivedHeader;
+            bzero(&receivedHeader, sizeof(receivedHeader));
             auto result = select(socket + 1, &readFileDescriptors, NULL, NULL, &timeout);
             if (result <= 0) {
                 Logger::Debug("TCP Scanner", "Select timeout");
@@ -95,11 +91,11 @@ void TcpScanner::Scan(IpAddress address)
             }
 
             //Receive incoming message
-            result = recv(socket, buffer, sizeof buffer, 0);
-            if (result <= 0) {
+            ssize_t count = recv(socket, buffer, sizeof buffer, 0);
+            if (count <= 0) {
                 continue;
             }
-            if (result < sizeof receivedHeader) {
+            if (count < sizeof receivedHeader) {
                 continue;
             }
 
@@ -110,7 +106,11 @@ void TcpScanner::Scan(IpAddress address)
             memcpy(&receivedHeader, buffer + ipLength, sizeof receivedHeader);
 
             if (receivedHeader.ack == 1 && receivedHeader.syn == 1) {
-                std::cout << address.ToString() << " TCP " <<  ntohs(receivedHeader.source) << std::endl;
+                uint16_t port = ntohs(receivedHeader.source);
+                if(std::find(std::begin(openPorts), std::end(openPorts), port) == openPorts.end()) {
+                    openPorts.push_back(port);
+                    std::cout << address.ToString() << " TCP " << port << std::endl;
+                }
             };
         }
         CloseSocket(socket);
@@ -118,7 +118,7 @@ void TcpScanner::Scan(IpAddress address)
 }
 
 tcphdr TcpScanner::CreateTcpHeader() const {
-    tcphdr tcph{};
+    tcphdr tcph;
     bzero(&tcph, sizeof(tcph));
     //TCP Header
     tcph.source = htons ( 54826);
@@ -137,64 +137,8 @@ tcphdr TcpScanner::CreateTcpHeader() const {
     return tcph;
 }
 
-bool TcpScanner::Scan(IpAddress adress, int port)
-{
-	struct sockaddr_in serv_addr;
-	long arg;
-
-
-	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockfd < 0)
-	{
-		int err = errno;
-		Logger::Debug("TCP scan", "Can't open socket " + std::to_string(err));
-		//FIXME
-		throw new std::exception();
-	}
-	struct hostent *server;
-	if ((server = gethostbyname(adress.ToString().c_str())) == nullptr) {
-		exit(EXIT_FAILURE);
-	}
-	bzero((char *)&serv_addr, sizeof(serv_addr));
-	serv_addr.sin_family = AF_INET;
-	bcopy((char *)server->h_addr, (char *)&serv_addr.sin_addr.s_addr,
-		server->h_length);
-	serv_addr.sin_port = htons(port);
-	// Set non-blocking 
-	fcntl(sockfd, F_SETFL, O_NONBLOCK);
-	fd_set fdset;
-	FD_ZERO(&fdset);
-	FD_SET(sockfd, &fdset);
-    timeval tv;
-	tv.tv_sec = arguments->maxRtt / 1000;             /* 10 second timeout */
-	tv.tv_usec = arguments->maxRtt % 1000;
-	if (connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)	{
-		int err = errno;
-		if(err == EINPROGRESS)
-		{
-			int res = select(sockfd + 1, nullptr, &fdset, nullptr, &tv);
-			if(res > 0)
-			{
-				int valopt;
-				socklen_t lon = sizeof(int);
-				getsockopt(sockfd, SOL_SOCKET, SO_ERROR, (void*)(&valopt), &lon);
-				if (valopt) {
-					close(sockfd);
-					return false;
-				}
-				close(sockfd);
-				return true;
-			}
-		}
-		close(sockfd);
-		return false;
-	}
-	close(sockfd);
-	return true;
-}
-
 TCPPseudoHeader TcpScanner::CreatePseudoHeader(pcap_if *pIf, IpAddress address,  tcphdr tcpHeader) {
-    TCPPseudoHeader pseudoHeader = {};
+    TCPPseudoHeader pseudoHeader;
     bzero(&pseudoHeader, sizeof(TCPPseudoHeader));
     pseudoHeader.sourceAddress = GetInAddrFromPcapDevice(pIf);
     pseudoHeader.destinationAddress = address.ToInAddr().s_addr;
@@ -213,11 +157,5 @@ unsigned int TcpScanner::GetInAddrFromPcapDevice(pcap_if *device) {
         }
     }
     return 0;
-}
-
-long TcpScanner::GetCurrentMilis() {
-    timeval time ={};
-    gettimeofday(&time, NULL);
-    return time.tv_sec * 1000 + time.tv_usec / 1000;
 }
 

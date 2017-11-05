@@ -21,17 +21,10 @@ class TcpScanner : ScannerBase
 public:
 	TcpScanner(const Arguments* arguments);
 	~TcpScanner();
-	bool Scan(IpAddress adress, int port);
 	const Arguments* arguments;
-
     void Scan(IpAddress address);
-
     tcphdr CreateTcpHeader() const;
-
 	TCPPseudoHeader CreatePseudoHeader(pcap_if *pIf, IpAddress address,  tcphdr tcphdr);
-
 	unsigned int GetInAddrFromPcapDevice(pcap_if *device);
-
-    long GetCurrentMilis();
 };
 

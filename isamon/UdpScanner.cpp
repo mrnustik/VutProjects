@@ -32,76 +32,11 @@ UdpScanner::~UdpScanner()
 {
 }
 
-void* UdpScanner::CraftPacket(pcap_if_t* device, const IpAddress& address, int port)
-{
-	char buffer[PacketSize];
-	memset(buffer, 0, sizeof(buffer));
-	char *data = buffer + sizeof(iphdr) + sizeof(udphdr);
-	memcpy(data, "UDPAB", strlen("UDPAB"));
-	bpf_u_int32 ip_raw;
-	bpf_u_int32 subnet_mask_raw;
-//	int result = pcap_lookupnet(device->name, &ip_raw, &subnet_mask_raw, ErrorBuffer);
-//	if (result != 0)
-//	{
-//		Logger::Error("UDP Create packet", "Can't lookup device" + std::string(device->name));
-//		return nullptr;
-//	}
-	iphdr* ipHeader = (iphdr*)buffer;
-	ipHeader->ihl = 5;
-	ipHeader->version = 4;
-	ipHeader->tos = 0;
-	ipHeader->tot_len = PacketSize;
-	ipHeader->id = htons(54321);
-	ipHeader->frag_off = 0x00;
-	ipHeader->ttl = 0xff;
-	ipHeader->protocol = IPPROTO_UDP;
-	ipHeader->check = 0;
-	ipHeader->saddr = ip_raw;
-	auto addressString = address.ToString();
-	ipHeader->daddr = inet_addr(addressString.c_str());
-	ipHeader->check = Checksum(buffer, ipHeader->tot_len);
-
-	udphdr* udpHeader = (udphdr*)buffer + sizeof(struct iphdr);
-	udpHeader->source = htons(6666);
-	udpHeader->dest = htons(8622);
-	udpHeader->len = htons(8 + 5); //tcp header size
-
-	pseudo_header psh;
-
-	psh.source_address = ip_raw;
-	psh.dest_address = inet_addr(addressString.c_str());
-	psh.placeholder = 0;
-	psh.protocol = IPPROTO_UDP;
-	psh.udp_length = htons(sizeof(struct udphdr) + strlen(data));
-
-	int psize = sizeof(struct pseudo_header) + sizeof(struct udphdr) + strlen(data);
-	char *pseudogram = (char*)malloc(psize);
-
-	memcpy(pseudogram, (char*)&psh, sizeof(struct pseudo_header));
-	memcpy(pseudogram + sizeof(struct pseudo_header), udpHeader, sizeof(struct udphdr) + strlen(data));
-
-	udpHeader->check = Checksum((unsigned short*)pseudogram, psize);
-
-	return buffer;
-}
-
 void OnRecieve(u_char *user, const struct pcap_pkthdr *h, const u_char *bytes)
 {
 	std::cout << user;
 	std::cout << h->len;
 	std::cout << bytes;
-}
-
-
-bool UdpScanner::Scan(IpAddress& address, int port)
-{
-	int udpSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-	struct sockaddr_in servaddr;
-	//GetSocketAddress(address, &servaddr, port);
-	connect(udpSocket, (struct sockaddr*)&servaddr, sizeof(servaddr));
-	send(udpSocket, "buffer", 6, 0);
-	close(udpSocket);
-	return false;
 }
 
 
@@ -111,17 +46,20 @@ void UdpScanner::Scan(IpAddress &address) {
 	SetNonBlocking(udpSocket);
 	char buffer[256];
 	std::vector<int> ports;
-	struct sockaddr_in socketAddress = {};
+	struct sockaddr_in socketAddress;
+	bzero(&socketAddress, sizeof(socketAddress));
 	for(int port = 1; port<= 65335; port++) {
 		GetSocketAddress(address, port, &socketAddress);
 		ports.push_back(port);
 		sendto(udpSocket, "buffer", 5, 0, (struct sockaddr *) &socketAddress, sizeof(socketAddress));
 
 		timeval timeout;
+		bzero(&timeout, sizeof(timeout));
 		timeout.tv_sec = arguments->maxRtt / 1000;
 		timeout.tv_usec = arguments->maxRtt % 1000;
 
-		fd_set readFileDescriptors{};
+		fd_set readFileDescriptors;
+		bzero(&readFileDescriptors, sizeof(readFileDescriptors));
 		FD_SET(icmpSocket, &readFileDescriptors);
 
 		while (true) {

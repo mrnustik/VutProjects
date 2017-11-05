@@ -46,6 +46,10 @@ int Application::Run()
             {
                 tcpScanner.Scan(address);
             }
+			if(arguments->flagUdp)
+			{
+				udpScanner.Scan(address);
+			}
         }
         knownHosts.clear();
 	}

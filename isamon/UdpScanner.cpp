@@ -25,6 +25,8 @@ void UdpScanner::Scan(IpAddress &address) {
 	struct sockaddr_in socketAddress;
 	bzero(&socketAddress, sizeof(socketAddress));
 	for(int port = 1; port<= 65335; port++) {
+		if(arguments->portNumber == Arguments::AllPorts) continue;
+		else if(arguments->portNumber != port) continue;
 		GetSocketAddress(address, port, &socketAddress);
 		ports.push_back(port);
 		sendto(udpSocket, "buffer", 5, 0, (struct sockaddr *) &socketAddress, sizeof(socketAddress));
@@ -68,7 +70,10 @@ void UdpScanner::Scan(IpAddress &address) {
 		}
 	}
 	for(std::vector<int>::iterator it = ports.begin(); it != ports.end(); ++it) {
-		std::cout << address.ToString() << " UDP " << *it << std::endl;
+		if(arguments->portNumber == Arguments::AllPorts)
+			std::cout << address.ToString() << " UDP " << *it << std::endl;
+		else
+			std::cout << address.ToString()  << std::endl;
 	}
 	CloseSocket(icmpSocket);
 	CloseSocket(udpSocket);

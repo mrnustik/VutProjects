@@ -38,7 +38,8 @@ int Application::Run()
             Logger::Debug("Hosts", "Found: " + std::to_string(knownHosts.size()) + " hosts");
             for (auto iterator = knownHosts.begin(); iterator != knownHosts.end(); ++iterator) {
                 auto address = *iterator;
-                std::cout << address.ToString() << std::endl;
+                if(arguments->portNumber == Arguments::AllPorts)
+                    std::cout << address.ToString() << std::endl;
                 if (arguments->flagTcp) {
                     tcpScanner.Scan(address);
                 }

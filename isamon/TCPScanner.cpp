@@ -57,8 +57,12 @@ void TcpScanner::Scan(IpAddress address)
         }
         short sourceportOffset = 50000;
         std::vector<int> openSockets;
-        for (uint16_t port = 1; port <= 3000; port++) {
-            SendTcpSyn(socket, device, address, tcph, sourceportOffset, port, iph);
+        if(arguments->portNumber == Arguments::AllPorts) {
+            for (uint16_t port = 1; port <= 3000; port++) {
+                SendTcpSyn(socket, device, address, tcph, sourceportOffset, port, iph);
+            }
+        } else {
+            SendTcpSyn(socket, device, address, tcph, sourceportOffset, static_cast<uint16_t>(arguments->portNumber), iph);
         }
 
         fd_set readFileDescriptors;
@@ -101,7 +105,10 @@ void TcpScanner::Scan(IpAddress address)
                 if(std::find(std::begin(openPorts), std::end(openPorts), port) == openPorts.end()) {
                     openPorts.push_back(port);
                     SendTcpReset(socket, device,address, port, sourcePort);
-                    std::cout << address.ToString() << " TCP " << port << std::endl;
+                    if(arguments->portNumber == Arguments::AllPorts)
+                        std::cout << address.ToString() << " TCP " << port << std::endl;
+                    else
+                        std::cout << address.ToString() << std::endl;
                 }
             };
         }

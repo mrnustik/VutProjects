@@ -58,8 +58,8 @@ void TcpScanner::Scan(IpAddress address)
         short sourceportOffset = 50000;
         std::vector<int> openSockets;
         if(arguments->portNumber == Arguments::AllPorts) {
-            for (uint16_t port = 1; port <= 3000; port++) {
-                SendTcpSyn(socket, device, address, tcph, sourceportOffset, port, iph);
+            for (int port = 1; port <= 65535; port++) {
+                SendTcpSyn(socket, device, address, tcph, sourceportOffset, static_cast<uint16_t>(port), iph);
             }
         } else {
             SendTcpSyn(socket, device, address, tcph, sourceportOffset, static_cast<uint16_t>(arguments->portNumber), iph);
@@ -74,6 +74,7 @@ void TcpScanner::Scan(IpAddress address)
             bzero(&timeout, sizeof(timeout));
             timeout.tv_sec = this->arguments->maxRtt / 1000;
             timeout.tv_usec = this->arguments->maxRtt % 1000;
+
 
             //Select if incoming messages
             struct tcphdr receivedHeader;
@@ -110,7 +111,11 @@ void TcpScanner::Scan(IpAddress address)
                     else
                         std::cout << address.ToString() << std::endl;
                 }
-            };
+            } else if(receivedHeader.ack == 1 && receivedHeader.rst == 1){
+                uint16_t port = ntohs(receivedHeader.source);
+                uint16_t sourcePort = ntohs(receivedHeader.dest);
+                SendTcpReset(socket, device,address, port, sourcePort);
+            }
         }
         CloseSocket(socket);
     }

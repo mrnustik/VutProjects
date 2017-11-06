@@ -5,11 +5,13 @@
 
 void Logger::Debug(const std::string category, const std::string message)
 {
+	if (!IsDebug) return;
 	WriteOutput(Green, category, message);
 }
 
 void Logger::Error(const std::string category, const std::string message)
 {
+	if (!IsDebug) return;
 	WriteOutput(Red, category, message);
 }
 
@@ -32,7 +34,6 @@ Logger::~Logger()
 
 void Logger::WriteOutput(Colour outputColour, std::string category, std::string message)
 {
-	if (!IsDebug) return;
 	std::string colourFormat;
 	switch (outputColour)
 	{

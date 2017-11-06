@@ -17,65 +17,61 @@ UdpScanner::~UdpScanner()
 
 
 void UdpScanner::Scan(IpAddress &address) {
-	int icmpSocket = OpenSocket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
-	int udpSocket = OpenSocket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-	SetNonBlocking(udpSocket);
-	char buffer[256];
-	std::vector<int> ports;
-	struct sockaddr_in socketAddress;
-	bzero(&socketAddress, sizeof(socketAddress));
-	for(int port = 1; port<= 65335; port++) {
-		if(arguments->portNumber == Arguments::AllPorts) continue;
-		else if(arguments->portNumber != port) continue;
-		GetSocketAddress(address, port, &socketAddress);
-		ports.push_back(port);
-		sendto(udpSocket, "buffer", 5, 0, (struct sockaddr *) &socketAddress, sizeof(socketAddress));
+    std::vector<unsigned short> ports;
 
-		timeval timeout;
-		bzero(&timeout, sizeof(timeout));
-		timeout.tv_sec = arguments->maxRtt / 1000;
-		timeout.tv_usec = arguments->maxRtt % 1000;
+    int icmpSocket = OpenSocket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+    int udpSocket = OpenSocket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    SetNonBlocking(udpSocket);
 
-		fd_set readFileDescriptors;
-		bzero(&readFileDescriptors, sizeof(readFileDescriptors));
-		FD_SET(icmpSocket, &readFileDescriptors);
+    char buffer[1024];
+    struct sockaddr_in socketAddress;
+    bzero(&socketAddress, sizeof(socketAddress));
 
-		while (true) {
-			FD_ZERO(&readFileDescriptors);
-			FD_SET(icmpSocket, &readFileDescriptors);
+    for (unsigned short port = 1; port < 65535; port++) {
+        if (arguments->portNumber != Arguments::AllPorts && arguments->portNumber != port) continue;
+        GetSocketAddress(address, port, &socketAddress);
+        ports.push_back(port);
+        sendto(udpSocket, "ahoj", 5, 0, (struct sockaddr *) &socketAddress, sizeof(socketAddress));
 
-			if (select(icmpSocket + 1, &readFileDescriptors, NULL, NULL, &timeout) > 0) {
-				recvfrom(icmpSocket, &buffer, sizeof(buffer), 0x0, NULL, NULL);
-			} else if (!FD_ISSET(udpSocket, &readFileDescriptors)) {
-				break;
-			} else {
-				Logger::Error("UDP Scanner", "recvfrom()", errno);
-				break;
-			}
 
-			struct ip *iphdr = (struct ip *) buffer;
-			unsigned int iplen = iphdr->ip_hl << 2;
-			struct icmp *icmp = (struct icmp *) (buffer + iplen);
+        timeval timeout;
+        bzero(&timeout, sizeof(timeout));
+        timeout.tv_sec = arguments->maxRtt / 1000;
+        timeout.tv_usec = arguments->maxRtt % 1000;
 
-			if (icmp->icmp_type == ICMP_UNREACH) {
-				Logger::Debug("UDP Scan", "Icmp unreachable");
-				struct udphdr *udp = (struct udphdr *) (icmp + 8 + sizeof(iphdr));
-				ports.erase(std::remove(ports.begin(), ports.end(), port), ports.end());
-				break;
-			} else {
-				Logger::Debug("UDP Scanner", "Other ICMP message");
-				continue;
-			}
+        fd_set readFileDescriptors{};
+        FD_ZERO(&readFileDescriptors);
+        FD_SET(icmpSocket, &readFileDescriptors);
 
-		}
-	}
-	for(std::vector<int>::iterator it = ports.begin(); it != ports.end(); ++it) {
-		if(arguments->portNumber == Arguments::AllPorts)
-			std::cout << address.ToString() << " UDP " << *it << std::endl;
-		else
-			std::cout << address.ToString()  << std::endl;
-	}
-	CloseSocket(icmpSocket);
-	CloseSocket(udpSocket);
+        bzero(buffer, sizeof(buffer));
+        if (select(icmpSocket + 1, &readFileDescriptors, nullptr, nullptr, &timeout) > 0) {
+            recv(icmpSocket, &buffer, sizeof(buffer), 0);
+        } else {
+            Logger::Debug("UDP scan", "Select timeout");
+            continue;
+        }
+
+        struct ip *iphdr = (struct ip *) buffer;
+        unsigned int iplen = iphdr->ip_hl << 2;
+        struct icmp *icmp = (struct icmp *) (buffer + iplen);
+        struct ip *iphdr2 = (struct ip *) (buffer + iplen + 8);
+        unsigned int iplen2 = iphdr->ip_hl << 2;
+
+        if (icmp->icmp_type == ICMP_UNREACH) {
+            Logger::Debug("UDP Scan", "Icmp unreachable");
+            struct udphdr *udp = (struct udphdr *) ((char *) iphdr2 + iplen2);
+            ports.erase(std::remove(ports.begin(), ports.end(), port), ports.end());
+        } else {
+            Logger::Debug("UDP Scanner", "Other ICMP message");
+        }
+    }
+    for (unsigned short &port : ports) {
+        if (arguments->portNumber == Arguments::AllPorts)
+            std::cout << address.ToString() << " UDP " << port << std::endl;
+        else
+            std::cout << address.ToString() << std::endl;
+    }
+    CloseSocket(icmpSocket);
+    CloseSocket(udpSocket);
 }
 

@@ -26,7 +26,7 @@ void TcpScanner::Scan(IpAddress address)
         Logger::Debug("TCP Scanner", "Send to device " + std::string(device->name));
 
         int socket = OpenSocket(AF_INET, SOCK_RAW, IPPROTO_TCP);
-        BindSocketToInterface(socket, arguments->interfaceName);
+        if(!TryBindSocketToInterface(socket, arguments->interfaceName)) continue;
 
         char buffer[256];
         tcphdr tcph = CreateTcpHeader();
@@ -57,18 +57,8 @@ void TcpScanner::Scan(IpAddress address)
         }
         short sourceportOffset = 50000;
         std::vector<int> openSockets;
-        for (uint16_t port = 1; port <= 100; port++) {
-            tcph.source = htons ( sourceportOffset + port % 100);
-            tcph.dest = htons(port);
-            TCPPseudoHeader pseudoHeader = CreatePseudoHeader(device,address, tcph);
-            tcph.check = Checksum(&pseudoHeader, sizeof(TCPPseudoHeader));
-            struct sockaddr_in socketAddress;
-            bzero(&socketAddress, sizeof(socketAddress));
-            GetSocketAddress(address, port, &socketAddress);
-            memcpy(buffer, &iph, sizeof(iph));
-            memcpy(buffer + sizeof(iph), &tcph, sizeof(tcph));
-            sendto(socket, buffer, sizeof(tcph) + sizeof(iph), 0, (struct sockaddr *) &socketAddress, sizeof(socketAddress));
-            tcph.check = 0;
+        for (uint16_t port = 1; port <= 3000; port++) {
+            SendTcpSyn(socket, device, address, tcph, sourceportOffset, port, iph);
         }
 
         fd_set readFileDescriptors;
@@ -107,14 +97,33 @@ void TcpScanner::Scan(IpAddress address)
 
             if (receivedHeader.ack == 1 && receivedHeader.syn == 1) {
                 uint16_t port = ntohs(receivedHeader.source);
+                uint16_t sourcePort = ntohs(receivedHeader.dest);
                 if(std::find(std::begin(openPorts), std::end(openPorts), port) == openPorts.end()) {
                     openPorts.push_back(port);
+                    SendTcpReset(socket, device,address, port, sourcePort);
                     std::cout << address.ToString() << " TCP " << port << std::endl;
                 }
             };
         }
         CloseSocket(socket);
     }
+}
+
+void
+TcpScanner::SendTcpSyn(int socket, pcap_if_t *device, IpAddress &address, tcphdr &tcph, short sourceportOffset,
+                       uint16_t port, iphdr &iph) {
+    char buffer[256];
+    tcph.source = htons (sourceportOffset + port % 100);
+    tcph.dest = htons(port);
+    TCPPseudoHeader pseudoHeader = CreatePseudoHeader(device, address, tcph);
+    tcph.check = Checksum(&pseudoHeader, sizeof(TCPPseudoHeader));
+    struct sockaddr_in socketAddress;
+    bzero(&socketAddress, sizeof(socketAddress));
+    GetSocketAddress(address, port, &socketAddress);
+    memcpy(buffer, &iph, sizeof(iph));
+    memcpy(buffer + sizeof(iph), &tcph, sizeof(tcph));
+    sendto(socket, buffer, sizeof(tcph) + sizeof(iph), 0, (struct sockaddr *) &socketAddress, sizeof(socketAddress));
+    tcph.check = 0;
 }
 
 tcphdr TcpScanner::CreateTcpHeader() const {
@@ -157,5 +166,33 @@ unsigned int TcpScanner::GetInAddrFromPcapDevice(pcap_if *device) {
         }
     }
     return 0;
+}
+
+void TcpScanner::SendTcpReset(int socket, pcap_if_t *device,  IpAddress address, uint16_t destinationPort, uint16_t sourcePort) {
+    char buffer[256];
+    iphdr ipHeader;
+    ipHeader.ihl = 5;
+    ipHeader.version = 4;
+    ipHeader.tos = 0;
+    ipHeader.tot_len = sizeof (struct ip) + sizeof (struct tcphdr);
+    ipHeader.id = htons (54321); //Id of this packet
+    ipHeader.frag_off = htons(16384);
+    ipHeader.ttl = 64;
+    ipHeader.protocol = IPPROTO_TCP;
+    ipHeader.check = 0;      //Set to 0 before calculating checksum
+    ipHeader.saddr = GetInAddrFromPcapDevice(device);
+    ipHeader.daddr = address.ToInAddr().s_addr;
+    tcphdr tcpHeader = CreateTcpHeader();
+    tcpHeader.syn = 0;
+    tcpHeader.rst = 1;
+    tcpHeader.source = htons (sourcePort);
+    tcpHeader.dest = htons(destinationPort);
+    struct sockaddr_in socketAddress;
+    bzero(&socketAddress, sizeof(socketAddress));
+    GetSocketAddress(address, destinationPort, &socketAddress);
+    memcpy(buffer, &ipHeader, sizeof(ipHeader));
+    memcpy(buffer + sizeof(ipHeader), &tcpHeader, sizeof(tcpHeader));
+    sendto(socket, buffer, sizeof(tcpHeader) + sizeof(ipHeader), 0, (struct sockaddr *) &socketAddress, sizeof(socketAddress));
+
 }
 

@@ -27,7 +27,7 @@ std::string NetworkHelper::GetConnectedAdapter(IpNetwork network) {
 	char PcapErrorBuffer[PCAP_ERRBUF_SIZE];
 	pcap_findalldevs(&devices, PcapErrorBuffer);
 	for(device = devices; device != nullptr; device = device->next){
-		
+		if(strcmp(device->name,"lo") == 0) continue;
 		for(pcap_addr_t *address = device->addresses; address != nullptr; address = address->next)
 		{
             if(address->netmask == nullptr

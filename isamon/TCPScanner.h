@@ -2,6 +2,7 @@
 
 #include <netinet/tcp.h>
 #include <pcap.h>
+#include <netinet/ip.h>
 #include "IpAddress.h"
 #include "ScannerBase.h"
 #include "Arguments.h"
@@ -26,5 +27,10 @@ public:
     tcphdr CreateTcpHeader() const;
 	TCPPseudoHeader CreatePseudoHeader(pcap_if *pIf, IpAddress address,  tcphdr tcphdr);
 	unsigned int GetInAddrFromPcapDevice(pcap_if *device);
+
+    void SendTcpReset(int socket, pcap_if_t *device, IpAddress address, uint16_t destinationPort, uint16_t sourcePort);
+
+    void SendTcpSyn(int socket, pcap_if_t *device, IpAddress &address, tcphdr &tcph, short sourceportOffset, uint16_t port,
+                    iphdr &iph);
 };
 

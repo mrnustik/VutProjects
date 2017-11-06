@@ -19,5 +19,7 @@ protected:
 	static const int IcmpEchoId = 1234;
 	ssize_t SendIcmpEcho(int socket, IpAddress &toAddress);
     std::vector<IpAddress> ipVector;
+
+    bool ContainsIpAddres(std::vector<IpAddress> vector, uint32_t address);
 };
 

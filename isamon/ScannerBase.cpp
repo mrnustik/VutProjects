@@ -69,12 +69,13 @@ void ScannerBase::GetSocketAddress(IpAddress &address, int port, struct sockaddr
     socketAddress->sin_port = htons(static_cast<uint16_t>(port));
 }
 
-void ScannerBase::BindSocketToInterface(int socket, std::string interfaceName) {
+bool ScannerBase::TryBindSocketToInterface(int socket, std::string interfaceName) {
     struct ifreq ifRequest;
     memset(&ifRequest, 0, sizeof(ifRequest));
     memcpy(&ifRequest.ifr_name,interfaceName.c_str(), sizeof(ifRequest.ifr_name));
     if (setsockopt(socket, SOL_SOCKET, SO_BINDTODEVICE, (void*) &ifRequest, sizeof(ifRequest)) < 0) {
         Logger::Error("Socket", "Can't bind to device: " + interfaceName);
+        return false;
     }
-    return;
+    return true;
 }

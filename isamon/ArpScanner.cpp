@@ -48,7 +48,7 @@ std::vector<IpAddress> ArpScanner::ScanNetwork(IpNetwork network, std::string ad
 	struct sockaddr_ll device;
     bzero(&device, sizeof(device));
     int socket = OpenSocket( AF_PACKET, SOCK_RAW, htons(ETH_P_ALL) );
-    BindSocketToInterface(socket, adapter);
+    if(!TryBindSocketToInterface(socket, adapter))return addressVector;
 	device.sll_ifindex = if_nametoindex(adapter.c_str());
 	memcpy(&device.sll_addr, macAddress, 6*sizeof(uint8_t));
     device.sll_family = AF_PACKET;

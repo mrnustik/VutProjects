@@ -11,7 +11,6 @@ public:
 	~IpAddress();
 	struct in_addr ToInAddr();
 	std::string ToString() const;
-private:
 	unsigned int address;
 };
 

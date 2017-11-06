@@ -13,7 +13,7 @@ protected:
 	int OpenSocket(int domain, int type, int protocol);
 	void SetNonBlocking(int socketFd);
 	void CloseSocket(int socketNumber);
-	void BindSocketToInterface(int socket, std::string interfaceName);
+	bool TryBindSocketToInterface(int socket, std::string interfaceName);
 
 	unsigned short Checksum(void* buffer, int bufferSize);
 

@@ -27,7 +27,7 @@ std::vector<IpAddress> IcmpScanner::ScanNetwork(IpNetwork network) {
         if(!arguments->interfaceName.empty() && arguments->interfaceName != device->name) continue;
         auto socket = this->OpenSocket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
 
-        BindSocketToInterface(socket, device->name);
+        if(!TryBindSocketToInterface(socket, device->name)) continue;
 
         auto enumerator = network.GetEnumerator();
         while (enumerator.MoveNext()) {
@@ -70,8 +70,11 @@ std::vector<IpAddress> IcmpScanner::ScanNetwork(IpNetwork network) {
 
             //Is valid ICMP echo reply?
             if (receivedHeader.type == ICMP_ECHOREPLY && receivedHeader.un.echo.id == IcmpEchoId) {
-                ipVector.emplace_back(ntohl(ip_header->ip_src.s_addr));
-                Logger::Debug("ICMPScanner", "Echo reply");
+                if(!ContainsIpAddres(ipVector, ntohl(ip_header->ip_src.s_addr))) {
+                    ipVector.emplace_back(ntohl(ip_header->ip_src.s_addr));
+
+                    Logger::Debug("ICMPScanner", "Echo reply");
+                }
             } else {
                 Logger::Debug("ICMPScanner", "Invalid ICMP message");
             }
@@ -104,4 +107,11 @@ ssize_t IcmpScanner::SendIcmpEcho(int socket, IpAddress &toAddress) {
 	}
 
 	return result;
+}
+
+bool IcmpScanner::ContainsIpAddres(std::vector<IpAddress> vector, uint32_t address) {
+    for (auto iterator = vector.begin(); iterator != vector.end(); ++iterator) {
+        if(iterator->address == address) return true;
+    }
+    return false;
 }

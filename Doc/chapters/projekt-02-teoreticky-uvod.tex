@@ -1,0 +1,61 @@
+\documentclass[../projekt.tex]{subfiles}
+\begin{document}
+\graphicspath{ {images/} }
+
+\chapter{Teoretický úvod}
+
+V rámci řešení projektu musíme vyřešit dva základní problémy a to detekci aktivních hostů a následnou detekci otevřených portů.
+
+V této kapitole se podíváme na to jakým způsobem jsme vyřešili detekci aktivních hostů na přímo nebo nepřímo připojené síti. Zároveň se podíváme na způsob detekce otevřených portů TCP a UDP portů na zařízeních. 
+
+\section{Detekce aktivních hostů}
+V rámci našeho programu máme detekovat aktivní hosty na síti. Dále máme specifikováno v zadání\cite{Zadani}, že na přímo připojené síti máme detekovat všechna připojená zařízení a na nepřímo připojené síti detekovat zařízení respektovat RFC 1122\cite{RFC1122}.
+
+V RFC 1122\cite{RFC1122} v sekci 3.2.2.6 je definováno, že každý host na síti musí implementovat ICMP server, který, pokud mu dojde ICMP echo request zpráva, odpoví zprávou typu ICMP Echo reply. Tím pádem všichni hosté respektující RFC 1122 musí odpovídat na tyto zprávy. Pro skenování nepřímo připojené síti proto zvolíme použití ICMP echo zpráv.
+
+V přímo připojené síti je potřeba detekovat všechna zařízení. ICMP protokol je pro toto řešení nevhodný, protože zařízení nemusí na ICMP zprávy odpovídat (viz \cite{ICMP_Dsiable}). Z tohoto důvodu budeme pro detekci v přímo připojené síti používat Address Resolution Protocol, jehož blokování by znemožnilo zařízení síťovou komunikaci.
+
+\subsection{Internet Control Message Protocol (ICMP)}
+Internet Control Message Protocol je L3 protokol definovaný v RFC 792\cite{RFC0792}. Tento protokol byl navržen pro detekci chyb, řešení problémů na síti a detekci nedostupnosti zařízení. Seznam všech typů naleznete v již zmiňovaném RFC\cite{RFC0792}.
+
+\begin{figure}
+    \includegraphics[width=0.8\textwidth]{IcmpHeader}
+    \centering
+    \caption{Tvar hlavičky pro ICMP Echo request/reply}
+\end{figure}
+
+Nás konkrétně zajímají zprávy typu Echo Request a Echo Reply. Jakmile je na hosta zaslána zpráva zpráva typu Echo Request. Tento host (za předpokladu, že dodržuje RFC 1122\cite{RFC1122}) na tuto zprávu odpoví zprávou typu Echo Reply se stejnými daty jako byly v původní zprávě (tato data mohou být použita odesilatelem requestu pro kontrolu správnosti odpovědi).
+
+\subsection{Address Resolution Protocol (ARP)}
+Address Resolution Protocol je L2 protokol definovaný v RFC 826\cite{RFC0826}. Tento protokol je navržený pro překlad L3 adres (v našem případě MAC adresa) na L4 adresy (v našem případě IPv4 adresa).
+
+ARP paket obsahuje informace o:
+\begin{itemize}
+    \item typu zařízení
+    \item typu L3 protokolu jehož adresu potřebujeme (v našem případě IPv4)
+    \item velikosti hardwareové (L2) adresy
+    \item velikosti adresy používané požadovaným L4 protokolem
+    \item L2 a L3 adresa odesilatele
+    \item L2 (broadcast) a L3 adresa, kterou hledáme
+\end{itemize}
+
+Odesilatel nejprve pošle na L2 broadcast dotaz, kdo má danou L3 adresu. Pokud je na síti připojen příjemce, tak na zprávu odpoví tentokrát už na unicast L2 adresy odesilatele, že on je ten hledaný a má tuto L3 adresu.
+
+\section{Zjišťování otevřených portů}
+
+V případě zjišťování, které porty jsou otevřené, musíme rozlišovat transportní protokoly, který služba běžící na daném využívá pro přenos dat. Výrazně se liší, jakým způsobem funguje zjišťování otevřených portů služeb používajícíh TCP, které vytváří spojení, a služeb používajících UDP, které je bezstavové.
+
+\subsection{Transmission Control Protocol (TCP)}
+
+Transmission Control Protocol je L4 protokol definovaný v RFC 793\cite{RFC0793}. Tento protokol je používaný pro spolehlivý a bezchybný přenos dat přes síť.
+
+Při navázání spojení TCP dochází pomocí techniky zvané threeway handshake. Navázání spojení vypadá takto:
+\begin{enumerate}
+    \item Klient odešle na server TCP packet s nastaveným příznakem SYN, náhodným číslem sekvence a potvrzovacím číslem 0.
+    \item Server packet přijme a odpoví a odešle klientovi packet s nastavenými příznaky SYN a ACK, zvýšeným potvrzovacím číslem rovným klientovu číslu sekvence + 1 a vlastním náhodným číslem sekvence.
+    \item Klient odešle na server packet s příznakem ACK a potvrzovacím číslem rovným serverovému číslu sekvence 1 větší a vlastním číslem sekvence zvětšeným rovněž 0 1.
+\end{enumerate} 
+
+\subsection{User Datagram Protocol (UDP)}
+
+\end{document}

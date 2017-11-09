@@ -15,7 +15,7 @@ V RFC 1122\cite{RFC1122} v sekci 3.2.2.6 je definováno, že každý host na sí
 
 V přímo připojené síti je potřeba detekovat všechna zařízení. ICMP protokol je pro toto řešení nevhodný, protože zařízení nemusí na ICMP zprávy odpovídat (viz \cite{ICMP_Dsiable}). Z tohoto důvodu budeme pro detekci v přímo připojené síti používat Address Resolution Protocol, jehož blokování by znemožnilo zařízení síťovou komunikaci.
 
-\subsection{Internet Control Message Protocol (ICMP)}
+\subsection{Internet Control Message Protocol (ICMP)} \label{icmp}
 Internet Control Message Protocol je L3 protokol definovaný v RFC 792\cite{RFC0792}. Tento protokol byl navržen pro detekci chyb, řešení problémů na síti a detekci nedostupnosti zařízení. Seznam všech typů naleznete v již zmiňovaném RFC\cite{RFC0792}.
 
 \begin{figure}
@@ -26,7 +26,7 @@ Internet Control Message Protocol je L3 protokol definovaný v RFC 792\cite{RFC0
 
 Nás konkrétně zajímají zprávy typu Echo Request a Echo Reply. Jakmile je na hosta zaslána zpráva zpráva typu Echo Request. Tento host (za předpokladu, že dodržuje RFC 1122\cite{RFC1122}) na tuto zprávu odpoví zprávou typu Echo Reply se stejnými daty jako byly v původní zprávě (tato data mohou být použita odesilatelem requestu pro kontrolu správnosti odpovědi).
 
-\subsection{Address Resolution Protocol (ARP)}
+\subsection{Address Resolution Protocol (ARP)} \label{arp}
 Address Resolution Protocol je L2 protokol definovaný v RFC 826\cite{RFC0826}. Tento protokol je navržený pro překlad L3 adres (v našem případě MAC adresa) na L4 adresy (v našem případě IPv4 adresa).
 
 ARP paket obsahuje informace o:
@@ -45,17 +45,27 @@ Odesilatel nejprve pošle na L2 broadcast dotaz, kdo má danou L3 adresu. Pokud 
 
 V případě zjišťování, které porty jsou otevřené, musíme rozlišovat transportní protokoly, který služba běžící na daném využívá pro přenos dat. Výrazně se liší, jakým způsobem funguje zjišťování otevřených portů služeb používajícíh TCP, které vytváří spojení, a služeb používajících UDP, které je bezstavové.
 
-\subsection{Transmission Control Protocol (TCP)}
+\subsection{Transmission Control Protocol (TCP)} \label{tcp}
 
 Transmission Control Protocol je L4 protokol definovaný v RFC 793\cite{RFC0793}. Tento protokol je používaný pro spolehlivý a bezchybný přenos dat přes síť.
 
 Při navázání spojení TCP dochází pomocí techniky zvané threeway handshake. Navázání spojení vypadá takto:
 \begin{enumerate}
-    \item Klient odešle na server TCP packet s nastaveným příznakem SYN, náhodným číslem sekvence a potvrzovacím číslem 0.
-    \item Server packet přijme a odpoví a odešle klientovi packet s nastavenými příznaky SYN a ACK, zvýšeným potvrzovacím číslem rovným klientovu číslu sekvence + 1 a vlastním náhodným číslem sekvence.
-    \item Klient odešle na server packet s příznakem ACK a potvrzovacím číslem rovným serverovému číslu sekvence 1 větší a vlastním číslem sekvence zvětšeným rovněž 0 1.
+    \item Klient odešle na server TCP paket s nastaveným příznakem SYN, náhodným číslem sekvence a potvrzovacím číslem 0.
+    \item Server paket přijme a odpoví a odešle klientovi paket s nastavenými příznaky SYN a ACK, zvýšeným potvrzovacím číslem rovným klientovu číslu sekvence + 1 a vlastním náhodným číslem sekvence.
+    \item Klient odešle na server paket s příznakem ACK a potvrzovacím číslem rovným serverovému číslu sekvence 1 větší a vlastním číslem sekvence zvětšeným rovněž 0 1.
 \end{enumerate} 
 
-\subsection{User Datagram Protocol (UDP)}
+Při skenování portů můžeme právě tohoto využít. Pokud pošleme na všechny porty paket s nastaveným příznakem SYN, tak by nám ze všech otevřených portů měla přijít odpověď s nastavenými SYN a ACK příznaky. V případě, že bude port zavřený měla by nám přijít zpráva s nastavenými příznaky RST a ACK. 
+
+Důležité je v případě, že jsme se dozvěděli, že je port otevřený zaslat klientovi požadavek s příznakem RST a ukončit tak připojení, aby nezůstávalo na druhé straně napůl otevřené připojení.
+
+\subsection{User Datagram Protocol (UDP)} \label{udp}
+
+User Datagram Protocol je L4 protokol definovaný v RFC 768\cite{RFC0768}. UDP je nespojovaný transportní protokol s minimálním množstvím režie. Pakety posílané pomocí UDP nemají žádnou jistotu jejich pořadí, doručení nebo duplikace. 
+
+Vzhledem k tomu, že je protokol nespojovaný, nelze u něj provádět detekci otevřených portů jako u TCP\ref{tcp}. UDP díky svému nespojovanému chování neposkytuje žádný způsob detekce zda paket došel z klienta na server. V tomto nám pomáhá ICMP\ref{icmp}, které jsme tu zmínili v předchozí kapitole. V případě, že pošleme UDP paket na server, nám server odpoví ICMP zprávou typu Destination Unreachable, díky které jsme schopni říct, že port je uzavřen. V případě, že nám ICMP zpráva nepřijde je port považován za otevřený.
+
+
 
 \end{document}

@@ -172,6 +172,7 @@
 \def\@tackn@CS{Poděkování}
 \def\@tackn@SK{Poďakovanie}
 \def\@tackn@EN{Acknowledgements}
+\def\code#1{\texttt{#1}}
 
 \newif\ifnasel
 \def\ifEqString#1#2#3#4{\def\testa{#1}\def\testb{#2}%

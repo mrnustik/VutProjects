@@ -16,11 +16,11 @@ Arguments* Arguments::ParseArguments(int argc, char* argv[])
 		{
 			arguments->flagHelp = true;
 		}
-		else if (currentArg == "-t")
+		else if (currentArg == "-t" || currentArg == "--tcp")
 		{
 			arguments->flagTcp = true;
 		}
-		else if (currentArg == "-u")
+		else if (currentArg == "-u" || currentArg == "--udp")
 		{
 			arguments->flagUdp = true;
 		}

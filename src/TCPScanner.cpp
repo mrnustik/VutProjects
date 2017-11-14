@@ -31,7 +31,7 @@ void TcpScanner::Scan(IpAddress address)
         char buffer[256];
         tcphdr tcph = CreateTcpHeader();
 
-        SetNonBlocking(socket);
+        //SetNonBlocking(socket);
 
         iphdr iph;
         iph.ihl = 5;

@@ -16,7 +16,7 @@ protected:
 	bool TryBindSocketToInterface(int socket, std::string interfaceName);
 
 	unsigned short Checksum(void* buffer, int bufferSize);
-
+	long GetCurrentMilis();
     void GetSocketAddress(IpAddress& address, struct sockaddr_in * socketAddress);
     void GetSocketAddress(IpAddress& address, int port ,struct sockaddr_in * socketAddress);
 

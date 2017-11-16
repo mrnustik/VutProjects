@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <net/if.h>
+#include <time.h>
 
 ScannerBase::ScannerBase()
 {
@@ -13,6 +14,13 @@ ScannerBase::ScannerBase()
 
 ScannerBase::~ScannerBase()
 {
+}
+
+long ScannerBase::GetCurrentMilis()
+{
+	struct timeval tp;
+	gettimeofday(&tp, NULL);
+	return tp.tv_sec * 1000 + tp.tv_usec / 1000;
 }
 
 unsigned short ScannerBase::Checksum(void* buffer, int bufferSize)

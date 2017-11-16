@@ -24,7 +24,7 @@ void TcpScanner::Scan(IpAddress address)
         if(!arguments->interfaceName.empty() && arguments->interfaceName != device->name) continue;
 
         Logger::Debug("TCP Scanner", "Send to device " + std::string(device->name));
-
+        
         int socket = OpenSocket(AF_INET, SOCK_RAW, IPPROTO_TCP);
         if(!TryBindSocketToInterface(socket, arguments->interfaceName)) continue;
 
@@ -38,83 +38,94 @@ void TcpScanner::Scan(IpAddress address)
         iph.version = 4;
         iph.tos = 0;
         iph.tot_len = sizeof (struct ip) + sizeof (struct tcphdr);
-        iph.id = htons (54321); //Id of this packet
+        iph.id = htons (54321); 
         iph.frag_off = htons(16384);
         iph.ttl = 64;
         iph.protocol = IPPROTO_TCP;
-        iph.check = 0;      //Set to 0 before calculating checksum
+        iph.check = 0; 
         iph.saddr = GetInAddrFromPcapDevice(device);
         iph.daddr = address.ToInAddr().s_addr;
 
-        //IP_HDRINCL to tell the kernel that headers are included in the packet
-        int one = 1;
-        const int *val = &one;
 
-        if (setsockopt (socket, IPPROTO_IP, IP_HDRINCL, val, sizeof (one)) < 0)
+        int one = 1;
+        
+        if (setsockopt (socket, IPPROTO_IP, IP_HDRINCL, &one, sizeof (one)) < 0)
         {
             printf ("Error setting IP_HDRINCL. Error number : %d . Error message : %s \n" , errno , strerror(errno));
             exit(0);
         }
+        
         short sourceportOffset = 50000;
         std::vector<int> openSockets;
-        if(arguments->portNumber == Arguments::AllPorts) {
-            for (int port = 1; port <= 65535; port++) {
-                SendTcpSyn(socket, device, address, tcph, sourceportOffset, static_cast<uint16_t>(port), iph);
-            }
-        } else {
-            SendTcpSyn(socket, device, address, tcph, sourceportOffset, static_cast<uint16_t>(arguments->portNumber), iph);
-        }
-
-        fd_set readFileDescriptors;
-        bzero(&readFileDescriptors, sizeof(readFileDescriptors));
-        FD_SET(socket, &readFileDescriptors);
-        while (true) {
-            //Initialize timeout
-            struct timeval timeout;
-            bzero(&timeout, sizeof(timeout));
-            timeout.tv_sec = this->arguments->maxRtt / 1000;
-            timeout.tv_usec = this->arguments->maxRtt % 1000;
-
-
-            //Select if incoming messages
-            struct tcphdr receivedHeader;
-            bzero(&receivedHeader, sizeof(receivedHeader));
-            auto result = select(socket + 1, &readFileDescriptors, NULL, NULL, &timeout);
-            if (result <= 0) {
-                Logger::Debug("TCP Scanner", "Select timeout");
-                break;
-            }
-
-            //Receive incoming message
-            ssize_t count = recv(socket, buffer, sizeof buffer, 0);
-            if (count <= 0) {
-                continue;
-            }
-            if (count < sizeof receivedHeader) {
-                continue;
-            }
-
-            //Read the ip header
-            auto *ip_header = (ip *) buffer;
-            const int ipLength = ip_header->ip_hl << 2;
-            //Read the TCP message
-            memcpy(&receivedHeader, buffer + ipLength, sizeof receivedHeader);
-
-            if (receivedHeader.ack == 1 && receivedHeader.syn == 1) {
-                uint16_t port = ntohs(receivedHeader.source);
-                uint16_t sourcePort = ntohs(receivedHeader.dest);
-                if(std::find(std::begin(openPorts), std::end(openPorts), port) == openPorts.end()) {
-                    openPorts.push_back(port);
-                    SendTcpReset(socket, device,address, port, sourcePort);
-                    if(arguments->portNumber == Arguments::AllPorts)
-                        std::cout << address.ToString() << " TCP " << port << std::endl;
-                    else
-                        std::cout << address.ToString() << std::endl;
+        for(int i = 0; i < 656; i++)
+        {
+            if(arguments->portNumber == Arguments::AllPorts) {
+                for (int port = 1 + i * 100; port <= 100 + i * 100; port++) {
+                    if(port > 65535) break;
+                    SendTcpSyn(socket, device, address, tcph, sourceportOffset, static_cast<uint16_t>(port), iph);
                 }
-            } else if(receivedHeader.ack == 1 && receivedHeader.rst == 1){
-                uint16_t port = ntohs(receivedHeader.source);
-                uint16_t sourcePort = ntohs(receivedHeader.dest);
-                SendTcpReset(socket, device,address, port, sourcePort);
+            } else {
+                SendTcpSyn(socket, device, address, tcph, sourceportOffset, static_cast<uint16_t>(arguments->portNumber), iph);
+            }
+
+            fd_set readFileDescriptors;
+            bzero(&readFileDescriptors, sizeof(readFileDescriptors));
+            FD_SET(socket, &readFileDescriptors);
+            long lastValidTime = GetCurrentMilis();
+            while (true) {
+                //Initialize timeout
+                struct timeval timeout;
+                bzero(&timeout, sizeof(timeout));
+                timeout.tv_sec = this->arguments->maxRtt / 1000;
+                timeout.tv_usec = this->arguments->maxRtt % 1000;
+                
+                long current = GetCurrentMilis();
+                if(current - lastValidTime > arguments->maxRtt){
+                    break;
+                }
+                //Select if incoming messages
+                struct tcphdr receivedHeader;
+                bzero(&receivedHeader, sizeof(receivedHeader));
+                auto result = select(socket + 1, &readFileDescriptors, NULL, NULL, &timeout);
+                if (result <= 0) {
+                    Logger::Debug("TCP Scanner", "Select timeout");
+                    break;
+                }
+
+                //Receive incoming message
+                ssize_t count = recv(socket, buffer, sizeof buffer, 0);
+                if (count <= 0) {
+                    continue;
+                }
+                if (count < sizeof receivedHeader) {
+                    continue;
+                }
+
+                //Read the ip header
+                auto *ip_header = (ip *) buffer;
+                const int ipLength = ip_header->ip_hl << 2;
+                //Read the TCP message
+                memcpy(&receivedHeader, buffer + ipLength, sizeof receivedHeader);
+
+                if (receivedHeader.ack == 1 && receivedHeader.syn == 1) {
+                    uint16_t port = ntohs(receivedHeader.source);
+                    uint16_t sourcePort = ntohs(receivedHeader.dest);
+                    if(std::find(std::begin(openPorts), std::end(openPorts), port) == openPorts.end()) {
+                        lastValidTime = GetCurrentMilis();
+                        openPorts.push_back(port);
+                        SendTcpReset(socket, device,address, port, sourcePort);
+                        if(arguments->portNumber == Arguments::AllPorts)
+                            std::cout << address.ToString() << " TCP " << port << std::endl;
+                        else {
+                            std::cout << address.ToString() << std::endl;
+                            break;
+                        }
+                    }
+                } else if(receivedHeader.ack == 1 && receivedHeader.rst == 1){
+                    uint16_t port = ntohs(receivedHeader.source);
+                    uint16_t sourcePort = ntohs(receivedHeader.dest);
+                    SendTcpReset(socket, device,address, port, sourcePort);
+                }
             }
         }
         CloseSocket(socket);

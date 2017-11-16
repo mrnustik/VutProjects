@@ -95,7 +95,13 @@ Arguments* Arguments::ParseArguments(int argc, char* argv[])
 				Logger::Error("Arguments", "Missing interface argument");
 			}
 			arguments->interfaceName = std::string(argv[i]);
-			arguments->interfaceNumber = NetworkHelper::GetNetworkInterfaceNumber(arguments->interfaceName);
+			try
+			{
+				arguments->interfaceNumber = NetworkHelper::GetNetworkInterfaceNumber(arguments->interfaceName);
+			} catch(...)
+			{
+				Logger::Error("Arguments", "Invalid interface specifier.");
+			}
 		}
 		else
 		{

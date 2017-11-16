@@ -19,6 +19,7 @@ void TcpScanner::Scan(IpAddress address)
     pcap_if_t* devices,* device;
     pcap_findalldevs(&devices, pcapBuffer);
     std::vector<uint16_t > openPorts;
+    srand(time(nullptr));
     for(device = devices; device != nullptr; device = device->next) {
         if(strcmp(device->name, "any") == 0) continue;
         if(!arguments->interfaceName.empty() && arguments->interfaceName != device->name) continue;
@@ -51,8 +52,8 @@ void TcpScanner::Scan(IpAddress address)
         
         if (setsockopt (socket, IPPROTO_IP, IP_HDRINCL, &one, sizeof (one)) < 0)
         {
-            printf ("Error setting IP_HDRINCL. Error number : %d . Error message : %s \n" , errno , strerror(errno));
-            exit(0);
+            Logger::Error("TCP Scanner", "Can't set socket to use my IP header", errno);
+            continue;
         }
         
         short sourceportOffset = 50000;
@@ -136,7 +137,9 @@ void
 TcpScanner::SendTcpSyn(int socket, pcap_if_t *device, IpAddress &address, tcphdr &tcph, short sourceportOffset,
                        uint16_t port, iphdr &iph) {
     char buffer[256];
-    tcph.source = htons (sourceportOffset + port % 100);
+    short sourcePort = rand() % 65535;
+    tcph.source = sourcePort;
+    //tcph.source = htons (sourceportOffset + port % 100);
     tcph.dest = htons(port);
     TCPPseudoHeader pseudoHeader = CreatePseudoHeader(device, address, tcph);
     tcph.check = Checksum(&pseudoHeader, sizeof(TCPPseudoHeader));

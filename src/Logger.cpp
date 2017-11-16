@@ -11,7 +11,6 @@ void Logger::Debug(const std::string category, const std::string message)
 
 void Logger::Error(const std::string category, const std::string message)
 {
-	if (!IsDebug) return;
 	WriteOutput(Red, category, message);
 }
 

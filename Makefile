@@ -1,6 +1,6 @@
 CC=g++
 CLIENT = isamon
-C_FLAGS= -std=c++11 -Wextra
+C_FLAGS= -std=c++11 
 LIBRARY=$(wildcard src/*.cpp)
 OBJ_DIR=obj
 OBJECTS=$(LIBRARY:src/%.cpp=$(OBJ_DIR)/%.o)

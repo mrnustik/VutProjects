@@ -36,6 +36,16 @@ namespace InformationSystem.DAL
                 var identityRole = new IdentityRole("admin");
                 await RoleManager.CreateAsync(identityRole);
             }
+            if ((await UserManager.FindByNameAsync("admin@iis.mrnustik.net")) == null)
+            {
+                var identityUser = new IdentityUser
+                {
+                    Email = "admin@iis.mrnustik.net",
+                    UserName = "admin@iis.mrnustik.net"
+                };
+                await UserManager.CreateAsync(identityUser, "admin");
+                await UserManager.AddToRoleAsync(identityUser, "Admin");
+            }
         }
     }
 }

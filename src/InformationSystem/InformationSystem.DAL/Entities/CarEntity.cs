@@ -7,7 +7,11 @@ namespace InformationSystem.DAL.Entities
     public class CarEntity : BaseEntity
     {
         [Required]
+        public string Name { get; set; }
+        [Required]
         public string CarIdentification { get; set; }
+        public string CompanyName { get; set; }
+        public string TypeName { get; set; }
         [ForeignKey("OwnerId")]
         public virtual IdentityUser Owner { get; set; }
     }

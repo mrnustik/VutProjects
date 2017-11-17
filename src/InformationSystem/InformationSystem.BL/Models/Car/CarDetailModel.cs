@@ -21,7 +21,7 @@ namespace InformationSystem.BL.Models.Car
             set;
         }
 
-        public string OwnerName
+        public string OwnerEmail
         {
             get;
             set;

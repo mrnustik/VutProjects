@@ -1,0 +1,65 @@
+﻿@viewModel InformationSystem.Web.Views.User.Cars.EditViewModel, InformationSystem.Web.Views.User.Cars
+@masterPage Views/MasterPage.dotmaster
+ 
+<dot:Content ContentPlaceHolderID="MainContent">
+    <style>
+        .form-group {
+            margin-bottom: 0;
+            text-align: left;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 3px;
+            margin-top: 20px;
+        }
+
+        input {
+            border: 2px solid #CCC !important;
+            height: 35px;
+            border-radius: 3px;
+            max-width: 100%;
+        }
+
+        label {
+            margin-top: 15px;
+        }
+    </style>
+    <form>
+        <fieldset>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label" for="carName">Car name:</label>
+                        <dot:TextBox ID="carName" class="form-control" Text="{value: Car.Name}" placeholder="My car no. 1" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label" for="carManufacturer">Car manufacturer:</label>
+                        <dot:TextBox ID="carManufacturer" class="form-control" Text="{value: Car.CompanyName}" Type="Normal" placeholder="Mazda" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label" for="carType">Car type:</label>
+                        <dot:TextBox ID="carType" class="form-control" Text="{value:  Car.TypeName}" Type="Normal" placeholder="Superb" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label class="control-label" for="carId">Car identification:</label>
+                        <dot:TextBox ID="carId" class="form-control" Text="{value: Car.CarIdenitification}" Type="Normal" placeholder="1B2 6445" />
+                    </div>
+                </div>
+            </div>
+
+
+        </fieldset>
+
+        <dot:Button class="btn btn-primary pull-right" ButtonTagName="button" IsSubmitButton="true" Text="Save" Click="{command: Save()}" />
+
+    </form>
+</dot:Content>

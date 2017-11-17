@@ -4,21 +4,67 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>InformationSystem.Web</title>
-    <dot:RequiredResource Name="bootstrap"/>
+    <title>Car Repairs</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <dot:RequiredResource Name="bootstrap" />
 </head>
 <body>
-    <div>
-        <dot:AuthenticatedView>
-            <AuthenticatedTemplate>
-                <dot:LinkButton Text="Sign Out" Click="{command: SignOutAsync()}" class="page-button-text" />
-            </AuthenticatedTemplate>
-            <NotAuthenticatedTemplate>
-                <dot:RouteLink Text="Sign In" RouteName="Authentication_SignIn" class="page-button-text" />
-            </NotAuthenticatedTemplate>
-        </dot:AuthenticatedView>
-    </div>
-	<dot:ContentPlaceHolder ID="MainContent" />
 
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Car Repairs</a>
+            </div>
+
+
+            <div class="collapse navbar-collapse" ID="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <dot:RoleView Roles="Regular">
+                        <IsMemberTemplate>
+                            <li>
+                                <dot:RouteLink RouteName="User_Cars_List" Text="My Cars"/>
+                            </li>
+                        </IsMemberTemplate>
+                    </dot:RoleView>
+                    <dot:RoleView Roles="Mechanic">
+                        <IsMemberTemplate>
+
+                        </IsMemberTemplate>
+                    </dot:RoleView>
+                    <dot:RoleView Roles="Admin">
+                        <IsMemberTemplate>
+
+                        </IsMemberTemplate>
+                    </dot:RoleView>
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <dot:AuthenticatedView>
+                            <AuthenticatedTemplate>
+                                <dot:LinkButton Text="Sign Out" Click="{command: SignOutAsync()}" class="page-button-text" />
+                            </AuthenticatedTemplate>
+                            <NotAuthenticatedTemplate>
+                                <dot:RouteLink Text="Sign In" RouteName="Authentication_SignIn" class="page-button-text" />
+                            </NotAuthenticatedTemplate>
+                        </dot:AuthenticatedView>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+    </nav>
+    <div class="container">
+        <dot:ContentPlaceHolder ID="MainContent" />
+    </div>
 </body>
 </html>

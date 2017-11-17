@@ -2,5 +2,26 @@
 @masterPage Views/MasterPage.dotmaster
 
 <dot:Content ContentPlaceHolderID="MainContent">
-    
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="text-right">
+                <dot:RouteLink class="btn btn-default text-right" RouteName="User_Cars_Add" Text="Add Car" />
+            </div>
+        </div>
+    </div>
+
+
+    <div class="table-responsive">
+        <dot:GridView DataSource="{value: Cars}" ShowHeaderWhenNoData="true" class="table">
+            <dot:GridViewTextColumn AllowSorting="true" HeaderText="Car name" ValueBinding="{value: Name}" />
+            <dot:GridViewTextColumn HeaderText="Car identification" ValueBinding="{value: CarIdenitification}" />
+            <dot:GridViewTemplateColumn>
+                <dot:RouteLink class="btn btn-primary" Text="Edit" RouteName="User_Cars_Edit" Param-Id="{value: Id}"/>
+                <dot:Button class="btn btn-danger" Text="Remove" Click="{command: _parent.Delete(_this)}"/>
+            </dot:GridViewTemplateColumn>
+        </dot:GridView>
+    </div>
+
+    <dot:DataPager class="pager" DataSet="{value: Cars}" />
+
 </dot:Content>

@@ -17,6 +17,7 @@ namespace InformationSystem.Web
         private void ConfigureRoutes(DotvvmConfiguration config, string applicationPath)
         {
             config.RouteTable.Add("Default", "", "Views/default.dothtml");
+            config.RouteTable.Add("User_Cars_Edit", "User/Cars/Edit/{Id}", "Views/User/Cars/Edit.dothtml");
             config.RouteTable.AutoDiscoverRoutes(new DefaultRouteStrategy(config));    
         }
 

@@ -56,12 +56,24 @@ namespace InformationSystem.Web
                 o.LoginPath = new PathString("/Authentication/SignIn");
             });
 
+            services.Configure<IdentityOptions>(
+                o =>
+                {
+                    o.Password.RequireDigit = false;
+                    o.Password.RequireLowercase = false;
+                    o.Password.RequiredLength = 5;
+                    o.Password.RequireUppercase = false;
+                    o.Password.RequireNonAlphanumeric = false;
+                });
+
             services.AddDotVVM(options =>
             {
                 options.AddDefaultTempStorages("Temp");
             });
             services.AddTransient<UserService>();
+            services.AddTransient<CarService>();
             services.AddTransient<DbIntiliazer>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -12,7 +12,6 @@ namespace InformationSystem.DAL.Entities
         public string CarIdentification { get; set; }
         public string CompanyName { get; set; }
         public string TypeName { get; set; }
-        [ForeignKey("OwnerId")]
-        public virtual IdentityUser Owner { get; set; }
+        public string OwnerEmail { get; set; }
     }
 }

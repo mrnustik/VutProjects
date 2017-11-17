@@ -16,8 +16,7 @@ namespace InformationSystem.Web.ViewModels
 
         public string UserName => Context.GetAuthentication().Context?.User?.Identity?.Name;
         public string UserRole => Context.GetAuthentication().Context.User?.Claims.FirstOrDefault( c=> c.Type == ClaimTypes.Role)?.Value;
-
-
+        
         public async Task SignOutAsync()
         {
             try

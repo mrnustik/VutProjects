@@ -86,5 +86,16 @@ namespace InformationSystem.BL.Services
         {
             return CarEntityToDetailModel(await dbContext.Cars.FirstAsync(c => c.Id == carId));
         }
+
+        public async Task SaveCarAsync(CarDetailModel car)
+        {
+            var entity = await dbContext.Cars.FirstAsync(c => c.Id == car.Id);
+            entity.CompanyName = car.CompanyName;
+            entity.CarIdentification = car.CarIdenitification;
+            entity.Name = car.Name;
+            entity.TypeName = car.TypeName;
+            dbContext.Cars.Update(entity);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -20,6 +20,7 @@
         <None Remove="dotvvm_serialized_config.json.tmp" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Views\Admin\" />
       <Folder Include="wwwroot\">
         <CopyToPublishDirectory>Always</CopyToPublishDirectory>
       </Folder>

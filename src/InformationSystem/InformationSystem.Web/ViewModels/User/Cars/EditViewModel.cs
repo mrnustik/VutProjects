@@ -25,6 +25,12 @@ namespace InformationSystem.Web.ViewModels.User.Cars
             Car = await _carService.GetCarById(carId);
             await base.Init();
         }
+
+        public async Task Save()
+        {
+            await _carService.SaveCarAsync(Car);
+            Context.RedirectToRoute("User_Cars_List");
+        }
     }
 }
 

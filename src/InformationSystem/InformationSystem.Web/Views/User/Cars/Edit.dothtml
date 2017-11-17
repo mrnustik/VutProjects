@@ -1,4 +1,4 @@
-﻿@viewModel InformationSystem.Web.Views.User.Cars.EditViewModel, InformationSystem.Web.Views.User.Cars
+﻿@viewModel InformationSystem.Web.ViewModels.User.Cars.EditViewModel, InformationSystem.Web
 @masterPage Views/MasterPage.dotmaster
  
 <dot:Content ContentPlaceHolderID="MainContent">

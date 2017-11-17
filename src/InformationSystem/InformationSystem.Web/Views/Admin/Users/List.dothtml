@@ -1,0 +1,30 @@
+﻿@viewModel InformationSystem.Web.ViewModels.Admin.Users.ListViewModel, InformationSystem.Web
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content ContentPlaceHolderID="MainContent">
+    <dot:GridView DataSource="{value: Users}" class="table" InlineEditing="true">
+        <dot:GridViewTextColumn HeaderText="Email" IsEditable="false" ValueBinding="{value: Email}" AllowSorting="true" />
+        
+        <%--<dot:GridViewTextColumn HeaderText="Role" ValueBinding="{value: Role}" AllowSorting="true"/>--%>
+        <dot:GridViewTemplateColumn HeaderText="Role">
+            <ContentTemplate>
+                <dot:Literal Text="{value: Role}" />
+            </ContentTemplate>
+            <EditTemplate>
+                <dot:ComboBox DataSource="{value: _parent.Roles }" SelectedValue="{value: Role}"/>
+            </EditTemplate>
+        </dot:GridViewTemplateColumn>
+        <dot:GridViewTemplateColumn>
+            <ContentTemplate>
+                <dot:Button class="btn btn-default" Text="Edit" Click="{command: _parent.Edit(_this) }"/>
+                <dot:Button class="btn btn-danger" Text="Delete"/>
+            </ContentTemplate>
+            <EditTemplate>
+                <dot:Button class="btn btn-success" Text="Save" Click="{command: _parent.Save(_this) }"/>
+                <dot:Button class="btn btn-danger" Text="Cancel" Click="{command: _parent.CancelEdit() }" />
+            </EditTemplate>
+        </dot:GridViewTemplateColumn>
+    </dot:GridView>
+    <dot:DataPager class="pager" DataSet="{value: Users}"/>
+</dot:Content>
+

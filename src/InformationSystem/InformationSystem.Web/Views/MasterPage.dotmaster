@@ -60,9 +60,11 @@
 
                         </IsMemberTemplate>
                     </dot:RoleView>
-                    <dot:RoleView Roles="Admin">
+                    <dot:RoleView Roles="admin">
                         <IsMemberTemplate>
-
+                            <li>
+                                <dot:RouteLink RouteName="Admin_Users_List" Text="All users" />
+                            </li>
                         </IsMemberTemplate>
                     </dot:RoleView>
                 </ul>

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using InformationSystem.BL.Models.User;
 using InformationSystem.DAL;
 using Microsoft.AspNetCore.Identity;
+
 
 namespace InformationSystem.BL.Services
 {
@@ -25,7 +28,24 @@ namespace InformationSystem.BL.Services
             UserManager = userManager;
             SignInManager = signInManager;
         }
-        
+
+        public IQueryable<UserModel> GetAllUsers()
+        {
+            return UserManager.Users
+                .Select(IdentityUserToUserModel)
+                .AsQueryable();
+        }
+
+        private UserModel IdentityUserToUserModel(IdentityUser identityUser)
+        {
+            var role = UserManager.GetRolesAsync(identityUser).Result.First();
+            return new UserModel
+            {
+                Email = identityUser.Email,
+                Role = role
+            };
+        }
+
         public async Task<IdentityResult> CreateUserAsync(string email, string password, UserType userType = UserType.Regular)
         {
             var identityUser = new IdentityUser()
@@ -47,10 +67,13 @@ namespace InformationSystem.BL.Services
             var user = await UserManager.FindByEmailAsync(email);
             if (user != null)
             {
-                if (await SignInManager.CanSignInAsync(user))
+                if (await UserManager.CheckPasswordAsync(user, password))
                 {
-                    await SignInManager.SignInAsync(user, false);
-                    return true;
+                    if (await SignInManager.CanSignInAsync(user))
+                    {
+                        await SignInManager.SignInAsync(user, false);
+                        return true;
+                    }
                 }
             }
             return false;

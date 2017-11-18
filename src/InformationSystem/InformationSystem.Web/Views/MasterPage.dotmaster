@@ -7,7 +7,6 @@
     <title>Car Repairs</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <dot:RequiredResource Name="bootstrap" />
     <style>
         #loader-wrapper .loader-section {
             position: fixed;
@@ -24,27 +23,26 @@
 
             #loader-wrapper .loader-section.section-right {
                 right: 0;
-        }
+            }
 
         .loader {
             position: absolute;
-            border: 16px solid #f3f3f3; 
+            border: 16px solid #f3f3f3;
             border-top: 16px solid #3498db;
             border-radius: 50%;
             z-index: 1001;
             width: 100%;
             height: 100%;
             animation: spin 2s linear infinite;
-
         }
 
         .progressbarwrapper {
-            position:absolute;
+            position: absolute;
             top: 50%;
             left: 50%;
             width: 50px;
             height: 50px;
-            z-index:10002;
+            z-index: 10002;
             transform: translate(-50%, -50%);
         }
 
@@ -57,9 +55,12 @@
                 transform: rotate(360deg);
             }
         }
-
-
     </style>
+    <%--<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.5/require.js"></script>--%>
+    <%--<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>--%>
+    
+    <dot:RequiredResource Name="bootstrap" />
+    
 </head>
 <body>
 
@@ -83,6 +84,9 @@
                         <IsMemberTemplate>
                             <li>
                                 <dot:RouteLink RouteName="User_Cars_List" Text="My Cars"/>
+                            </li>
+                            <li>
+                                <dot:RouteLink RouteName="User_Repairs_Order" Text="Order a repair"/>
                             </li>
                         </IsMemberTemplate>
                     </dot:RoleView>

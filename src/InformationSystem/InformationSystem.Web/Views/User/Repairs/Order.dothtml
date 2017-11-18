@@ -1,10 +1,57 @@
-﻿@viewModel InformationSystem.Web.ViewModels.User.Repairs.OrderViewModel, InformationSystem.Web
+﻿@viewModel InformationSystem.Web.ViewModels.User.Repairs.OrderRepairViewModel, InformationSystem.Web
 @masterPage Views/MasterPage.dotmaster
 
-<dot:Content>
+<dot:Content ContentPlaceHolderID="Title">
     Repair
 </dot:Content>
 
 <dot:Content ContentPlaceHolderID="MainContent">
 
+
+    <form>
+        <div class="row">
+            <div class="col-sm-6" Validator.SetToolTipText="true" Validator.Value="{value: Repair.Car}" Validator.InvalidCssClass="has-feedback has-error">
+                <label>Select a car: </label>
+                <dot:ComboBox class="form-control" DataSource="{value: Cars}" DisplayMember="Name" SelectedValue="{value: Repair.Car}" />
+            </div>
+            <div class="col-sm-6" Validator.SetToolTipText="true" Validator.Value="{value: Repair.RepairType}" Validator.InvalidCssClass="has-feedback has-error">
+                <label>Repair Type: </label>
+                <dot:ComboBox class="form-control" DataSource="{value: Types}" DisplayMember="String" ValueMember="RepairType" SelectedValue="{value: Repair.RepairType}" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <label>Reservation day:</label>
+                <div class='input-group date' id='datetimepicker2'>
+                    <dot:TextBox Type="Date" class="form-control" Changed="{command: ReservationTimeChanged()}" Text="{value: SelectedDate}" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-6 form-group">
+                <label>Reservation time:</label>
+                <dot:ComboBox class="form-control" SelectionChanged="{command: ReservationTimeChanged()}" DataSource="{value: OpeningHours}" SelectedValue="{value: SelectedHour}" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <label>Mechanic:</label>
+                <dot:ComboBox class="form-control" DataSource="{value: Mechanics}" DisplayMember="Name" SelectedValue="{value: Repair.Mechanic}"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12" Validator.SetToolTipText="true" Validator.Value="{value: Repair.Description}" Validator.InvalidCssClass="has-feedback has-error">
+                <label>Describe the issue:</label>
+                <dot:TextBox class="form-control" Text="{value: Repair.Description}" Type="MultiLine" placeholder="My battery is not working" />
+            </div>
+        </div>
+    
+
+        <dot:Button class="btn btn-primary" Click="{command: Save()}" Text="Save"/>
+
+    </form>
 </dot:Content>

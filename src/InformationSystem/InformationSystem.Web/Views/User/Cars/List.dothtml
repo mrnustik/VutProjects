@@ -1,6 +1,11 @@
 ﻿@viewModel InformationSystem.Web.ViewModels.User.Cars.ListViewModel, InformationSystem.Web
 @masterPage Views/MasterPage.dotmaster
 
+<dot:Content ContentPlaceHolderID="Title">
+    My cars
+</dot:Content>
+
+
 <dot:Content ContentPlaceHolderID="MainContent">
     <div class="row">
         <div class="col-xs-12">

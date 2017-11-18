@@ -1,6 +1,10 @@
 ﻿@viewModel InformationSystem.Web.ViewModels.DefaultViewModel, InformationSystem.Web
 @masterPage Views/MasterPage.dotmaster
 
+<dot:Content ContentPlaceHolderID="Title">
+    Home
+</dot:Content>
+
 <dot:Content ContentPlaceHolderID="MainContent">
 
     <h1>{{value: Title}}</h1>

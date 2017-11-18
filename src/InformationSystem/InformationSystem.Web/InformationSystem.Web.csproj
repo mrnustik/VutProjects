@@ -20,8 +20,6 @@
         <None Remove="dotvvm_serialized_config.json.tmp" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="ViewModels\User\Repair\" />
-      <Folder Include="Views\User\Repairs\" />
       <Folder Include="wwwroot\">
         <CopyToPublishDirectory>Always</CopyToPublishDirectory>
       </Folder>

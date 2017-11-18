@@ -128,8 +128,12 @@
             </div>
         </div>
     </dot:UpdateProgress>
-    
     <div class="container">
+        <div class="row">
+            <h1>
+                <dot:ContentPlaceHolder ID="Title" />
+            </h1>
+        </div>
         <dot:ContentPlaceHolder ID="MainContent" />
     </div>
 

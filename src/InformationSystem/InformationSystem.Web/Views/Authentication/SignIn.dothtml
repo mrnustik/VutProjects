@@ -1,6 +1,11 @@
 ﻿@viewModel InformationSystem.Web.ViewModels.Authentication.SignInViewModel, InformationSystem.Web
 @masterPage Views/MasterPage.dotmaster
 
+<dot:Content ContentPlaceHolderID="Title">
+    
+</dot:Content>
+
+
 <dot:Content ContentPlaceHolderID="MainContent">    
     <dot:ValidationSummary/>
     <div class="row">

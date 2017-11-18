@@ -1,6 +1,11 @@
 ﻿@viewModel InformationSystem.Web.ViewModels.Admin.Users.ListViewModel, InformationSystem.Web
 @masterPage Views/MasterPage.dotmaster
 
+<dot:Content ContentPlaceHolderID="Title">
+    Users list
+</dot:Content>
+
+
 <dot:Content ContentPlaceHolderID="MainContent">
     <style>
         .dialog {

@@ -1,0 +1,10 @@
+﻿@viewModel InformationSystem.Web.ViewModels.User.Repairs.OrderViewModel, InformationSystem.Web
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content>
+    Repair
+</dot:Content>
+
+<dot:Content ContentPlaceHolderID="MainContent">
+
+</dot:Content>

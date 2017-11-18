@@ -1,6 +1,10 @@
 ﻿@viewModel InformationSystem.Web.ViewModels.User.Cars.AddViewModel, InformationSystem.Web
 @masterPage Views/MasterPage.dotmaster
 
+<dot:Content ContentPlaceHolderID="Title">
+    Add a car
+</dot:Content>
+
 <dot:Content ContentPlaceHolderID="MainContent">
     <style>
         .form-group {

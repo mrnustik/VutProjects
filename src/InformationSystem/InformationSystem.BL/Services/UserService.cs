@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using InformationSystem.BL.Models.User;
 using InformationSystem.DAL;
+using InformationSystem.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,10 +22,10 @@ namespace InformationSystem.BL.Services
 
     public class UserService
     {
-        public UserManager<IdentityUser> UserManager { get; }
-        public SignInManager<IdentityUser> SignInManager { get; }
+        public UserManager<ApplicationUser> UserManager { get; }
+        public SignInManager<ApplicationUser> SignInManager { get; }
 
-        public UserService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -32,16 +33,17 @@ namespace InformationSystem.BL.Services
 
         public async Task<IQueryable<UserModel>> GetAllUsers()
         {
-            var admins = (await UserManager.GetUsersInRoleAsync("admin")).Select(u => new UserModel { Email = u.Email, Role = "admin"});
-            var mechanics = (await UserManager.GetUsersInRoleAsync("Mechanic")).Select(u => new UserModel { Email = u.Email, Role = "Mechanic" });
-            var users = (await UserManager.GetUsersInRoleAsync("Regular")).Select(u => new UserModel { Email = u.Email, Role = "Regular" });
+            var admins = (await UserManager.GetUsersInRoleAsync("admin")).Select(u => new UserModel { Name= u.Name,  Email = u.Email, Role = "admin"});
+            var mechanics = (await UserManager.GetUsersInRoleAsync("Mechanic")).Select(u => new UserModel {Name = u.Name, Email = u.Email, Role = "Mechanic" });
+            var users = (await UserManager.GetUsersInRoleAsync("Regular")).Select(u => new UserModel { Name = u.Name, Email = u.Email, Role = "Regular" });
             return admins.Concat(mechanics).Concat(users).AsQueryable();
         }
         
-        public async Task<IdentityResult> CreateUserAsync(string email, string password, UserType userType = UserType.Regular)
+        public async Task<IdentityResult> CreateUserAsync(string name, string email, string password, UserType userType = UserType.Regular)
         {
-            var identityUser = new IdentityUser()
+            var identityUser = new ApplicationUser()
             {
+                Name = name,
                 UserName = email,
                 Email = email
             };

@@ -31,9 +31,8 @@
         </div>
     </div>
     <dot:GridView DataSource="{value: Users}" class="table" InlineEditing="true">
+        <dot:GridViewTextColumn HeaderText="Name" IsEditable="false" ValueBinding="{value: Name}" AllowSorting="true" />
         <dot:GridViewTextColumn HeaderText="Email" IsEditable="false" ValueBinding="{value: Email}" AllowSorting="true" />
-
-        <%--<dot:GridViewTextColumn HeaderText="Role" ValueBinding="{value: Role}" AllowSorting="true"/>--%>
         <dot:GridViewTemplateColumn HeaderText="Role">
             <ContentTemplate>
                 <dot:Literal Text="{value: Role}" />

@@ -29,6 +29,8 @@ namespace InformationSystem.Web.ViewModels.Authentication
         public string SignInPassword { get; set; }
 
         [Bind(Direction.ClientToServer)]
+        public string RegisterName { get; set; }
+        [Bind(Direction.ClientToServer)]
         public string RegisterEmail { get; set; }
 
         [Bind(Direction.ClientToServer)]
@@ -68,7 +70,7 @@ namespace InformationSystem.Web.ViewModels.Authentication
 
         public async Task RegisterAsync()
         {
-            var identityResult = await userService.CreateUserAsync(RegisterEmail, RegisterPassword);
+            var identityResult = await userService.CreateUserAsync(RegisterName,RegisterEmail, RegisterPassword);
             if (identityResult.Succeeded)
             {
                 SignInEmail = RegisterEmail;

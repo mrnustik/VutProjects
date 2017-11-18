@@ -40,7 +40,7 @@ namespace InformationSystem.Web
                 {
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 });
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ServiceDbContext>()
                 .AddDefaultTokenProviders();
 

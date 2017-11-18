@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InformationSystem.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -10,10 +11,10 @@ namespace InformationSystem.DAL
 {
     public class DbIntiliazer
     {
-        public UserManager<IdentityUser> UserManager { get; }
+        public UserManager<ApplicationUser> UserManager { get; }
         public RoleManager<IdentityRole> RoleManager { get; private set; }
 
-        public DbIntiliazer(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public DbIntiliazer(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             UserManager = userManager;
             RoleManager = roleManager;
@@ -38,8 +39,9 @@ namespace InformationSystem.DAL
             }
             if ((await UserManager.FindByNameAsync("admin@iis.mrnustik.net")) == null)
             {
-                var identityUser = new IdentityUser
+                var identityUser = new ApplicationUser
                 {
+                    Name = "Admin",
                     Email = "admin@iis.mrnustik.net",
                     UserName = "admin@iis.mrnustik.net"
                 };

@@ -17,8 +17,7 @@ namespace InformationSystem.DAL.Entities
         public DateTime ReservationTime { get; set; }
         [Required]
         public int Duration { get; set; }
-        [ForeignKey("MechanicId")]
-        public IdentityUser Mechanic { get; set; }
+        public string MechanicUserName { get; set; }
         [Required]
         public virtual CarEntity Car { get; set; }
         public IList<UsedMaterialEntity> UsedMaterials { get; set; } = new List<UsedMaterialEntity>();

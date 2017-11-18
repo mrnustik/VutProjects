@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InformationSystem.DAL
 {
-    public class ServiceDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
+    public class ServiceDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public ServiceDbContext(DbContextOptions<ServiceDbContext> options) : base(options)
         {

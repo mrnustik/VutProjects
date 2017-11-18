@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DotVVM.Framework.Controls;
+using DotVVM.Framework.Runtime.Filters;
 using InformationSystem.BL.Models.Car;
 using InformationSystem.BL.Services;
 
 namespace InformationSystem.Web.ViewModels.User.Cars
 {
+    [Authorize]
     public class ListViewModel : MasterPageViewModel
     {
         private readonly CarService _carService;

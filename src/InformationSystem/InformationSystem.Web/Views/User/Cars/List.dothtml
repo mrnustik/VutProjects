@@ -22,6 +22,7 @@
             <dot:GridViewTextColumn HeaderText="Car identification" ValueBinding="{value: CarIdenitification}" />
             <dot:GridViewTemplateColumn>
                 <dot:RouteLink class="btn btn-primary" Text="Edit" RouteName="User_Cars_Edit" Param-Id="{value: Id}"/>
+                <dot:RouteLink class="btn btn-primary" Text="Order repair" RouteName="User_Repairs_Order" Param-CarId="{value: Id}" />
                 <dot:Button class="btn btn-danger" Text="Remove" Click="{command: _parent.Delete(_this)}"/>
             </dot:GridViewTemplateColumn>
         </dot:GridView>

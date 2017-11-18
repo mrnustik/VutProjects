@@ -56,6 +56,16 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
             return base.Init();
         }
 
+        public override Task PreRender()
+        {
+            if (Context.Parameters.ContainsKey("CarId"))
+            {
+                var guid = new Guid((string)Context.Parameters["CarId"]);
+                Repair.Car = Cars.FirstOrDefault(c => c.Id == guid);
+            }
+            return base.PreRender();
+        }
+
         public async Task ReservationTimeChanged()
         {
             var datetime = ParseSelectedDate();

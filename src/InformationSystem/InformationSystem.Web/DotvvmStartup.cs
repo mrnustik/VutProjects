@@ -18,6 +18,7 @@ namespace InformationSystem.Web
         {
             config.RouteTable.Add("Default", "", "Views/default.dothtml");
             config.RouteTable.Add("User_Cars_Edit", "User/Cars/Edit/{Id}", "Views/User/Cars/Edit.dothtml");
+            config.RouteTable.Add("User_Repairs_Order", "User/Repair/Order/{CarId?}", "Views/User/Repairs/Order.dothtml");
             config.RouteTable.AutoDiscoverRoutes(new DefaultRouteStrategy(config));    
         }
 

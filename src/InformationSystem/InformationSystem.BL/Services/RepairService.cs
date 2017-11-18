@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InformationSystem.BL.Models.Car;
 using InformationSystem.BL.Models.Repair;
 using InformationSystem.BL.Models.User;
 using InformationSystem.DAL;
@@ -27,6 +28,24 @@ namespace InformationSystem.BL.Services
             var entity = await RepairDetailToEntity(repairDetail);
             _dbContext.Repairs.Add(entity);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public IQueryable<RepairListModel> GetAllRepairsByUser(string userName)
+        {
+            return _dbContext.Cars
+                .Where(c => c.OwnerEmail == userName)
+                .Join(_dbContext.Repairs, entity => entity.Id, entity => entity.Car.Id, (car, repair) =>
+                    new RepairListModel
+                    {
+                        Id = repair.Id,
+                        Done = repair.Done,
+                        CarName = car.Name,
+                        RepairType = repair.RepairType,
+                        ReservationDate = repair.ReservationTime,
+                        MechanicUserName = repair.MechanicUserName,
+                        MechanicName = _dbContext.Users.FirstOrDefault(u => u.UserName == repair.MechanicUserName).Name
+                    }).AsQueryable();
+
         }
 
         private async Task<RepairEntity> RepairDetailToEntity(RepairDetailModel repairDetail)

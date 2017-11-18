@@ -1,0 +1,18 @@
+﻿@viewModel InformationSystem.Web.ViewModels.User.Repairs.HistoryViewModel, InformationSystem.Web
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content ContentPlaceHolderID="Title">
+    Repair history
+</dot:Content>
+
+<dot:Content ContentPlaceHolderID="MainContent">
+
+    <dot:GridView DataSource="{value: Repairs}" class="table">
+        <dot:GridViewCheckBoxColumn ValueBinding="{value: Done}" />
+        <dot:GridViewTextColumn ValueBinding="{value: ReservationDate}" FormatString="dd/MM/yyyy HH:mm" HeaderText="Date" AllowSorting="true"/>
+        <dot:GridViewTextColumn ValueBinding="{value: CarName}" HeaderText="Car" AllowSorting="true"/>
+        <dot:GridViewTextColumn ValueBinding="{value: RepairType}" HeaderText="Repair Type" />
+        <dot:GridViewTextColumn ValueBinding="{value: MechanicName}" HeaderText="Asigned Mechanic"/>
+    </dot:GridView>
+</dot:Content>
+

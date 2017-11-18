@@ -10,6 +10,7 @@ namespace InformationSystem.BL.Models.Repair
 {
     public class RepairDetailModel
     {
+        public Guid Id { get; set; }
         [Required]
         public CarListModel Car { get; set; }
         [Required]

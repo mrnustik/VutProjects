@@ -88,6 +88,9 @@
                             <li>
                                 <dot:RouteLink RouteName="User_Repairs_Order" Text="Order a repair"/>
                             </li>
+                            <li>
+                                <dot:RouteLink RouteName="User_Repairs_History" Text="Repair history"/>
+                            </li>
                         </IsMemberTemplate>
                     </dot:RoleView>
                     <dot:RoleView Roles="Mechanic">

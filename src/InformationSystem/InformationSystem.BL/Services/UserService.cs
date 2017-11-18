@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using InformationSystem.BL.Models.User;
 using InformationSystem.DAL;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace InformationSystem.BL.Services
@@ -29,23 +30,14 @@ namespace InformationSystem.BL.Services
             SignInManager = signInManager;
         }
 
-        public IQueryable<UserModel> GetAllUsers()
+        public async Task<IQueryable<UserModel>> GetAllUsers()
         {
-            return UserManager.Users
-                .Select(IdentityUserToUserModel)
-                .AsQueryable();
+            var admins = (await UserManager.GetUsersInRoleAsync("admin")).Select(u => new UserModel { Email = u.Email, Role = "admin"});
+            var mechanics = (await UserManager.GetUsersInRoleAsync("Mechanic")).Select(u => new UserModel { Email = u.Email, Role = "Mechanic" });
+            var users = (await UserManager.GetUsersInRoleAsync("Regular")).Select(u => new UserModel { Email = u.Email, Role = "Regular" });
+            return admins.Concat(mechanics).Concat(users).AsQueryable();
         }
-
-        private UserModel IdentityUserToUserModel(IdentityUser identityUser)
-        {
-            var role = UserManager.GetRolesAsync(identityUser).Result.First();
-            return new UserModel
-            {
-                Email = identityUser.Email,
-                Role = role
-            };
-        }
-
+        
         public async Task<IdentityResult> CreateUserAsync(string email, string password, UserType userType = UserType.Regular)
         {
             var identityUser = new IdentityUser()
@@ -96,6 +88,13 @@ namespace InformationSystem.BL.Services
                     return "Admin";
             }
             return String.Empty;
+        }
+
+        public async Task DeleteUser(UserModel user)
+        {
+            var identity = await UserManager.FindByEmailAsync(user.Email);
+            await UserManager.DeleteAsync(identity);
+            
         }
     }
 }

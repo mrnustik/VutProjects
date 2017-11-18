@@ -2,29 +2,57 @@
 @masterPage Views/MasterPage.dotmaster
 
 <dot:Content ContentPlaceHolderID="MainContent">
+    <style>
+        .dialog {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(101, 99, 99, 0.43);
+            z-index: 1000;
+        }
+
+    </style>
+    <div class="dialog" Visible="{value: DialogShown}">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{value: DialogHeader}}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{value: DialogText}}</p>
+                </div>
+                <div class="modal-footer">
+                    <dot:Button class="btn btn-primary" ButtonTagName="button" Text="{value: YesButtonText}" Visible="{value: YesButtonText != null}" Click="{command: DeleteUser()}" />
+                    <dot:Button class="btn btn-danger" ButtonTagName="button" Text="{value: NoButtonText}" Visible="{value: NoButtonText != null}" Click="{command: HideDialog()}" />
+                </div>
+            </div>
+        </div>
+    </div>
     <dot:GridView DataSource="{value: Users}" class="table" InlineEditing="true">
         <dot:GridViewTextColumn HeaderText="Email" IsEditable="false" ValueBinding="{value: Email}" AllowSorting="true" />
-        
+
         <%--<dot:GridViewTextColumn HeaderText="Role" ValueBinding="{value: Role}" AllowSorting="true"/>--%>
         <dot:GridViewTemplateColumn HeaderText="Role">
             <ContentTemplate>
                 <dot:Literal Text="{value: Role}" />
             </ContentTemplate>
             <EditTemplate>
-                <dot:ComboBox DataSource="{value: _parent.Roles }" SelectedValue="{value: Role}"/>
+                <dot:ComboBox class="form-control" DataSource="{value: _parent.Roles }" SelectedValue="{value: Role}" />
             </EditTemplate>
         </dot:GridViewTemplateColumn>
         <dot:GridViewTemplateColumn>
             <ContentTemplate>
-                <dot:Button class="btn btn-default" Text="Edit" Click="{command: _parent.Edit(_this) }"/>
-                <dot:Button class="btn btn-danger" Text="Delete"/>
+                <dot:Button class="btn btn-default" Text="Edit" Click="{command: _parent.Edit(_this) }" />
+                <dot:Button class="btn btn-danger" Text="Delete" Click="{command: _parent.ShowUserDeleteDialog(_this)}" />
             </ContentTemplate>
             <EditTemplate>
-                <dot:Button class="btn btn-success" Text="Save" Click="{command: _parent.Save(_this) }"/>
+                <dot:Button class="btn btn-success" Text="Save" Click="{command: _parent.Save(_this) }" />
                 <dot:Button class="btn btn-danger" Text="Cancel" Click="{command: _parent.CancelEdit() }" />
             </EditTemplate>
         </dot:GridViewTemplateColumn>
     </dot:GridView>
-    <dot:DataPager class="pager" DataSet="{value: Users}"/>
+    <dot:DataPager class="pager" DataSet="{value: Users}" />
 </dot:Content>
 

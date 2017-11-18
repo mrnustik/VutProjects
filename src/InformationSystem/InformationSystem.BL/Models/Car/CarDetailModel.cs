@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace InformationSystem.BL.Models.Car
 {
     public class CarDetailModel
@@ -9,12 +11,14 @@ namespace InformationSystem.BL.Models.Car
             set;
         }
 
+        [Required]
         public string Name
         {
             get;
             set;
         }
 
+        [Required]
         public string CarIdenitification
         {
             get;
@@ -27,12 +31,14 @@ namespace InformationSystem.BL.Models.Car
             set;
         }
 
+        [Required]
         public string CompanyName
         {
             get;
             set;
         }
 
+        [Required]
         public string TypeName
         {
             get;

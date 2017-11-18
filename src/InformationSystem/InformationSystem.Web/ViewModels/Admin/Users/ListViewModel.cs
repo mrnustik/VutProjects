@@ -54,18 +54,45 @@ namespace InformationSystem.Web.ViewModels.Admin.Users
         }
 
 
+        public void ShowUserDeleteDialog(UserModel user)
+        {
+            DialogText = $"Are you sure you want to delete user {user.Email}?";
+            DialogUser = user;
+            DialogShown = true;
+        }
+
+        public async Task DeleteUser()
+        {
+            await _userService.DeleteUser(DialogUser);
+            Users.RequestRefresh(true);
+            DialogShown = false;
+        }
+
+        public void HideDialog()
+        {
+            DialogShown = false;
+        }
+
         public Task CancelEdit()
         {
             Users.RowEditOptions.EditRowId = null;
             return Users.RequestRefreshAsync(true);
         }
 
-        private GridViewDataSetLoadedData<UserModel> GridViewDataSetLoadDelegate(IGridViewDataSetLoadOptions gridViewDataSetLoadOptions)
+        private async Task<GridViewDataSetLoadedData<UserModel>> GridViewDataSetLoadDelegate(IGridViewDataSetLoadOptions gridViewDataSetLoadOptions)
         {
-            var users = _userService.GetAllUsers();
+            var users = await _userService.GetAllUsers();
 
             return users.GetDataFromQueryable(gridViewDataSetLoadOptions);
         }
+
+        public bool DialogShown { get; set; } = false;
+        public string DialogHeader { get; set; } = "Remove user";
+        public string DialogText { get; set; } = "";
+        public UserModel DialogUser { get; set; } = new UserModel();
+        public string YesButtonText { get; set; } = "Yes";
+        public string NoButtonText { get; set; } = "No";
+
     }
 }
 

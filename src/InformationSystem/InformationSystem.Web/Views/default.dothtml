@@ -6,8 +6,6 @@
 </dot:Content>
 
 <dot:Content ContentPlaceHolderID="MainContent">
-
-    <h1>{{value: Title}}</h1>
     <div>
         <dot:AuthenticatedView>
             <AuthenticatedTemplate>
@@ -15,5 +13,4 @@
             </AuthenticatedTemplate>
         </dot:AuthenticatedView>
     </div>
-    <dot:RouteLink Text="User Authorized test" RouteName="Mechanic_Test" />
 </dot:Content>

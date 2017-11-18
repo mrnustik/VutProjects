@@ -27,7 +27,7 @@ namespace InformationSystem.Web.ViewModels
             catch
             {
             }
-            Context.RedirectToRoute(Context.Route.RouteName);
+            Context.RedirectToRoute("Default");
         }
     }
 }

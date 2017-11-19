@@ -46,14 +46,15 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
             }
         };
 
-        public override Task Init()
+        public override async Task Init()
         {
             if (!Context.IsPostBack)
             {
                 Cars = _carService.GetAllCarsByUser(UserName).ToList();
                 OpeningHours = Enumerable.Range(8, 9).Select(a => $"{a:D2}:00").ToList();
+                await ReservationTimeChanged();
             }
-            return base.Init();
+            await base.Init();
         }
 
         public override Task PreRender()

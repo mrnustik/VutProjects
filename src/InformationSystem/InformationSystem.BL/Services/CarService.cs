@@ -24,11 +24,11 @@ namespace InformationSystem.BL.Services
                             .AsQueryable();
         }
 
-        public IQueryable<CarListModel> GetAllCarsByUser(string userEmail)
+        public IQueryable<CarDetailModel> GetAllCarsByUser(string userEmail)
         {
             return dbContext.Cars
                 .Where(c => c.OwnerEmail == userEmail)
-                            .Select(CarEntityToListModel)
+                            .Select(CarEntityToDetailModel)
                             .AsQueryable();
         }
 

@@ -39,7 +39,8 @@
         <div class="row">
             <div class="col-sm-12">
                 <label>Mechanic:</label>
-                <dot:ComboBox class="form-control" DataSource="{value: Mechanics}" DisplayMember="Name" SelectedValue="{value: Repair.Mechanic}"/>
+                <dot:ListBox Visible="{value: Mechanics.Count > 0}" Size="3" class="form-control" DataSource="{value: Mechanics}" DisplayMember="Name" SelectedValue="{value: Repair.Mechanic}"/>
+                <dot:Literal Visible="{value: Mechanics.Count == 0}" Text="No mechanics available for the selected time"/>
             </div>
         </div>
 

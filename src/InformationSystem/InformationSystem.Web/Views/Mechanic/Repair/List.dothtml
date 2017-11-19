@@ -1,0 +1,40 @@
+﻿@viewModel InformationSystem.Web.ViewModels.Mechanic.Repair.ListViewModel, InformationSystem.Web
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content ContentPlaceHolderID="Title">
+    Repair list
+</dot:Content>
+
+<dot:Content ContentPlaceHolderID="MainContent">
+    <div class="row">
+        <%--<div class="col-sm-offset-4">
+            <dot:CheckBox Checked="{value: HideDoneWork}" Text="Hide done work"/>
+        </div>
+        <div class="col-sm-2">
+            <dot:CheckBox Checked="{value: ShowOnlyTodays}" Text="Show only todays work"/>
+        </div>--%>
+    </div>
+
+    <dot:GridView class="table" ShowHeaderWhenNoData="true" DataSource="{value: Repairs}" FilterPlacement="ExtraRow">
+        <dot:GridViewCheckBoxColumn ValueBinding="{value: Done}" >
+            <FilterTemplate>
+               <dot:CheckBox class="checkbox" Text="Hide done items" Checked="{value: HideDoneWork}" Changed="{command: ReloadDataSet()}"/>
+            </FilterTemplate>
+        </dot:GridViewCheckBoxColumn>
+        <dot:GridViewTextColumn ValueBinding="{value: ReservationDate}" FormatString="dd/MM/yyyy HH:mm" HeaderText="Reservation date">
+            <FilterTemplate>
+                <dot:CheckBox class="checkbox" Text="Show only todays work" Checked="{value: ShowOnlyTodays}" Changed="{command: ReloadDataSet()}"/>
+            </FilterTemplate>
+        </dot:GridViewTextColumn>
+        <dot:GridViewTextColumn ValueBinding="{value: CarManufacturer}" HeaderText="Car Manufacturer" />
+        <dot:GridViewTextColumn ValueBinding="{value: CarType}" HeaderText="Car Type" />
+        <dot:GridViewTextColumn ValueBinding="{value: RepairType}" HeaderText="Repair type"/>
+        <dot:GridViewTemplateColumn>
+            <ContentTemplate>
+                <dot:RouteLink RouteName="Mechanic_Repair_Detail" Param-Id="{value: Id}" class="btn btn-primary" Text="View detail"/>
+            </ContentTemplate>
+        </dot:GridViewTemplateColumn>
+    </dot:GridView>
+    <dot:DataPager class="pager" DataSet="{value: Repairs}"/>
+</dot:Content>
+

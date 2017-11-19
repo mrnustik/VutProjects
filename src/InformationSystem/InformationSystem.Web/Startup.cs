@@ -72,6 +72,7 @@ namespace InformationSystem.Web
             });
             services.AddTransient<UserService>();
             services.AddTransient<CarService>();
+            services.AddTransient<MaterialService>();
             services.AddTransient<RepairService>();
             services.AddTransient<DbIntiliazer>();
 

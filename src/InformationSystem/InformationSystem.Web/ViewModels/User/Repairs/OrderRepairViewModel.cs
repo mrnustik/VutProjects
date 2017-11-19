@@ -25,12 +25,12 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
         }
 
         public RepairDetailModel Repair { get; set; } = new RepairDetailModel();
-        public List<CarListModel> Cars { get; set; } = new List<CarListModel>();
+        public List<CarDetailModel> Cars { get; set; } = new List<CarDetailModel>();
 
         public string SelectedDate { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
         public string SelectedHour { get; set; } = "08:00";
         public List<string> OpeningHours { get; set; }
-        public IEnumerable<UserModel> Mechanics { get; set; }
+        public List<UserModel> Mechanics { get; set; }
 
         public List<RepairTypeString> Types { get; set; } = new List<RepairTypeString>
         {
@@ -62,7 +62,7 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
             if (Context.Parameters.ContainsKey("CarId"))
             {
                 var guid = new Guid((string)Context.Parameters["CarId"]);
-                Repair.Car = Cars.FirstOrDefault(c => c.Id == guid);
+                //Repair.Car = Cars.FirstOrDefault(c => c.Id == guid);
             }
             return base.PreRender();
         }
@@ -70,7 +70,7 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
         public async Task ReservationTimeChanged()
         {
             var datetime = ParseSelectedDate();
-            Mechanics = await _repairService.FindAvailableMechanics(datetime);
+            Mechanics = (await _repairService.FindAvailableMechanics(datetime)).ToList();
         }
 
         private DateTime ParseSelectedDate()
@@ -86,6 +86,7 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
             var date = ParseSelectedDate();
             Repair.ReservationDate = date;
             await _repairService.CreateRepairOrder(Repair);
+            Context.RedirectToRoute("Default");
         }
 
     }

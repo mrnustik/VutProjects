@@ -1,0 +1,63 @@
+﻿@viewModel InformationSystem.Web.ViewModels.Mechanic.Repair.DetailViewModel, InformationSystem.Web
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content ContentPlaceHolderID="Title">
+    Repair detail    
+</dot:Content>
+<dot:Content ContentPlaceHolderID="MainContent">
+    <div class="row">
+        <h4>{{value: Repair.Car.CarIdenitification}} - {{value: Repair.Car.CompanyName}} {{value: Repair.Car.TypeName}}</h4>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <label>Status: </label>
+            <dot:Literal Text="{value: Repair.Done ? "Done" : "Waiting" }" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Repair type:</label> {{value: Repair.RepairType}}
+        </div>
+        <div class="col-md-6">
+            <label>Problem description:</label> 
+            <div>
+                {{value: Repair.Description}}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="pull-right">
+            <dot:Button class="btn btn-primary" Text="Add material" Click="{command: AddMaterial()}"/>
+        </div>
+    </div>
+    <div class="row">
+        <dot:GridView class="table" DataSource="{value: UsedMaterials}" ShowHeaderWhenNoData="true" InlineEditing="true">
+            <dot:GridViewTemplateColumn HeaderText="Material">
+                <ContentTemplate>
+                    {{value: Material.Name}}
+                </ContentTemplate>
+                <EditTemplate>
+                    <dot:ComboBox class="form-control" DataSource="{value: _parent.Materials}" DisplayMember="Name" SelectedValue="{value: Material}"/>
+                </EditTemplate>
+            </dot:GridViewTemplateColumn>
+            <dot:GridViewTextColumn HeaderText="Ammount" ValueType="Number" ValueBinding="{value: Ammount}"/>
+            <dot:GridViewTemplateColumn>
+                <ContentTemplate>
+                    <dot:Button class="btn btn-primary" Text="Edit" Click="{command: _parent.BeginEdit(_this)}"/>
+                    <dot:Button class="btn btn-danger" Text="Remove" Click="{command: _parent.RemoveMaterial(_this)}"/>
+                </ContentTemplate>
+                <EditTemplate>
+                    <dot:Button class="btn btn-primary" Text="Save" Click="{command: _parent.AddOrUpdateMaterial(_this)}"/>
+                    <dot:Button class="btn btn-danger" Text="Cancel" Click="{command: _parent.CancelEdit()}" />
+                </EditTemplate>
+            </dot:GridViewTemplateColumn>
+        </dot:GridView>
+    </div>
+    <div class="row">
+        <div class="pull-right">
+            <dot:Button class="btn btn-primary" Text="Mark done" Visible="{value: !Repair.Done}" Click="{command: MarkDone()}" />
+            <dot:Button class="btn btn-primary" Text="Mark undone" Visible="{value: Repair.Done}" Click="{command: MarkUndone()}" />
+        </div>
+    </div>
+</dot:Content>
+

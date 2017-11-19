@@ -1,8 +1,0 @@
-﻿@viewModel InformationSystem.Web.ViewModels.Mechanic.TestViewModel, InformationSystem.Web
-@masterPage Views/MasterPage.dotmaster
-
-<dot:Content ContentPlaceHolderID="MainContent">
-
-    You are an mechanic.
-</dot:Content>
-

@@ -1,4 +1,6 @@
-﻿namespace InformationSystem.DAL.Entities
+﻿using System;
+
+namespace InformationSystem.DAL.Entities
 {
     public class MaterialEntity : BaseEntity
     {

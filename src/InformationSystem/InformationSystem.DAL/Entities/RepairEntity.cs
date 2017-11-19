@@ -20,6 +20,6 @@ namespace InformationSystem.DAL.Entities
         public string MechanicUserName { get; set; }
         [Required]
         public virtual CarEntity Car { get; set; }
-        public IList<UsedMaterialEntity> UsedMaterials { get; set; } = new List<UsedMaterialEntity>();
+        public virtual ICollection<UsedMaterialEntity> UsedMaterials { get; set; } = new List<UsedMaterialEntity>();
     }
 }

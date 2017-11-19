@@ -17,7 +17,7 @@ namespace InformationSystem.Web.ViewModels.User.Cars
             _carService = carService;
         }
 
-        public GridViewDataSet<CarListModel> Cars { get; set; }
+        public GridViewDataSet<CarDetailModel> Cars { get; set; }
 
 
         public async Task Delete(CarListModel car)
@@ -32,7 +32,7 @@ namespace InformationSystem.Web.ViewModels.User.Cars
             return base.Init();
         }
 
-        private GridViewDataSetLoadedData<CarListModel> GridViewDataSetLoadDelegate(IGridViewDataSetLoadOptions gridViewDataSetLoadOptions)
+        private GridViewDataSetLoadedData<CarDetailModel> GridViewDataSetLoadDelegate(IGridViewDataSetLoadOptions gridViewDataSetLoadOptions)
         {
             var queryable = _carService.GetAllCarsByUser(UserName);
 

@@ -20,7 +20,7 @@ namespace InformationSystem.Web.ViewModels.User.Cars
         public GridViewDataSet<CarDetailModel> Cars { get; set; }
 
 
-        public async Task Delete(CarListModel car)
+        public async Task Delete(CarDetailModel car)
         {
             await _carService.DeleteCar(car.Id);
             await Cars.RequestRefreshAsync(true);

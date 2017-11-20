@@ -27,7 +27,7 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
         public RepairDetailModel Repair { get; set; } = new RepairDetailModel();
         public List<CarDetailModel> Cars { get; set; } = new List<CarDetailModel>();
 
-        public string SelectedDate { get; set; } = DateTime.Now.ToString("yyyy-MM-dd");
+        public string SelectedDate { get; set; } = (DateTime.Now + TimeSpan.FromHours(24)).ToString("yyyy-MM-dd");
         public string SelectedHour { get; set; } = "08:00";
         public List<string> OpeningHours { get; set; }
         public List<UserModel> Mechanics { get; set; }
@@ -53,24 +53,20 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
                 Cars = _carService.GetAllCarsByUser(UserName).ToList();
                 OpeningHours = Enumerable.Range(8, 9).Select(a => $"{a:D2}:00").ToList();
                 await ReservationTimeChanged();
+                if (Context.Parameters.ContainsKey("CarId"))
+                {
+                    var guid = new Guid((string)Context.Parameters["CarId"]);
+                    Repair.Car = Cars.FirstOrDefault(c => c.Id == guid);
+                }
             }
             await base.Init();
-        }
-
-        public override Task PreRender()
-        {
-            if (Context.Parameters.ContainsKey("CarId"))
-            {
-                var guid = new Guid((string)Context.Parameters["CarId"]);
-                //Repair.Car = Cars.FirstOrDefault(c => c.Id == guid);
-            }
-            return base.PreRender();
         }
 
         public async Task ReservationTimeChanged()
         {
             var datetime = ParseSelectedDate();
             Mechanics = (await _repairService.FindAvailableMechanics(datetime)).ToList();
+            Repair.Mechanic = null;
         }
 
         private DateTime ParseSelectedDate()

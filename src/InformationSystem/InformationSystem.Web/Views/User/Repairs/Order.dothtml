@@ -10,9 +10,13 @@
 
     <form>
         <div class="row">
-            <div class="col-sm-6" Validator.SetToolTipText="true" Validator.Value="{value: Repair.Car}" Validator.InvalidCssClass="has-feedback has-error">
+            <div class="col-sm-6" Visible="{value: Cars.Count > 0}"  Validator.SetToolTipText="true" Validator.Value="{value: Repair.Car}" Validator.InvalidCssClass="has-feedback has-error">
                 <label>Select a car: </label>
-                <dot:ComboBox class="form-control" DataSource="{value: Cars}" DisplayMember="Name" SelectedValue="{value: Repair.Car}" />
+                <dot:ComboBox class="form-control" Visible="{value: Cars.Count > 0}" DataSource="{value: Cars}" DisplayMember="Name" SelectedValue="{value: Repair.Car}" />
+            </div>
+            <div  class="col-sm-6" Visible="{value: Cars.Count == 0}">
+                You don't seem to have any cars registered. Please add one.
+                <dot:RouteLink class="btn btn-primary" Text="Add a car" RouteName="User_Cars_Add"/>
             </div>
             <div class="col-sm-6" Validator.SetToolTipText="true" Validator.Value="{value: Repair.RepairType}" Validator.InvalidCssClass="has-feedback has-error">
                 <label>Repair Type: </label>

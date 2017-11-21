@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,10 +24,50 @@ namespace InformationSystem.Web.ViewModels.User.Cars
 
         public async Task Save()
         {
-            await _carService.CreateCar(Car, UserName);
-            Context.RedirectToRoute("User_Cars_List");
+            if (IsValid(Car))
+            {
+                await _carService.CreateCar(Car, UserName);
+                Context.RedirectToRoute("User_Cars_List");
+            }
         }
 
+        private bool IsValid(CarDetailModel car)
+        {
+
+            if (string.IsNullOrEmpty(car.Name))
+            {
+                ShowAlert = true;
+                AlertText = "Car name is required";
+                AlertType = AlertDanger;
+                return false;
+            }
+            
+            if (string.IsNullOrEmpty(car.CompanyName))
+            {
+                ShowAlert = true;
+                AlertText = "Car manufacturer is required";
+                AlertType = AlertDanger;
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(car.TypeName))
+            {
+                ShowAlert = true;
+                AlertText = "Car type name is required";
+                AlertType = AlertDanger;
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(car.CarIdenitification))
+            {
+                ShowAlert = true;
+                AlertText = "Car identification is required";
+                AlertType = AlertDanger;
+                return false;
+            }
+
+            return true;
+        }
     }
 }
 

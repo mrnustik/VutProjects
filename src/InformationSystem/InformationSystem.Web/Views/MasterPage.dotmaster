@@ -129,6 +129,9 @@
 
         </div>
     </nav>
+
+
+
     <dot:UpdateProgress>
         <div id="loader-wrapper">
             <div id="loader"></div>
@@ -145,6 +148,10 @@
             <h1>
                 <dot:ContentPlaceHolder ID="Title" />
             </h1>
+        </div>
+        <div Visible="{value: ShowAlert}" class="{value: "alert alert-dismissable " + AlertType}">
+            <dot:LinkButton href="#" class="close" Click="{staticCommand: ShowAlert = false}" aria-label="close">&times;</dot:LinkButton>
+            <dot:Literal Text="{value:  AlertText}" />
         </div>
         <dot:ContentPlaceHolder ID="MainContent" />
     </div>

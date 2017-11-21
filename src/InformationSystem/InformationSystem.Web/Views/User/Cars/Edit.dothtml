@@ -1,70 +1,49 @@
 ﻿@viewModel InformationSystem.Web.ViewModels.User.Cars.EditViewModel, InformationSystem.Web
 @masterPage Views/MasterPage.dotmaster
- 
+
 <dot:Content ContentPlaceHolderID="Title">
     Edit a car
 </dot:Content>
 
 
 <dot:Content ContentPlaceHolderID="MainContent">
-    <style>
-        .form-group {
-            margin-bottom: 0;
-            text-align: left;
-        }
-
-        .btn {
-            border: 0;
-            border-radius: 3px;
-            margin-top: 20px;
-        }
-
-        input {
-            border: 2px solid #CCC !important;
-            height: 35px;
-            border-radius: 3px;
-            max-width: 100%;
-        }
-
-        label {
-            margin-top: 15px;
-        }
-    </style>
     <form>
-        <fieldset>
-            <div class="row">
+
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group" Validator.InvalidCssClass="has-feedback has-error" Validator.SetToolTipText="true" Validator.Value="{value: Car.Name}">
-                    <div class="col-md-6">
-                        <label class="control-label" for="carName">Car name:*</label>
-                        <dot:TextBox ID="carName" class="form-control" Text="{value: Car.Name}" />
-                    </div>
+                    <label class="control-label" for="carName">Car name:*</label>
+                    <dot:TextBox ID="carName" class="form-control" Text="{value: Car.Name}" />
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group" Validator.InvalidCssClass="has-feedback has-error" Validator.SetToolTipText="true" Validator.Value="{value: Car.CompanyName}">
-                    <div class="col-md-6">
-                        <label class="control-label" for="carManufacturer">Car manufacturer:*</label>
-                        <dot:TextBox ID="carManufacturer" class="form-control" Text="{value: Car.CompanyName}" Type="Normal"/>
-                    </div>
+                    <label class="control-label" for="carManufacturer">Car manufacturer:*</label>
+                    <dot:TextBox ID="carManufacturer" class="form-control" Text="{value: Car.CompanyName}" Type="Normal" />
                 </div>
             </div>
-            <div class="row">
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group" Validator.InvalidCssClass="has-feedback has-error" Validator.SetToolTipText="true" Validator.Value="{value: Car.TypeName}">
-                    <div class="col-md-6">
-                        <label class="control-label" for="carType">Car type:*</label>
-                        <dot:TextBox ID="carType" class="form-control" Text="{value:  Car.TypeName}" Type="Normal"/>
-                    </div>
+                    <label class="control-label" for="carType">Car type:*</label>
+                    <dot:TextBox ID="carType" class="form-control" Text="{value:  Car.TypeName}" Type="Normal" />
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group" Validator.InvalidCssClass="has-feedback has-error" Validator.SetToolTipText="true" Validator.Value="{value: Car.CarIdenitification}">
-                    <div class="col-md-6">
-                        <label class="control-label" for="carId">Car identification:*</label>
-                        <dot:TextBox ID="carId" class="form-control" Text="{value: Car.CarIdenitification}" Type="Normal"/>
-                    </div>
+                    <label class="control-label" for="carId">Car identification:*</label>
+                    <dot:TextBox ID="carId" class="form-control" Text="{value: Car.CarIdenitification}" Type="Normal" />
                 </div>
             </div>
 
+        </div>
 
-        </fieldset>
-
-        <dot:Button class="btn btn-primary pull-right" ButtonTagName="button" IsSubmitButton="true" Text="Save" Click="{command: Save()}" />
+        <div class="row">
+            <div class="pull-right">
+                <dot:Button class="btn btn-primary pull-right" ButtonTagName="button" IsSubmitButton="true" Text="Save" Click="{command: Save()}" />
+            </div>
+        </div>
 
     </form>
 </dot:Content>

@@ -7,17 +7,6 @@
 
 
 <dot:Content ContentPlaceHolderID="MainContent">
-    <style>
-        .dialog {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(101, 99, 99, 0.43);
-            z-index: 1000;
-        }
-
-    </style>
     <div class="dialog" Visible="{value: DialogShown}">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">

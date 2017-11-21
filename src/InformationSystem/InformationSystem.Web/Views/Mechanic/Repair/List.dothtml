@@ -6,15 +6,6 @@
 </dot:Content>
 
 <dot:Content ContentPlaceHolderID="MainContent">
-    <div class="row">
-        <%--<div class="col-sm-offset-4">
-            <dot:CheckBox Checked="{value: HideDoneWork}" Text="Hide done work"/>
-        </div>
-        <div class="col-sm-2">
-            <dot:CheckBox Checked="{value: ShowOnlyTodays}" Text="Show only todays work"/>
-        </div>--%>
-    </div>
-
     <dot:GridView class="table" ShowHeaderWhenNoData="true" DataSource="{value: Repairs}" FilterPlacement="ExtraRow">
         <Columns>
             <dot:GridViewCheckBoxColumn ValueBinding="{value: Done}">

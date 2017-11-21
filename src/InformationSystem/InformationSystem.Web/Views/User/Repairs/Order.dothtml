@@ -54,9 +54,10 @@
                 <dot:TextBox class="form-control" Text="{value: Repair.Description}" Type="MultiLine" placeholder="My battery is not working" />
             </div>
         </div>
-    
-
-        <dot:Button class="btn btn-primary" Click="{command: Save()}" Text="Save"/>
-
+        <div class="row">
+            <div class="pull-right">
+                <dot:Button class="btn btn-primary" Click="{command: Save()}" Text="Save" />
+            </div>
+        </div>
     </form>
 </dot:Content>

@@ -73,6 +73,8 @@ namespace InformationSystem.Web.ViewModels.Mechanic.Repair
         {
             Repair.Done = true;
             await _repairService.UpdateRepair(Repair);
+            UsedMaterials.RowEditOptions.EditRowId = null;
+            UsedMaterials.RequestRefresh(true);
         }
 
         public async Task MarkUndone()

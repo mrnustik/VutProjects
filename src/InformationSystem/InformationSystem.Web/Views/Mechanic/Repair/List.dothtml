@@ -16,25 +16,33 @@
     </div>
 
     <dot:GridView class="table" ShowHeaderWhenNoData="true" DataSource="{value: Repairs}" FilterPlacement="ExtraRow">
-        <dot:GridViewCheckBoxColumn ValueBinding="{value: Done}" >
-            <FilterTemplate>
-               <dot:CheckBox class="checkbox" Text="Hide done items" Checked="{value: HideDoneWork}" Changed="{command: ReloadDataSet()}"/>
-            </FilterTemplate>
-        </dot:GridViewCheckBoxColumn>
-        <dot:GridViewTextColumn ValueBinding="{value: ReservationDate}" FormatString="dd/MM/yyyy HH:mm" HeaderText="Reservation date">
-            <FilterTemplate>
-                <dot:CheckBox class="checkbox" Text="Show only todays work" Checked="{value: ShowOnlyTodays}" Changed="{command: ReloadDataSet()}"/>
-            </FilterTemplate>
-        </dot:GridViewTextColumn>
-        <dot:GridViewTextColumn ValueBinding="{value: CarManufacturer}" HeaderText="Car Manufacturer" />
-        <dot:GridViewTextColumn ValueBinding="{value: CarType}" HeaderText="Car Type" />
-        <dot:GridViewTextColumn ValueBinding="{value: RepairType}" HeaderText="Repair type"/>
-        <dot:GridViewTemplateColumn>
-            <ContentTemplate>
-                <dot:RouteLink RouteName="Mechanic_Repair_Detail" Param-Id="{value: Id}" class="btn btn-primary" Text="View detail"/>
-            </ContentTemplate>
-        </dot:GridViewTemplateColumn>
+        <Columns>
+            <dot:GridViewCheckBoxColumn ValueBinding="{value: Done}">
+                <FilterTemplate>
+                    <dot:CheckBox class="checkbox" Text="Hide done items" Checked="{value: HideDoneWork}" Changed="{command: ReloadDataSet()}" />
+                </FilterTemplate>
+            </dot:GridViewCheckBoxColumn>
+            <dot:GridViewTextColumn ValueBinding="{value: ReservationDate}" FormatString="dd/MM/yyyy HH:mm" HeaderText="Reservation date">
+                <FilterTemplate>
+                    <dot:CheckBox class="checkbox" Text="Show only todays work" Checked="{value: ShowOnlyTodays}" Changed="{command: ReloadDataSet()}" />
+                </FilterTemplate>
+            </dot:GridViewTextColumn>
+            <dot:GridViewTextColumn ValueBinding="{value: CarManufacturer}" HeaderText="Car Manufacturer" />
+            <dot:GridViewTextColumn ValueBinding="{value: CarType}" HeaderText="Car Type" />
+            <dot:GridViewTextColumn ValueBinding="{value: RepairType}" HeaderText="Repair type" />
+            <dot:GridViewTemplateColumn>
+                <ContentTemplate>
+                    <dot:RouteLink RouteName="Mechanic_Repair_Detail" Param-Id="{value: Id}" class="btn btn-primary" Text="View detail" />
+                </ContentTemplate>
+            </dot:GridViewTemplateColumn>
+        </Columns>
     </dot:GridView>
+    <h2 class="text-center" Visible="{value: Repairs.PagingOptions.TotalItemsCount == 0}">
+        {{value: ShowOnlyTodays && HideDoneWork ? "You have done all work for today" : ""}}
+        {{value: !ShowOnlyTodays && HideDoneWork ? "You have done all work." : ""}}
+        {{value: ShowOnlyTodays && !HideDoneWork ? "You have no work for today" : "" }}
+        {{value: !ShowOnlyTodays && !HideDoneWork ? "You have not been assigned any work yet." : ""}}
+    </h2>
     <dot:DataPager class="pager" DataSet="{value: Repairs}"/>
 </dot:Content>
 

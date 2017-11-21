@@ -27,7 +27,7 @@
     </div>
     <div class="row">
         <div class="pull-right">
-            <dot:Button class="btn btn-primary" Text="Add material" Click="{command: AddMaterial()}"/>
+            <dot:Button class="btn btn-primary" Text="Add material" Visible="{value: Repair.Done == false}" Click="{command: AddMaterial()}"/>
         </div>
     </div>
     <div class="row">
@@ -41,7 +41,8 @@
                 </EditTemplate>
             </dot:GridViewTemplateColumn>
             <dot:GridViewTextColumn HeaderText="Ammount" ValueType="Number" ValueBinding="{value: Ammount}"/>
-            <dot:GridViewTemplateColumn>
+            <dot:GridViewTextColumn HeaderText="Price" ValueBinding="{value: Ammount * Material.Price}" IsEditable="false"/>
+            <dot:GridViewTemplateColumn Visible="{value: Repair.Done == false}">
                 <ContentTemplate>
                     <dot:Button class="btn btn-primary" Text="Edit" Click="{command: _parent.BeginEdit(_this)}"/>
                     <dot:Button class="btn btn-danger" Text="Remove" Click="{command: _parent.RemoveMaterial(_this)}"/>
@@ -51,6 +52,7 @@
                     <dot:Button class="btn btn-danger" Text="Cancel" Click="{command: _parent.CancelEdit()}" />
                 </EditTemplate>
             </dot:GridViewTemplateColumn>
+            
         </dot:GridView>
     </div>
     <div class="row">

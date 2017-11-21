@@ -9,6 +9,5 @@ namespace InformationSystem.BL.Models.Material
         public Guid Id { get; set; }
         public MaterialModel Material { get; set; }
         public double Ammount { get; set; }
-
     }
 }

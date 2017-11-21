@@ -26,6 +26,11 @@ namespace InformationSystem.Web.ViewModels
         public string AlertType { get; set; }
         public string AlertText { get; set; }
 
+        public override Task Init()
+        {
+            ShowAlert = false;
+            return base.Init();
+        }
 
         public async Task SignOutAsync()
         {

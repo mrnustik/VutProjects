@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 using DotVVM.Framework.ViewModel;
 using DotVVM.Framework.ViewModel.Validation;
 using InformationSystem.BL.Services;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 
 namespace InformationSystem.Web.ViewModels.Authentication
 {
-    public class SignInViewModel : MasterPageViewModel, IValidatableObject
+    public class SignInViewModel : MasterPageViewModel
     {
         private readonly UserService userService;
 
@@ -19,7 +20,7 @@ namespace InformationSystem.Web.ViewModels.Authentication
         {
             this.userService = userService;
         }
-        
+
 
         [Bind(Direction.ClientToServer)]
         public string SignInEmail { get; set; }
@@ -43,7 +44,8 @@ namespace InformationSystem.Web.ViewModels.Authentication
 
         public override Task Init()
         {
-            if(Context.Query.ContainsKey("ReturnUrl")){
+            if (Context.Query.ContainsKey("ReturnUrl"))
+            {
                 ReturnUrl = (string)Context.Query["ReturnUrl"];
             }
             return base.Init();
@@ -51,38 +53,137 @@ namespace InformationSystem.Web.ViewModels.Authentication
 
         public async Task SignInAsync()
         {
+            if (string.IsNullOrEmpty(SignInPassword))
+            {
+                ShowAlert = true;
+                AlertText = "You have to enter a password";
+                AlertType = AlertDanger;
+                Context.ModelState.Errors.Add(new ViewModelValidationError
+                {
+                    ErrorMessage = "You have to enter a password.",
+                    PropertyPath = nameof(SignInPassword)
+                });
+                Context.FailOnInvalidModelState();
+                return;
+            }
+
             if (await userService.SignInAsync(SignInEmail, SignInPassword))
             {
-                if(ReturnUrl != null){
+                if (ReturnUrl != null)
+                {
                     Context.RedirectToUrl(ReturnUrl, true);
                 }
                 Context.RedirectToRoute("Default");
             }
-            else 
+            else
             {
                 Context.ModelState.Errors.Add(new ViewModelValidationError
                 {
-                    ErrorMessage = "Invalid user name or password",
+                    ErrorMessage = "Invalid email or password.",
                     PropertyPath = nameof(SignInPassword)
                 });
+                Context.ModelState.Errors.Add(new ViewModelValidationError
+                {
+                    ErrorMessage = "Invalid email or password.",
+                    PropertyPath = nameof(SignInEmail)
+                });
+                Context.FailOnInvalidModelState();
+                ShowAlert = true;
+                AlertText = "Invalid email or password";
+                AlertType = AlertDanger;
             }
         }
 
         public async Task RegisterAsync()
         {
-            var identityResult = await userService.CreateUserAsync(RegisterName,RegisterEmail, RegisterPassword);
-            if (identityResult.Succeeded)
+            if (IsRegistrationValid())
             {
-                SignInEmail = RegisterEmail;
-                SignInPassword = RegisterPassword;
-                await SignInAsync();
+                var identityResult = await userService.CreateUserAsync(RegisterName, RegisterEmail, RegisterPassword);
+                if (identityResult.Succeeded)
+                {
+                    SignInEmail = RegisterEmail;
+                    SignInPassword = RegisterPassword;
+                    await SignInAsync();
+                }
+                else
+                {
+                    ShowAlert = true;
+                    AlertType = AlertDanger;
+                    AlertText = identityResult.Errors.FirstOrDefault()?.Description;
+                }
             }
-            else
+        }
+
+        private bool IsRegistrationValid()
+        {
+            if (string.IsNullOrEmpty(RegisterName))
             {
-                var modelErrors = ConvertIdentityErrorsToModelErrors(identityResult);
-                Context.ModelState.Errors.AddRange(modelErrors);
+                ShowAlert = true;
+                AlertText = "You have to enter your name";
+                AlertType = AlertDanger;
+                Context.ModelState.Errors.Add(new ViewModelValidationError
+                {
+                    ErrorMessage = "You have to enter your name.",
+                    PropertyPath = nameof(RegisterName)
+                });
                 Context.FailOnInvalidModelState();
+                return false;
             }
+
+            bool isValid;
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(RegisterEmail);
+                isValid = addr.Address == RegisterEmail;
+            }
+            catch
+            {
+                ShowAlert = true;
+                AlertText = "You have entered an invalid email";
+                AlertType = AlertDanger;
+                Context.ModelState.Errors.Add(new ViewModelValidationError
+                {
+                    ErrorMessage = "You have entered an invalid email.",
+                    PropertyPath = nameof(RegisterEmail)
+                });
+                Context.FailOnInvalidModelState();
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(RegisterPassword))
+            {
+                ShowAlert = true;
+                AlertText = "You have to enter a password.";
+                AlertType = AlertDanger;
+                Context.ModelState.Errors.Add(new ViewModelValidationError
+                {
+                    ErrorMessage = "You have to enter a password.",
+                    PropertyPath = nameof(RegisterPassword)
+                });
+                Context.FailOnInvalidModelState();
+                return false;
+            }
+
+            if (RegisterPassword != RegisterConfirmPassword)
+            {
+                ShowAlert = true;
+                AlertText = "Passwords dont match";
+                AlertType = AlertDanger;
+                Context.ModelState.Errors.Add(new ViewModelValidationError
+                {
+                    ErrorMessage = "Passwords dont match",
+                    PropertyPath = nameof(RegisterPassword)
+                });
+                Context.ModelState.Errors.Add(new ViewModelValidationError
+                {
+                    ErrorMessage = "Passwords dont match",
+                    PropertyPath = nameof(RegisterConfirmPassword)
+                });
+                Context.FailOnInvalidModelState();
+                return false;
+            }
+
+            return isValid;
         }
 
         private IEnumerable<ViewModelValidationError> ConvertIdentityErrorsToModelErrors(IdentityResult identityResult)
@@ -92,14 +193,6 @@ namespace InformationSystem.Web.ViewModels.Authentication
                 ErrorMessage = identityError.Description,
                 PropertyPath = nameof(RegisterPassword)
             });
-        }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (RegisterPassword != RegisterConfirmPassword)
-            {
-                yield return new ValidationResult("Passwords dont match", new[] { nameof(RegisterConfirmPassword) });
-            }
         }
     }
 }

@@ -11,7 +11,7 @@
     <form>
         <div class="row">
             <div class="col-sm-6" Visible="{value: Cars.Count > 0}"  Validator.SetToolTipText="true" Validator.Value="{value: Repair.Car}" Validator.InvalidCssClass="has-feedback has-error">
-                <label>Select a car: </label>
+                <label>Select a car:*</label>
                 <dot:ComboBox class="form-control" Visible="{value: Cars.Count > 0}" DataSource="{value: Cars}" DisplayMember="Name" SelectedValue="{value: Repair.Car}" />
             </div>
             <div  class="col-sm-6" Visible="{value: Cars.Count == 0}">
@@ -19,14 +19,14 @@
                 <dot:RouteLink class="btn btn-primary" Text="Add a car" RouteName="User_Cars_Add"/>
             </div>
             <div class="col-sm-6" Validator.SetToolTipText="true" Validator.Value="{value: Repair.RepairType}" Validator.InvalidCssClass="has-feedback has-error">
-                <label>Repair Type: </label>
+                <label>Repair Type:*</label>
                 <dot:ComboBox class="form-control" DataSource="{value: Types}" DisplayMember="String" ValueMember="RepairType" SelectedValue="{value: Repair.RepairType}" />
             </div>
         </div>
 
         <div class="row">
             <div class="col-sm-6 form-group">
-                <label>Reservation day:</label>
+                <label>Reservation day:*</label>
                 <div class='input-group date' id='datetimepicker2'>
                     <dot:TextBox Type="Date" class="form-control" Changed="{command: ReservationTimeChanged()}" Text="{value: SelectedDate}" />
                     <span class="input-group-addon">
@@ -35,14 +35,14 @@
                 </div>
             </div>
             <div class="col-sm-6 form-group">
-                <label>Reservation time:</label>
+                <label>Reservation time:*</label>
                 <dot:ComboBox class="form-control" SelectionChanged="{command: ReservationTimeChanged()}" DataSource="{value: OpeningHours}" SelectedValue="{value: SelectedHour}" />
             </div>
         </div>
 
         <div class="row">
             <div class="col-sm-12">
-                <label>Mechanic:</label>
+                <label>Mechanic:*</label>
                 <dot:ListBox Visible="{value: Mechanics.Count > 0}" Size="3" class="form-control" DataSource="{value: Mechanics}" DisplayMember="Name" SelectedValue="{value: Repair.Mechanic}"/>
                 <dot:Literal Visible="{value: Mechanics.Count == 0}" Text="No mechanics available for the selected time"/>
             </div>
@@ -50,7 +50,7 @@
 
         <div class="row">
             <div class="col-sm-12" Validator.SetToolTipText="true" Validator.Value="{value: Repair.Description}" Validator.InvalidCssClass="has-feedback has-error">
-                <label>Describe the issue:</label>
+                <label>Describe the issue:*</label>
                 <dot:TextBox class="form-control" Text="{value: Repair.Description}" Type="MultiLine" placeholder="My battery is not working" />
             </div>
         </div>

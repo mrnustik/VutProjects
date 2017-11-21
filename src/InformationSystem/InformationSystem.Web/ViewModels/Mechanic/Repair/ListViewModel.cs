@@ -51,10 +51,9 @@ namespace InformationSystem.Web.ViewModels.Mechanic.Repair
             return queryable.GetDataFromQueryable(gridViewDataSetLoadOptions);
         }
 
-        public async Task ReloadDataSet()
+        public void ReloadDataSet()
         {
             Repairs = GridViewDataSet.Create(GridViewDataSetLoadDelegate, pageSize: 10);
-            
         }
     }
 }

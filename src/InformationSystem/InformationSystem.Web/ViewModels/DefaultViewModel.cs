@@ -12,9 +12,5 @@ namespace InformationSystem.Web.ViewModels
 {
     public class DefaultViewModel : MasterPageViewModel
     {
-
-        public string Title { get; set; } = "Title";
-
-
     }
 }

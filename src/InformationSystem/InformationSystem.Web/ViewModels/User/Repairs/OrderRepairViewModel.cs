@@ -10,6 +10,7 @@ using InformationSystem.BL.Models.Repair;
 using InformationSystem.BL.Models.User;
 using InformationSystem.BL.Services;
 using InformationSystem.DAL.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace InformationSystem.Web.ViewModels.User.Repairs
 {
@@ -65,6 +66,17 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
         public async Task ReservationTimeChanged()
         {
             var datetime = ParseSelectedDate();
+            if (datetime < DateTime.Today.AddDays(1))
+            {
+                ShowAlert = true;
+                AlertText = "You have to order at least one day ahead.";
+                AlertType = AlertDanger;
+                return;
+            }
+            else
+            {
+                ShowAlert = false;
+            }
             Mechanics = (await _repairService.FindAvailableMechanics(datetime)).ToList();
             Repair.Mechanic = null;
         }
@@ -81,10 +93,49 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
         {
             var date = ParseSelectedDate();
             Repair.ReservationDate = date;
-            await _repairService.CreateRepairOrder(Repair);
-            Context.RedirectToRoute("Default");
+            if (IsValid(Repair))
+            {
+                await _repairService.CreateRepairOrder(Repair);
+                Context.RedirectToRoute("Default");
+            }
         }
 
+        private bool IsValid(RepairDetailModel repair)
+        {
+            if (repair.Car == null)
+            {
+                ShowAlert = true;
+                AlertText = "You have to select car in order to order repair.";
+                AlertType = AlertDanger;
+                return false;
+            }
+
+            if (repair.ReservationDate < DateTime.Today.AddDays(1))
+            {
+                ShowAlert = true;
+                AlertText = "You have to order at least one day ahead.";
+                AlertType = AlertDanger;
+                return false;
+            }
+
+            if (repair.Mechanic == null)
+            {
+                ShowAlert = true;
+                AlertText = "You have to select a mechanic, that you want to be served by.";
+                AlertType = AlertDanger;
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(repair.Description))
+            {
+                ShowAlert = true;
+                AlertText = "You have to describe an issue, that you have with your car before ordering.";
+                AlertType = AlertDanger;
+                return false;
+            }
+
+            return true;
+        }
     }
 
     public class RepairTypeString

@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DotVVM.Framework.Controls;
+using DotVVM.Framework.Runtime.Filters;
 using DotVVM.Framework.ViewModel;
 using InformationSystem.BL.Models.Repair;
 using InformationSystem.BL.Services;
 
 namespace InformationSystem.Web.ViewModels.User.Repairs
 {
+    [Authorize]
     public class HistoryViewModel : InformationSystem.Web.ViewModels.MasterPageViewModel
     {
         private readonly RepairService _repairService;

@@ -110,6 +110,7 @@ namespace InformationSystem.BL.Services
                 Description = repairEntity.Description,
                 Done = repairEntity.Done,
                 ReservationDate = repairEntity.ReservationTime,
+                Duration = repairEntity.Duration,
                 Car = new CarDetailModel
                 {
                     Id = repairEntity.Car.Id,

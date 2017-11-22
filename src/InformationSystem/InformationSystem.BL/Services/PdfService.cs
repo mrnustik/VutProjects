@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
@@ -32,8 +33,10 @@ namespace InformationSystem.BL.Services
         public byte[] ConvertHtmlToPdf(string html)
         {
             var assemblyLoader = new CustomAssemblyLoadContext();
+            var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var path = Path.Combine(assemblyPath, "libwkhtmltox.dll");
             assemblyLoader.LoadUnmanagedLibrary(
-                "C:\\Development\\University\\IIS\\src\\InformationSystem\\lib\\libwkhtmltox.dll");
+                path);
             var converter = new BasicConverter(new PdfTools());
             var document = new HtmlToPdfDocument
             {

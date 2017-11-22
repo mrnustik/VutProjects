@@ -2,6 +2,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
   <ItemGroup>
     <!--Include Views-->
     <Content Include="**/*.dothtml" Exclude="obj/**/*.*;bin/**/*.*">
@@ -25,21 +31,21 @@
     </Folder>
   </ItemGroup>
   <ItemGroup Condition=" '$(CONFIGURATION)' == 'Debug' And '$(PROCESSOR_ARCHITECTURE)' == 'x86' And '$(PROCESSOR_ARCHITEW6432)' == '' ">
-    <ContentWithTargetPath Include="..\lib\libwkhtmltox.dll">
+    <ContentWithTargetPath Include="..\lib\libwkhtmltox32bit.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>libwkhtmltox.dll</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
 
   <ItemGroup Condition=" '$(CONFIGURATION)' == 'Debug' And '$(PROCESSOR_ARCHITECTURE)' == 'AMD64' Or '$(PROCESSOR_ARCHITEW6432)' == 'AMD64' ">
-    <ContentWithTargetPath Include="..\lib\libwkhtmltox.dll">
+    <ContentWithTargetPath Include="..\lib\libwkhtmltox64bit.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>libwkhtmltox.dll</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
 
   <ItemGroup Condition=" '$(CONFIGURATION)' == 'Release' ">
-    <ContentWithTargetPath Include="..\lib\libwkhtmltox.dll">
+    <ContentWithTargetPath Include="..\lib\libwkhtmltox32bit.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>libwkhtmltox.dll</TargetPath>
     </ContentWithTargetPath>

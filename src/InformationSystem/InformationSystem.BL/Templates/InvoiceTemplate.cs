@@ -181,7 +181,7 @@ color: #5D6975;
         <div><span> ADDRESS </span> { model.ClientAddress }</div>
         <div><span> EMAIL </span> <a href=""mailto:{model.Owner.Email}"">{ model.Owner.Email }</a></div>
         <div><span>DATE</span> { model.Date.ToString("yyyy MMMM dd") }</div>
-        <div><span>DUE DATE</span>{ model.DueDate.ToString("yyyy MMMM dd") }</div>
+        <div><span>DUE DATE</span> { model.DueDate.ToString("yyyy MMMM dd") }</div>
       </div>
     </header>
     <main>

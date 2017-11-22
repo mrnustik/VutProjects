@@ -16,6 +16,7 @@ namespace InformationSystem.BL.Models.Repair
         [Required]
         public RepairType RepairType { get; set; }
         public string Description { get; set; }
+        public int Duration { get; set; }
         public DateTime ReservationDate { get; set; } = DateTime.Today;
         public bool Done { get; set; }
         public UserModel Mechanic { get; set; }

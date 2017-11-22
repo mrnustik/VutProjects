@@ -14,6 +14,8 @@ namespace InformationSystem.DAL
         {
         }
 
+        public DbSet<AddressEntity> Addresses { get; set; }
+        public DbSet<InvoiceEntity> Invoices { get; set; }
         public DbSet<CarEntity> Cars { get; set; }
         public DbSet<RepairEntity> Repairs { get; set; }
         public DbSet<MaterialEntity> Materials { get; set; }

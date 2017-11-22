@@ -1,0 +1,40 @@
+﻿@viewModel InformationSystem.Web.ViewModels.User.Invoice.AddressViewModel, InformationSystem.Web
+@masterPage Views/MasterPage.dotmaster
+
+<dot:Content ContentPlaceHolderID="Title">
+    Contact Information
+</dot:Content>
+<dot:Content ContentPlaceHolderID="MainContent">
+    <form>
+        <fieldset>
+            
+            <div class="form-group" Validator.InvalidCssClass="has-feedback has-error" Validator.SetToolTipText="true" Validator.Value="{value: Address.Address}">
+                <div class="col-md-6">
+                    <label class="control-label">Address:*</label>
+                    <dot:TextBox class="form-control" Text="{value: Address.Address}" placeholder="Baker Street 221A" />
+                </div>
+            </div>
+            <div class="form-group" Validator.InvalidCssClass="has-feedback has-error" Validator.SetToolTipText="true" Validator.Value="{value: Address.City}">
+                <div class="col-md-6">
+                    <label class="control-label">City:*</label>
+                    <dot:TextBox class="form-control" Text="{value: Address.City}" placeholder="London" />
+                </div>
+            </div>
+            <div class="form-group" Validator.InvalidCssClass="has-feedback has-error" Validator.SetToolTipText="true" Validator.Value="{value: Address.ZipCode}">
+                <div class="col-md-6">
+                    <label class="control-label">Zip code:*</label>
+                    <dot:TextBox class="form-control" Type="Number" Text="{value: Address.ZipCode}" placeholder="644 00" />
+                </div>
+            </div>
+            <div class="form-group" Validator.InvalidCssClass="has-feedback has-error" Validator.SetToolTipText="true" Validator.Value="{value: Address.State}">
+                <div class="col-md-6">
+                    <label class="control-label">Country:*</label>
+                    <dot:TextBox class="form-control" Type="Number" Text="{value: Address.State}" placeholder="Great Britain" />
+                </div>
+            </div>
+            <dot:CheckBox Text="Save address to later usage" Checked="{value: SaveAddress}"/>
+        </fieldset>
+        <dot:Button Text="Get invoice" Click="{command: GenerateInvoice()}" />
+    </form>
+</dot:Content>
+

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using System.Reflection;
+using System.Runtime.Loader;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -72,15 +75,20 @@ namespace InformationSystem.Web
             });
             services.AddTransient<UserService>();
             services.AddTransient<CarService>();
+            services.AddTransient<InvoiceService>();
+            services.AddTransient<AddressService>();
+            services.AddTransient<PdfService>();
             services.AddTransient<MaterialService>();
             services.AddTransient<RepairService>();
             services.AddTransient<DbIntiliazer>();
 
         }
 
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DbIntiliazer intiliazer)
         {
+
             loggerFactory.AddConsole();
 
             if (env.IsDevelopment())

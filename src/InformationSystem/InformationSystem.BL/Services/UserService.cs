@@ -96,7 +96,16 @@ namespace InformationSystem.BL.Services
         {
             var identity = await UserManager.FindByEmailAsync(user.Email);
             await UserManager.DeleteAsync(identity);
-            
+        }
+
+        public async Task<UserModel> GetUserByEmail(string userEmail)
+        {
+            var user = await UserManager.FindByEmailAsync(userEmail);
+            return new UserModel
+            {
+                Email = user.Email,
+                Name = user.Name
+            };
         }
     }
 }

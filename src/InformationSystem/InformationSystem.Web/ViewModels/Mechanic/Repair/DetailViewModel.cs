@@ -65,6 +65,7 @@ namespace InformationSystem.Web.ViewModels.Mechanic.Repair
         public async Task RemoveMaterial(UsedMaterialModel material)
         {
             await _materialService.RemoveMaterialFromRepair(Repair.Id, material);
+            UsedMaterials.Items.Remove(material);
             UsedMaterials.RowEditOptions.EditRowId = null;
             await UsedMaterials.RequestRefreshAsync(true);
         }

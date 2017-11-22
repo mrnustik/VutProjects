@@ -11,16 +11,16 @@ namespace InformationSystem.BL.Templates
         public string TransformText(InvoiceModel model)
         {
             return $@"
-< !DOCTYPE html >
- < html lang = ""en"" >
+<!DOCTYPE html>
+ <html lang = ""en"">
   
-    < head >
+    <head>
   
-      < meta charset = ""utf-8"" >
+      <meta charset = ""utf-8"">
    
-       < title > Example 1 </ title >
+       <title> Example 1 </title>
       
-          < style >
+          <style>
       
             .clearfix:after {{
                 content: "";
@@ -165,21 +165,21 @@ color: #5D6975;
   </head>
   <body>
     <header class=""clearfix"">
-      <div id = ""logo"" >
-        Car Repairs
+      <div id = ""logo"">
+        <h1>Car Repairs</h1>
       </div>
-      <h1>INVOICE{ model.InvoiceNumber }</h1>
+      <h1>INVOICE { model.InvoiceNumber }</h1>
       <div id=""company"" class=""clearfix"">
         <div>Car Repairs</div>
         <div>V Zahradách 10,<br /> Brno, Česká Republika</div>
         <div>(602) 519-0450</div>
-        <div><a href = ""mailto:car-repairs@iis.mrnustik.net"" > car - repairs@iis.mrnustik.net<a></div>
+        <div><a href = ""mailto:car-repairs@iis.mrnustik.net""> car - repairs@iis.mrnustik.net<a></div>
       </div>
-      <div id = ""project"" >
-        < div >< span > PROJECT </ span > Fixing { model.Repair.Car.CarIdenitification }</div>
-        < div >< span > CLIENT </ span > { model.Owner.Name }</div>
-        < div >< span > ADDRESS </ span > { model.ClientAddress }</div>
-        < div >< span > EMAIL </ span > < a href=""mailto:{model.Owner.Email}"">{ model.Owner.Email }</a></div>
+      <div id = ""project"">
+        <div><span> PROJECT </span> Fixing { model.Repair.Car.CarIdenitification }</div>
+        <div><span> CLIENT </span> { model.Owner.Name }</div>
+        <div><span> ADDRESS </span> { model.ClientAddress }</div>
+        <div><span> EMAIL </span> <a href=""mailto:{model.Owner.Email}"">{ model.Owner.Email }</a></div>
         <div><span>DATE</span> { model.Date.ToString("yyyy MMMM dd") }</div>
         <div><span>DUE DATE</span>{ model.DueDate.ToString("yyyy MMMM dd") }</div>
       </div>
@@ -196,7 +196,7 @@ color: #5D6975;
           </tr>
         </thead>
         <tbody>
-		{model.Repair.UsedMaterials.Select(
+		{string.Join("\n", model.Repair.UsedMaterials.Select(
            material =>
            $@"<tr>
             <td class=""service"">Used Material</td>
@@ -205,7 +205,7 @@ color: #5D6975;
             <td class=""qty"">{material.Ammount}</td>
             <td class=""total"">${material.Ammount * material.Material.Price}</td>
           </tr>"
-           )};
+           ))}
           <tr>
             <td class=""service"">Work</td>
             <td class=""desc""></td>
@@ -214,23 +214,23 @@ color: #5D6975;
             <td class=""total"">${20 * model.Repair.Duration }</td>
           </tr>
           <tr>
-            <td colspan = ""4"" > SUBTOTAL </ td >
-            < td class=""total"">${model.TotalPrice}</td>
+            <td colspan = ""4""> SUBTOTAL </td>
+            <td class=""total"">${model.TotalPrice}</td>
           </tr>
           <tr>
-            <td colspan = ""4"" > TAX 25%</td>
-            <td class=""total"">{ model.TaxPrice }</td>
+            <td colspan = ""4""> TAX 25%</td>
+            <td class=""total"">${ model.TaxPrice }</td>
           </tr>
           <tr>
             <td colspan = ""4"" class=""grand total"">GRAND TOTAL</td>
-              <td class=""grand total"">{ model.TotalPriceWithTax }</td>
+              <td class=""grand total"">${ model.TotalPriceWithTax }</td>
           </tr>
         </tbody>
       </table>
-      <div id = ""notices"" >
-      </ div >
-    </ main >
-    < footer >
+      <div id = ""notices"">
+      </div>
+    </main>
+    <footer>
       Invoice was created on a computer and is valid without the signature and seal.
     </footer>
   </body>

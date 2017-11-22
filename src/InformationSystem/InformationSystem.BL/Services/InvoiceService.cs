@@ -19,9 +19,10 @@ namespace InformationSystem.BL.Services
         private readonly ServiceDbContext _dbContext;
         private readonly PdfService _pdfService;
 
-        public InvoiceService(ServiceDbContext dbContext)
+        public InvoiceService(ServiceDbContext dbContext, PdfService pdfService)
         {
             _dbContext = dbContext;
+            _pdfService = pdfService;
         }
 
         public async Task<bool> HasStoredInvoice(Guid repairId)
@@ -67,7 +68,7 @@ namespace InformationSystem.BL.Services
             return new InvoiceModel
             {
                 Id = Guid.NewGuid(),
-                InvoiceNumber = _dbContext.Invoices.Max(i => i.InvoiceNumber) + 1,
+                InvoiceNumber = _dbContext.Invoices.Select(i=> i.InvoiceNumber).DefaultIfEmpty(0).Max() + 1,
                 ClientAddress = $"{address.Address}, {address.ZipCode} {address.City}, {address.State}",
                 Date = DateTime.Today,
                 DueDate = DateTime.Today.AddDays(14),

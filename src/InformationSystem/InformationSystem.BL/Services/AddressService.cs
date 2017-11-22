@@ -11,9 +11,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InformationSystem.BL.Services
 {
-    class AddressService
+    public class AddressService
     {
         private readonly ServiceDbContext _dbContext;
+
+        public AddressService(ServiceDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public async Task AddAddress(AddressModel model)
         {
@@ -24,7 +29,7 @@ namespace InformationSystem.BL.Services
         public async Task<AddressModel> GetUserAddress(string userEmail)
         {
             var addressEntity = await _dbContext.Addresses.FirstOrDefaultAsync(a => a.UserEmail == userEmail);
-            return AdressEntityToAdressModel(addressEntity);
+            return  addressEntity == null ? null : AdressEntityToAdressModel(addressEntity);
         }
 
         private AddressModel AdressEntityToAdressModel(AddressEntity entity)

@@ -13,6 +13,12 @@
         <dot:GridViewTextColumn ValueBinding="{value: CarName}" HeaderText="Car" AllowSorting="true"/>
         <dot:GridViewTextColumn ValueBinding="{value: RepairType}" HeaderText="Repair Type" />
         <dot:GridViewTextColumn ValueBinding="{value: MechanicName}" HeaderText="Asigned Mechanic"/>
+        <dot:GridViewTemplateColumn>
+            <dot:Button class="btn btn-primary" Visible="{value: Done}" Text="Get invoice" Click="{command: _parent.GenerateInvoice(_this)}"/>
+        </dot:GridViewTemplateColumn>
     </dot:GridView>
+    
+    <dot:DataPager class="pager" DataSet="{value:Repairs}"/>
+
 </dot:Content>
 

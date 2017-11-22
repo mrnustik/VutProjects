@@ -15,9 +15,13 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
     public class HistoryViewModel : InformationSystem.Web.ViewModels.MasterPageViewModel
     {
         private readonly RepairService _repairService;
-        public HistoryViewModel(RepairService repairService)
+        private readonly InvoiceService _invoiceService;
+        private readonly UserService _userService;
+        public HistoryViewModel(RepairService repairService, InvoiceService invoiceService, UserService userService)
         {
             _repairService = repairService;
+            _invoiceService = invoiceService;
+            _userService = userService;
         }
 
         public GridViewDataSet<RepairListModel> Repairs { get; set; }
@@ -33,6 +37,21 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
             var queryable = _repairService.GetAllRepairsByUser(UserName);
 
             return queryable.GetDataFromQueryable(gridViewDataSetLoadOptions);
+        }
+
+        public async Task GenerateInvoice(RepairListModel repairListModel)
+        {
+            if (await _invoiceService.HasStoredInvoice(repairListModel.Id))
+            {
+                var repair = await _repairService.GetRepairDetailAsync(repairListModel.Id);
+                var user = await _userService.GetUserByEmail(UserName);
+                var pdf = await _invoiceService.CreateInvoicePdf(repair, null, user);
+                Context.ReturnFile(pdf, "Invoice.pdf", "application/pdf");
+            }
+            else
+            {
+                Context.RedirectToRoute("User_Invoice_Address", new { Id = repairListModel.Id});
+            }
         }
     }
 }

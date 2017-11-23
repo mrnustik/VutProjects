@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +21,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InformationSystem.Web
 {
+    internal class CustomAssemblyLoadContext : AssemblyLoadContext
+    {
+        public IntPtr LoadUnmanagedLibrary(string absolutePath)
+        {
+            return LoadUnmanagedDll(absolutePath);
+        }
+        protected override IntPtr LoadUnmanagedDll(String unmanagedDllName)
+        {
+            return LoadUnmanagedDllFromPath(unmanagedDllName);
+        }
+
+        protected override Assembly Load(AssemblyName assemblyName)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public static class WkHtmlToPdf
+    {
+        public static void Preload()
+        {
+            var wkHtmlToPdfContext = new CustomAssemblyLoadContext();
+            var architectureFolder = (IntPtr.Size == 8) ? "64 bit" : "32 bit";
+            var wkHtmlToPdfPath = Path.Combine(AppContext.BaseDirectory, $"wkhtmltox\\{architectureFolder}\\libwkhtmltox");
+
+            wkHtmlToPdfContext.LoadUnmanagedLibrary(wkHtmlToPdfPath);
+        }
+    }
+
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -30,6 +62,7 @@ namespace InformationSystem.Web
         }
 
         public IConfiguration Configuration { get; }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -77,11 +110,12 @@ namespace InformationSystem.Web
             services.AddTransient<CarService>();
             services.AddTransient<InvoiceService>();
             services.AddTransient<AddressService>();
-            services.AddTransient<PdfService>();
+            services.AddSingleton<PdfService>();
             services.AddTransient<MaterialService>();
             services.AddTransient<RepairService>();
             services.AddTransient<DbIntiliazer>();
-
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+            WkHtmlToPdf.Preload();
         }
 
 

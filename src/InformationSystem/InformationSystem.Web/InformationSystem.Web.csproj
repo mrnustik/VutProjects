@@ -30,17 +30,30 @@
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </Folder>
   </ItemGroup>
-  <ItemGroup Condition=" '$(CONFIGURATION)' == 'Debug' And '$(PROCESSOR_ARCHITECTURE)' == 'x86' And '$(PROCESSOR_ARCHITEW6432)' == '' ">
-    <ContentWithTargetPath Include="..\lib\libwkhtmltox32bit.dll">
+  <ItemGroup>
+    <ContentWithTargetPath Include="..\lib\wkhtmltox\64 bit\libwkhtmltox.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>libwkhtmltox.dll</TargetPath>
+      <TargetPath>wkhtmltox\64 bit\libwkhtmltox.dll</TargetPath>
     </ContentWithTargetPath>
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(CONFIGURATION)' == 'Debug' And '$(PROCESSOR_ARCHITECTURE)' == 'AMD64' Or '$(PROCESSOR_ARCHITEW6432)' == 'AMD64' ">
-    <ContentWithTargetPath Include="..\lib\libwkhtmltox64bit.dll">
+	<ContentWithTargetPath Include="..\lib\wkhtmltox\64 bit\libwkhtmltox.dylib">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>libwkhtmltox.dll</TargetPath>
+      <TargetPath>wkhtmltox\64 bit\libwkhtmltox.dylib</TargetPath>
+    </ContentWithTargetPath>
+	<ContentWithTargetPath Include="..\lib\wkhtmltox\64 bit\libwkhtmltox.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>wkhtmltox\64 bit\libwkhtmltox.so</TargetPath>
+    </ContentWithTargetPath>
+	<ContentWithTargetPath Include="..\lib\wkhtmltox\32 bit\libwkhtmltox.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>wkhtmltox\32 bit\libwkhtmltox.dll</TargetPath>
+    </ContentWithTargetPath>
+	<ContentWithTargetPath Include="..\lib\wkhtmltox\32 bit\libwkhtmltox.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>wkhtmltox\32 bit\libwkhtmltox.dylib</TargetPath>
+    </ContentWithTargetPath>
+	<ContentWithTargetPath Include="..\lib\wkhtmltox\32 bit\libwkhtmltox.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>wkhtmltox\32 bit\libwkhtmltox.so</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
 
@@ -51,6 +64,7 @@
     </ContentWithTargetPath>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.0" />

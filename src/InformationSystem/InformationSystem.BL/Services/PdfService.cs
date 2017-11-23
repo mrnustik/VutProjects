@@ -6,38 +6,21 @@ using System.Runtime.Loader;
 using System.Text;
 using System.Threading.Tasks;
 using DinkToPdf;
+using DinkToPdf.Contracts;
 
 namespace InformationSystem.BL.Services
 {
     public class PdfService
     {
+        private readonly IConverter converter;
 
-
-        internal class CustomAssemblyLoadContext : AssemblyLoadContext
+        public PdfService(IConverter converter)
         {
-            public IntPtr LoadUnmanagedLibrary(string absolutePath)
-            {
-                return LoadUnmanagedDll(absolutePath);
-            }
-            protected override IntPtr LoadUnmanagedDll(String unmanagedDllName)
-            {
-                return LoadUnmanagedDllFromPath(unmanagedDllName);
-            }
-
-            protected override Assembly Load(AssemblyName assemblyName)
-            {
-                throw new NotImplementedException();
-            }
+            this.converter = converter;
         }
 
         public byte[] ConvertHtmlToPdf(string html)
         {
-            var assemblyLoader = new CustomAssemblyLoadContext();
-            var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var path = Path.Combine(assemblyPath, "libwkhtmltox.dll");
-            assemblyLoader.LoadUnmanagedLibrary(
-                path);
-            var converter = new BasicConverter(new PdfTools());
             var document = new HtmlToPdfDocument
             {
                 GlobalSettings =

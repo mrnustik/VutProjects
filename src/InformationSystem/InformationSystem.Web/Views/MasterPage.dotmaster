@@ -18,12 +18,12 @@
 
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
+                    <span class="sr-only">Zobrazit menu</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Car Repairs</a>
+                <a class="navbar-brand" href="/">Opravna vozidel</a>
             </div>
 
 
@@ -32,30 +32,30 @@
                     <dot:RoleView Roles="Regular">
                         <IsMemberTemplate>
                             <li>
-                                <dot:RouteLink RouteName="User_Cars_List" Text="My Cars"/>
+                                <dot:RouteLink RouteName="User_Cars_List" Text="Moje vozidla"/>
                             </li>
                             <li>
-                                <dot:RouteLink RouteName="User_Repairs_Order" Text="Order a repair"/>
+                                <dot:RouteLink RouteName="User_Repairs_Order" Text="Provést objednávku"/>
                             </li>
                             <li>
-                                <dot:RouteLink RouteName="User_Repairs_History" Text="Repair history"/>
+                                <dot:RouteLink RouteName="User_Repairs_History" Text="Historie oprav"/>
                             </li>
                         </IsMemberTemplate>
                     </dot:RoleView>
                     <dot:RoleView Roles="Mechanic">
                         <IsMemberTemplate>
                             <li>
-                                <dot:RouteLink RouteName="Mechanic_Repair_List" Text="Assigned repairs"/>
+                                <dot:RouteLink RouteName="Mechanic_Repair_List" Text="Přidělené opravy"/>
                             </li>
                             <li>
-                                <dot:RouteLink RouteName="Mechanic_Materials_List" Text="Materials"/>
+                                <dot:RouteLink RouteName="Mechanic_Materials_List" Text="Správa materiálů"/>
                             </li>
                         </IsMemberTemplate>
                     </dot:RoleView>
                     <dot:RoleView Roles="admin">
                         <IsMemberTemplate>
                             <li>
-                                <dot:RouteLink RouteName="Admin_Users_List" Text="All users" />
+                                <dot:RouteLink RouteName="Admin_Users_List" Text="Správa uživatelů" />
                             </li>
                         </IsMemberTemplate>
                     </dot:RoleView>
@@ -65,10 +65,10 @@
                     <li>
                         <dot:AuthenticatedView>
                             <AuthenticatedTemplate>
-                                <dot:LinkButton Text="Sign Out" Click="{command: SignOutAsync()}" class="page-button-text" />
+                                <dot:LinkButton Text="{value: "Odhlásit uživatele "+ UserName}" Click="{command: SignOutAsync()}" class="page-button-text" />
                             </AuthenticatedTemplate>
                             <NotAuthenticatedTemplate>
-                                <dot:RouteLink Text="Sign In" RouteName="Authentication_SignIn" class="page-button-text" />
+                                <dot:RouteLink Text="Přihlásit" RouteName="Authentication_SignIn" class="page-button-text" />
                             </NotAuthenticatedTemplate>
                         </dot:AuthenticatedView>
                     </li>

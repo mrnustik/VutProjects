@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,6 +26,7 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
         }
 
         public RepairDetailModel Repair { get; set; } = new RepairDetailModel();
+        
         public List<CarDetailModel> Cars { get; set; } = new List<CarDetailModel>();
 
         public string SelectedDate { get; set; } = (DateTime.Now + TimeSpan.FromHours(24)).ToString("yyyy-MM-dd");
@@ -33,19 +34,8 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
         public List<string> OpeningHours { get; set; }
         public List<UserModel> Mechanics { get; set; }
 
-        public List<RepairTypeString> Types { get; set; } = new List<RepairTypeString>
-        {
-            new RepairTypeString
-            {
-                RepairType = RepairType.Body,
-                String = "Body"
-            },
-            new RepairTypeString
-            {
-                RepairType = RepairType.Motor,
-                String = "Engine"
-            }
-        };
+        [Bind(Direction.ServerToClient)]
+        public List<RepairTypeString> Types { get; set; } = RepairTypeString.GetAll();
 
         public override async Task Init()
         {
@@ -69,7 +59,7 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
             if (datetime < DateTime.Today.AddDays(1))
             {
                 ShowAlert = true;
-                AlertText = "You have to order at least one day ahead.";
+                AlertText = "Objednávku musíte provést alespoň jeden den dopředu.";
                 AlertType = AlertDanger;
                 return;
             }
@@ -105,7 +95,7 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
             if (repair.Car == null)
             {
                 ShowAlert = true;
-                AlertText = "You have to select car in order to order repair.";
+                AlertText = "Musíte zvolit vozidlo, které chcete opravit.";
                 AlertType = AlertDanger;
                 return false;
             }
@@ -113,7 +103,7 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
             if (repair.ReservationDate < DateTime.Today.AddDays(1))
             {
                 ShowAlert = true;
-                AlertText = "You have to order at least one day ahead.";
+                AlertText = "Musíte se objednat alespoň jeden den dopředu.";
                 AlertType = AlertDanger;
                 return false;
             }
@@ -121,7 +111,7 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
             if (repair.Mechanic == null)
             {
                 ShowAlert = true;
-                AlertText = "You have to select a mechanic, that you want to be served by.";
+                AlertText = "Musíte vybrat mechanika, kterého si přejete, aby opravu provedl.";
                 AlertType = AlertDanger;
                 return false;
             }
@@ -129,19 +119,13 @@ namespace InformationSystem.Web.ViewModels.User.Repairs
             if (string.IsNullOrEmpty(repair.Description))
             {
                 ShowAlert = true;
-                AlertText = "You have to describe an issue, that you have with your car before ordering.";
+                AlertText = "Musíte problém, který s vozidlem máte popsat.";
                 AlertType = AlertDanger;
                 return false;
             }
 
             return true;
         }
-    }
-
-    public class RepairTypeString
-    {
-        public string String { get; set; }
-        public RepairType RepairType { get; set; }
     }
 }
 

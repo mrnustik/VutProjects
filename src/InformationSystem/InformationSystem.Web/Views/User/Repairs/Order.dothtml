@@ -2,7 +2,7 @@
 @masterPage Views/MasterPage.dotmaster
 
 <dot:Content ContentPlaceHolderID="Title">
-    Repair
+    Objednat opravu
 </dot:Content>
 
 <dot:Content ContentPlaceHolderID="MainContent">
@@ -11,22 +11,22 @@
     <form>
         <div class="row">
             <div class="col-sm-6" Visible="{value: Cars.Count > 0}"  Validator.SetToolTipText="true" Validator.Value="{value: Repair.Car}" Validator.InvalidCssClass="has-feedback has-error">
-                <label>Select a car:*</label>
+                <label>Vyberte vozidlo:*</label>
                 <dot:ComboBox class="form-control" Visible="{value: Cars.Count > 0}" DataSource="{value: Cars}" DisplayMember="Name" SelectedValue="{value: Repair.Car}" />
             </div>
             <div  class="col-sm-6" Visible="{value: Cars.Count == 0}">
-                You don't seem to have any cars registered. Please add one.
-                <dot:RouteLink class="btn btn-primary" Text="Add a car" RouteName="User_Cars_Add"/>
+                Nemáme v databázi žádná vaše vozidla. Přidejte prosím jedno.
+                <dot:RouteLink class="btn btn-primary" Text="Přidat vozidlo" RouteName="User_Cars_Add"/>
             </div>
             <div class="col-sm-6" Validator.SetToolTipText="true" Validator.Value="{value: Repair.RepairType}" Validator.InvalidCssClass="has-feedback has-error">
-                <label>Repair Type:*</label>
+                <label>Druh opravy:*</label>
                 <dot:ComboBox class="form-control" DataSource="{value: Types}" DisplayMember="String" ValueMember="RepairType" SelectedValue="{value: Repair.RepairType}" />
             </div>
         </div>
 
         <div class="row">
             <div class="col-sm-6 form-group">
-                <label>Reservation day:*</label>
+                <label>Datum objednávky (ve formátu měsíc/den/rok):*</label>
                 <div class='input-group date' id='datetimepicker2'>
                     <dot:TextBox Type="Date" class="form-control" Changed="{command: ReservationTimeChanged()}" Text="{value: SelectedDate}" />
                     <span class="input-group-addon">
@@ -35,28 +35,28 @@
                 </div>
             </div>
             <div class="col-sm-6 form-group">
-                <label>Reservation time:*</label>
+                <label>Čas objednávky:*</label>
                 <dot:ComboBox class="form-control" SelectionChanged="{command: ReservationTimeChanged()}" DataSource="{value: OpeningHours}" SelectedValue="{value: SelectedHour}" />
             </div>
         </div>
 
         <div class="row">
             <div class="col-sm-12">
-                <label>Mechanic:*</label>
+                <label>Mechanik:*</label>
                 <dot:ListBox Visible="{value: Mechanics.Count > 0}" Size="3" class="form-control" DataSource="{value: Mechanics}" DisplayMember="Name" SelectedValue="{value: Repair.Mechanic}"/>
-                <dot:Literal Visible="{value: Mechanics.Count == 0}" Text="No mechanics available for the selected time"/>
+                <dot:Literal Visible="{value: Mechanics.Count == 0}" Text="Ve vybranou dobu není žádný z našich mechaniků k dispozici."/>
             </div>
         </div>
 
         <div class="row">
             <div class="col-sm-12" Validator.SetToolTipText="true" Validator.Value="{value: Repair.Description}" Validator.InvalidCssClass="has-feedback has-error">
-                <label>Describe the issue:*</label>
-                <dot:TextBox class="form-control" Text="{value: Repair.Description}" Type="MultiLine" placeholder="My battery is not working" />
+                <label>Popište problém:*</label>
+                <dot:TextBox class="form-control" Text="{value: Repair.Description}" Type="MultiLine" placeholder="Vybíjí se mi baterie." />
             </div>
         </div>
         <div class="row">
             <div class="pull-right">
-                <dot:Button class="btn btn-primary" Click="{command: Save()}" Text="Save" />
+                <dot:Button class="btn btn-primary" Click="{command: Save()}" Text="Objednat" />
             </div>
         </div>
     </form>

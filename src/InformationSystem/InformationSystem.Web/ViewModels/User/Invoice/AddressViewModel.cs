@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,7 +60,7 @@ namespace InformationSystem.Web.ViewModels.User.Invoice
             if (string.IsNullOrEmpty(address.Address))
             {
                 ShowAlert = true;
-                AlertText = "You have to enter valid address";
+                AlertText = "Musíte zadat platnou adresu.";
                 AlertType = AlertDanger;
                 return false;
             }
@@ -68,7 +68,7 @@ namespace InformationSystem.Web.ViewModels.User.Invoice
             if (string.IsNullOrEmpty(address.City))
             {
                 ShowAlert = true;
-                AlertText = "You have to enter city address";
+                AlertText = "Musíte zadat platné město.";
                 AlertType = AlertDanger;
                 return false;
             }
@@ -76,7 +76,7 @@ namespace InformationSystem.Web.ViewModels.User.Invoice
             if (string.IsNullOrEmpty(address.ZipCode))
             {
                 ShowAlert = true;
-                AlertText = "You have to enter zip code.";
+                AlertText = "Musíte zadat poštovní směrovací číslo.";
                 AlertType = AlertDanger;
                 return false;
             }
@@ -84,7 +84,7 @@ namespace InformationSystem.Web.ViewModels.User.Invoice
             if (string.IsNullOrEmpty(address.State))
             {
                 ShowAlert = true;
-                AlertText = "You have to enter state";
+                AlertText = "Musíte zadat stát.";
                 AlertType = AlertDanger;
                 return false;
             }

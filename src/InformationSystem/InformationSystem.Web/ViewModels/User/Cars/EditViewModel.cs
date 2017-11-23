@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,7 +43,7 @@ namespace InformationSystem.Web.ViewModels.User.Cars
             if (string.IsNullOrEmpty(car.Name))
             {
                 ShowAlert = true;
-                AlertText = "Car name is required";
+                AlertText = "Jméno vozidla je poviné.";
                 AlertType = AlertDanger;
                 return false;
             }
@@ -51,7 +51,7 @@ namespace InformationSystem.Web.ViewModels.User.Cars
             if (string.IsNullOrEmpty(car.CompanyName))
             {
                 ShowAlert = true;
-                AlertText = "Car manufacturer is required";
+                AlertText = "Výrobce vozidla je poviný.";
                 AlertType = AlertDanger;
                 return false;
             }
@@ -59,7 +59,7 @@ namespace InformationSystem.Web.ViewModels.User.Cars
             if (string.IsNullOrEmpty(car.TypeName))
             {
                 ShowAlert = true;
-                AlertText = "Car type name is required";
+                AlertText = "Typ vozidla je poviný.";
                 AlertType = AlertDanger;
                 return false;
             }
@@ -67,7 +67,7 @@ namespace InformationSystem.Web.ViewModels.User.Cars
             if (string.IsNullOrEmpty(car.CarIdenitification))
             {
                 ShowAlert = true;
-                AlertText = "Car identification is required";
+                AlertText = "Poznávací značka je poviná.";
                 AlertType = AlertDanger;
                 return false;
             }

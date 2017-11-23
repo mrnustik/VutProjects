@@ -26,6 +26,12 @@
     animation: spin 2s linear infinite;
 }
 
+.img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
 .dialog {
     position: fixed;
     top: 0;
@@ -68,6 +74,6 @@ label {
     margin-top: 5px;
 }
 
-.row .btn {
+.form .btn {
     margin-top: 10px;
 }

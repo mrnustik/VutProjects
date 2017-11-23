@@ -56,11 +56,11 @@ namespace InformationSystem.Web.ViewModels.Authentication
             if (string.IsNullOrEmpty(SignInPassword))
             {
                 ShowAlert = true;
-                AlertText = "You have to enter a password";
+                AlertText = "Musíte zadat heslo.";
                 AlertType = AlertDanger;
                 Context.ModelState.Errors.Add(new ViewModelValidationError
                 {
-                    ErrorMessage = "You have to enter a password.",
+                    ErrorMessage = "Musíte zadat heslo.",
                     PropertyPath = nameof(SignInPassword)
                 });
                 Context.FailOnInvalidModelState();
@@ -79,17 +79,17 @@ namespace InformationSystem.Web.ViewModels.Authentication
             {
                 Context.ModelState.Errors.Add(new ViewModelValidationError
                 {
-                    ErrorMessage = "Invalid email or password.",
+                    ErrorMessage = "Nesprávné uživatelské jméno nebo heslo.",
                     PropertyPath = nameof(SignInPassword)
                 });
                 Context.ModelState.Errors.Add(new ViewModelValidationError
                 {
-                    ErrorMessage = "Invalid email or password.",
+                    ErrorMessage = "Nesprávné uživatelské jméno nebo heslo.",
                     PropertyPath = nameof(SignInEmail)
                 });
                 Context.FailOnInvalidModelState();
                 ShowAlert = true;
-                AlertText = "Invalid email or password";
+                AlertText = "Nesprávné uživatelské jméno nebo heslo.";
                 AlertType = AlertDanger;
             }
         }
@@ -119,11 +119,11 @@ namespace InformationSystem.Web.ViewModels.Authentication
             if (string.IsNullOrEmpty(RegisterName))
             {
                 ShowAlert = true;
-                AlertText = "You have to enter your name";
+                AlertText = "Musíte zadat vaše jméno.";
                 AlertType = AlertDanger;
                 Context.ModelState.Errors.Add(new ViewModelValidationError
                 {
-                    ErrorMessage = "You have to enter your name.",
+                    ErrorMessage = "Musíte zadat vaše jméno.",
                     PropertyPath = nameof(RegisterName)
                 });
                 Context.FailOnInvalidModelState();
@@ -139,11 +139,11 @@ namespace InformationSystem.Web.ViewModels.Authentication
             catch
             {
                 ShowAlert = true;
-                AlertText = "You have entered an invalid email";
+                AlertText = "Musíte zadat váš email.";
                 AlertType = AlertDanger;
                 Context.ModelState.Errors.Add(new ViewModelValidationError
                 {
-                    ErrorMessage = "You have entered an invalid email.",
+                    ErrorMessage = "Musíte zadat váš email.",
                     PropertyPath = nameof(RegisterEmail)
                 });
                 Context.FailOnInvalidModelState();
@@ -153,11 +153,11 @@ namespace InformationSystem.Web.ViewModels.Authentication
             if (string.IsNullOrEmpty(RegisterPassword))
             {
                 ShowAlert = true;
-                AlertText = "You have to enter a password.";
+                AlertText = "Musíte zadat heslo.";
                 AlertType = AlertDanger;
                 Context.ModelState.Errors.Add(new ViewModelValidationError
                 {
-                    ErrorMessage = "You have to enter a password.",
+                    ErrorMessage = "Musíte zadat heslo.",
                     PropertyPath = nameof(RegisterPassword)
                 });
                 Context.FailOnInvalidModelState();
@@ -167,16 +167,16 @@ namespace InformationSystem.Web.ViewModels.Authentication
             if (RegisterPassword != RegisterConfirmPassword)
             {
                 ShowAlert = true;
-                AlertText = "Passwords dont match";
+                AlertText = "Hesla se neshodují.";
                 AlertType = AlertDanger;
                 Context.ModelState.Errors.Add(new ViewModelValidationError
                 {
-                    ErrorMessage = "Passwords dont match",
+                    ErrorMessage = "Hesla se neshodují.",
                     PropertyPath = nameof(RegisterPassword)
                 });
                 Context.ModelState.Errors.Add(new ViewModelValidationError
                 {
-                    ErrorMessage = "Passwords dont match",
+                    ErrorMessage = "Hesla se neshodují.",
                     PropertyPath = nameof(RegisterConfirmPassword)
                 });
                 Context.FailOnInvalidModelState();

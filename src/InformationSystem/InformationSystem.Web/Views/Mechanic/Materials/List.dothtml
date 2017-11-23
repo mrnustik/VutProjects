@@ -2,21 +2,21 @@
 @masterPage Views/MasterPage.dotmaster
 
 <dot:Content ContentPlaceHolderID="Title">
-    Material list
+    Seznam materiálu
 </dot:Content>
 <dot:Content ContentPlaceHolderID="MainContent">
-    <dot:Button class="btn btn-primary" Text="Add material" Click="{command: AddMaterial()}" />
+    <dot:Button class="btn btn-primary" Text="Přidat materiál" Click="{command: AddMaterial()}" />
     <dot:GridView class="table" DataSource="{value: Materials}" InlineEditing="true">
-        <dot:GridViewTextColumn HeaderText="Name" ValueBinding="{value: Name}" IsEditable="true"/>
-        <dot:GridViewTextColumn HeaderText="Price" ValueBinding="{value: Price}" ValueType="Number" IsEditable="true"/>
+        <dot:GridViewTextColumn HeaderText="Jméno" ValueBinding="{value: Name}" IsEditable="true"/>
+        <dot:GridViewTextColumn HeaderText="Cena" ValueBinding="{value: Price}" ValueType="Number" IsEditable="true"/>
         <dot:GridViewTemplateColumn>
             <ContentTemplate>
-                <dot:Button class="btn btn-primary" Text="Edit" Click="{command: _parent.BeginEdit(_this)}"/>
-                <dot:Button class="btn btn-danger" Text="Remove" Click="{command: _parent.RemoveMaterial(_this)}"/>
+                <dot:Button class="btn btn-primary" Text="Upravit" Click="{command: _parent.BeginEdit(_this)}"/>
+                <dot:Button class="btn btn-danger" Text="Odebrat" Click="{command: _parent.RemoveMaterial(_this)}"/>
             </ContentTemplate>
             <EditTemplate>
-                <dot:Button class="btn btn-danger" Text="Cancel" Click="{command: _parent.CancelEdit()}"/>
-                <dot:Button class="btn btn-primary" Text="Save" Click="{command: _parent.SaveMaterial(_this)}"/>
+                <dot:Button class="btn btn-primary" Text="Uložit" Click="{command: _parent.SaveMaterial(_this)}" />
+                <dot:Button class="btn btn-danger" Text="Zrušit" Click="{command: _parent.CancelEdit()}"/>
             </EditTemplate>
         </dot:GridViewTemplateColumn>
     </dot:GridView>

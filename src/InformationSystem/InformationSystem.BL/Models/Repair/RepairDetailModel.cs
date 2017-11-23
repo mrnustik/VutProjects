@@ -21,5 +21,6 @@ namespace InformationSystem.BL.Models.Repair
         public bool Done { get; set; }
         public UserModel Mechanic { get; set; }
         public IEnumerable<UsedMaterialModel> UsedMaterials { get; set; }
+        public RepairTypeString TypeString => RepairTypeString.GetRepairTypeString(RepairType);
     }
 }

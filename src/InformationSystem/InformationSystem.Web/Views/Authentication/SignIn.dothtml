@@ -9,20 +9,20 @@
 <dot:Content ContentPlaceHolderID="MainContent">    
     <div class="row">
         <form id="sign-in-form" class="col-md-6 col-xs-12">
-            <h2>Sign in</h2>
+            <h2>Přihlášení</h2>
             <div class="form-group" Validator.InvalidCssClass="has-error has-feedback" Validator.SetToolTipText="true" Validator.Value="{value: SignInEmail}">
                 <label>Email:*</label>
                 <dot:TextBox class="form-control" Text="{value: SignInEmail}" Type="Email" />
             </div>
             <div class="form-group" Validator.InvalidCssClass="has-error has-feedback" Validator.SetToolTipText="true" Validator.Value="{value: SignInPassword}">
-                <label>Password:*</label> <dot:TextBox class="form-control" Text="{value: SignInPassword}" Type="Password" />
+                <label>Heslo:*</label> <dot:TextBox class="form-control" Text="{value: SignInPassword}" Type="Password" />
             </div>
-            <dot:Button class="btn btn-primary" Text="Sign In" Click="{command: SignInAsync()}"/>
+            <dot:Button class="btn btn-primary" Text="Přihlásit" Click="{command: SignInAsync()}"/>
         </form>
         <form id="register-form" class="col-md-6 col-xs-12">
-            <h2>Register</h2>
+            <h2>Registrace</h2>
             <div class="form-group" Validator.InvalidCssClass="has-error has-feedback" Validator.SetToolTipText="true" Validator.Value="{value: RegisterName}" >
-                <label>Name:*</label>
+                <label>Jméno:*</label>
                 <dot:TextBox class="form-control" Text="{value: RegisterName}" Type="Normal"/>
             </div>
             <div class="form-group" Validator.InvalidCssClass="has-error has-feedback" Validator.SetToolTipText="true" Validator.Value="{value: RegisterEmail}">
@@ -30,14 +30,14 @@
                 <dot:TextBox class="form-control" Text="{value: RegisterEmail}" Type="Email" />
             </div>
             <div class="form-group" Validator.InvalidCssClass="has-error has-feedback" Validator.SetToolTipText="true" Validator.Value="{value: RegisterPassword}">
-                <label>Password:*</label>
+                <label>Heslo:*</label>
                 <dot:TextBox class="form-control" Text="{value: RegisterPassword}" Type="Password" />
             </div>
             <div class="form-group" Validator.InvalidCssClass="has-error has-feedback" Validator.SetToolTipText="true" Validator.Value="{value: RegisterConfirmPassword}">
-                <label>Confirm Pasword:*</label>
+                <label>Potvrzení hesla:*</label>
                 <dot:TextBox class="form-control" Text="{value: RegisterConfirmPassword}" Type="Password" />
             </div>
-            <dot:Button class="btn btn-primary" ButtonTagName="button" Text="Register" Click="{command: RegisterAsync()}" IsSubmitButton="true" />
+            <dot:Button class="btn btn-primary" ButtonTagName="button" Text="Registrovat" Click="{command: RegisterAsync()}" IsSubmitButton="true" />
         </form>
     </div>
 </dot:Content>

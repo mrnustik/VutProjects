@@ -2,7 +2,12 @@
 {
     public enum RepairType
     {
-        Motor,
+        Engine,
+        Transmission,
+        Electronics,
+        Lights,
+        Brakes,
+        Battery,
         Body
     }
 }

@@ -2,7 +2,7 @@
 @masterPage Views/MasterPage.dotmaster
 
 <dot:Content ContentPlaceHolderID="Title">
-    Repair detail    
+    Detail opravy
 </dot:Content>
 <dot:Content ContentPlaceHolderID="MainContent">
     <div class="row">
@@ -10,16 +10,16 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <label>Status: </label>
-            <dot:Literal Text="{value: Repair.Done ? "Done" : "Waiting" }" />
+            <label>Stav: </label>
+            <dot:Literal Text="{value: Repair.Done ? "Hotova" : "Čekání" }" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            <label>Repair type:</label> {{value: Repair.RepairType}}
+            <label>Typ opravy:</label> {{value: Repair.TypeString.String}}
         </div>
         <div class="col-md-6">
-            <label>Problem description:</label> 
+            <label>Popis problému:</label> 
             <div>
                 {{value: Repair.Description}}
             </div>
@@ -27,12 +27,12 @@
     </div>
     <div class="row">
         <div class="pull-right">
-            <dot:Button class="btn btn-primary" Text="Add material" Visible="{value: Repair.Done == false}" Click="{command: AddMaterial()}"/>
+            <dot:Button class="btn btn-primary" Text="Přidat materiál" Visible="{value: Repair.Done == false}" Click="{command: AddMaterial()}"/>
         </div>
     </div>
     <div class="row">
         <dot:GridView class="table" DataSource="{value: UsedMaterials}" ShowHeaderWhenNoData="true" InlineEditing="true">
-            <dot:GridViewTemplateColumn HeaderText="Material">
+            <dot:GridViewTemplateColumn HeaderText="Materiál">
                 <ContentTemplate>
                     {{value: Material.Name}}
                 </ContentTemplate>
@@ -40,16 +40,16 @@
                     <dot:ComboBox class="form-control" DataSource="{value: _parent.Materials}" DisplayMember="Name" SelectedValue="{value: Material}"/>
                 </EditTemplate>
             </dot:GridViewTemplateColumn>
-            <dot:GridViewTextColumn HeaderText="Ammount" ValueType="Number" ValueBinding="{value: Ammount}"/>
-            <dot:GridViewTextColumn HeaderText="Price" ValueBinding="{value: Ammount * Material.Price}" IsEditable="false"/>
+            <dot:GridViewTextColumn HeaderText="Množství" ValueType="Number" ValueBinding="{value: Ammount}"/>
+            <dot:GridViewTextColumn HeaderText="Cena" ValueBinding="{value: Ammount * Material.Price}" IsEditable="false"/>
             <dot:GridViewTemplateColumn Visible="{value: Repair.Done == false}">
                 <ContentTemplate>
-                    <dot:Button class="btn btn-primary" Text="Edit" Click="{command: _parent.BeginEdit(_this)}"/>
-                    <dot:Button class="btn btn-danger" Text="Remove" Click="{command: _parent.RemoveMaterial(_this)}"/>
+                    <dot:Button class="btn btn-primary" Text="Upravit" Click="{command: _parent.BeginEdit(_this)}"/>
+                    <dot:Button class="btn btn-danger" Text="Odstranit" Click="{command: _parent.RemoveMaterial(_this)}"/>
                 </ContentTemplate>
                 <EditTemplate>
-                    <dot:Button class="btn btn-primary" Text="Save" Click="{command: _parent.AddOrUpdateMaterial(_this)}"/>
-                    <dot:Button class="btn btn-danger" Text="Cancel" Click="{command: _parent.CancelEdit()}" />
+                    <dot:Button class="btn btn-primary" Text="Uložit" Click="{command: _parent.AddOrUpdateMaterial(_this)}"/>
+                    <dot:Button class="btn btn-danger" Text="Zrušit" Click="{command: _parent.CancelEdit()}" />
                 </EditTemplate>
             </dot:GridViewTemplateColumn>
             

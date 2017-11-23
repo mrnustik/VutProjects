@@ -56,7 +56,7 @@ namespace InformationSystem.Web.ViewModels.Admin.Users
 
         public void ShowUserDeleteDialog(UserModel user)
         {
-            DialogText = $"Are you sure you want to delete user {user.Email}?";
+            DialogText = $"Opravdu chcete deaktivovat uživatel {user.Email}?";
             DialogUser = user;
             DialogShown = true;
         }
@@ -87,11 +87,11 @@ namespace InformationSystem.Web.ViewModels.Admin.Users
         }
 
         public bool DialogShown { get; set; } = false;
-        public string DialogHeader { get; set; } = "Remove user";
+        public string DialogHeader { get; set; } = "Odebrat uživatele";
         public string DialogText { get; set; } = "";
         public UserModel DialogUser { get; set; } = new UserModel();
-        public string YesButtonText { get; set; } = "Yes";
-        public string NoButtonText { get; set; } = "No";
+        public string YesButtonText { get; set; } = "Ano";
+        public string NoButtonText { get; set; } = "Ne";
 
     }
 }

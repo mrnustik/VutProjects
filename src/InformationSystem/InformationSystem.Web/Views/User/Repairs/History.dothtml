@@ -2,19 +2,19 @@
 @masterPage Views/MasterPage.dotmaster
 
 <dot:Content ContentPlaceHolderID="Title">
-    Repair history
+    Historie oprav
 </dot:Content>
 
 <dot:Content ContentPlaceHolderID="MainContent">
 
     <dot:GridView DataSource="{value: Repairs}" class="table">
         <dot:GridViewCheckBoxColumn ValueBinding="{value: Done}" />
-        <dot:GridViewTextColumn ValueBinding="{value: ReservationDate}" FormatString="dd/MM/yyyy HH:mm" HeaderText="Date" AllowSorting="true"/>
-        <dot:GridViewTextColumn ValueBinding="{value: CarName}" HeaderText="Car" AllowSorting="true"/>
-        <dot:GridViewTextColumn ValueBinding="{value: RepairType}" HeaderText="Repair Type" />
-        <dot:GridViewTextColumn ValueBinding="{value: MechanicName}" HeaderText="Asigned Mechanic"/>
+        <dot:GridViewTextColumn ValueBinding="{value: ReservationDate}" FormatString="dd/MM/yyyy HH:mm" HeaderText="Datum opravy" AllowSorting="true"/>
+        <dot:GridViewTextColumn ValueBinding="{value: CarName}" HeaderText="Vozidlo" AllowSorting="true"/>
+        <dot:GridViewTextColumn ValueBinding="{value: TypeString.String}" HeaderText="Typ opravy" />
+        <dot:GridViewTextColumn ValueBinding="{value: MechanicName}" HeaderText="Přidělený mechanik"/>
         <dot:GridViewTemplateColumn>
-            <dot:Button class="btn btn-primary" Visible="{value: Done}" Text="Get invoice" Click="{command: _parent.GenerateInvoice(_this)}"/>
+            <dot:Button class="btn btn-primary" Visible="{value: Done}" Text="Získat fakturu" Click="{command: _parent.GenerateInvoice(_this)}"/>
         </dot:GridViewTemplateColumn>
     </dot:GridView>
     

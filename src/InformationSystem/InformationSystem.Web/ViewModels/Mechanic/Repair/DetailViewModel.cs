@@ -8,6 +8,7 @@ using DotVVM.Framework.ViewModel;
 using InformationSystem.BL.Models.Material;
 using InformationSystem.BL.Models.Repair;
 using InformationSystem.BL.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace InformationSystem.Web.ViewModels.Mechanic.Repair
 {
@@ -84,9 +85,10 @@ namespace InformationSystem.Web.ViewModels.Mechanic.Repair
             await _repairService.UpdateRepair(Repair);
         }
 
-        public void AddMaterial()
+        public async Task AddMaterial()
         {
-            var materialModel = new UsedMaterialModel {Id = new Guid(), Ammount = 1.0};
+            var materialModel = new UsedMaterialModel {Id = new Guid(), Ammount = 1.0, Material = Materials.First() };
+         
             UsedMaterials.Items.Add(materialModel);
             UsedMaterials.RowEditOptions.EditRowId = materialModel.Id;
             UsedMaterials.RequestRefresh(true);

@@ -2,7 +2,7 @@
 @masterPage Views/MasterPage.dotmaster
 
 <dot:Content ContentPlaceHolderID="Title">
-    Users list
+    Správa uživatelů
 </dot:Content>
 
 
@@ -37,12 +37,12 @@
         </dot:GridViewTemplateColumn>
         <dot:GridViewTemplateColumn>
             <ContentTemplate>
-                <dot:Button class="btn btn-default" Text="Edit" Click="{command: _parent.Edit(_this) }" />
-                <dot:Button class="btn btn-danger" Text="Delete" Click="{command: _parent.ShowUserDeleteDialog(_this)}" />
+                <dot:Button class="btn btn-default" Text="Upravit" Click="{command: _parent.Edit(_this) }" />
+                <dot:Button class="btn btn-danger" Text="Smazat" Click="{command: _parent.ShowUserDeleteDialog(_this)}" />
             </ContentTemplate>
             <EditTemplate>
-                <dot:Button class="btn btn-success" Text="Save" Click="{command: _parent.Save(_this) }" />
-                <dot:Button class="btn btn-danger" Text="Cancel" Click="{command: _parent.CancelEdit() }" />
+                <dot:Button class="btn btn-success" Text="Uložit" Click="{command: _parent.Save(_this) }" />
+                <dot:Button class="btn btn-danger" Text="Zrušit" Click="{command: _parent.CancelEdit() }" />
             </EditTemplate>
         </dot:GridViewTemplateColumn>
     </dot:GridView>

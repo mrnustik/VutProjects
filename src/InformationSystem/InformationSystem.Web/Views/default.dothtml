@@ -9,8 +9,95 @@
     <div>
         <dot:AuthenticatedView>
             <AuthenticatedTemplate>
-                Hello {{value: UserName}}, Role: {{value: UserRole}}.
+                Vítejte {{value: UserName}}.
             </AuthenticatedTemplate>
+            <NotAuthenticatedTemplate>
+                <div class="row">
+                    <h2>
+                        Umění není vyměnit, ale opravit!
+                    </h2>
+                    <p>
+                        Přikláníme se také k tomu, že v autoservisu se mají auta opravovat a ne měnit poškozené celky? Hledáte autoservis, kde se cena za opravu nešplhá do astronomických výšin? Vyměnit vadný celek umí v každém autoservise, náš autoservis si ovšem zakládá na nalezení a odstranění příčiny Vaší závady.
+                    </p>
+                    <p>
+                        Vítejte v Autoservise  ABC, servisu, kde Vám auto opraví pečlivě vyškolení profesionálové a s citem k Vaší peněžence. Využíváme nejnovější německý diagnostický a informační software, který obsahuje veškeré informace pro jednotlivé modely vozidel jak evropských, tak i asijských výrobců.
+                    </p>
+                    <p>
+                        Neutrácejte zbytečně peníze jako ve značkovém autoservisu a vyzkoušejte kvalitnější služby za polovinu peněz a bez ztráty Vaší záruky!
+                    </p>
+                    <p>
+                        Náš nezávislý autoservis ABC disponuje nejmodernějším technickým vybavením pro mechanické a elektrické opravy aut, servisní prohlídky, záruční i pozáruční opravy, diagnostiku automobilů až po nejnáročnější opravy.
+                    </p>
+                    <p>
+                        Pro objednání opravy se prosím <dot:RouteLink RouteName="Authentication_SignIn" Text="zaregistrujte"/>.
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h3>
+                            Opravy a servis motorů
+                        </h3>
+                        Vše od servisní prohlídky po generální opravy motorů: výměny oleje a rozvodů, výměna a seřízení řemenů, opravy úniku oleje a vody z motoru, seřízení motorů, diagnostika motorů, výměny turbodmychadel, výměna těsnění hlavy, regenerace filtrů pevných částic a další.
+                    </div>
+                    <div class="col-sm-4">
+                        <h3>
+                            Opravy převodovek
+                        </h3>
+                        Náš autoservis provádí opravy a seřízení manuálních i automatických převodovek od výměny gufera po generální opravy převodovek: servisní seřízení, výměny olejů a filtrů v převodovce, opravy spojky a další.
+                    </div>
+                    <div class="col-sm-4">
+                        <h3>
+                            Opravy náprav a podvozkových částí
+                        </h3>
+                        ABC auroservis provádí opravy a seřízení náprav a podvozků. Opravujeme ramena, čepy, stabilizátory, gumové uložení náprav, pružiny, tlumiče, manžety, klouby, poloosy a další.
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h3>
+                            Opravy brzd
+                        </h3>
+                        V ABC autoservisu provádíme veškeré opravy a seřízení brzd, výměny brzdových destiček, kotoučů, brzdových hadic, trubek, kapaliny a další. Během opravy brzdového systému Vám náš technik provede test brzdové kapaliny zdarma.
+                    </div>
+                    <div class="col-sm-4">
+                        <h3>
+                            Opravy výfuků
+                        </h3>
+                        Nabízíme opravy výfukových potrubí, tlumičů výfuku, katalyzátoru, filtru pevných částic apod.
+                    </div>
+                    <div class="col-sm-4">
+                        <h3>
+                            Opravy elektrických částí a zařízení
+                        </h3>
+                        Provádíme opravy závad na elektrických částech vozidel. Zajišťujeme auto diagnostiku, opravy alternátorů, opravy startérů, přepínačů a další.
+                    </div>
+                </div>
+            </NotAuthenticatedTemplate>
         </dot:AuthenticatedView>
+        <dot:RoleView Roles="Regular">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3 class="text-center">Evidence vozidel:</h3>
+                    <img class="img" src="/images/CarEvidence.jpg" />
+                    <div class="text-justify">
+                        V rámci našeho systému si můžete evidovat všechna vozidla, která vlastníte. Stačí jít na <dot:RouteLink RouteName="User_Cars_List" Text="tento odkaz" /> a můžete přidat všechna svá auta do evidence.
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <h3 class="text-center">Objednávka opravy:</h3>
+                    <img class="img" src="/images/OrderRepair.jpg" />
+                    <div class="text-justify">
+                        Nastal nějaký problém s vaším čtyřkolým miláčkem? Objednejte ho ihned k opravě na <dot:RouteLink RouteName="User_Repairs_Order" Text="tomto odkaze." /> My se vám o něj postaráme.
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <h3 class="text-center">Historie oprav:</h3>
+                    <img class="img" src="/images/RepairHistory.jpg" />
+                    <div class="text-justify">
+                        Chcete zjistit, jaký je stav vaší opravy? Stačí se zajít podívat na <dot:RouteLink RouteName="User_Repairs_History" Text="tento odkaz" /> a vše se dozvíte.
+                    </div>
+                </div>
+            </div>
+        </dot:RoleView>
     </div>
 </dot:Content>

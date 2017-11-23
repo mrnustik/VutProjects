@@ -14,5 +14,7 @@ namespace InformationSystem.BL.Models.Repair
         public string MechanicName { get; set; }
         public bool Done { get; set; }
         public string MechanicUserName { get; set; }
+        public RepairTypeString TypeString => RepairTypeString.GetRepairTypeString(RepairType);
+
     }
 }

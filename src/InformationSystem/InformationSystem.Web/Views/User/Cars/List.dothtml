@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="text-right">
-                <dot:RouteLink class="btn btn-default text-right" RouteName="User_Cars_Add" Text="Add Car" />
+                <dot:RouteLink class="btn btn-default text-right" RouteName="User_Cars_Add" Text="Přidat vozidlo" />
             </div>
         </div>
     </div>
@@ -18,12 +18,12 @@
 
     <div class="table-responsive">
         <dot:GridView DataSource="{value: Cars}" ShowHeaderWhenNoData="true" class="table">
-            <dot:GridViewTextColumn AllowSorting="true" HeaderText="Car name" ValueBinding="{value: Name}" />
-            <dot:GridViewTextColumn HeaderText="Car identification" ValueBinding="{value: CarIdenitification}" />
+            <dot:GridViewTextColumn AllowSorting="true" HeaderText="Jméno vozidla" ValueBinding="{value: Name}" />
+            <dot:GridViewTextColumn HeaderText="Poznávací značka" ValueBinding="{value: CarIdenitification}" />
             <dot:GridViewTemplateColumn>
-                <dot:RouteLink class="btn btn-primary" Text="Edit" RouteName="User_Cars_Edit" Param-Id="{value: Id}"/>
-                <dot:RouteLink class="btn btn-primary" Text="Order repair" RouteName="User_Repairs_Order" Param-CarId="{value: Id}" />
-                <dot:Button class="btn btn-danger" Text="Remove" Click="{command: _parent.Delete(_this)}"/>
+                <dot:RouteLink class="btn btn-primary" Text="Upravit" RouteName="User_Cars_Edit" Param-Id="{value: Id}"/>
+                <%--<dot:RouteLink class="btn btn-primary" Text="Objednat opravu" RouteName="User_Repairs_Order" Param-CarId="{value: Id}" />--%>
+                <dot:Button class="btn btn-danger" Text="Odebrat vozidlo" Click="{command: _parent.Delete(_this)}"/>
             </dot:GridViewTemplateColumn>
         </dot:GridView>
     </div>

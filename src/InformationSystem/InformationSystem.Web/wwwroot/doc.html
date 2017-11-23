@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0070)https://www.fit.vutbr.cz/study/courses/IIS/private/projekt/doc.html.cs -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-2" />
+
+    <title>Projekt IIS</title>
+    <style type="text/css">
+        table {
+            border-collapse: collapse;
+        }
+
+        td, th {
+            border: 1px solid black;
+            padding: 0.3em 0.5em;
+            text-align: left;
+        }
+
+        dt {
+            font-weight: bold;
+            margin-top: 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu
+         podle použitého editoru -->
+    <h1>Autoopravna</h1> <!-- Nahradte názvem svého zadání -->
+    <dl>
+        <dt>Autoři</dt>
+        <dd>
+            Michal Mrnuštík <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+            <a href="mailto:xmrnus01@stud.fit.vutbr.cz">xmrnus01@stud.fit.vutbr.cz</a> -
+            Datbase Access Logic (DAL) + Business Logic (BL) - návrh databáze, tvorba migrací, napojení na Business Logiku, support v rámci týmu
+        </dd>
+        <dd>
+            Filip Doležal <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+            <a href="mailto:xdolez69@stud.fit.vutbr.cz">xdolez69@stud.fit.vutbr.cz</a> -
+            Administrační rozhrání pro administrátory napojení na ASP.NET Identity, tvorba PDF k úhradě
+        </dd>
+        <dd>
+            Zuzana Císařová<!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+            <a href="mailto:xcisar07@stud.fit.vutbr.cz">xcisar07@stud.fit.vutbr.cz</a> -
+            Rozhrání pro zákazníky, stylování, přihlašovací stránky
+        </dd>
+        <dt>URL aplikace</dt>
+        <dd><a href="http://iis.mrnustik.net">http://iis.mrnustik.net</a></dd>
+    </dl>
+    <h2>Uživatelé systému pro testování</h2>
+    <p>Uveďte prosím existující zástupce <strong>všech rolí uživatelů</strong>.</p>
+    <table>
+        <tbody>
+            <tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
+            <tr><td>admin@iis.mrnustik.net</td><td>admin</td><td>Administrátor</td></tr>
+            <tr><td>prodavac</td><td>prodavac</td><td>Prodavač</td></tr>
+            <tr><td>franta</td><td>franta</td><td>Zákazník</td></tr>
+        </tbody>
+    </table>
+    <h2>Implementace</h2>
+    <h3>Použité technologie</h3>
+    <ul>
+        <li>Jazyk - ASP.NET Core 2.0</li>
+        <li>Databázové technologie - napojená databáze v Azure SQL (ConnectionString lze nalézt v projetktu InformationSystem.Web v souboru appsettings.json)</li>
+        <li>
+            Backend
+            <ul>
+                <li>
+                    Správa uživatelů - Microsoft.AspNet.Identity (podpora přihlašování v rámci Cookies, databázové zázemí, správa rolí)
+                </li>
+                <li>
+                    Generování PDF pro faktury - knihovna libwkhtmltox napojená přes NuGet balíček DinkToPdf
+                </li>
+            </ul>
+        </li>
+        <li>
+            Frontend
+            <ul>
+                <li> Framework DotVVM pro komunikaci server-klient a tvorbu uživatelského rozhrání</li>
+            </ul>
+        </li>
+    </ul>
+    
+<h3>Struktura projektů</h3>
+<ul>
+    <li>
+        <b>InformationSystem.DAL</b> - Poskytuje napojení do DB, definuje DB entity(tabulky)
+    </li>
+    <li>
+        <b>InformationSystem.BL</b> - Obsahuje Modely pro předávání dat z DB do aplikace, definuje Service, které se používají pro přístup k datům
+    </li>
+    <li>
+        <b>InformationSystem.Web</b> - Obsahuje definici uživatelských rozhraní ve formátu DotHTML (složka Views), definici ViewModels, které obsahují aplikační logiku a jsou napojené na Views
+    </li>
+</ul>
+    
+
+<h2>Instalace</h2>
+    <ul>
+        <li>potřeba nainstalovat .NET Core framework SDK 2.0</li>
+        <li>zavolat příkaz dotnet restore pro natáhnutí potřebných balíčků</li>
+        <li>Nastavit ConnectionString do databáze (v InformationSystem.Web/appsetings.json a v InformationSystem.DAL/DesignTimeDbContextFactory.cs)</li>
+        <li>zavolat příkaz dotnet ef database update pro inicializaci DB</li>
+        <li>spuštění pomocí příkazu dotnet run</li>
+    </ul>
+    <h2>Známé problémy</h2>
+    <p>Jediná věc, která se nám nepodařilo nějak rozumně implementovat a z návrhu jsme se jí rozhodli vyškrnout byla specializace mechaniků na jednotlivé typy operace. Důvodem bylo použití Microsoft.AspNetCore.Identity, které pro uživatele umožňuje pouze jednu entitu a bylo by tak nutné zavádět navíc tabulku v DB, což by znepřehlednilo fungování aplikace.</p>
+
+</body>
+</html>

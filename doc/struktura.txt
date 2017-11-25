@@ -1,0 +1,16 @@
+Struktura dokumentu
+	- úvod - motivace zkoumání, širší souvislosti
+		- zdroje faktu (odkud jsem cerpal)
+		- overení validity (snaha o ukázání, že model má smysl)
+	- fakta - zjištené informace
+		- kterékoliv císlo a vztah
+		- použít hypotézy, ale nutno podeprít argumenty (odhadem)
+		- Zdroje (literatura, osobní pozorování, hypotézy)
+	- koncepce - návrh abstraktního modelu
+		- zjištení, která fakta bereme v úvahu
+		- prevedení fakt do abstraktního modelu
+		- Zduvodnit procesy príchodu, pribalení Petriho síte.
+		- 
+	- zpusob rešení - implementace
+	- testování/experimenty 
+	- záver - shrnutí

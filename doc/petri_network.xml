@@ -1,6 +1,266 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><pnml>
 <net id="Net-One" type="P/T net">
 <token id="Default" enabled="true" red="0" green="0" blue="0"/>
+<place id="Autobus hledá zastávku">
+<graphics>
+<position x="810.0" y="360.0"/>
+</graphics>
+<name>
+<value>Autobus hledá zastávku</value>
+<graphics>
+<offset x="173.21428571428575" y="29.71428571428574"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus na Z1">
+<graphics>
+<position x="630.0" y="90.0"/>
+</graphics>
+<name>
+<value>Autobus na Z1</value>
+<graphics>
+<offset x="47.5" y="-12.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus na Z2">
+<graphics>
+<position x="990.0" y="90.0"/>
+</graphics>
+<name>
+<value>Autobus na Z2</value>
+<graphics>
+<offset x="51.0" y="-8.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus na Z3">
+<graphics>
+<position x="1350.0" y="90.0"/>
+</graphics>
+<name>
+<value>Autobus na Z3</value>
+<graphics>
+<offset x="48.0" y="-6.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus na Z4">
+<graphics>
+<position x="630.0" y="720.0"/>
+</graphics>
+<name>
+<value>Autobus na Z4</value>
+<graphics>
+<offset x="51.5" y="-10.5"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus na Z5">
+<graphics>
+<position x="990.0" y="720.0"/>
+</graphics>
+<name>
+<value>Autobus na Z5</value>
+<graphics>
+<offset x="48.0" y="-8.5"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus na Z6">
+<graphics>
+<position x="1350.0" y="720.0"/>
+</graphics>
+<name>
+<value>Autobus na Z6</value>
+<graphics>
+<offset x="50.0" y="-8.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus opou&#353;tí Z1">
+<graphics>
+<position x="750.0" y="90.0"/>
+</graphics>
+<name>
+<value>Autobus opou&#353;tí Z1</value>
+<graphics>
+<offset x="64.5" y="-11.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus opou&#353;tí Z2">
+<graphics>
+<position x="1110.0" y="90.0"/>
+</graphics>
+<name>
+<value>Autobus opou&#353;tí Z2</value>
+<graphics>
+<offset x="62.0" y="-7.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus opou&#353;tí Z3">
+<graphics>
+<position x="1470.0" y="90.0"/>
+</graphics>
+<name>
+<value>Autobus opou&#353;tí Z3</value>
+<graphics>
+<offset x="63.0" y="-8.5"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus opou&#353;tí Z4">
+<graphics>
+<position x="750.0" y="720.0"/>
+</graphics>
+<name>
+<value>Autobus opou&#353;tí Z4</value>
+<graphics>
+<offset x="65.5" y="-10.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus opou&#353;tí Z5">
+<graphics>
+<position x="1110.0" y="720.0"/>
+</graphics>
+<name>
+<value>Autobus opou&#353;tí Z5</value>
+<graphics>
+<offset x="64.5" y="-8.5"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Autobus opou&#353;tí Z6">
+<graphics>
+<position x="1470.0" y="720.0"/>
+</graphics>
+<name>
+<value>Autobus opou&#353;tí Z6</value>
+<graphics>
+<offset x="67.0" y="-7.5"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
 <place id="Generátor Bratislava">
 <graphics>
 <position x="150.0" y="600.0"/>
@@ -81,326 +341,6 @@
 <value>0</value>
 </capacity>
 </place>
-<place id="P10">
-<graphics>
-<position x="390.0" y="390.0"/>
-</graphics>
-<name>
-<value>P10</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P12">
-<graphics>
-<position x="390.0" y="510.0"/>
-</graphics>
-<name>
-<value>P12</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P13">
-<graphics>
-<position x="390.0" y="630.0"/>
-</graphics>
-<name>
-<value>P13</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P15">
-<graphics>
-<position x="630.0" y="90.0"/>
-</graphics>
-<name>
-<value>P15</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P16">
-<graphics>
-<position x="750.0" y="90.0"/>
-</graphics>
-<name>
-<value>P16</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P18">
-<graphics>
-<position x="990.0" y="90.0"/>
-</graphics>
-<name>
-<value>P18</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P19">
-<graphics>
-<position x="1110.0" y="90.0"/>
-</graphics>
-<name>
-<value>P19</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P21">
-<graphics>
-<position x="1350.0" y="90.0"/>
-</graphics>
-<name>
-<value>P21</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P22">
-<graphics>
-<position x="1470.0" y="90.0"/>
-</graphics>
-<name>
-<value>P22</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P24">
-<graphics>
-<position x="630.0" y="720.0"/>
-</graphics>
-<name>
-<value>P24</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P25">
-<graphics>
-<position x="750.0" y="720.0"/>
-</graphics>
-<name>
-<value>P25</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P27">
-<graphics>
-<position x="990.0" y="720.0"/>
-</graphics>
-<name>
-<value>P27</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P28">
-<graphics>
-<position x="1110.0" y="720.0"/>
-</graphics>
-<name>
-<value>P28</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P30">
-<graphics>
-<position x="1350.0" y="720.0"/>
-</graphics>
-<name>
-<value>P30</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P31">
-<graphics>
-<position x="1470.0" y="720.0"/>
-</graphics>
-<name>
-<value>P31</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P32">
-<graphics>
-<position x="810.0" y="360.0"/>
-</graphics>
-<name>
-<value>P32</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
 <place id="P4">
 <graphics>
 <position x="270.0" y="240.0"/>
@@ -423,7 +363,7 @@
 </place>
 <place id="P5">
 <graphics>
-<position x="270.0" y="360.0"/>
+<position x="273.5" y="360.0"/>
 </graphics>
 <name>
 <value>P5</value>
@@ -448,7 +388,7 @@
 <name>
 <value>P6</value>
 <graphics>
-<offset x="0.0" y="0.0"/>
+<offset x="9.5" y="-11.0"/>
 </graphics>
 </name>
 <initialMarking>
@@ -468,27 +408,7 @@
 <name>
 <value>P7</value>
 <graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</name>
-<initialMarking>
-<value>Default,0</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
-</graphics>
-</initialMarking>
-<capacity>
-<value>0</value>
-</capacity>
-</place>
-<place id="P8">
-<graphics>
-<position x="390.0" y="270.0"/>
-</graphics>
-<name>
-<value>P8</value>
-<graphics>
-<offset x="0.0" y="0.0"/>
+<offset x="10.0" y="-9.0"/>
 </graphics>
 </name>
 <initialMarking>
@@ -621,9 +541,89 @@
 <value>0</value>
 </capacity>
 </place>
+<place id="Zpo&#382;d&#283;ní Bratislava">
+<graphics>
+<position x="390.0" y="630.0"/>
+</graphics>
+<name>
+<value>Zpo&#382;d&#283;ní Bratislava</value>
+<graphics>
+<offset x="66.0" y="-8.5"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Zpo&#382;d&#283;ní Krom&#283;&#345;í&#382;">
+<graphics>
+<position x="390.0" y="390.0"/>
+</graphics>
+<name>
+<value>Zpo&#382;d&#283;ní Krom&#283;&#345;í&#382;</value>
+<graphics>
+<offset x="59.5" y="-9.5"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Zpo&#382;d&#283;ní Praha">
+<graphics>
+<position x="390.0" y="270.0"/>
+</graphics>
+<name>
+<value>Zpo&#382;d&#283;ní Praha</value>
+<graphics>
+<offset x="50.0" y="-8.0"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
+<place id="Zpo&#382;d&#283;ní Víde&#328;">
+<graphics>
+<position x="390.0" y="510.0"/>
+</graphics>
+<name>
+<value>Zpo&#382;d&#283;ní Víde&#328;</value>
+<graphics>
+<offset x="56.0" y="-10.5"/>
+</graphics>
+</name>
+<initialMarking>
+<value>Default,0</value>
+<graphics>
+<offset x="0.0" y="0.0"/>
+</graphics>
+</initialMarking>
+<capacity>
+<value>0</value>
+</capacity>
+</place>
 <transition id="T1">
 <graphics>
-<position x="210.0" y="360.0"/>
+<position x="210.0" y="359.0"/>
 </graphics>
 <name>
 <value>T1</value>
@@ -654,7 +654,7 @@
 <name>
 <value>T11</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="25.0" y="35.5"/>
 </graphics>
 </name>
 <orientation>
@@ -680,7 +680,7 @@
 <name>
 <value>T12</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="24.0" y="36.0"/>
 </graphics>
 </name>
 <orientation>
@@ -706,7 +706,7 @@
 <name>
 <value>T13</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="25.0" y="36.0"/>
 </graphics>
 </name>
 <orientation>
@@ -805,12 +805,12 @@
 </transition>
 <transition id="T17">
 <graphics>
-<position x="570.0" y="90.0"/>
+<position x="573.5" y="90.0"/>
 </graphics>
 <name>
 <value>T17</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="7.85714285714286" y="19.999999999999996"/>
 </graphics>
 </name>
 <orientation>
@@ -914,7 +914,7 @@
 <name>
 <value>T20</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="7.142857142857141" y="22.142857142857135"/>
 </graphics>
 </name>
 <orientation>
@@ -992,7 +992,7 @@
 <name>
 <value>T23</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="1.4285714285714286" y="17.14285714285714"/>
 </graphics>
 </name>
 <orientation>
@@ -1356,7 +1356,7 @@
 <name>
 <value>T4</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="21.5" y="35.0"/>
 </graphics>
 </name>
 <orientation>
@@ -1382,7 +1382,7 @@
 <name>
 <value>T5</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="20.0" y="36.0"/>
 </graphics>
 </name>
 <orientation>
@@ -1408,7 +1408,7 @@
 <name>
 <value>T6</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="20.5" y="34.5"/>
 </graphics>
 </name>
 <orientation>
@@ -1434,7 +1434,7 @@
 <name>
 <value>T7</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="21.5" y="34.5"/>
 </graphics>
 </name>
 <orientation>
@@ -1460,7 +1460,7 @@
 <name>
 <value>T8</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="20.5" y="35.0"/>
 </graphics>
 </name>
 <orientation>
@@ -1486,7 +1486,7 @@
 <name>
 <value>T9</value>
 <graphics>
-<offset x="-5.0" y="35.0"/>
+<offset x="21.5" y="34.5"/>
 </graphics>
 </name>
 <orientation>
@@ -1505,6 +1505,113 @@
 <value>1</value>
 </priority>
 </transition>
+<arc id="Autobus hledá zastávku to T17" source="Autobus hledá zastávku" target="T17">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="809" y="362" curvePoint="false"/>
+<arcpath id="001" x="585" y="192" curvePoint="false"/>
+<arcpath id="002" x="585" y="117" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Autobus hledá zastávku to T20" source="Autobus hledá zastávku" target="T20">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="827" y="358" curvePoint="false"/>
+<arcpath id="001" x="942" y="117" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Autobus hledá zastávku to T23" source="Autobus hledá zastávku" target="T23">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="834" y="364" curvePoint="false"/>
+<arcpath id="001" x="1296" y="107" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Autobus hledá zastávku to T26" source="Autobus hledá zastávku" target="T26">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="810" y="382" curvePoint="false"/>
+<arcpath id="001" x="467" y="694" curvePoint="false"/>
+<arcpath id="002" x="576" y="737" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Autobus hledá zastávku to T29" source="Autobus hledá zastávku" target="T29">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="822" y="386" curvePoint="false"/>
+<arcpath id="001" x="830" y="695" curvePoint="false"/>
+<arcpath id="002" x="936" y="737" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Autobus hledá zastávku to T32" source="Autobus hledá zastávku" target="T32">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="833" y="380" curvePoint="false"/>
+<arcpath id="001" x="1296" y="737" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Autobus na Z1 to T18" source="Autobus na Z1" target="T18">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="656" y="102" curvePoint="false"/>
+<arcpath id="001" x="696" y="102" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Autobus opou&#353;tí Z1 to T19" source="Autobus opou&#353;tí Z1" target="T19">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="776" y="102" curvePoint="false"/>
+<arcpath id="001" x="816" y="102" curvePoint="false"/>
+<type value="normal"/>
+</arc>
 <arc id="Generátor Bratislava to T3" source="Generátor Bratislava" target="T3">
 <graphics/>
 <inscription>
@@ -1527,8 +1634,8 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="176" y="372" curvePoint="false"/>
-<arcpath id="001" x="216" y="372" curvePoint="false"/>
+<arcpath id="000" x="176" y="371" curvePoint="false"/>
+<arcpath id="001" x="216" y="371" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 <arc id="Generátor Praha to T35" source="Generátor Praha" target="T35">
@@ -1540,7 +1647,7 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="176" y="253" curvePoint="false"/>
+<arcpath id="000" x="224" y="332" curvePoint="false"/>
 <arcpath id="001" x="216" y="257" curvePoint="false"/>
 <type value="normal"/>
 </arc>
@@ -1553,73 +1660,8 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="176" y="490" curvePoint="false"/>
+<arcpath id="000" x="225" y="668" curvePoint="false"/>
 <arcpath id="001" x="217" y="487" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="P10 to T14" source="P10" target="T14">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="416" y="402" curvePoint="false"/>
-<arcpath id="001" x="456" y="402" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="P12 to T15" source="P12" target="T15">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="416" y="522" curvePoint="false"/>
-<arcpath id="001" x="456" y="522" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="P13 to T16" source="P13" target="T16">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="416" y="642" curvePoint="false"/>
-<arcpath id="001" x="456" y="642" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="P15 to T18" source="P15" target="T18">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="656" y="102" curvePoint="false"/>
-<arcpath id="001" x="696" y="102" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="P16 to T19" source="P16" target="T19">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="776" y="102" curvePoint="false"/>
-<arcpath id="001" x="816" y="102" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 <arc id="P17 to T20" source="Zastávka 2" target="T20">
@@ -1631,11 +1673,11 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="892" y="53" curvePoint="false"/>
+<arcpath id="000" x="892" y="52" curvePoint="false"/>
 <arcpath id="001" x="936" y="102" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="P18 to T21" source="P18" target="T21">
+<arc id="P18 to T21" source="Autobus na Z2" target="T21">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -1648,7 +1690,7 @@
 <arcpath id="001" x="1056" y="102" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="P19 to T22" source="P19" target="T22">
+<arc id="P19 to T22" source="Autobus opou&#353;tí Z2" target="T22">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -1674,7 +1716,7 @@
 <arcpath id="001" x="1297" y="97" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="P21 to T24" source="P21" target="T24">
+<arc id="P21 to T24" source="Autobus na Z3" target="T24">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -1687,7 +1729,7 @@
 <arcpath id="001" x="1416" y="102" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="P22 to T25" source="P22" target="T25">
+<arc id="P22 to T25" source="Autobus opou&#353;tí Z3" target="T25">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -1713,7 +1755,7 @@
 <arcpath id="001" x="577" y="727" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="P24 to T27" source="P24" target="T27">
+<arc id="P24 to T27" source="Autobus na Z4" target="T27">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -1726,7 +1768,7 @@
 <arcpath id="001" x="696" y="732" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="P25 to T28" source="P25" target="T28">
+<arc id="P25 to T28" source="Autobus opou&#353;tí Z4" target="T28">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -1752,7 +1794,7 @@
 <arcpath id="001" x="937" y="727" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="P27 to T30" source="P27" target="T30">
+<arc id="P27 to T30" source="Autobus na Z5" target="T30">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -1765,7 +1807,7 @@
 <arcpath id="001" x="1056" y="732" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="P28 to T31" source="P28" target="T31">
+<arc id="P28 to T31" source="Autobus opou&#353;tí Z5" target="T31">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -1791,7 +1833,7 @@
 <arcpath id="001" x="1297" y="727" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="P30 to T33" source="P30" target="T33">
+<arc id="P30 to T33" source="Autobus na Z6" target="T33">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -1804,7 +1846,7 @@
 <arcpath id="001" x="1416" y="732" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="P31 to T34" source="P31" target="T34">
+<arc id="P31 to T34" source="Autobus opou&#353;tí Z6" target="T34">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -1815,86 +1857,6 @@
 </tagged>
 <arcpath id="000" x="1496" y="732" curvePoint="false"/>
 <arcpath id="001" x="1536" y="732" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="P32 to T17" source="P32" target="T17">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="812" y="360" curvePoint="false"/>
-<arcpath id="001" x="586" y="107" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="P32 to T20" source="P32" target="T20">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="828" y="358" curvePoint="false"/>
-<arcpath id="001" x="942" y="117" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="P32 to T23" source="P32" target="T23">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="835" y="364" curvePoint="false"/>
-<arcpath id="001" x="1296" y="107" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="P32 to T26" source="P32" target="T26">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="810" y="382" curvePoint="false"/>
-<arcpath id="001" x="468" y="695" curvePoint="false"/>
-<arcpath id="002" x="576" y="737" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="P32 to T29" source="P32" target="T29">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="822" y="386" curvePoint="false"/>
-<arcpath id="001" x="831" y="696" curvePoint="false"/>
-<arcpath id="002" x="936" y="737" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="P32 to T32" source="P32" target="T32">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="833" y="381" curvePoint="false"/>
-<arcpath id="001" x="1296" y="737" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 <arc id="P4 to T4" source="P4" target="T4">
@@ -1932,7 +1894,7 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="295" y="364" curvePoint="false"/>
+<arcpath id="000" x="298" y="364" curvePoint="false"/>
 <arcpath id="001" x="336" y="342" curvePoint="false"/>
 <type value="normal"/>
 </arc>
@@ -1945,7 +1907,7 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="295" y="379" curvePoint="false"/>
+<arcpath id="000" x="297" y="379" curvePoint="false"/>
 <arcpath id="001" x="336" y="402" curvePoint="false"/>
 <type value="normal"/>
 </arc>
@@ -2001,20 +1963,7 @@
 <arcpath id="001" x="336" y="582" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="P8 to T13" source="P8" target="T13">
-<graphics/>
-<inscription>
-<value>Default,1</value>
-<graphics/>
-</inscription>
-<tagged>
-<value>false</value>
-</tagged>
-<arcpath id="000" x="416" y="282" curvePoint="false"/>
-<arcpath id="001" x="456" y="282" curvePoint="false"/>
-<type value="normal"/>
-</arc>
-<arc id="T11 to P13" source="T11" target="P13">
+<arc id="T11 to Zpo&#382;d&#283;ní Bratislava" source="T11" target="Zpo&#382;d&#283;ní Bratislava">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2027,7 +1976,7 @@
 <arcpath id="001" x="387" y="642" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T12 to P32" source="T12" target="P32">
+<arc id="T12 to Autobus hledá zastávku" source="T12" target="Autobus hledá zastávku">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2037,11 +1986,11 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="346" y="582" curvePoint="false"/>
-<arcpath id="001" x="468" y="584" curvePoint="false"/>
-<arcpath id="002" x="809" y="379" curvePoint="false"/>
+<arcpath id="001" x="467" y="583" curvePoint="false"/>
+<arcpath id="002" x="808" y="379" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T13 to P32" source="T13" target="P32">
+<arc id="T13 to Autobus hledá zastávku" source="T13" target="Autobus hledá zastávku">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2051,10 +2000,10 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="466" y="282" curvePoint="false"/>
-<arcpath id="001" x="807" y="368" curvePoint="false"/>
+<arcpath id="001" x="807" y="367" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T14 to P32" source="T14" target="P32">
+<arc id="T14 to Autobus hledá zastávku" source="T14" target="Autobus hledá zastávku">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2064,10 +2013,10 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="466" y="402" curvePoint="false"/>
-<arcpath id="001" x="807" y="373" curvePoint="false"/>
+<arcpath id="001" x="807" y="372" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T15 to P32" source="T15" target="P32">
+<arc id="T15 to Autobus hledá zastávku" source="T15" target="Autobus hledá zastávku">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2077,10 +2026,10 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="466" y="522" curvePoint="false"/>
-<arcpath id="001" x="808" y="377" curvePoint="false"/>
+<arcpath id="001" x="807" y="377" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T16 to P32" source="T16" target="P32">
+<arc id="T16 to Autobus hledá zastávku" source="T16" target="Autobus hledá zastávku">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2090,10 +2039,10 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="466" y="642" curvePoint="false"/>
-<arcpath id="001" x="810" y="381" curvePoint="false"/>
+<arcpath id="001" x="809" y="380" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T17 to P15" source="T17" target="P15">
+<arc id="T17 to Autobus na Z1" source="T17" target="Autobus na Z1">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2102,11 +2051,11 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="587" y="97" curvePoint="false"/>
-<arcpath id="001" x="627" y="100" curvePoint="false"/>
+<arcpath id="000" x="590" y="102" curvePoint="false"/>
+<arcpath id="001" x="627" y="102" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T18 to P16" source="T18" target="P16">
+<arc id="T18 to Autobus opou&#353;tí Z1" source="T18" target="Autobus opou&#353;tí Z1">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2129,7 +2078,7 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="702" y="87" curvePoint="false"/>
-<arcpath id="001" x="693" y="43" curvePoint="false"/>
+<arcpath id="001" x="692" y="42" curvePoint="false"/>
 <arcpath id="002" x="536" y="42" curvePoint="false"/>
 <type value="normal"/>
 </arc>
@@ -2143,7 +2092,7 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="216" y="373" curvePoint="false"/>
-<arcpath id="001" x="176" y="372" curvePoint="false"/>
+<arcpath id="001" x="225" y="500" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 <arc id="T1 to P5" source="T1" target="P5">
@@ -2155,11 +2104,11 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="226" y="377" curvePoint="false"/>
-<arcpath id="001" x="267" y="373" curvePoint="false"/>
+<arcpath id="000" x="226" y="375" curvePoint="false"/>
+<arcpath id="001" x="270" y="372" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T20 to P18" source="T20" target="P18">
+<arc id="T20 to P18" source="T20" target="Autobus na Z2">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2182,11 +2131,11 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="1062" y="87" curvePoint="false"/>
-<arcpath id="001" x="1053" y="43" curvePoint="false"/>
+<arcpath id="001" x="1052" y="42" curvePoint="false"/>
 <arcpath id="002" x="896" y="42" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T21 to P19" source="T21" target="P19">
+<arc id="T21 to P19" source="T21" target="Autobus opou&#353;tí Z2">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2199,7 +2148,7 @@
 <arcpath id="001" x="1107" y="102" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T23 to P21" source="T23" target="P21">
+<arc id="T23 to P21" source="T23" target="Autobus na Z3">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2222,11 +2171,11 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="1422" y="87" curvePoint="false"/>
-<arcpath id="001" x="1413" y="43" curvePoint="false"/>
+<arcpath id="001" x="1412" y="42" curvePoint="false"/>
 <arcpath id="002" x="1256" y="42" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T24 to P22" source="T24" target="P22">
+<arc id="T24 to P22" source="T24" target="Autobus opou&#353;tí Z3">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2239,7 +2188,7 @@
 <arcpath id="001" x="1467" y="102" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T26 to P24" source="T26" target="P24">
+<arc id="T26 to P24" source="T26" target="Autobus na Z4">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2262,11 +2211,11 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="702" y="717" curvePoint="false"/>
-<arcpath id="001" x="693" y="673" curvePoint="false"/>
+<arcpath id="001" x="692" y="672" curvePoint="false"/>
 <arcpath id="002" x="536" y="672" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T27 to P25" source="T27" target="P25">
+<arc id="T27 to P25" source="T27" target="Autobus opou&#353;tí Z4">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2279,7 +2228,7 @@
 <arcpath id="001" x="747" y="732" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T29 to P27" source="T29" target="P27">
+<arc id="T29 to P27" source="T29" target="Autobus na Z5">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2328,11 +2277,11 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="1062" y="717" curvePoint="false"/>
-<arcpath id="001" x="1053" y="673" curvePoint="false"/>
+<arcpath id="001" x="1052" y="672" curvePoint="false"/>
 <arcpath id="002" x="896" y="672" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T30 to P28" source="T30" target="P28">
+<arc id="T30 to P28" source="T30" target="Autobus opou&#353;tí Z5">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2345,7 +2294,7 @@
 <arcpath id="001" x="1107" y="732" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T32 to P30" source="T32" target="P30">
+<arc id="T32 to P30" source="T32" target="Autobus na Z6">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2368,11 +2317,11 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="1422" y="717" curvePoint="false"/>
-<arcpath id="001" x="1413" y="673" curvePoint="false"/>
+<arcpath id="001" x="1412" y="672" curvePoint="false"/>
 <arcpath id="002" x="1256" y="672" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T33 to P31" source="T33" target="P31">
+<arc id="T33 to P31" source="T33" target="Autobus opou&#353;tí Z6">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2421,7 +2370,7 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="216" y="617" curvePoint="false"/>
-<arcpath id="001" x="176" y="613" curvePoint="false"/>
+<arcpath id="001" x="226" y="836" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 <arc id="T3 to P7" source="T3" target="P7">
@@ -2437,7 +2386,7 @@
 <arcpath id="001" x="267" y="612" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T4 to P32" source="T4" target="P32">
+<arc id="T4 to Autobus hledá zastávku" source="T4" target="Autobus hledá zastávku">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2450,7 +2399,7 @@
 <arcpath id="001" x="807" y="367" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T5 to P8" source="T5" target="P8">
+<arc id="T5 to Zpo&#382;d&#283;ní Praha" source="T5" target="Zpo&#382;d&#283;ní Praha">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2463,7 +2412,7 @@
 <arcpath id="001" x="387" y="282" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T6 to P32" source="T6" target="P32">
+<arc id="T6 to Autobus hledá zastávku" source="T6" target="Autobus hledá zastávku">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2473,10 +2422,10 @@
 <value>false</value>
 </tagged>
 <arcpath id="000" x="346" y="342" curvePoint="false"/>
-<arcpath id="001" x="807" y="371" curvePoint="false"/>
+<arcpath id="001" x="807" y="370" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T7 to P10" source="T7" target="P10">
+<arc id="T7 to Zpo&#382;d&#283;ní Krom&#283;&#345;í&#382;" source="T7" target="Zpo&#382;d&#283;ní Krom&#283;&#345;í&#382;">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2489,7 +2438,7 @@
 <arcpath id="001" x="387" y="402" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T8 to P32" source="T8" target="P32">
+<arc id="T8 to Autobus hledá zastávku" source="T8" target="Autobus hledá zastávku">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2502,7 +2451,7 @@
 <arcpath id="001" x="807" y="374" curvePoint="false"/>
 <type value="normal"/>
 </arc>
-<arc id="T9 to P12" source="T9" target="P12">
+<arc id="T9 to Zpo&#382;d&#283;ní Víde&#328;" source="T9" target="Zpo&#382;d&#283;ní Víde&#328;">
 <graphics/>
 <inscription>
 <value>Default,1</value>
@@ -2524,8 +2473,60 @@
 <tagged>
 <value>false</value>
 </tagged>
-<arcpath id="000" x="532" y="53" curvePoint="false"/>
-<arcpath id="001" x="576" y="102" curvePoint="false"/>
+<arcpath id="000" x="532" y="52" curvePoint="false"/>
+<arcpath id="001" x="580" y="102" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Zpo&#382;d&#283;ní Bratislava to T16" source="Zpo&#382;d&#283;ní Bratislava" target="T16">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="416" y="642" curvePoint="false"/>
+<arcpath id="001" x="456" y="642" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Zpo&#382;d&#283;ní Krom&#283;&#345;í&#382; to T14" source="Zpo&#382;d&#283;ní Krom&#283;&#345;í&#382;" target="T14">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="416" y="402" curvePoint="false"/>
+<arcpath id="001" x="456" y="402" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Zpo&#382;d&#283;ní Praha to T13" source="Zpo&#382;d&#283;ní Praha" target="T13">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="416" y="282" curvePoint="false"/>
+<arcpath id="001" x="456" y="282" curvePoint="false"/>
+<type value="normal"/>
+</arc>
+<arc id="Zpo&#382;d&#283;ní Víde&#328; to T15" source="Zpo&#382;d&#283;ní Víde&#328;" target="T15">
+<graphics/>
+<inscription>
+<value>Default,1</value>
+<graphics/>
+</inscription>
+<tagged>
+<value>false</value>
+</tagged>
+<arcpath id="000" x="416" y="522" curvePoint="false"/>
+<arcpath id="001" x="456" y="522" curvePoint="false"/>
 <type value="normal"/>
 </arc>
 </net>

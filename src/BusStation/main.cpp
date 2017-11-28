@@ -1,40 +1,56 @@
 ﻿
 #include <iostream>
+#include <fstream>
 #include <simlib.h>
+#include <vector>
+#include <queue>
 
 #define DEBUG true
 
-#define START_OF_SIMULATION 60 * 8 // 8:00
+#define START_OF_SIMULATION 60 * 0 // 8:00
 #define END_OF_SIMULATION	60 * 24 //one day
 #define SIMULATION_LENGTH END_OF_SIMULATION - START_OF_SIMULATION
 
-#define NUMBER_OF_PLATFORMS 6
+#define NUMBER_OF_PLATFORMS 4
 
 #define AVERAGE_DELAY_PRAHA				10
 #define PROBABILITY_DELAY_PRAHA			0.2
-#define ARRIVAL_INTERVAL_PRAHA			15
 
 #define AVERAGE_DELAY_KROMERIZ			5
 #define PROBABILITY_DELAY_KROMERIZ		0.1
-#define ARRIVAL_INTERVAL_KROMERIZ		25
 
 #define AVERAGE_DELAY_BRATISLAVA		5
 #define PROBABILITY_DELAY_BRATISLAVA	0.1
-#define ARRIVAL_INTERVAL_BRATISLAVA		30
 
 #define AVERAGE_DELAY_VIDEN				5
 #define PROBABILITY_DELAY_VIDEN			0.1
-#define ARRIVAL_INTERVAL_VIDEN			40
 
-#define LOCAL_BUS_INTERVAL				5
-
-#define PLATFORM_WAIT_TIME				15
+#define PLATFORM_WAIT_TIME				10
 
 Facility Platforms[NUMBER_OF_PLATFORMS];
 Queue PlatformsQueue;
 
 Histogram DelayHistogram("Delay", 0, SIMULATION_LENGTH, 1);
 Histogram LocalDelayHistogram("Local delay", 0, SIMULATION_LENGTH, 1);
+
+
+class Helper {
+public:
+	static std::vector<std::string> split(const std::string& str, const std::string& delim)
+	{
+		std::vector<std::string> tokens;
+		size_t prev = 0, pos = 0;
+		do
+		{
+			pos = str.find(delim, prev);
+			if (pos == std::string::npos) pos = str.length();
+			std::string token = str.substr(prev, pos - prev);
+			if (!token.empty()) tokens.push_back(token);
+			prev = pos + delim.length();
+		} while (pos < str.length() && prev < str.length());
+		return tokens;
+	}
+};
 
 class Logger 
 {
@@ -51,35 +67,100 @@ public:
 	}
 };
 
+typedef struct ScheduleItem {
+	double dispatchTime;
+} tScheduleItem;
+
+typedef struct Connection{
+	int directionNumber; 
+	std::string name;
+	std::queue<tScheduleItem> schedules;
+} tConnection;
+
+class Schedule
+{
+	std::vector<Connection> _connections;
+public:
+	Schedule() : _connections() {}
+	~Schedule() {}
+
+	void AddToSchedule(const int direction, const std::string connectionName, const std::queue<ScheduleItem> schedules)
+	{
+		tConnection connection;
+		connection.name = std::string(connectionName);
+		connection.directionNumber = direction;
+		connection.schedules = schedules;
+		_connections.push_back(connection);
+	}
+
+	std::vector<Connection>& GetAllConnections()
+	{
+		return _connections;
+	}
+
+	static Schedule LoadScheduleFromCsv(const std::string path)
+	{
+		std::ifstream fileStream(path);
+		if (!fileStream.is_open()) throw "Invalid file path";
+
+		Schedule schedule{};
+		std::string line;
+		while(getline(fileStream, line))
+		{
+			auto values = Helper::split(line, ";");
+			const int direction = std::stoi(values[0]);
+			const std::string connectionName = values[1];
+			std::queue<ScheduleItem> scheduleItems;
+			for(unsigned int i = 2; i < values.size(); i++)
+			{
+				auto time = Helper::split(values[i], ":");
+				if(time.size() == 2)
+				{
+					const int hours = std::stoi(time[0]);
+					const int minutes = std::stoi(time[1]);
+					tScheduleItem item;
+					item.dispatchTime = hours * 60 + minutes;
+					scheduleItems.push(item);
+				}
+			}
+			schedule.AddToSchedule(direction, connectionName, scheduleItems);
+		}
+		fileStream.close();
+		return schedule;
+	}
+};
+
+
 class Bus : public Process
 {
 	double delayValue = 0;
 	double delayPercentage = 0;
 	double delay = 0;
 public:
-	Bus(double delayPercentage, double delayValue) {
+	Bus(double delayPercentage, double delayValue) : Process() {
 		this->delayPercentage = delayPercentage;
 		this->delayValue = delayValue;
 	}
 
-	void Behavior()
+	void Behavior() override
 	{
 		if (Random() <= delayPercentage) 
 		{
-			double delayTime = Exponential(this->delayValue);
+			const double delayTime = Exponential(this->delayValue);
 			Logger::DebugLog("Bus", "Delayed bus ariving " + std::to_string(delayTime));
-			this->Wait(delayTime);
+			Wait(delayTime);
 			delay += delayTime;
 		}
-		double startWaitingTime = -1;
+
+		double waitingStart = -1;
 FindPlatform:
 		int platformNumber = -1;
 		for (int i = 0; i < NUMBER_OF_PLATFORMS; i++) {
 			if (Platforms[i].Busy() == false) 
 			{
-				if (startWaitingTime > 0) 
+				if (waitingStart > 0) 
 				{
-					auto localDelay = Time - startWaitingTime;
+					auto localDelay = Time - waitingStart;
 					LocalDelayHistogram(localDelay);
 					delay += localDelay;
 				}
@@ -92,7 +173,7 @@ FindPlatform:
 		if (platformNumber == -1) 
 		{
 			Into(PlatformsQueue);
-			startWaitingTime = Time;
+			waitingStart = Time;
 			Passivate();
 			goto FindPlatform;
 		}
@@ -111,46 +192,32 @@ FindPlatform:
 
 };
 
-class RemoteBusGenerator : public Event {
+class ScheduledGenerator : public Event
+{
 private:
-	double delayValue = 0;
-	double probabilityOfDelay = 0;
-	std::string direction = "";
-	double arrivalInterval = 0;
+	tConnection& _connection;
 public:
-	RemoteBusGenerator(std::string direction, double delayValue, double probabilityOfDelay, double arivalInterval) : Event()
+	ScheduledGenerator(tConnection& connection) : _connection(connection)
 	{
-		this->direction = direction;
-		this->delayValue = delayValue;
-		this->probabilityOfDelay = probabilityOfDelay;
-		this->arrivalInterval = arivalInterval;
 	}
 
-	void Behavior()
+	void Behavior() override
 	{
-		auto bus = new Bus(probabilityOfDelay, delayValue);
-		Logger::DebugLog("Bus generator", "Bus arriving from " + direction);
-		bus->Activate();
-		this->Activate(Time + arrivalInterval);
-	}
-};
-
-
-class LocalBusGenerator : public Event{
-private:
-	double arrivalInterval = 0;
-public:
-	LocalBusGenerator(double arrivalInterval)
-	{
-		this->arrivalInterval = arrivalInterval;
-	}
-
-	void Behavior() 
-	{
-		auto bus = new Bus(0, 0);
-		Logger::DebugLog("Local bus generator", "Local bus arrived");
-		bus->Activate();
-		this->Activate(Time + arrivalInterval);
+		if (_connection.schedules.size() == 0) return;
+		auto schedule = _connection.schedules.front();
+		if(schedule.dispatchTime == Time)
+		{
+			Logger::DebugLog("Scheduled generator", "Bus coming from connection " + _connection.name);
+			(new Bus(0, 0))->Activate();
+			_connection.schedules.pop();
+		}
+		if (_connection.schedules.size() == 0) return;
+		schedule = _connection.schedules.front();
+		if(schedule.dispatchTime < Time)
+		{
+			std::cout << "Test";
+		}
+		this->Activate(schedule.dispatchTime);
 	}
 };
 
@@ -158,11 +225,11 @@ public:
 int main() {
 	Print("Brno Bus Station simulace\n");
 	Init(START_OF_SIMULATION, END_OF_SIMULATION);
-	(new RemoteBusGenerator("Praha", AVERAGE_DELAY_PRAHA, PROBABILITY_DELAY_PRAHA, ARRIVAL_INTERVAL_PRAHA))->Activate();
-	(new RemoteBusGenerator("Kroměříž", AVERAGE_DELAY_KROMERIZ, PROBABILITY_DELAY_KROMERIZ, ARRIVAL_INTERVAL_KROMERIZ))->Activate();
-	(new RemoteBusGenerator("Bratislav", AVERAGE_DELAY_BRATISLAVA, PROBABILITY_DELAY_BRATISLAVA, ARRIVAL_INTERVAL_BRATISLAVA))->Activate();
-	(new RemoteBusGenerator("Vídeň", AVERAGE_DELAY_VIDEN, PROBABILITY_DELAY_VIDEN, ARRIVAL_INTERVAL_VIDEN))->Activate();
-	(new LocalBusGenerator(LOCAL_BUS_INTERVAL))->Activate();
+	Schedule schedule = Schedule::LoadScheduleFromCsv("data.csv");
+	for(tConnection &connection :  schedule.GetAllConnections())
+	{
+		(new ScheduledGenerator(connection))->Activate();
+	}
 	Run();
 	for (int i = 0; i < NUMBER_OF_PLATFORMS; i++) 
 	{

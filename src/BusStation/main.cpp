@@ -1,6 +1,7 @@
 ﻿
 #include <iostream>
 #include <simlib.h>
+#include <string.h>
 
 #define DEBUG true
 
@@ -155,8 +156,68 @@ public:
 };
 
 
-int main() {
-	Print("Brno Bus Station simulace\n");
+int main(int argc, char **argv) {
+	
+    int capacity=0;
+    std::string begin_sim, end_sim, source_file;
+    
+    for (int i=1; i < argc; i++)        //parse arguments
+    {
+        if (strcmp(argv[i], "-h") == 0)
+        {
+            printf("Usage of this script:\n\n./SCRIPT -s path [-b 6:00] [-e 8:00] [-c 5] [-h]\n-h            >> prints this help\n-c capacity   >> sets capacity of stations\n-b time       >> begin of simulation\n-e time       >> end of simulation\n-s sourcefile >> source file for departure times (.csv)\n\n");
+            exit (0);
+        }
+        else if (strcmp(argv[i], "-c") == 0)
+        {
+            char *ptr;
+            capacity = strtol(argv[i+1], &ptr, 10);
+            if (ptr[0] != '\0')
+            {
+                printf("Error while getting arguments\n");
+                exit (1);
+            }
+            i++;
+            continue;
+        }
+        else if (strcmp(argv[i], "-b") == 0)
+        {
+            begin_sim = argv[i+1];
+            i++;
+            continue;
+        }
+        else if (strcmp(argv[i], "-e") == 0)
+        {
+            end_sim = argv[i+1];
+            i++;
+            continue;
+        }
+        else if (strcmp(argv[i], "-s") == 0)
+        {
+            source_file = argv[i+1];
+            i++;
+            continue;
+        }
+        else
+        {
+            printf("error while getting arguments\n");
+            exit (1);
+        }
+
+    }
+    if (source_file.empty())
+    {
+        printf("No source file was specified, exiting...\n");
+        exit (1);
+    }
+    if (capacity<1)
+    {
+        printf("Capacity cannot be less than 1, exiting...\n");
+        exit (1);
+    }
+    
+    
+    Print("Brno Bus Station simulace\n");
 	Init(START_OF_SIMULATION, END_OF_SIMULATION);
 	(new RemoteBusGenerator("Praha", AVERAGE_DELAY_PRAHA, PROBABILITY_DELAY_PRAHA, ARRIVAL_INTERVAL_PRAHA))->Activate();
 	(new RemoteBusGenerator("Kroměříž", AVERAGE_DELAY_KROMERIZ, PROBABILITY_DELAY_KROMERIZ, ARRIVAL_INTERVAL_KROMERIZ))->Activate();

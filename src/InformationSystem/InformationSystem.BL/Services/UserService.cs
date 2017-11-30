@@ -31,11 +31,18 @@ namespace InformationSystem.BL.Services
             SignInManager = signInManager;
         }
 
+        public async Task SwitchUserActivation(UserModel model)
+        {
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            user.IsEnabled = !user.IsEnabled;
+            await UserManager.UpdateAsync(user);
+        }
+
         public async Task<IQueryable<UserModel>> GetAllUsers()
         {
-            var admins = (await UserManager.GetUsersInRoleAsync("admin")).Select(u => new UserModel { Name= u.Name,  Email = u.Email, Role = "admin"});
-            var mechanics = (await UserManager.GetUsersInRoleAsync("Mechanic")).Select(u => new UserModel {Name = u.Name, Email = u.Email, Role = "Mechanic" });
-            var users = (await UserManager.GetUsersInRoleAsync("Regular")).Select(u => new UserModel { Name = u.Name, Email = u.Email, Role = "Regular" });
+            var admins = (await UserManager.GetUsersInRoleAsync("admin")).Select(u => new UserModel { Name= u.Name,  Email = u.Email, Role = "admin", IsEnabled = u.IsEnabled });
+            var mechanics = (await UserManager.GetUsersInRoleAsync("Mechanic")).Select(u => new UserModel {Name = u.Name, Email = u.Email, Role = "Mechanic", IsEnabled = u.IsEnabled });
+            var users = (await UserManager.GetUsersInRoleAsync("Regular")).Select(u => new UserModel { Name = u.Name, Email = u.Email, Role = "Regular", IsEnabled = u.IsEnabled});
             return admins.Concat(mechanics).Concat(users).AsQueryable();
         }
         
@@ -61,7 +68,7 @@ namespace InformationSystem.BL.Services
             var user = await UserManager.FindByEmailAsync(email);
             if (user != null)
             {
-                if (await UserManager.CheckPasswordAsync(user, password))
+                if (await UserManager.CheckPasswordAsync(user, password) && user.IsEnabled)
                 {
                     if (await SignInManager.CanSignInAsync(user))
                     {

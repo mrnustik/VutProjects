@@ -38,7 +38,7 @@
         <dot:GridViewTemplateColumn>
             <ContentTemplate>
                 <dot:Button class="btn btn-default" Text="Upravit" Click="{command: _parent.Edit(_this) }" />
-                <dot:Button class="btn btn-danger" Text="Smazat" Click="{command: _parent.ShowUserDeleteDialog(_this)}" />
+                <dot:Button class="btn btn-danger" Text="{value: IsEnabled ? "Deaktivovat" : "Aktivovat"}" Click="{command: _parent.ShowUserDeleteDialog(_this)}" />
             </ContentTemplate>
             <EditTemplate>
                 <dot:Button class="btn btn-success" Text="Uložit" Click="{command: _parent.Save(_this) }" />

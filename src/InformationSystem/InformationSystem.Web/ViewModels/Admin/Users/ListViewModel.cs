@@ -56,14 +56,21 @@ namespace InformationSystem.Web.ViewModels.Admin.Users
 
         public void ShowUserDeleteDialog(UserModel user)
         {
-            DialogText = $"Opravdu chcete deaktivovat uživatel {user.Email}?";
+            if (user.IsEnabled)
+            {
+                DialogText = $"Opravdu chcete deaktivovat uživatele {user.Email}?";
+            }
+            else
+            {
+                DialogText = $"Opravdu chcete aktivovat uživatele {user.Email}?";
+            }
             DialogUser = user;
             DialogShown = true;
         }
 
         public async Task DeleteUser()
         {
-            await _userService.DeleteUser(DialogUser);
+            await _userService.SwitchUserActivation(DialogUser);
             Users.RequestRefresh(true);
             DialogShown = false;
         }

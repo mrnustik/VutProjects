@@ -12,9 +12,10 @@ using System;
 namespace InformationSystem.DAL.Migrations
 {
     [DbContext(typeof(ServiceDbContext))]
-    partial class ServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171130131445_AddUserDisablePosibity")]
+    partial class AddUserDisablePosibity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

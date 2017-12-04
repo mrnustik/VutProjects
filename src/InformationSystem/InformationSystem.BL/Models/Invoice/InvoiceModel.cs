@@ -15,8 +15,8 @@ namespace InformationSystem.BL.Models.Invoice
         public DateTime Date { get; set; }
         public DateTime DueDate { get; set; }
         public RepairDetailModel Repair { get; set; }
-        public double TotalPrice => Repair.UsedMaterials.Sum(m => m.Ammount * m.Material.Price) + 20 * Repair.Duration;
-        public double TaxPrice => TotalPrice * 0.25;
+        public double TotalPrice => Repair.UsedMaterials.Sum(m => m.Ammount * m.Material.Price) + 200 * Repair.Duration;
+        public double TaxPrice => TotalPrice * 0.21;
         public double TotalPriceWithTax => TotalPrice + TaxPrice;
     }
 }

@@ -52,8 +52,8 @@
         <tbody>
             <tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
             <tr><td>admin@iis.mrnustik.net</td><td>admin</td><td>Administrátor</td></tr>
-            <tr><td>prodavac</td><td>prodavac</td><td>Prodavaè</td></tr>
-            <tr><td>franta</td><td>franta</td><td>Zákazník</td></tr>
+            <tr><td>j@j.j</td><td>mrndik</td><td>Mechanik</td></tr>
+            <tr><td>m@mrnustik.net</td><td>mrndik</td><td>Zákazník</td></tr>
         </tbody>
     </table>
     <h2>Implementace</h2>
@@ -79,22 +79,30 @@
             </ul>
         </li>
     </ul>
-    
-<h3>Struktura projektù</h3>
-<ul>
-    <li>
-        <b>InformationSystem.DAL</b> - Poskytuje napojení do DB, definuje DB entity(tabulky)
-    </li>
-    <li>
-        <b>InformationSystem.BL</b> - Obsahuje Modely pro pøedávání dat z DB do aplikace, definuje Service, které se pou¾ívají pro pøístup k datùm
-    </li>
-    <li>
-        <b>InformationSystem.Web</b> - Obsahuje definici u¾ivatelských rozhraní ve formátu DotHTML (slo¾ka Views), definici ViewModels, které obsahují aplikaèní logiku a jsou napojené na Views
-    </li>
-</ul>
-    
 
-<h2>Instalace</h2>
+    <h3>Struktura projektù</h3>
+    <ul>
+        <li>
+            <b>InformationSystem.DAL</b> - Poskytuje napojení do DB, definuje DB entity(tabulky)
+        </li>
+        <li>
+            <b>InformationSystem.BL</b> - Obsahuje Modely pro pøedávání dat z DB do aplikace, definuje Service, které se pou¾ívají pro pøístup k datùm
+        </li>
+        <li>
+            <b>InformationSystem.Web</b> - Obsahuje definici u¾ivatelských rozhraní ve formátu DotHTML (slo¾ka Views), definici ViewModels, které obsahují aplikaèní logiku a jsou napojené na Views
+        </li>
+    </ul>
+    <div>
+        <h3>
+            Pøípady pou¾ití
+        </h3>
+        <ul>
+            <li><b>Administrátor</b> - mù¾e deaktivovat u¾ivatele a pøidìlovat jim role</li>
+            <li><b>Mechanik</b> - mù¾e provádìt správu materiálù a pøed provedením pøidìlené opravy vozidla mù¾e pøidat materiál pou¾itý pøi opravì</li>
+            <li><b>U¾ivatel</b> - pøidává si vozidla do evidence, mù¾e si pro svá vozidla objednat opravy, poté co je oprava nastavena jako provedena mù¾e si zákazník vytisknout fakturu za práci a materiál</li>
+        </ul>
+    </div>
+    <h2>Instalace</h2>
     <ul>
         <li>potøeba nainstalovat .NET Core framework SDK 2.0</li>
         <li>zavolat pøíkaz dotnet restore pro natáhnutí potøebných balíèkù</li>

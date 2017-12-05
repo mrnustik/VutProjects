@@ -39,7 +39,7 @@
 #define PLATFORM_WAIT_TIME				10
 
 Facility Platforms[NUMBER_OF_PLATFORMS];
-Store ArrivalRoad("Arrival road", 1);
+Store ArrivalRoad("Arrival road", 2);
 Queue PlatformsQueue;
 
 Histogram DelayHistogram("Delay", 0, 6, 10);

@@ -17,17 +17,24 @@
 
 #define NUMBER_OF_PLATFORMS 4
 
-#define AVERAGE_DELAY_PRAHA				10
+#define CONNECTION_BRNO					1
+
+#define CONNECTION_PRAHA				2
+#define AVERAGE_DELAY_PRAHA				9.36
 #define PROBABILITY_DELAY_PRAHA			0.2
 
-#define AVERAGE_DELAY_KROMERIZ			5
+#define CONNECTION_KROMERIZ				3
+#define AVERAGE_DELAY_KROMERIZ			4.8
 #define PROBABILITY_DELAY_KROMERIZ		0.1
 
-#define AVERAGE_DELAY_BRATISLAVA		5
-#define PROBABILITY_DELAY_BRATISLAVA	0.1
+#define CONNECTION_BRATISLAVA			4
+#define AVERAGE_DELAY_BRATISLAVA		13.33
+#define PROBABILITY_DELAY_BRATISLAVA	0.2
 
-#define AVERAGE_DELAY_VIDEN				5
-#define PROBABILITY_DELAY_VIDEN			0.1
+#define CONNECTION_VIDEN				5
+#define AVERAGE_DELAY_VIDEN				2.5
+#define PROBABILITY_DELAY_VIDEN			0.05
+
 
 #define PLATFORM_WAIT_TIME				10
 
@@ -35,9 +42,8 @@ Facility Platforms[NUMBER_OF_PLATFORMS];
 Facility ArrivalRoad("Arrival road");
 Queue PlatformsQueue;
 
-Histogram DelayHistogram("Delay", 0, SIMULATION_LENGTH, 1);
-Histogram LocalDelayHistogram("Local delay", 0, SIMULATION_LENGTH, 1);
-
+Histogram DelayHistogram("Delay", 0, 1, 30);
+Histogram LocalDelayHistogram("Local delay", 0, 1, 30);
 
 class Helper {
 public:
@@ -68,6 +74,21 @@ public:
 			int timeHours = time / 60;
 			int timeMinutes = time % 60;
 			std::cout << std::to_string(timeHours) << ":" << std::to_string(timeMinutes) << " [" << category << "]: " << message << std::endl;
+		}
+	}
+
+	static void DelayLog(double time, double delay)
+	{
+		std::ofstream output;
+		output.open(("stats.csv"), std::ofstream::out | std::ofstream::app);
+		
+		if(output.is_open())
+		{
+			int hours = time / 60;
+			int minutes = ((int) time) % 60;
+			output << hours << ":" << minutes << ";" << delay << std::endl;
+			output.close();
+			
 		}
 	}
 };
@@ -156,20 +177,21 @@ public:
 			Wait(delayTime);
 			delay += delayTime;
 		}
-		
-		double waitingStart = -1;
+
+		double roadAheadTime = Time;
 		Seize(ArrivalRoad);
+		double delayOnArrivalRoad = Time - roadAheadTime;
+		delay += delayOnArrivalRoad;
+		if(delayOnArrivalRoad > 0) 
+		{
+			LocalDelayHistogram(delayOnArrivalRoad);
+		}
 FindPlatform:
 		int platformNumber = -1;
 		for (int i = 0; i < NUMBER_OF_PLATFORMS; i++) {
 			if (Platforms[i].Busy() == false) 
 			{
-				if (waitingStart > 0) 
-				{
-					const auto localDelay = Time - waitingStart;
-					LocalDelayHistogram(localDelay);
-					delay += localDelay;
-				}
+				Release(ArrivalRoad);		
 				Seize(Platforms[i]);
 				platformNumber = i;
 				break;
@@ -178,25 +200,23 @@ FindPlatform:
 
 		if (platformNumber == -1) 
 		{
-			Into(PlatformsQueue);
-			waitingStart = Time;
-			Passivate();
-			goto FindPlatform;
+			Wait(PLATFORM_WAIT_TIME);
+			Release(ArrivalRoad);
+			return;
 		}
 
-		Wait(1);
-		Release(ArrivalRoad);
-
 		Wait(PLATFORM_WAIT_TIME);
-
 		Release(Platforms[platformNumber]);
+
 		if (PlatformsQueue.Empty() == false) 
 		{
 			auto bus = PlatformsQueue.GetFirst();
 			bus->Activate();
 		}
-
-		DelayHistogram(delay);
+		if(delay != 0){
+			Logger::DelayLog(Time, delay);
+		}
+		DelayHistogram(delay);		
 	}
 
 };
@@ -217,16 +237,57 @@ public:
 		if(schedule.dispatchTime == Time)
 		{
 			Logger::DebugLog("Scheduled generator", "Bus coming from connection " + _connection.name);
-			(new Bus(0, 0))->Activate();
+			(new Bus(GetDelayProbability(_connection.directionNumber), 
+					GetDelayForConnection(_connection.directionNumber))
+				)->Activate();
 			_connection.schedules.pop();
 		}
 		if (_connection.schedules.size() == 0) return;
 		schedule = _connection.schedules.front();
-		if(schedule.dispatchTime < Time)
+		while(schedule.dispatchTime < Time)
 		{
-			std::cout << "Test";
+			if(_connection.schedules.size()	==  0) return;
+			_connection.schedules.pop();
+			schedule = _connection.schedules.front();
 		}
 		this->Activate(schedule.dispatchTime);
+	}
+
+
+
+
+	double GetDelayForConnection(int connectionNumber)
+	{
+		switch(connectionNumber){
+			case CONNECTION_BRNO:
+				return 0;
+			case CONNECTION_PRAHA:
+				return AVERAGE_DELAY_PRAHA;
+			case CONNECTION_KROMERIZ:
+				return AVERAGE_DELAY_KROMERIZ;
+			case CONNECTION_BRATISLAVA:
+				return AVERAGE_DELAY_BRATISLAVA;
+			case CONNECTION_VIDEN:
+				return AVERAGE_DELAY_VIDEN;
+		}
+		return 0;
+	}
+
+	double GetDelayProbability(int connectionNumber)
+	{
+		switch(connectionNumber)
+		{
+			case CONNECTION_BRNO:
+				return 0;
+			case CONNECTION_PRAHA:
+				return PROBABILITY_DELAY_PRAHA;
+			case CONNECTION_KROMERIZ:
+				return PROBABILITY_DELAY_KROMERIZ;
+			case CONNECTION_BRATISLAVA:
+				return PROBABILITY_DELAY_BRATISLAVA;
+			case CONNECTION_VIDEN:
+				return PROBABILITY_DELAY_VIDEN;
+		}
 	}
 };
 
@@ -338,6 +399,8 @@ int main(const int argc, char **argv) {
 		Logger::DebugLog("Statistics", "Platform number " + std::to_string((i + 1)));
 		Platforms[i].Output(); 
 	}
+	
+ 	ArrivalRoad.Output();
 	DelayHistogram.Output();
 	LocalDelayHistogram.Output();
 }

@@ -42,8 +42,8 @@ Facility Platforms[NUMBER_OF_PLATFORMS];
 Store ArrivalRoad("Arrival road", 1);
 Queue PlatformsQueue;
 
-Histogram DelayHistogram("Delay", 0, 1, 30);
-Histogram LocalDelayHistogram("Local delay", 0, 1, 30);
+Histogram DelayHistogram("Delay", 0, 5, 12);
+Histogram LocalDelayHistogram("Local delay", 0, 5, 12);
 
 class Helper {
 public:
@@ -212,10 +212,12 @@ FindPlatform:
 			auto bus = PlatformsQueue.GetFirst();
 			bus->Activate();
 		}
-		if(delay != 0){
+		
+		if(delay != 0)
+		{
 			Logger::DelayLog(Time, delay);
+			DelayHistogram(delay);		
 		}
-		DelayHistogram(delay);		
 	}
 
 };

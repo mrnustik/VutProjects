@@ -39,7 +39,7 @@
 #define PLATFORM_WAIT_TIME				10
 
 Facility Platforms[NUMBER_OF_PLATFORMS];
-Facility ArrivalRoad("Arrival road");
+Store ArrivalRoad("Arrival road", 1);
 Queue PlatformsQueue;
 
 Histogram DelayHistogram("Delay", 0, 1, 30);
@@ -88,7 +88,6 @@ public:
 			int minutes = ((int) time) % 60;
 			output << hours << ":" << minutes << ";" << delay << std::endl;
 			output.close();
-			
 		}
 	}
 };
@@ -179,7 +178,7 @@ public:
 		}
 
 		double roadAheadTime = Time;
-		Seize(ArrivalRoad);
+		Enter(ArrivalRoad, 1);
 		double delayOnArrivalRoad = Time - roadAheadTime;
 		delay += delayOnArrivalRoad;
 		if(delayOnArrivalRoad > 0) 
@@ -191,7 +190,7 @@ FindPlatform:
 		for (int i = 0; i < NUMBER_OF_PLATFORMS; i++) {
 			if (Platforms[i].Busy() == false) 
 			{
-				Release(ArrivalRoad);		
+				Leave(ArrivalRoad, 1);		
 				Seize(Platforms[i]);
 				platformNumber = i;
 				break;
@@ -201,7 +200,7 @@ FindPlatform:
 		if (platformNumber == -1) 
 		{
 			Wait(PLATFORM_WAIT_TIME);
-			Release(ArrivalRoad);
+			Leave(ArrivalRoad, 1);
 			return;
 		}
 

@@ -9,7 +9,7 @@
 #include <string.h>
 
 
-#define DEBUG true
+#define DEBUG false
 
 #define START_OF_SIMULATION 60 * 0 // 8:00
 #define END_OF_SIMULATION	60 * 24 //one day
@@ -42,8 +42,8 @@ Facility Platforms[NUMBER_OF_PLATFORMS];
 Store ArrivalRoad("Arrival road", 1);
 Queue PlatformsQueue;
 
-Histogram DelayHistogram("Delay", 0, 5, 12);
-Histogram LocalDelayHistogram("Local delay", 0, 5, 12);
+Histogram DelayHistogram("Delay", 0, 6, 10);
+Histogram LocalDelayHistogram("Local delay", 0, 6, 10);
 
 class Helper {
 public:

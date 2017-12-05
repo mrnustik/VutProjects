@@ -32,6 +32,7 @@
 #define PLATFORM_WAIT_TIME				10
 
 Facility Platforms[NUMBER_OF_PLATFORMS];
+Facility ArrivalRoad("Arrival road");
 Queue PlatformsQueue;
 
 Histogram DelayHistogram("Delay", 0, SIMULATION_LENGTH, 1);
@@ -59,7 +60,7 @@ public:
 class Logger 
 {
 public:
-	static void DebugLog(std::string category, std::string message)
+	static void DebugLog(const std::string category, const std::string message)
 	{
 		if (DEBUG)
 		{
@@ -155,8 +156,9 @@ public:
 			Wait(delayTime);
 			delay += delayTime;
 		}
-
+		
 		double waitingStart = -1;
+		Seize(ArrivalRoad);
 FindPlatform:
 		int platformNumber = -1;
 		for (int i = 0; i < NUMBER_OF_PLATFORMS; i++) {
@@ -164,7 +166,7 @@ FindPlatform:
 			{
 				if (waitingStart > 0) 
 				{
-					auto localDelay = Time - waitingStart;
+					const auto localDelay = Time - waitingStart;
 					LocalDelayHistogram(localDelay);
 					delay += localDelay;
 				}
@@ -181,6 +183,9 @@ FindPlatform:
 			Passivate();
 			goto FindPlatform;
 		}
+
+		Wait(1);
+		Release(ArrivalRoad);
 
 		Wait(PLATFORM_WAIT_TIME);
 
@@ -226,11 +231,12 @@ public:
 };
 
 
-int main(int argc, char **argv) {
+int main(const int argc, char **argv) {
 	
     int capacity=0;
-    std::string begin_sim, end_sim, source_file;
-    
+    std::string source_file;
+	double beginOfSimulation = START_OF_SIMULATION;
+	double endOfSimulation = END_OF_SIMULATION;
     for (int i=1; i < argc; i++)        //parse arguments
     {
         if (strcmp(argv[i], "-h") == 0)
@@ -252,13 +258,43 @@ int main(int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-b") == 0)
         {
-            begin_sim = argv[i+1];
+	        const std::string begin_sim = argv[i+1];
+			auto time = Helper::split(begin_sim, ":");
+			if(time.size() == 2)
+			{
+				try 
+				{
+					const int hours = std::stoi(time[0]);
+					const int minutes = std::stoi(time[1]);
+					beginOfSimulation = hours * 60 + minutes;
+				}
+				catch (...) 
+				{
+					std::cerr << "Invalid start time" << std::endl; 
+					exit(1);
+				}
+			}
             i++;
             continue;
         }
         else if (strcmp(argv[i], "-e") == 0)
         {
-            end_sim = argv[i+1];
+	        const std::string end_sim = argv[i+1];
+			auto time = Helper::split(end_sim, ":");
+			if (time.size() == 2)
+			{
+				try
+				{
+					const int hours = std::stoi(time[0]);
+					const int minutes = std::stoi(time[1]);
+					endOfSimulation = hours * 60 + minutes;
+				}
+				catch (...)
+				{
+					std::cerr << "Invalid start time" << std::endl;
+					exit(1);
+				}
+			}
             i++;
             continue;
         }
@@ -275,22 +311,24 @@ int main(int argc, char **argv) {
         }
 
     }
+
     if (source_file.empty())
     {
         printf("No source file was specified, exiting...\n");
         exit (1);
     }
+
     if (capacity<1)
     {
         printf("Capacity cannot be less than 1, exiting...\n");
         exit (1);
     }
     
-    
     Print("Brno Bus Station simulace\n");
-	Init(START_OF_SIMULATION, END_OF_SIMULATION);
-	Schedule schedule = Schedule::LoadScheduleFromCsv("data.csv");
-	for(tConnection &connection :  schedule.GetAllConnections())
+	Init(beginOfSimulation, endOfSimulation);
+	RandomSeed(time(nullptr));
+	auto schedule = Schedule::LoadScheduleFromCsv(source_file);
+	for(Connection& connection : schedule.GetAllConnections())
 	{
 		(new ScheduledGenerator(connection))->Activate();
 	}

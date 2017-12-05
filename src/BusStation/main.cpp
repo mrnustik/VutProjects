@@ -15,7 +15,7 @@
 #define END_OF_SIMULATION	60 * 24 //one day
 #define SIMULATION_LENGTH END_OF_SIMULATION - START_OF_SIMULATION
 
-#define NUMBER_OF_PLATFORMS 4
+#define NUMBER_OF_PLATFORMS 			4
 
 #define CONNECTION_BRNO					1
 
@@ -212,7 +212,7 @@ FindPlatform:
 			auto bus = PlatformsQueue.GetFirst();
 			bus->Activate();
 		}
-		
+
 		if(delay != 0)
 		{
 			Logger::DelayLog(Time, delay);
@@ -377,12 +377,6 @@ int main(const int argc, char **argv) {
     if (source_file.empty())
     {
         printf("No source file was specified, exiting...\n");
-        exit (1);
-    }
-
-    if (capacity<1)
-    {
-        printf("Capacity cannot be less than 1, exiting...\n");
         exit (1);
     }
     

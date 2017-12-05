@@ -1,0 +1,331 @@
+Brno Bus Station simulace
+0:20 [Scheduled generator]: Bus coming from connection Viden - Praha
+1:30 [Scheduled generator]: Bus coming from connection Praha - Budapest
+1:45 [Scheduled generator]: Bus coming from connection Viden - Praha
+2:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+2:20 [Scheduled generator]: Bus coming from connection Praha - Viden
+4:0 [Scheduled generator]: Bus coming from connection Budapest - Praha
+4:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+4:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+5:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+5:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+5:0 [Bus]: Delayed bus ariving 42.584138
+5:10 [Scheduled generator]: Bus coming from connection Praha - Viden
+5:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+5:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+6:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+6:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+6:30 [Scheduled generator]: Bus coming from connection Brno - Ostrava
+6:30 [Scheduled generator]: Bus coming from connection Brno - Zlin
+6:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+6:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+6:40 [Scheduled generator]: Bus coming from connection Neapol - Brno
+6:40 [Scheduled generator]: Bus coming from connection Viden - Praha
+7:0 [Scheduled generator]: Bus coming from connection Praha - Viden
+7:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+7:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+7:0 [Bus]: Delayed bus ariving 15.242278
+7:15 [Scheduled generator]: Bus coming from connection Praha - Brno
+7:30 [Scheduled generator]: Bus coming from connection Praha - Budapest
+7:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+7:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+7:50 [Scheduled generator]: Bus coming from connection Zlin - Brno
+8:0 [Scheduled generator]: Bus coming from connection Brno - Ceske Budejovice
+8:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+8:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+8:20 [Scheduled generator]: Bus coming from connection Viden - Praha
+8:20 [Bus]: Delayed bus ariving 3.252695
+8:25 [Scheduled generator]: Bus coming from connection Ostrava - Brno
+8:25 [Bus]: Delayed bus ariving 6.420699
+8:30 [Scheduled generator]: Bus coming from connection Brno - Ostrava
+8:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+8:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+8:30 [Bus]: Delayed bus ariving 1.107235
+9:0 [Scheduled generator]: Bus coming from connection Bratislava - Praha
+9:0 [Scheduled generator]: Bus coming from connection Budapest - Praha
+9:0 [Scheduled generator]: Bus coming from connection Brno - Zlin
+9:0 [Scheduled generator]: Bus coming from connection Praha - Viden
+9:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+9:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+9:0 [Bus]: Delayed bus ariving 26.756866
+9:0 [Bus]: Delayed bus ariving 0.084810
+9:30 [Scheduled generator]: Bus coming from connection Praha - Temesvar
+9:30 [Scheduled generator]: Bus coming from connection Praha - Budapest
+9:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+9:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+9:30 [Bus]: Delayed bus ariving 0.995127
+9:30 [Bus]: Delayed bus ariving 8.937014
+9:45 [Scheduled generator]: Bus coming from connection Praha - Kosice
+9:45 [Bus]: Delayed bus ariving 4.713665
+10:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+10:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+10:0 [Bus]: Delayed bus ariving 25.513619
+10:25 [Scheduled generator]: Bus coming from connection Ostrava - Brno
+10:30 [Scheduled generator]: Bus coming from connection Brno - Ostrava
+10:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+10:35 [Scheduled generator]: Bus coming from connection Zlin - Brno
+10:41 [Scheduled generator]: Bus coming from connection Ceske Budejovice - Brno
+10:41 [Bus]: Delayed bus ariving 2.457677
+11:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+11:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+11:25 [Scheduled generator]: Bus coming from connection Ostrava - Brno
+11:30 [Scheduled generator]: Bus coming from connection Praha - Bratislava
+11:30 [Scheduled generator]: Bus coming from connection Praha - Budapest
+11:30 [Scheduled generator]: Bus coming from connection Brno - Ostrava
+11:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+11:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+11:30 [Bus]: Delayed bus ariving 23.766859
+11:35 [Scheduled generator]: Bus coming from connection Split - Praha
+12:0 [Scheduled generator]: Bus coming from connection Brno - Ceske Budejovice
+12:0 [Scheduled generator]: Bus coming from connection Budapest - Praha
+12:0 [Scheduled generator]: Bus coming from connection Brno - Zlin
+12:0 [Scheduled generator]: Bus coming from connection Praha - Viden
+12:0 [Scheduled generator]: Bus coming from connection Praha - Bratislava
+12:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+12:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+12:30 [Scheduled generator]: Bus coming from connection Brno - Ostrava
+12:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+12:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+12:50 [Scheduled generator]: Bus coming from connection Viden - Praha
+13:0 [Scheduled generator]: Bus coming from connection Praha - Viden
+13:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+13:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+13:25 [Scheduled generator]: Bus coming from connection Ostrava - Brno
+13:30 [Scheduled generator]: Bus coming from connection Praha - Budapest
+13:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+13:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+13:30 [Bus]: Delayed bus ariving 2.336302
+13:35 [Scheduled generator]: Bus coming from connection Zlin - Brno
+14:0 [Scheduled generator]: Bus coming from connection Budapest - Praha
+14:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+14:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+14:0 [Bus]: Delayed bus ariving 5.563647
+14:25 [Scheduled generator]: Bus coming from connection Ostrava - Brno
+14:30 [Scheduled generator]: Bus coming from connection Brno - Zlin
+14:30 [Scheduled generator]: Bus coming from connection Brno - Ostrava
+14:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+14:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+14:50 [Scheduled generator]: Bus coming from connection Viden - Praha
+15:0 [Scheduled generator]: Bus coming from connection Praha - Viden
+15:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+15:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+15:25 [Scheduled generator]: Bus coming from connection Ostrava - Brno
+15:30 [Scheduled generator]: Bus coming from connection Praha - Budapest
+15:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+15:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+16:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+16:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+16:16 [Scheduled generator]: Bus coming from connection Ceske Budejovice - Brno
+16:30 [Scheduled generator]: Bus coming from connection Budapest - Praha
+16:30 [Scheduled generator]: Bus coming from connection Brno - Ostrava
+16:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+16:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+16:50 [Scheduled generator]: Bus coming from connection Zlin - Brno
+16:50 [Scheduled generator]: Bus coming from connection Viden - Praha
+16:50 [Bus]: Delayed bus ariving 0.148102
+17:0 [Scheduled generator]: Bus coming from connection Praha - Viden
+17:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+17:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+17:0 [Bus]: Delayed bus ariving 14.443502
+17:25 [Scheduled generator]: Bus coming from connection Ostrava - Brno
+17:30 [Scheduled generator]: Bus coming from connection Bratislava - Praha
+17:30 [Scheduled generator]: Bus coming from connection Brno - Ceske Budejovice
+17:30 [Scheduled generator]: Bus coming from connection Praha - Budapest
+17:30 [Scheduled generator]: Bus coming from connection Budapest - Praha
+17:30 [Scheduled generator]: Bus coming from connection Brno - Ostrava
+17:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+17:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+17:30 [Bus]: Delayed bus ariving 23.063512
+17:30 [Bus]: Delayed bus ariving 3.314480
+18:0 [Scheduled generator]: Bus coming from connection Brno - Zlin
+18:0 [Scheduled generator]: Bus coming from connection Bratislava - Praha
+18:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+18:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+18:0 [Bus]: Delayed bus ariving 9.087255
+18:30 [Scheduled generator]: Bus coming from connection Temesvar - Praha
+18:30 [Scheduled generator]: Bus coming from connection Brno - Ostrava
+18:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+18:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+18:40 [Scheduled generator]: Bus coming from connection Praha - Split
+18:40 [Bus]: Delayed bus ariving 4.256664
+18:50 [Scheduled generator]: Bus coming from connection Viden - Praha
+19:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+19:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+19:10 [Scheduled generator]: Bus coming from connection Kosice - Praha
+19:25 [Scheduled generator]: Bus coming from connection Brno - Praha
+19:30 [Scheduled generator]: Bus coming from connection Praha - Bratislava
+19:30 [Scheduled generator]: Bus coming from connection Praha - Budapest
+19:30 [Scheduled generator]: Bus coming from connection Budapest - Praha
+19:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+19:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+19:30 [Bus]: Delayed bus ariving 10.291012
+19:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+19:35 [Scheduled generator]: Bus coming from connection Zlin - Brno
+20:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+20:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+20:25 [Scheduled generator]: Bus coming from connection Ostrava - Brno
+20:30 [Scheduled generator]: Bus coming from connection Praha - Viden
+20:45 [Scheduled generator]: Bus coming from connection Ceske Budejovice - Brno
+20:45 [Bus]: Delayed bus ariving 0.292405
+20:50 [Scheduled generator]: Bus coming from connection Viden - Praha
+21:0 [Scheduled generator]: Bus coming from connection Brno - Neapol
+21:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+21:0 [Scheduled generator]: Bus coming from connection Praha - Viden
+21:25 [Scheduled generator]: Bus coming from connection Ostrava - Brno
+21:30 [Scheduled generator]: Bus coming from connection Praha - Brno
+22:30 [Scheduled generator]: Bus coming from connection Budapest - Praha
+22:30 [Scheduled generator]: Bus coming from connection Brno - Praha
+22:50 [Scheduled generator]: Bus coming from connection Viden - Praha
+23:0 [Scheduled generator]: Bus coming from connection Praha - Brno
+23:0 [Scheduled generator]: Bus coming from connection Brno - Praha
+23:55 [Scheduled generator]: Bus coming from connection Praha - Brno
+24:0 [Statistics]: Platform number 1
++----------------------------------------------------------+
+| FACILITY                                                 |
++----------------------------------------------------------+
+|  Status = BUSY                                           |
+|  Time interval = 0 - 1440                                |
+|  Number of requests = 67                                 |
+|  Average utilization = 0.461806                          |
++----------------------------------------------------------+
+
+24:0 [Statistics]: Platform number 2
++----------------------------------------------------------+
+| FACILITY                                                 |
++----------------------------------------------------------+
+|  Status = not BUSY                                       |
+|  Time interval = 0 - 1440                                |
+|  Number of requests = 43                                 |
+|  Average utilization = 0.298611                          |
++----------------------------------------------------------+
+
+24:0 [Statistics]: Platform number 3
++----------------------------------------------------------+
+| FACILITY                                                 |
++----------------------------------------------------------+
+|  Status = not BUSY                                       |
+|  Time interval = 0 - 1440                                |
+|  Number of requests = 25                                 |
+|  Average utilization = 0.173611                          |
++----------------------------------------------------------+
+
+24:0 [Statistics]: Platform number 4
++----------------------------------------------------------+
+| FACILITY                                                 |
++----------------------------------------------------------+
+|  Status = not BUSY                                       |
+|  Time interval = 0 - 1440                                |
+|  Number of requests = 15                                 |
+|  Average utilization = 0.104167                          |
++----------------------------------------------------------+
+
++----------------------------------------------------------+
+| FACILITY Arrival road                                    |
++----------------------------------------------------------+
+|  Status = not BUSY                                       |
+|  Time interval = 0 - 1440                                |
+|  Number of requests = 157                                |
+|  Average utilization = 0.0486111                         |
++----------------------------------------------------------+
+  Input queue 'Arrival road.Q1'
++----------------------------------------------------------+
+| QUEUE Q1                                                 |
++----------------------------------------------------------+
+|  Time interval = 0 - 1440                                |
+|  Incoming  8                                             |
+|  Outcoming  8                                            |
+|  Current length = 0                                      |
+|  Maximal length = 3                                      |
+|  Average length = 0.0463094                              |
+|  Minimal time = 5                                        |
+|  Maximal time = 10                                       |
+|  Average time = 8.33569                                  |
++----------------------------------------------------------+
+
++----------------------------------------------------------+
+| HISTOGRAM Delay                                          |
++----------------------------------------------------------+
+| STATISTIC                                                |
++----------------------------------------------------------+
+|  Min = 0                       Max = 42.5841             |
+|  Number of records = 149                                 |
+|  Average value = 1.97859                                 |
+|  Standard deviation = 5.89821                            |
++----------------------------------------------------------+
+|    from    |     to     |     n    |   rel    |   sum    |
++------------+------------+----------+----------+----------+
+|      0.000 |      1.000 |      124 | 0.832215 | 0.832215 |
+|      1.000 |      2.000 |        1 | 0.006711 | 0.838926 |
+|      2.000 |      3.000 |        2 | 0.013423 | 0.852349 |
+|      3.000 |      4.000 |        1 | 0.006711 | 0.859060 |
+|      4.000 |      5.000 |        2 | 0.013423 | 0.872483 |
+|      5.000 |      6.000 |        3 | 0.020134 | 0.892617 |
+|      6.000 |      7.000 |        0 | 0.000000 | 0.892617 |
+|      7.000 |      8.000 |        0 | 0.000000 | 0.892617 |
+|      8.000 |      9.000 |        1 | 0.006711 | 0.899329 |
+|      9.000 |     10.000 |        1 | 0.006711 | 0.906040 |
+|     10.000 |     11.000 |        7 | 0.046980 | 0.953020 |
+|     11.000 |     12.000 |        0 | 0.000000 | 0.953020 |
+|     12.000 |     13.000 |        0 | 0.000000 | 0.953020 |
+|     13.000 |     14.000 |        0 | 0.000000 | 0.953020 |
+|     14.000 |     15.000 |        1 | 0.006711 | 0.959732 |
+|     15.000 |     16.000 |        1 | 0.006711 | 0.966443 |
+|     16.000 |     17.000 |        0 | 0.000000 | 0.966443 |
+|     17.000 |     18.000 |        0 | 0.000000 | 0.966443 |
+|     18.000 |     19.000 |        0 | 0.000000 | 0.966443 |
+|     19.000 |     20.000 |        0 | 0.000000 | 0.966443 |
+|     20.000 |     21.000 |        0 | 0.000000 | 0.966443 |
+|     21.000 |     22.000 |        0 | 0.000000 | 0.966443 |
+|     22.000 |     23.000 |        0 | 0.000000 | 0.966443 |
+|     23.000 |     24.000 |        2 | 0.013423 | 0.979866 |
+|     24.000 |     25.000 |        0 | 0.000000 | 0.979866 |
+|     25.000 |     26.000 |        1 | 0.006711 | 0.986577 |
+|     26.000 |     27.000 |        1 | 0.006711 | 0.993289 |
+|     27.000 |     28.000 |        0 | 0.000000 | 0.993289 |
+|     28.000 |     29.000 |        0 | 0.000000 | 0.993289 |
+|     29.000 |     30.000 |        0 | 0.000000 | 0.993289 |
++------------+------------+----------+----------+----------+
+
++----------------------------------------------------------+
+| HISTOGRAM Local delay                                    |
++----------------------------------------------------------+
+| STATISTIC                                                |
++----------------------------------------------------------+
+|  Min = 5                       Max = 10                  |
+|  Number of records = 8                                   |
+|  Average value = 8.33569                                 |
++----------------------------------------------------------+
+|    from    |     to     |     n    |   rel    |   sum    |
++------------+------------+----------+----------+----------+
+|      0.000 |      1.000 |        0 | 0.000000 | 0.000000 |
+|      1.000 |      2.000 |        0 | 0.000000 | 0.000000 |
+|      2.000 |      3.000 |        0 | 0.000000 | 0.000000 |
+|      3.000 |      4.000 |        0 | 0.000000 | 0.000000 |
+|      4.000 |      5.000 |        0 | 0.000000 | 0.000000 |
+|      5.000 |      6.000 |        2 | 0.250000 | 0.250000 |
+|      6.000 |      7.000 |        1 | 0.125000 | 0.375000 |
+|      7.000 |      8.000 |        0 | 0.000000 | 0.375000 |
+|      8.000 |      9.000 |        0 | 0.000000 | 0.375000 |
+|      9.000 |     10.000 |        0 | 0.000000 | 0.375000 |
+|     10.000 |     11.000 |        5 | 0.625000 | 1.000000 |
+|     11.000 |     12.000 |        0 | 0.000000 | 1.000000 |
+|     12.000 |     13.000 |        0 | 0.000000 | 1.000000 |
+|     13.000 |     14.000 |        0 | 0.000000 | 1.000000 |
+|     14.000 |     15.000 |        0 | 0.000000 | 1.000000 |
+|     15.000 |     16.000 |        0 | 0.000000 | 1.000000 |
+|     16.000 |     17.000 |        0 | 0.000000 | 1.000000 |
+|     17.000 |     18.000 |        0 | 0.000000 | 1.000000 |
+|     18.000 |     19.000 |        0 | 0.000000 | 1.000000 |
+|     19.000 |     20.000 |        0 | 0.000000 | 1.000000 |
+|     20.000 |     21.000 |        0 | 0.000000 | 1.000000 |
+|     21.000 |     22.000 |        0 | 0.000000 | 1.000000 |
+|     22.000 |     23.000 |        0 | 0.000000 | 1.000000 |
+|     23.000 |     24.000 |        0 | 0.000000 | 1.000000 |
+|     24.000 |     25.000 |        0 | 0.000000 | 1.000000 |
+|     25.000 |     26.000 |        0 | 0.000000 | 1.000000 |
+|     26.000 |     27.000 |        0 | 0.000000 | 1.000000 |
+|     27.000 |     28.000 |        0 | 0.000000 | 1.000000 |
+|     28.000 |     29.000 |        0 | 0.000000 | 1.000000 |
+|     29.000 |     30.000 |        0 | 0.000000 | 1.000000 |
++------------+------------+----------+----------+----------+
+

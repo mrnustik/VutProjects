@@ -13,32 +13,28 @@ namespace SvnClient.Backend
 {
     public class SvnRepository
     {
-        public IEnumerable<SvnCommitModel> GetHistory(string uri)
+        public IEnumerable<SvnCommitModel> GetHistory(SvnConnection connection)
         {
             using (var client = new SharpSvn.SvnClient())
             {
-                var path = Path.Combine(Path.GetTempPath(), (new Random().Next().ToString()));
-                var checkOut = client.CheckOut(new SvnUriTarget(uri), path);
-                if (checkOut)
+                client.GetLog(connection.LocalPath, new SvnLogArgs(), out var logItems);
+                foreach (var commit in logItems)
                 {
-                    client.GetLog(path, new SvnLogArgs(), out var logItems);
-                    foreach (var commit in logItems)
+                    yield return new SvnCommitModel
                     {
-                        yield return new SvnCommitModel
+                        Author = commit.Author,
+                        Message = commit.LogMessage,
+                        Time = commit.Time,
+                        Revision = commit.Revision,
+                        Changes = commit.ChangedPaths?.Select(item => new SvnChangeModel
                         {
-                            Author = commit.Author,
-                            Message = commit.LogMessage,
-                            Time = commit.Time,
-                            Revision = commit.Revision,
-                            Changes = commit.ChangedPaths?.Select(item => new SvnChangeModel
-                            {
-                                Path = item.Path,
-                                Type = SvnActionToSvnChangeType(item.Action)
-                            })
-                        };
-                    }
+                            Path = item.Path,
+                            Type = SvnActionToSvnChangeType(item.Action)
+                        })
+                    };
                 }
             }
+
         }
 
         private SvnChangeType SvnActionToSvnChangeType(SvnChangeAction itemAction)

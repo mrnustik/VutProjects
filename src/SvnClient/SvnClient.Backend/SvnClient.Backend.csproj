@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Models\SvnCommitModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SvnConnection.cs" />
     <Compile Include="SvnRepository.cs" />
   </ItemGroup>
   <ItemGroup>

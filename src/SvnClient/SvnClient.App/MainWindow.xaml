@@ -7,6 +7,53 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu Height="20" Width="Auto" Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem Header="Open" />
+                <MenuItem Header="Close" />
+            </MenuItem>
+        </Menu>
+        <TabControl Grid.Row="1">
+            <TabItem>
+                
+            </TabItem>
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Height="20" Text="Header 123"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <DataGrid Grid.Row="0">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Revision"/>
+                                <DataGridTextColumn Header="Log message"/>
+                                <DataGridTextColumn Header="Author" />
+                                <DataGridTextColumn Header="Time"   />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <GridSplitter Height="5" HorizontalAlignment="Stretch" Grid.Row="1" />
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+       
+        </TabControl>
     </Grid>
 </Window>

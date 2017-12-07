@@ -21,13 +21,20 @@ namespace SvnClient.App.Controls
     /// </summary>
     public partial class CircularProgressBar : UserControl
     {
+
+        private static bool isSet = false;
+
         public CircularProgressBar()
         {
             InitializeComponent();
 
-            Timeline.DesiredFrameRateProperty.OverrideMetadata(
-                typeof(Timeline),
-                 new FrameworkPropertyMetadata{ DefaultValue = 20});
+            if (!isSet)
+            {
+                Timeline.DesiredFrameRateProperty.OverrideMetadata(
+                    typeof(Timeline),
+                    new FrameworkPropertyMetadata {DefaultValue = 20});
+                isSet = true;
+            }
         }
     }
 }

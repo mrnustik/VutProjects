@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
@@ -12,36 +11,27 @@ using SvnClient.Backend.Messages;
 
 namespace SvnClient.App.ViewModels
 {
-    public class RepositoryViewModel : ViewModelBase
-    {
-        private readonly SvnConnection _connection;
-
-        public RepositoryViewModel(SvnConnection connection)
-        {
-            _connection = connection ?? throw new ArgumentNullException(nameof(connection));
-        }
-
-        public string Name => _connection.Name;
-
-    }
-    
     public class MainViewModel : ViewModelBase
     {
 
         public ObservableCollection<RepositoryViewModel> Repositories { get; set; } = new ObservableCollection<RepositoryViewModel>();
         public IMessenger Messenger { get; }
+        public SvnRepository SvnRepository { get; }
         public ICommand OpenConnectionCommand { get; }
 
-        public MainViewModel(IMessenger messenger)
+        public MainViewModel(IMessenger messenger, SvnRepository svnRepository)
         {
             Messenger = messenger;
+            SvnRepository = svnRepository;
             OpenConnectionCommand = new RelayCommand(OpenConnection);
             Messenger.Register<ConnectionOpenedMessage>(ConnectionOpenedMesssageReceived);
         }
         
         private void ConnectionOpenedMesssageReceived(ConnectionOpenedMessage connectionOpenedMessage)
         {
-            Repositories.Add(new RepositoryViewModel(connectionOpenedMessage.Connection));
+            var repositoryViewModel = new RepositoryViewModel(connectionOpenedMessage.Connection, SvnRepository);
+            Repositories.Add(repositoryViewModel);
+            repositoryViewModel.Init();
         }
 
         private void OpenConnection()

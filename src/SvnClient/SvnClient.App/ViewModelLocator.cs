@@ -11,9 +11,9 @@ namespace SvnClient.App
     class ViewModelLocator
     {
         private readonly IMessenger _messenger = new Messenger();
+        private readonly SvnRepository _svnRepository = new SvnRepository();
 
         public MainViewModel MainViewModel => CreateMainViewModel();
-
         public OpenConnectionViewModel OpenConnectionViewModel => CreateOpenConnectionViewModel();
 
         private OpenConnectionViewModel CreateOpenConnectionViewModel()
@@ -23,7 +23,7 @@ namespace SvnClient.App
 
         private MainViewModel CreateMainViewModel()
         {
-            return new MainViewModel(_messenger);
+            return new MainViewModel(_messenger, _svnRepository);
         }
     }
 }

@@ -10,7 +10,6 @@
         Title="Open Remote Repository" Width="300" Height="150" ResizeMode="NoResize"
         DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=OpenConnectionViewModel}">
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SvnClient.App"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="600">
+        Title="MainWindow" Height="350" Width="600"
+        DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -13,14 +14,16 @@
         </Grid.RowDefinitions>
         <Menu Height="20" Width="Auto" Grid.Row="0">
             <MenuItem Header="File">
-                <MenuItem Header="Open" />
+                <MenuItem Header="Open" Command="{Binding OpenConnectionCommand}" />
                 <MenuItem Header="Close" />
             </MenuItem>
         </Menu>
-        <TabControl Grid.Row="1">
-            <TabItem Header="2232">
-                
-            </TabItem>
+        <TabControl Grid.Row="1" ItemsSource="{Binding Repositories}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <Grid>

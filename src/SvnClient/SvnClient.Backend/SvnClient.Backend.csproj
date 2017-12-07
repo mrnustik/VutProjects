@@ -64,6 +64,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\ConnectionOpenedMessage.cs" />
+    <Compile Include="Messenger.cs" />
     <Compile Include="Models\SvnCommitModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SvnConnection.cs" />

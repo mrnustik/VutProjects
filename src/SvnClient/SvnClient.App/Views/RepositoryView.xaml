@@ -4,17 +4,32 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SvnClient.App.Views"
+             xmlns:viewModels="clr-namespace:SvnClient.App.ViewModels"
              xmlns:controls="clr-namespace:SvnClient.App.Controls"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600"
-             d:DataContext="{d:DesignInstance Type=local:RepositoryView, IsDesignTimeCreatable=true}" >
+             d:DataContext="{d:DesignInstance Type=viewModels:RepositoryViewModel, IsDesignTimeCreatable=true}" >
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <DataGrid Grid.Row="0" IsReadOnly="True" ItemsSource="{Binding CommitList}" SelectedIndex="0" SelectedItem="{Binding SelectedCommit}" AutoGenerateColumns="False">
+        <DockPanel Margin="5" LastChildFill="True">
+            <Label Content="Search:" Margin="5,0"/>
+            <TextBox x:Name="SearchText" HorizontalAlignment="Stretch">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding SearchCommand}"
+                                               CommandParameter="{Binding Text, ElementName=SearchText}">
+                        </i:InvokeCommandAction>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </DockPanel>
+        <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding CollectionView}" SelectedIndex="0" SelectedItem="{Binding SelectedCommit}" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Revision" Binding="{Binding Revision}" Width="auto"/>
                 <DataGridTextColumn Header="Log message" Binding="{Binding Message}" Width="*"/>
@@ -22,8 +37,8 @@
                 <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
-        <GridSplitter Height="5" HorizontalAlignment="Stretch" Grid.Row="1" />
-        <Grid Grid.Row="2" DataContext="{Binding SelectedCommit}">
+        <GridSplitter Height="5" HorizontalAlignment="Stretch" Grid.Row="2" />
+        <Grid Grid.Row="3" DataContext="{Binding SelectedCommit}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="5" />
@@ -47,7 +62,7 @@
 
                 <Rectangle Margin="0,5" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Height="1" Stroke="Black" Fill="Black"/>
 
-                <DataGrid IsReadOnly="True" Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Changes}" AutoGenerateColumns="False" >
+                <DataGrid  Grid.Row="3" Grid.ColumnSpan="2" IsReadOnly="True" ItemsSource="{Binding Changes}" AutoGenerateColumns="False" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Type" Width="Auto" Binding="{Binding Type}"></DataGridTextColumn>
                         <DataGridTextColumn Header="File" Width="*" Binding="{Binding Path}"></DataGridTextColumn>
@@ -58,6 +73,6 @@
             <GridSplitter Grid.Column="1" Width="5" ResizeBehavior="PreviousAndNext" VerticalAlignment="Stretch" />
             <TextBlock Grid.Column="2" Padding="5" Text="sassad" />
         </Grid>
-        <controls:CircularProgressBar Grid.RowSpan="3" Background="White" Visibility="{Binding ShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <controls:CircularProgressBar Grid.RowSpan="4" Background="White" d:IsHidden="true" Visibility="{Binding ShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

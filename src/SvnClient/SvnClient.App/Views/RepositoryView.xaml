@@ -9,6 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance Type=viewModels:RepositoryViewModel, IsDesignTimeCreatable=true}" >
+
     <Grid x:Name="Parent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -73,14 +74,63 @@
                         <DataGridTextColumn Header="Type" Width="Auto" Binding="{Binding Type}"></DataGridTextColumn>
                         <DataGridTextColumn Header="File" Width="*" Binding="{Binding Path}"></DataGridTextColumn>
                     </DataGrid.Columns>
-                    
+
                 </DataGrid>
             </Grid>
 
             <GridSplitter Grid.Column="1" Width="5" ResizeBehavior="PreviousAndNext" VerticalAlignment="Stretch" />
             <Grid Grid.Column="2">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <TextBlock Padding="5" Text="{Binding Path=DataContext.FileDiff,ElementName=Parent}" />
+                    <ListView Padding="5" ItemsSource="{Binding Path=DataContext.FileDiff,ElementName=Parent}">
+                        <ListView.Resources>
+                            <Style TargetType="{x:Type ListViewItem}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Operation}"
+                                                 Value="Added">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="Green" Opacity="0.6"></SolidColorBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Operation}"
+                                                 Value="Deleted">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="Red" Opacity="0.6"></SolidColorBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding None}"
+                                                 Value="None">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="White"></SolidColorBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Resources>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding LineNumber}"/>
+                                <!--<GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding LineNumber}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>-->
+                                <GridViewColumn DisplayMemberBinding="{Binding Content}"/>
+                                <!--<GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Content}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>-->
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </ScrollViewer>
                 <controls:CircularProgressBar Background="White" Visibility="{Binding ElementName=Parent, Path=DataContext.ShowFileProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>

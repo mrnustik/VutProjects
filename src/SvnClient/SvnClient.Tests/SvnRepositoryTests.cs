@@ -12,12 +12,12 @@ namespace SvnClient.Tests
         [Test]
         public void SvnRepository_GetHistory_ReturnsData()
         {
-
-            var connection = SvnConnection.OpenConnection("Connection", "https://svn.code.sf.net/p/heifaratest/code-0/");
+            var connection = SvnConnection.OpenConnection("Connection", "   ");
             var repository = new SvnRepository();
             var svnCommitModels = repository.GetHistory(connection).ToList();
 
-            repository.GetFileDiff(connection, svnCommitModels.First(), svnCommitModels.ElementAt(1), svnCommitModels.First().Changes.First(c => c.Type == SvnChangeType.Modify));
+            var lines = repository.GetFileDiff(connection, svnCommitModels.First(), svnCommitModels.ElementAt(1), svnCommitModels.First().Changes.First(c => c.Type == SvnChangeType.Modify)).ToList();
+            Assert.Greater(0, lines.Count());
         }
     }
 }

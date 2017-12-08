@@ -59,6 +59,7 @@
     <Compile Include="Controls\CircularProgressBar.xaml.cs">
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\FileOperationToColorConverter.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\OpenConnectionViewModel.cs" />

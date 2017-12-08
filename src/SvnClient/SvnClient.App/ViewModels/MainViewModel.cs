@@ -18,12 +18,14 @@ namespace SvnClient.App.ViewModels
         public IMessenger Messenger { get; }
         public SvnRepository SvnRepository { get; }
         public ICommand OpenConnectionCommand { get; }
+        public ICommand CloseConnectionCommand { get; }
 
         public MainViewModel(IMessenger messenger, SvnRepository svnRepository)
         {
             Messenger = messenger;
             SvnRepository = svnRepository;
             OpenConnectionCommand = new RelayCommand(OpenConnection);
+            CloseConnectionCommand = new RelayCommand(CloseConnection);
             Messenger.Register<ConnectionOpenedMessage>(ConnectionOpenedMesssageReceived);
         }
         
@@ -38,6 +40,12 @@ namespace SvnClient.App.ViewModels
         {
             var window = new OpenConnectionWindow();
             window.ShowDialog();
+        }
+
+        private void CloseConnection(object obj)
+        {
+            var viewModel = obj as RepositoryViewModel;
+            Repositories.Remove(viewModel);
         }
     }
 }

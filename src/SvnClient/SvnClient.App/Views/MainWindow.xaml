@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="600"
         DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainViewModel}">
-    <Grid>
+    <Grid x:Name="Root">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -22,7 +22,11 @@
         <TabControl Grid.Row="1" SelectedIndex="0" ItemsSource="{Binding Repositories}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}"/>
+                        <Button Content="X" Background="Transparent" BorderBrush="Transparent" Command="{Binding ElementName=Root, Path=DataContext.CloseConnectionCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext}"></Button>
+                    </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>

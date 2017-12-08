@@ -19,6 +19,7 @@ namespace SvnClient.App.ViewModels
         private readonly SvnRepository _svnRepository;
         private readonly SvnConnection _connection;
         private readonly BackgroundWorker _backgroundWorker = new BackgroundWorker();
+        private readonly BackgroundWorker _fileLoadingWorker = new BackgroundWorker();
         private readonly CollectionViewSource _collectionViewSource = new CollectionViewSource();
 
         public RepositoryViewModel(SvnConnection connection, [NotNull] SvnRepository svnRepository)
@@ -26,19 +27,36 @@ namespace SvnClient.App.ViewModels
             _svnRepository = svnRepository ?? throw new ArgumentNullException(nameof(svnRepository));
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
             SearchCommand = new RelayCommand(Search);
+            FileSelectedCommand = new RelayCommand(FileSelected);
+        }
+
+        private void FileSelected(object o)
+        {
+            if (o is SvnChangeModel file && SelectedCommit.Revision != 0)
+            {
+                ShowFileProgress = true;
+                if (_fileLoadingWorker.IsBusy)
+                {
+                    _fileLoadingWorker.CancelAsync();
+                }
+                _fileLoadingWorker.RunWorkerAsync(file);
+            }
         }
 
         private SvnCommitModel _selectedCommit;
         private bool _showProgress;
         private ObservableCollection<SvnCommitModel> _commitList;
-        
+        private string _fileDiff;
+        private bool _showFileProgress;
+
         public string Name => _connection.Name;
 
-        public ICommand SearchCommand { get; private set; }
-        
+        public ICommand SearchCommand { get; }
+        public ICommand FileSelectedCommand { get; }
+
         public bool ShowProgress
         {
-            get { return _showProgress; }
+            get => _showProgress;
             set
             {
                 if (_showProgress == value) return;
@@ -47,9 +65,21 @@ namespace SvnClient.App.ViewModels
             }
         }
 
+        public bool ShowFileProgress
+        {
+            get => _showFileProgress;
+            set
+            {
+                if (_showFileProgress == value) return;
+                _showFileProgress = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public SvnCommitModel SelectedCommit
         {
-            get { return _selectedCommit; }
+            get => _selectedCommit;
             set
             {
                 if (_selectedCommit == value) return;
@@ -57,10 +87,10 @@ namespace SvnClient.App.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        
         public ObservableCollection<SvnCommitModel> CommitList
         {
-            get { return _commitList; }
+            get => _commitList;
             set {
                 if (_commitList == value) return;
                 _commitList = value; 
@@ -68,9 +98,17 @@ namespace SvnClient.App.ViewModels
             }
         }
 
-        public ICollectionView CollectionView
+        public ICollectionView CollectionView => _collectionViewSource.View;
+
+        public string FileDiff
         {
-            get => _collectionViewSource.View;
+            get => _fileDiff;
+            set
+            {
+                if (_fileDiff == value) return;
+                _fileDiff = value;
+                OnPropertyChanged();
+            }
         }
 
 
@@ -80,6 +118,23 @@ namespace SvnClient.App.ViewModels
             _backgroundWorker.DoWork += LoadHistory;
             _backgroundWorker.RunWorkerCompleted += LoadingFinished;
             _backgroundWorker.RunWorkerAsync();
+            _fileLoadingWorker.DoWork += LoadFileDiff;
+            _fileLoadingWorker.RunWorkerCompleted += FileDiffLoaded;
+        }
+
+        private void FileDiffLoaded(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        {
+            ShowFileProgress = false;
+            OnPropertyChanged(nameof(FileDiff));
+        }
+
+        private void LoadFileDiff(object sender, DoWorkEventArgs doWorkEventArgs)
+        {
+            if (doWorkEventArgs.Argument is SvnChangeModel file)
+            {
+                _fileDiff = _svnRepository.GetFileDiff(_connection, SelectedCommit,
+                    CommitList.ElementAt(CommitList.IndexOf(SelectedCommit) + 1), file);
+            }
         }
 
         private void Search(object o)
@@ -93,10 +148,14 @@ namespace SvnClient.App.ViewModels
             {
                 CollectionView.Filter = obj =>
                 {
-                    var commit = obj as SvnCommitModel;
-                    return (commit.Author != null && commit.Author.Contains(pattern))
-                                || (commit.Message != null && commit.Message.Contains(pattern))
-                                || (commit.Changes != null && commit.Changes.Any(c => c.Path != null && c.Path.Contains(pattern)));
+                    if (obj is SvnCommitModel commit)
+                    {
+                        return (commit.Author != null && commit.Author.Contains(pattern))
+                               || (commit.Message != null && commit.Message.Contains(pattern))
+                               || (commit.Changes != null &&
+                                   commit.Changes.Any(c => c.Path != null && c.Path.Contains(pattern)));
+                    }
+                    return false;
                 };
             }
             OnPropertyChanged(nameof(CollectionView));

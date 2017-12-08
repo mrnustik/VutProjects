@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using SharpSvn;
+using SharpSvn.Delta;
 using SvnClient.Backend.Models;
 
 namespace SvnClient.Backend
@@ -34,7 +35,20 @@ namespace SvnClient.Backend
                     };
                 }
             }
+        }
 
+        public string GetFileDiff(SvnConnection connection,SvnCommitModel commit,SvnCommitModel fromCommit, SvnChangeModel change)
+        {
+            using (var client = new SharpSvn.SvnClient())
+            {
+                var fileUri = new Uri($"{connection.RemoteUri.AbsoluteUri}{change.Path}");
+                var toTarget = new SvnUriTarget(fileUri, commit.Revision);
+                var fromTarget = new SvnUriTarget(fileUri, fromCommit.Revision);
+                var stream = new MemoryStream();
+                client.Diff(fromTarget, toTarget, new SvnDiffArgs(){UseGitFormat = true, IgnoreContentType = true}, stream);
+                var text = Encoding.UTF8.GetString(stream.ToArray());
+                return text;
+            }
         }
 
         private SvnChangeType SvnActionToSvnChangeType(SvnChangeAction itemAction)

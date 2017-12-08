@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance Type=viewModels:RepositoryViewModel, IsDesignTimeCreatable=true}" >
-    <Grid>
+    <Grid x:Name="Parent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*"/>
@@ -61,17 +61,31 @@
 
                 <Rectangle Margin="0,5" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Height="1" Stroke="Black" Fill="Black"/>
 
-                <DataGrid  Grid.Row="3" Grid.ColumnSpan="2" IsReadOnly="True" ItemsSource="{Binding Changes}" AutoGenerateColumns="False" >
+                <DataGrid Grid.Row="3" Grid.ColumnSpan="2" x:Name="FilesGrid" IsReadOnly="True" ItemsSource="{Binding Changes}" AutoGenerateColumns="False" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding Path=DataContext.FileSelectedCommand,ElementName=Parent}"
+                                                   CommandParameter="{Binding SelectedItem, ElementName=FilesGrid}">
+                            </i:InvokeCommandAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Type" Width="Auto" Binding="{Binding Type}"></DataGridTextColumn>
                         <DataGridTextColumn Header="File" Width="*" Binding="{Binding Path}"></DataGridTextColumn>
                     </DataGrid.Columns>
+                    
                 </DataGrid>
             </Grid>
 
             <GridSplitter Grid.Column="1" Width="5" ResizeBehavior="PreviousAndNext" VerticalAlignment="Stretch" />
-            <TextBlock Grid.Column="2" Padding="5" Text="sassad" />
+            <Grid Grid.Column="2">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <TextBlock Padding="5" Text="{Binding Path=DataContext.FileDiff,ElementName=Parent}" />
+                </ScrollViewer>
+                <controls:CircularProgressBar Background="White" Visibility="{Binding ElementName=Parent, Path=DataContext.ShowFileProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
         </Grid>
         <controls:CircularProgressBar Grid.RowSpan="4" Background="White" d:IsHidden="true" Visibility="{Binding ShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>
+

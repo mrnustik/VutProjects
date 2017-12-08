@@ -56,7 +56,7 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label Margin="5,5,0,0" Grid.ColumnSpan="2" Content="{Binding Message}" FontWeight="DemiBold" />
+                <TextBlock Margin="5,5,0,0" TextWrapping="WrapWithOverflow" Grid.ColumnSpan="2" Text="{Binding Message}" FontWeight="DemiBold" />
                 <TextBlock Margin="0,5,5,0" Grid.Row="1" Grid.Column="0" TextAlignment="Right" FontWeight="DemiBold" FontStyle="Italic" Text="{Binding Author}"/>
                 <TextBlock Margin="0,5,5,0" Grid.Row="1" Grid.Column="1" TextAlignment="Right" FontStyle="Italic" Text="{Binding Time}"/>
 

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using SvnClient.App.Command;
 using SvnClient.App.Views;
@@ -14,8 +16,22 @@ namespace SvnClient.App.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private RepositoryViewModel _selectedRepository;
+        private ObservableCollection<RepositoryViewModel> _repositories;
 
-        public ObservableCollection<RepositoryViewModel> Repositories { get; set; } = new ObservableCollection<RepositoryViewModel>();
+        public ObservableCollection<RepositoryViewModel> Repositories
+        {
+            get
+            {
+                if (_repositories == null)
+                {
+                    _repositories = new ObservableCollection<RepositoryViewModel>();
+                    var itemsView = (IEditableCollectionView) CollectionViewSource.GetDefaultView(_repositories);
+                    itemsView.NewItemPlaceholderPosition = NewItemPlaceholderPosition.AtEnd;
+                }
+                return _repositories;
+            }
+        }
+
         public IMessenger Messenger { get; }
         public SvnRepository SvnRepository { get; }
         public ICommand OpenConnectionCommand { get; }

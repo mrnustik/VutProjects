@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:SvnClient.App.Views"
         mc:Ignorable="d"
         Loaded="OnLoaded"
-        Title="MainWindow" Height="450" Width="600"
+        Title="SVN Client" Height="450" Width="600"
         DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainViewModel}">
     <Window.InputBindings>
         <KeyBinding
@@ -33,11 +33,32 @@
             </MenuItem>
         </Menu>
         <TabControl Grid.Row="1" SelectedIndex="0" x:Name="TabControl" SelectedItem="{Binding SelectedRepository}" ItemsSource="{Binding Repositories}">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="TabItem">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Button Command="{Binding DataContext.OpenConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="Open Connection" >
+                                            +
+                                        </Button>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TabControl.ItemContainerStyle>
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name}"/>
-                        <Button Width="15" Height="15" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Transparent" BorderBrush="Transparent" Command="{Binding ElementName=Root, Path=DataContext.CloseConnectionCommand}"
+                        <Button Width="15" Height="15"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                Background="Transparent" BorderBrush="Transparent"
+                                Command="{Binding ElementName=Root, Path=DataContext.CloseConnectionCommand}"
                                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext}">
                             <Image Source="../Resources/IconClose.png"></Image>
                         </Button>
@@ -49,7 +70,7 @@
                     <views:RepositoryView />
                 </DataTemplate>
             </TabControl.ContentTemplate>
-       
+
         </TabControl>
     </Grid>
 </Window>

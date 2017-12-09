@@ -15,14 +15,4 @@ namespace SvnClient.Backend.Messages
             Connection = connection;
         }
     }
-
-    public class ConnectionAddedMessage
-    {
-        public ConnectionAddedMessage(SvnConnection connection)
-        {
-            Connection = connection;
-        }
-
-        public SvnConnection Connection { get; }
-    }
 }

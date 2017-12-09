@@ -7,13 +7,6 @@ using System.Threading.Tasks;
 
 namespace SvnClient.Backend
 {
-    public interface IMessenger
-    {
-        void Register<TMessage>(Action<TMessage> action);
-        void Send<TMessage>(TMessage message);
-        void UnRegister<TMessage>(Action<TMessage> action);
-    }
-
     public class Messenger : IMessenger
     {
         private readonly ConcurrentDictionary<Type, ConcurrentBag<Delegate>> registeredActions = new ConcurrentDictionary<Type, ConcurrentBag<Delegate>>();

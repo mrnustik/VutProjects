@@ -13,12 +13,24 @@ namespace SvnClient.App.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        private RepositoryViewModel _selectedRepository;
 
         public ObservableCollection<RepositoryViewModel> Repositories { get; set; } = new ObservableCollection<RepositoryViewModel>();
         public IMessenger Messenger { get; }
         public SvnRepository SvnRepository { get; }
         public ICommand OpenConnectionCommand { get; }
         public ICommand CloseConnectionCommand { get; }
+
+        public RepositoryViewModel SelectedRepository
+        {
+            get { return _selectedRepository; }
+            set
+            {
+                if (_selectedRepository == value) return;
+                _selectedRepository = value;
+                OnPropertyChanged();
+            }
+        }
 
         public MainViewModel(IMessenger messenger, SvnRepository svnRepository)
         {
@@ -34,6 +46,7 @@ namespace SvnClient.App.ViewModels
             var repositoryViewModel = new RepositoryViewModel(connectionOpenedMessage.Connection, SvnRepository);
             Repositories.Add(repositoryViewModel);
             repositoryViewModel.Init();
+            SelectedRepository = repositoryViewModel;
         }
 
         private void OpenConnection()

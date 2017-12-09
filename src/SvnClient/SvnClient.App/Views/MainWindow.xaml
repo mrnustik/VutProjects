@@ -31,7 +31,7 @@
                 <MenuItem Header="Close" InputGestureText="Alt+F4" Click="CloseMenuItemClick"/>
             </MenuItem>
         </Menu>
-        <TabControl Grid.Row="1" SelectedIndex="0" x:Name="TabControl" ItemsSource="{Binding Repositories}">
+        <TabControl Grid.Row="1" SelectedIndex="0" x:Name="TabControl" SelectedItem="{Binding SelectedRepository}" ItemsSource="{Binding Repositories}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

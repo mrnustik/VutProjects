@@ -29,10 +29,10 @@
             </i:Interaction.Triggers>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="{Binding Name}" Margin="2"/>
-                        <Label Content="-"/>
-                        <Label Content="{Binding RemoteUri.AbsoluteUri}" Margin="2"/>
+                    <StackPanel Orientation="Horizontal" Height="25">
+                        <Label Content="{Binding Name}" FontWeight="SemiBold" FontSize="11"/>
+                        <Label Content="-" Margin="0,2"/>
+                        <Label Content="{Binding RemoteUri.AbsoluteUri}" FontStyle="Italic" FontSize="11"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

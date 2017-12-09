@@ -81,6 +81,7 @@ namespace SvnClient.App.ViewModels
                 var window = new OpenConnectionWindow();
                 if (window.DataContext is OpenConnectionViewModel viewModel)
                 {
+                    viewModel.Id = connection.Id;
                     viewModel.Name = connection.Name;
                     viewModel.Url = connection.RemoteUri.AbsoluteUri;
                 }

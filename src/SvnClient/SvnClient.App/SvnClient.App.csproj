@@ -60,6 +60,8 @@
       <DependentUpon>CircularProgressBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\FileOperationToColorConverter.cs" />
+    <Compile Include="Converters\NodeTypeToImageConverter.cs" />
+    <Compile Include="Converters\OperationTypeToImageConverter.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\OpenConnectionViewModel.cs" />
@@ -140,6 +142,17 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\IconClose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconEdit.png" />
+    <Resource Include="Resources\IconFile.png" />
+    <Resource Include="Resources\IconFolder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconAdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconDelete.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

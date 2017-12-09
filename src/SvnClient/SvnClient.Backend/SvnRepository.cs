@@ -28,10 +28,10 @@ namespace SvnClient.Backend
                         Message = commit.LogMessage,
                         Time = commit.Time,
                         Revision = commit.Revision,
-                        Changes = commit.ChangedPaths?.Where(item => item.NodeKind == SvnNodeKind.File)
+                        Changes = commit.ChangedPaths?
                         .Select(item => new SvnChangeModel
                         {
-
+                            NodeType = SvnNodeKindToNodeType(item.NodeKind),
                             Path = item.Path,
                             Type = SvnActionToSvnChangeType(item.Action)
                         })
@@ -40,8 +40,21 @@ namespace SvnClient.Backend
             }
         }
 
+        private SvnNodeType SvnNodeKindToNodeType(SvnNodeKind itemNodeKind)
+        {
+            switch (itemNodeKind)
+            {
+                case SvnNodeKind.Directory:
+                    return SvnNodeType.Directory;
+                case SvnNodeKind.File:
+                default:
+                    return SvnNodeType.File;
+            }
+        }
+
         public IEnumerable<SvnFileLine> GetFileDiff(SvnConnection connection, SvnCommitModel commit, SvnCommitModel fromCommit, SvnChangeModel change)
         {
+            if (change.NodeType == SvnNodeType.Directory) return Enumerable.Empty<SvnFileLine>();
             using (var client = new SharpSvn.SvnClient())
             {
                 var fileUri = new Uri($"{connection.RemoteUri.AbsoluteUri}{change.Path}");

@@ -8,5 +8,7 @@
         <local:ViewModelLocator x:Key="ViewModelLocator" />
         <converters:FileOperationToColorConverter x:Key="FileOperationToColorConverter"/> 
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+        <converters:OperationTypeToImageConverter x:Key="OperationTypeToImageConverter" />
+        <converters:NodeTypeToImageConverter x:Key="NodeTypeToImageConverter" />
     </Application.Resources>
 </Application>

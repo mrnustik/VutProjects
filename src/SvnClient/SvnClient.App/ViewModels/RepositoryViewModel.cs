@@ -19,7 +19,7 @@ namespace SvnClient.App.ViewModels
         private readonly SvnRepository _svnRepository;
         private readonly SvnConnection _connection;
         private readonly BackgroundWorker _backgroundWorker = new BackgroundWorker();
-        private readonly BackgroundWorker _fileLoadingWorker = new BackgroundWorker { WorkerReportsProgress = true };
+        private readonly BackgroundWorker _fileLoadingWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
         private readonly CollectionViewSource _collectionViewSource = new CollectionViewSource();
 
         private SvnCommitModel _selectedCommit;
@@ -118,6 +118,7 @@ namespace SvnClient.App.ViewModels
                 {
                     _fileLoadingWorker.CancelAsync();
                 }
+                
                 _fileLoadingWorker.RunWorkerAsync(file);
             }
         }

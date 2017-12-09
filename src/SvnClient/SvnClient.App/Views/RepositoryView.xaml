@@ -70,7 +70,20 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Type" Width="Auto" Binding="{Binding Type}"></DataGridTextColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Width="15" Height="15" Source="{Binding Type, Converter={StaticResource OperationTypeToImageConverter}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Width="15" Height="15" Source="{Binding NodeType, Converter={StaticResource NodeTypeToImageConverter}}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn Header="File" Width="*" Binding="{Binding Path}"></DataGridTextColumn>
                     </DataGrid.Columns>
 

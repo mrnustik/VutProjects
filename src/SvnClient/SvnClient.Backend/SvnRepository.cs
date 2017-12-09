@@ -59,7 +59,8 @@ namespace SvnClient.Backend
                     || l.StartsWith("---")
                     || l.StartsWith("+++")
                     || l.StartsWith("deleted file mode")
-                    || l.StartsWith("new file mode"));
+                    || l.StartsWith("new file mode")
+                    || l.StartsWith("\\ No"));
                 lines.Remove(lines.Last());
                 return ParseSvnFileLines(lines);
             }

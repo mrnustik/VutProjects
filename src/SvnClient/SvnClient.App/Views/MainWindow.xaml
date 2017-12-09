@@ -19,9 +19,7 @@
             Command="{Binding CloseConnectionCommand}"
             CommandParameter="{Binding ElementName=TabControl, Path=SelectedItem}"/>
     </Window.InputBindings>
-    <Window.Resources>
-        <Image x:Key="CloseIcon" Source="../Resources/IconClose.png"></Image>
-    </Window.Resources>
+
     <Grid x:Name="Root">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -38,9 +36,9 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name}"/>
-                        <Button Content="{StaticResource CloseIcon}" Background="Transparent" BorderBrush="Transparent" Command="{Binding ElementName=Root, Path=DataContext.CloseConnectionCommand}"
+                        <Button Width="15" Height="15" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="Transparent" BorderBrush="Transparent" Command="{Binding ElementName=Root, Path=DataContext.CloseConnectionCommand}"
                                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext}">
-                            
+                            <Image Source="../Resources/IconClose.png"></Image>
                         </Button>
                     </StackPanel>
                 </DataTemplate>

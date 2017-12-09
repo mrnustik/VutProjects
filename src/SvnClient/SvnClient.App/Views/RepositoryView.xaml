@@ -9,7 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600"
              d:DataContext="{d:DesignInstance Type=viewModels:RepositoryViewModel, IsDesignTimeCreatable=true}" >
-
     <Grid x:Name="Parent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

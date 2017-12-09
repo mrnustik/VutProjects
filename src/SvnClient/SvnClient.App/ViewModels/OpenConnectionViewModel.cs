@@ -15,8 +15,31 @@ namespace SvnClient.App.ViewModels
     public class OpenConnectionViewModel : ViewModelBase
     {
         private bool _showProgress;
-        public string Name { get; set; }
-        public string Url { get; set; }
+        private string _name;
+        private string _url;
+        public Guid Id { get; set; } = Guid.Empty;
+
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name == value) return;
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Url
+        {
+            get { return _url; }
+            set
+            {
+                if (_url == value) return;
+                _url = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool ShowProgress
         {
@@ -55,7 +78,8 @@ namespace SvnClient.App.ViewModels
                 
                 if (svnConnection != null)
                 {
-                    var message = new ConnectionOpenedMessage(svnConnection);
+                    svnConnection.Id = Id;
+                    var message = new ConnectionAddedMessage(svnConnection);
                     Messenger.Send(message);
                     (window as Window)?.Close();
                 }

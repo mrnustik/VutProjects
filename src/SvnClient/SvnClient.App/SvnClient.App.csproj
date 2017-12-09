@@ -64,12 +64,16 @@
     <Compile Include="ViewModelLocator.cs" />
     <Compile Include="ViewModels\OpenConnectionViewModel.cs" />
     <Compile Include="ViewModels\RepositoryViewModel.cs" />
+    <Compile Include="ViewModels\SavedConnectionsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\OpenConnectionWindow.xaml.cs">
       <DependentUpon>OpenConnectionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RepositoryView.xaml.cs">
       <DependentUpon>RepositoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SavedConnectionsView.xaml.cs">
+      <DependentUpon>SavedConnectionsView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\CircularProgressBar.xaml">
       <SubType>Designer</SubType>
@@ -96,6 +100,10 @@
     <Page Include="Views\RepositoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SavedConnectionsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

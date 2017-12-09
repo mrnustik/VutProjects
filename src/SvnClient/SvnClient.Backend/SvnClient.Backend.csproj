@@ -48,6 +48,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SharpSvn, Version=1.8017.3940.496, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=AMD64">
       <HintPath>..\packages\SharpSvn.1.8-x64.1.8017.3940.496\lib\net40\SharpSvn.dll</HintPath>
     </Reference>
@@ -72,6 +75,8 @@
     <Compile Include="Models\SvnCommitModel.cs" />
     <Compile Include="Models\SvnFileLine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stores\JsonDataStore.cs" />
+    <Compile Include="Stores\SavedConnectionsStore.cs" />
     <Compile Include="SvnConnection.cs" />
     <Compile Include="SvnRepository.cs" />
   </ItemGroup>

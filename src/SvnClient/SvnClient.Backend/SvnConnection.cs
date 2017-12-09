@@ -9,6 +9,7 @@ namespace SvnClient.Backend
 {
     public class SvnConnection
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public Uri RemoteUri { get; set; }
         public string LocalPath { get; set; }

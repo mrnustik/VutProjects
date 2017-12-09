@@ -38,8 +38,8 @@ namespace SvnClient.App.ViewModels
 
         private void OpenConnection()
         {
-            var window = new OpenConnectionWindow();
-            window.ShowDialog();
+            var window = new SavedConnectionsView();
+            window.Show();
         }
 
         private void CloseConnection(object obj)

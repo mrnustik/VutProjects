@@ -40,7 +40,12 @@ namespace SvnClient.App.ViewModels
             CloseConnectionCommand = new RelayCommand(CloseConnection);
             Messenger.Register<ConnectionOpenedMessage>(ConnectionOpenedMesssageReceived);
         }
-        
+
+        public void Init()
+        {
+            OpenConnection();
+        }
+
         private void ConnectionOpenedMesssageReceived(ConnectionOpenedMessage connectionOpenedMessage)
         {
             var repositoryViewModel = new RepositoryViewModel(connectionOpenedMessage.Connection, SvnRepository);

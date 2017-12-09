@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SvnClient.App"
         xmlns:views="clr-namespace:SvnClient.App.Views"
         mc:Ignorable="d"
+        Loaded="OnLoaded"
         Title="MainWindow" Height="450" Width="600"
         DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainViewModel}">
     <Window.InputBindings>

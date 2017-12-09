@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using SvnClient.App.ViewModels;
 
 namespace SvnClient.App.Views
 {
@@ -15,6 +17,14 @@ namespace SvnClient.App.Views
         private void CloseMenuItemClick(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void OnLoaded(object sender, EventArgs e)
+        {
+            if (DataContext is MainViewModel viewModel)
+            {
+                viewModel.Init();
+            }
         }
     }
 }

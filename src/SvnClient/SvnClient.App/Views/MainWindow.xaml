@@ -8,6 +8,20 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="600"
         DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainViewModel}">
+    <Window.InputBindings>
+        <KeyBinding
+            Modifiers="Control"
+            Key="T"
+            Command="{Binding OpenConnectionCommand}"/>
+        <KeyBinding
+            Modifiers="Control"
+            Key="W"
+            Command="{Binding CloseConnectionCommand}"
+            CommandParameter="{Binding ElementName=TabControl, Path=SelectedItem}"/>
+    </Window.InputBindings>
+    <Window.Resources>
+        <Image x:Key="CloseIcon" Source="../Resources/IconClose.png"></Image>
+    </Window.Resources>
     <Grid x:Name="Root">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -15,17 +29,19 @@
         </Grid.RowDefinitions>
         <Menu Height="20" Width="Auto" Grid.Row="0">
             <MenuItem Header="File">
-                <MenuItem Header="Open" Command="{Binding OpenConnectionCommand}" />
-                <MenuItem Header="Close" />
+                <MenuItem Header="Open" InputGestureText="Ctrl+T"  Command="{Binding OpenConnectionCommand}" />
+                <MenuItem Header="Close" InputGestureText="Alt+F4" Click="CloseMenuItemClick"/>
             </MenuItem>
         </Menu>
-        <TabControl Grid.Row="1" SelectedIndex="0" ItemsSource="{Binding Repositories}">
+        <TabControl Grid.Row="1" SelectedIndex="0" x:Name="TabControl" ItemsSource="{Binding Repositories}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name}"/>
-                        <Button Content="X" Background="Transparent" BorderBrush="Transparent" Command="{Binding ElementName=Root, Path=DataContext.CloseConnectionCommand}"
-                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext}"></Button>
+                        <Button Content="{StaticResource CloseIcon}" Background="Transparent" BorderBrush="Transparent" Command="{Binding ElementName=Root, Path=DataContext.CloseConnectionCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext}">
+                            
+                        </Button>
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>

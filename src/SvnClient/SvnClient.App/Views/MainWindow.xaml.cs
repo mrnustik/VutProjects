@@ -11,5 +11,10 @@ namespace SvnClient.App.Views
         {
             InitializeComponent();
         }
+
+        private void CloseMenuItemClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

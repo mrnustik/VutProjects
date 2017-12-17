@@ -1,59 +1,45 @@
+#include <ESP8266WebServer.h>
 #include <EEPROM.h>
 #include <ESP8266WiFi.h>
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
-#define MEASURING_DELAY 2500
 #define ONE_WIRE_BUS D3
+#define EEPROM_SIZE  4096
+#define RECORD_SIZE  8
 
+//-------- Connection variables ----------
 const char WiFiAPPSK[] = "mrndajebuh";
+ESP8266WebServer server(80);
+//----------------------------------------
 
+//-------- Temperature variables ---------
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature DS18B20(&oneWire);
 float tempDev;
 long lastMeasure = 0;
 long eepromIndex = 0;
-WiFiServer server(80);
+long measuringDelay = 2000;
+long baseTime = 0;
+//----------------------------------------
+
 
 void setup()
 {
   initHardware();
   setupWiFi();
-  server.begin();
+  setupServer();
 }
 
 void loop()
 {
-  // Check if a client has connected
   int elapsedTime = millis() - lastMeasure;
 
-  if (elapsedTime > MEASURING_DELAY)
+  if (elapsedTime > measuringDelay)
   {
     measure();
   }
-
-  WiFiClient client = server.available();
-  if (!client) {
-    return;
-  }
-
-  // Read the first line of the request
-  String req = client.readStringUntil('\r');
-  Serial.println(req);
-  client.flush();
-
-  if (req.indexOf("/rtc") != -1)
-  {
-    sendRTC(&client);
-  }
-  else if (req.indexOf("/temperature") != -1)
-  {
-    sendLastMeasuredTemperature(&client);
-  }
-  else if (req.indexOf("/history") != -1)
-  {
-    sendHistory(&client);
-  }
+  server.handleClient();
 }
 
 void measure()
@@ -68,7 +54,7 @@ void measure()
 
 void storeTemperature(int timestamp, float temperature)
 {
-  if (eepromIndex >= 512 - 8) eepromIndex = 0;
+  if (eepromIndex >= EEPROM_SIZE - RECORD_SIZE) eepromIndex = 0;
 
   Serial.print("Log timestamp");
   for (int i = 0; i < 2; i++)
@@ -88,34 +74,17 @@ void storeTemperature(int timestamp, float temperature)
   eepromIndex += 6;
 }
 
-void sendRTC(WiFiClient *client)
-{
-  String s = "HTTP/1.1 200 OK\r\n";
-  s += "Content-Type: text/html\r\n\r\n";
-  s += "<!DOCTYPE HTML>\r\n<html>\r\n";
-  s += String(millis());
-  client->print(s);
+void handleRTC(){
+  server.send(200, "text/plain", String(millis()));
 }
 
-void sendLastMeasuredTemperature(WiFiClient *client)
-{
-  String s = "HTTP/1.1 200 OK\r\n";
-  s += "Content-Type: text/html\r\n\r\n";
-  s += "<!DOCTYPE HTML>\r\n<html>\r\n";
-  s += String(tempDev);
-  client->print(s);
-}
-
-
-void sendHistory(WiFiClient *client)
-{
-  String s = "HTTP/1.1 200 OK\r\n";
-  s += "Content-Type: application/json\r\n\r\n";
+void handleHistory(){
+  String s = "";
   s += "[";
-  for (int i = 0; i < eepromIndex / 10;)
+  for (int i = 0; i < eepromIndex / RECORD_SIZE;)
   {
     int timestamp = 0;
-    char temperature[5];
+    String temperature = "";
     for (int y = 0; y < 2; y++)
     {
       byte value = EEPROM.read(i + y);
@@ -124,19 +93,31 @@ void sendHistory(WiFiClient *client)
     i += 2;
     for (int y = 0; y < 5; y++)
     {
-      byte value = EEPROM.read(i + y);
-      temperature[y] = value;
+      char value = EEPROM.read(i + y);
+      temperature += value;
     }
     s += "{\n";
-    s += "  \"time\": " + String(timestamp) + ",\n";
-    s += "  \"value\": " + String(temperature) + "\n";
+    s += "  \"time\": " + String(timestamp + baseTime) + ",\n";
+    s += "  \"value\": " + temperature + "\n";
     s += "},\n";
     i += 6;
   }
   s += "]";
-  client->print(s);
+  server.send(200, "application/json", s);
 }
 
+void handleTemperature(){
+  server.send(200, "application/json", "Text");
+}
+
+void setupServer()
+{
+  server.on("/rtc", HTTP_GET, handleRTC);
+  server.on("/history", HTTP_GET, handleHistory);
+  server.on("/temperature", HTTP_GET, handleTemperature);
+  server.onNotFound([](){server.send(404, "text/plain", "URI not found" + server.uri());});
+  server.begin();
+}
 
 void setupWiFi()
 {
@@ -156,6 +137,6 @@ void setupWiFi()
 void initHardware()
 {
   Serial.begin(115200);
-  EEPROM.begin(512);
+  EEPROM.begin(4096);
   DS18B20.begin();
 }

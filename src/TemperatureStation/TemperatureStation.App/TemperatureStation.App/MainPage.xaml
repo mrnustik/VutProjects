@@ -5,8 +5,22 @@
              xmlns:behaviors="clr-namespace:TemperatureStation.App.Behaviors;assembly=TemperatureStation.App"
              BindingContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainPageViewModel}"
              x:Class="TemperatureStation.App.MainPage"
-             Appearing="MainPageAppearing">
+             Appearing="MainPageAppearing"
+             x:Name="Page">
     <StackLayout Orientation="Vertical" Padding="20">
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Refresh rate (in ms)" VerticalOptions="Center" FontSize="16"/>
+            <Entry x:Name="RefreshRate" HorizontalOptions="FillAndExpand" Text="{Binding RefreshRate}" Keyboard="Numeric"/>
+            <Button Text="Apply" HorizontalOptions="End" Command="{Binding SetRefreshRateCommand}" CommandParameter="{Binding Source={x:Reference RefreshRate}, Path=Text}"/>
+        </StackLayout>
+        
+        <Picker Title="Temperature unit" SelectedIndex="{Binding SelectedUnit}">
+            <Picker.Items>
+                <x:String>Celsius</x:String>
+                <x:String>Fahrenheit</x:String>
+                <x:String>Kelvin</x:String>
+            </Picker.Items>
+        </Picker>
         <Button Text="Refresh" Command="{Binding RefreshCommand}"  BorderRadius="20" BackgroundColor="Aquamarine"/>
 
         <ListView ItemsSource="{Binding Measurements}">
@@ -19,6 +33,7 @@
                         <ViewCell.View>
                             <StackLayout Orientation="Horizontal" >
                                 <Label Text="{Binding Value}" VerticalOptions="Center" TextColor="Red" FontSize="16"/>
+                                <Label Text="{Binding Source={x:Reference Page}, Path=BindingContext.SelectedUnit, Converter={StaticResource UnitToTextConverter}}" VerticalOptions="Center" TextColor="Red" FontSize="16"></Label>
                                 <Label Text="{Binding Time}" VerticalOptions="Center" HorizontalOptions="EndAndExpand"/>
                             </StackLayout>
                         </ViewCell.View>

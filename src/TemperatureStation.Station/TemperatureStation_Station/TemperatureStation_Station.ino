@@ -6,21 +6,21 @@
 
 #define ONE_WIRE_BUS D3
 #define EEPROM_SIZE  4096
-#define RECORD_SIZE  8
+#define RECORD_SIZE  10
+
+#define AP_NAME "Temperature station"
+#define AP_PWD  "mrndajebuh"
 
 //-------- Connection variables ----------
-const char WiFiAPPSK[] = "mrndajebuh";
 ESP8266WebServer server(80);
 //----------------------------------------
 
 //-------- Temperature variables ---------
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature DS18B20(&oneWire);
-float tempDev;
+int numberOfValues = 0;
 long lastMeasure = 0;
-long eepromIndex = 0;
 long measuringDelay = 2000;
-long baseTime = 0;
 //----------------------------------------
 
 
@@ -44,34 +44,35 @@ void loop()
 
 void measure()
 {
+  Serial.print("Measuring");
   DS18B20.setWaitForConversion(false);
   DS18B20.requestTemperatures();
   float tempC = DS18B20.getTempCByIndex(0);
-  lastMeasure = (int) millis();
+  lastMeasure = millis();
+  Serial.print(" at " + String(lastMeasure));
+  Serial.println(" value " + String(tempC));
   storeTemperature(lastMeasure, tempC);
-  tempDev = tempC;
 }
 
-void storeTemperature(int timestamp, float temperature)
+void storeTemperature(long timestamp, float temperature)
 {
-  if (eepromIndex >= EEPROM_SIZE - RECORD_SIZE) eepromIndex = 0;
-
-  Serial.print("Log timestamp");
-  for (int i = 0; i < 2; i++)
+  int eepromIndex = numberOfValues * RECORD_SIZE;
+  if (eepromIndex >= EEPROM_SIZE) {
+    numberOfValues = 0;
+  }
+  for (int i = 0; i < 4; i++)
   {
     EEPROM.write(eepromIndex + i, (timestamp >> (8 * i)) & 255);
   }
-  Serial.println(timestamp);
-  eepromIndex += 2;
+  eepromIndex += 4;
   String tempString = String(temperature);
-  Serial.print("Log temperature");
   for (int i = 0; i < 6; i++)
   {
-    Serial.print(tempString[i]);
     EEPROM.write(eepromIndex + i, tempString[i]);
   }
-  Serial.println("");
+  EEPROM.commit();
   eepromIndex += 6;
+  numberOfValues++;
 }
 
 void handleRTC(){
@@ -81,40 +82,52 @@ void handleRTC(){
 void handleHistory(){
   String s = "";
   s += "[";
-  for (int i = 0; i < eepromIndex / RECORD_SIZE;)
+  Serial.println("Getting history of " + String(numberOfValues));
+  for (int i = 0; i < numberOfValues; i++)
   {
     int timestamp = 0;
     String temperature = "";
-    for (int y = 0; y < 2; y++)
+    int index = i * RECORD_SIZE;
+    for (int y = 0; y < 4; y++)
     {
-      byte value = EEPROM.read(i + y);
+      byte value = EEPROM.read(index + y);
       timestamp |= (value << (y * 8));
     }
-    i += 2;
+    index += 4;
     for (int y = 0; y < 5; y++)
     {
-      char value = EEPROM.read(i + y);
+      char value = EEPROM.read(index + y);
       temperature += value;
     }
     s += "{\n";
-    s += "  \"time\": " + String(timestamp + baseTime) + ",\n";
+    s += "  \"time\": " + String(timestamp) + ",\n";
     s += "  \"value\": " + temperature + "\n";
     s += "},\n";
-    i += 6;
   }
   s += "]";
   server.send(200, "application/json", s);
 }
 
-void handleTemperature(){
-  server.send(200, "application/json", "Text");
+void handleRefresh(){
+  if(server.args() == 0) {
+    server.send(500, "text/plain", "Missing argument");
+  }
+  String refreshArg = server.arg(0);
+  measuringDelay = refreshArg.toInt();
+  server.send(200, "text/plain", "OK");
+}
+
+void handleGetRefresh()
+{
+  server.send(200, "text/plain", String(measuringDelay));
 }
 
 void setupServer()
 {
   server.on("/rtc", HTTP_GET, handleRTC);
   server.on("/history", HTTP_GET, handleHistory);
-  server.on("/temperature", HTTP_GET, handleTemperature);
+  server.on("/refresh", HTTP_GET, handleGetRefresh);
+  server.on("/refresh", HTTP_PUT, handleRefresh);
   server.onNotFound([](){server.send(404, "text/plain", "URI not found" + server.uri());});
   server.begin();
 }
@@ -122,16 +135,7 @@ void setupServer()
 void setupWiFi()
 {
   WiFi.mode(WIFI_AP);
-
-  String AP_NameString = "Temperature station";
-
-  char AP_NameChar[AP_NameString.length() + 1];
-  memset(AP_NameChar, 0, AP_NameString.length() + 1);
-
-  for (int i = 0; i < AP_NameString.length(); i++)
-    AP_NameChar[i] = AP_NameString.charAt(i);
-
-  WiFi.softAP(AP_NameChar, WiFiAPPSK);
+  WiFi.softAP(AP_NAME, AP_PWD);
 }
 
 void initHardware()

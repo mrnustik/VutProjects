@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TemperatureStation.App"
+             xmlns:behaviors="clr-namespace:TemperatureStation.App.Behaviors;assembly=TemperatureStation.App"
+             BindingContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainPageViewModel}"
+             x:Class="TemperatureStation.App.MainPage"
+             Appearing="MainPageAppearing">
+    <StackLayout Orientation="Vertical" Padding="20">
+        <Button Text="Refresh" Command="{Binding RefreshCommand}"  BorderRadius="20" BackgroundColor="Aquamarine"/>
+
+        <ListView ItemsSource="{Binding Measurements}">
+            <ListView.Behaviors>
+                <behaviors:ListViewNoSelectionBehavior/>
+            </ListView.Behaviors>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.View>
+                            <StackLayout Orientation="Horizontal" >
+                                <Label Text="{Binding Value}" VerticalOptions="Center" TextColor="Red" FontSize="16"/>
+                                <Label Text="{Binding Time}" VerticalOptions="Center" HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                        </ViewCell.View>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

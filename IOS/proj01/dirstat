@@ -1,0 +1,256 @@
+#!/bin/sh
+
+dir="$1"
+if [ "$1" = "-i" ] ; then
+	if [ -z "$2" ]; then
+		echo 1>&2 "Error: You have not entered the ignore regular expression"
+		exit 1
+	fi
+	regex="$2"
+	dir="$3"
+fi
+[ -z "$dir" ] && dir="$PWD"
+
+if [ -z "$dir" ]; then
+	dir=$current_dir
+fi 
+
+if ! [ -e "$dir" ]; then
+	echo 1>&2 "Error: $dir path does not exist"
+	exit 1
+fi
+    
+if ! [ -d "$dir" ]; then
+	echo 1>&2 "Error: $dir is not directory"
+	exit 1
+fi
+
+
+
+
+
+
+error_check=$(find $dir 2>/dev/null)
+if [ ! "$?" -eq "0" ]; then
+	echo 1>&2 "Error: The script does not have permissions to some content of this folder"
+	exit 1
+fi
+
+directories_count=0
+files_count=0
+file_sum=0
+largest=0
+if [ -z "$regex" ]; then
+	extensions=""
+	sizes=""
+	maxdepth=0
+	depth=0
+	lowestdepth=1100
+	find "$dir" | {
+		while read file; do
+			
+			if [ -d "$file" ]; then 
+				directories_count=$(($directories_count + 1))
+				depth=$(echo "$file" | tr '/' '\n' | wc -l)
+				if [ $depth -gt $maxdepth ]; then
+					maxdepth=$depth
+				fi
+				if [ $depth -lt $lowestdepth ]; then 
+					lowestdepth=$depth
+				fi
+			elif [ -f "$file" -a ! -L "$file" ]; then
+				file_size=$(wc -c < "$file")		
+				
+				if [ ! -z "$sizes" ]; then
+					sizes="$sizes,$file_size"
+				else 
+					sizes="$file_size"
+				fi
+				
+				file_sum=$(($file_size + $file_sum))
+				if [ $file_size -gt $largest ]; then
+					largest=$file_size
+				fi
+				basename=$(basename "$file")
+				extension=$(echo "${basename##*.}")
+				filename=$(echo "${basename%*.}")
+				if [ ! "$extension" = "$basename" ]; then
+					if [ ! -z "$extensions" ]; then
+						extensions="$extensions,$extension"
+					else 
+						extensions="$extension"
+					fi
+				fi
+				files_count=$(($files_count + 1))
+			fi
+		done 
+		
+		median=$(echo "$sizes" | tr ',' '\n'| sort -n -r | awk '{array[NR]=$1;} END {if (NR % 2){print array[(NR+1)/2];} else {print int((array[(NR/2)] + array[(NR/2)+1])/2)}}')
+		maxdepth=$(($maxdepth - $lowestdepth +1 ))
+		if [ ! "$files_count" -eq 0 ]; then 
+			average=$(($file_sum / $files_count))
+		fi
+		extensions=$(echo "$extensions" | tr ',' '\n' | sort -u |tr '\n' ',' | rev | cut -c 2- | rev )
+		if [ ! "$directories_count" -eq 0 ]; then
+			average_number_of_files=$(($files_count / $directories_count))
+		else 
+			echo 1>&2 "Error: You have entered bad regex"
+			exit 1
+		fi
+		echo "Root directory: $dir" 
+		echo "Directories: $directories_count"
+		echo "Max depth: $maxdepth"
+		echo "Average no. of files: $average_number_of_files"
+		echo "All files: $files_count"
+		echo "  Largest file: $largest"
+		echo "  Average file size: $average"
+		echo "  File size median: $median"
+		echo "File extensions: $extensions"
+		
+		
+		
+		for ext in $(echo "$extensions" | tr ',' '\n'); do
+			if [ ! -z "$ext" ]; then
+				file_sum=0
+				files_count=0
+				largest=0	
+				median=0
+				sizes=""
+				find "$dir" -type f -name "*.$ext" | 
+				{ 
+					while read file; do 
+						file_size=$(wc -c < "$file")		
+						file_sum=$(($file_size + $file_sum))
+						if [ $file_size -gt $largest ]; then
+							largest=$file_size
+						fi 
+						files_count=$(($files_count + 1))
+						if [ ! -z "$sizes" ]; then
+							sizes="$sizes,$file_size"
+						else 
+							sizes="$file_size"
+						fi
+					done 
+					average=$(($file_sum / $files_count))
+					median=$(echo "$sizes" | tr ',' '\n'| sort -n -r | awk '{array[NR]=$1;} END {if (NR % 2){print array[(NR+1)/2];} else {print int((array[(NR/2)] + array[(NR/2)+1])/2)}}')
+					echo "Files .$ext: $files_count"
+					echo "  Largest file .$ext: $largest"
+					echo "  Average file size .$ext: $average"
+					echo "  File size median .$ext: $median"
+				
+				}
+				
+				
+			fi
+		done
+	}	
+else
+	extensions=""
+	sizes=""
+	maxdepth=0
+	lowestdepth=1000
+	find "$dir" | {
+		while read file; do
+			[ "$(echo "$file" | tr '/' '\n' | egrep "$regex"  | wc -l)" -gt 0 ] &&  continue
+
+			if [ -d "$file" ]; then 
+				directories_count=$(($directories_count + 1))
+				depth=$(echo "$file" | tr '/' '\n' | wc -l)
+				if [ $depth -gt $maxdepth ]; then
+					maxdepth=$depth
+				fi
+				if [ $depth -lt $lowestdepth ]; then
+					lowestdepth=$depth
+				fi
+			elif [ -f "$file" -a  ! -L "$file" ]; then 
+				file_size=$(wc -c < "$file")		
+				
+				if [ ! -z "$sizes" ]; then
+					sizes="$sizes,$file_size"
+				else 
+					sizes="$file_size"
+				fi
+				
+				file_sum=$(($file_size + $file_sum))
+				if [ $file_size -gt $largest ]; then
+					largest=$file_size
+				fi 
+				basename=$(basename "$file")
+				extension=$( echo "${basename##*.}")
+				filename=$( echo "${basename%.*}")
+
+				if [ ! $extension = $basename -a ! -z "$filename" ]; then
+					if [ ! -z "$extensions" ]; then
+						extensions="$extensions,$extension"
+					else 
+						extensions="$extension"
+					fi
+				fi
+				files_count=$(($files_count + 1))
+			fi
+		done 
+		
+		median=$(echo "$sizes" | tr ',' '\n'| sort -n -r | awk '{array[NR]=$1;} END {if (NR % 2){print array[(NR+1)/2];} else {print int((array[(NR/2)] + array[(NR/2)+1])/2)}}')
+		maxdepth=$(($maxdepth - $lowestdepth  + 1  ))
+		if [ ! "$files_count" -eq 0 ]; then 
+			average=$(($file_sum / $files_count))
+		fi
+		extensions=$(echo "$extensions" | tr ',' '\n' | sort -u | tr '\n' ',' | rev | cut -c 2- | rev )
+		if [ ! "$directories_count" -eq 0 ]; then
+			average_number_of_files=$(($files_count / $directories_count))
+		else 
+			echo 1>&2 "Error: You have entered bad regex"
+			exit 1
+		fi
+		echo "Root directory: $dir" 
+		echo "Directories: $directories_count"
+		echo "Max depth: $maxdepth"
+		echo "Average no. of files: $average_number_of_files"
+		echo "All files: $files_count"
+		echo "  Largest file: $largest"
+		echo "  Average file size: $average"
+		echo "  File size median: $median"
+		echo "File extensions: $extensions"
+		
+		
+		
+		for ext in $(echo "$extensions" | tr ',' '\n'); do
+			if [ ! -z "$ext" ]; then
+				file_sum=0
+				files_count=0
+				largest=0	
+				median=0
+				sizes=""
+				find "$dir" -type f -name "*.$ext" | 
+				{ 
+					while read file; do 
+						[ -z "$(echo "$file" | tr '/' '\n' | egrep "$regex")" ] || continue
+						file_size=$(wc -c < "$file")		
+						file_sum=$(($file_size + $file_sum))
+						if [ $file_size -gt $largest ]; then
+							largest=$file_size
+						fi 
+						files_count=$(($files_count + 1))
+						if [ ! -z "$sizes" ]; then
+							sizes="$sizes,$file_size"
+						else 
+							sizes="$file_size"
+						fi
+					done 
+					average=$(($file_sum / $files_count))
+					median=$(echo "$sizes" | tr ',' '\n'| sort -n -r | awk '{array[NR]=$1;} END {if (NR % 2){print array[(NR+1)/2];} else {print int((array[(NR/2)] + array[(NR/2)+1])/2)}}')
+					echo "Files .$ext: $files_count"
+					echo "  Largest file .$ext: $largest"
+					echo "  Average file size .$ext: $average"
+					echo "  File size median .$ext: $median"
+				
+				}
+				
+				
+			fi
+		done
+			
+	
+	}
+fi
+

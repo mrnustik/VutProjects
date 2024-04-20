@@ -1,0 +1,22 @@
+\documentclass[../projekt.tex]{subfiles}
+
+\begin{document}
+\chapter{Návrh}
+V rámci kapitoly teoretický úvod (viz. \ref{teoreticky-uvod}) jsme si popsali, teoretická řešení jednotlivých typů skenování, která má náš program podporovat. V~této kapitole se budeme věnovat tomu, jakým způsobem se na náš program podíváme z~hlediska návrhu jednotlivých částí programu. Vzhledem k~tomu, že je umožněno projekt psát v~C++, rozhodl jsem se pro použití objektově orientovaného přístupu k~návrhu kódu.
+
+\section{Reprezentace IPv4 sítě}
+V rámci projektu potřebujeme vyřešit, jakým způsobem reprezentovat IPv4 sítě a jejich adresy, abychom byli jednoduše schopní zkontrolovat, zda je síť validní, a zároveň, aby bylo jednoduché iterovat nad všemi adresami dané sítě.
+
+Pro reprezentaci sítě jsem navrhl třídu \code{IpNetwork}. Pro zajištění, že může vzniknout pouze objekt reprezentující validní síť, jsem použil návrhový vzor tovární metoda\cite{DesignPatternFactoryMethod}. V~rámci třídy IpNetwork je statická metoda \code{IpNetwork::FromCidr(std::string network)}, která umožňuje vytvoření instance objektu IpNetwork pouze z~řetězce reprezentujícího validní síť ve formátu CIDR\cite{RFC4632}. V~případě, že je předaný řetězec nevalidního 
+
+Pro zajištění možnosti jednoduché interace nad všemi adresami v~síti jsem navrhl třídu \code{IpNetworkEnumerator}. Jedná se implementaci návrhového vzoru iterátor\cite{DesignPatternIterator}. Tento návrhový vzor je pro umožnění iterování nad kolekcí objektů bez nutnosti znalosti kolik objektů v~kolekci je. Třída \code{IpNetworkEnumerator} definuje metodu \code{MoveNext()}, která vrací bool a~indikuje, zda můžeme v~iteraci ještě pokračovat (v našem případě, zda následující adresa není broadcast). Dále je definována metoda \code{Current()}, která vrací aktuální adresu reprezentovanou objektem \code{IpAddress}. Enumerator je možné získat zavoláním metody \code{GetEnumerator()} nad objektem \code{IpNetwork}.
+
+\section{Skenovací nástroje}
+
+Za účelem skenování jsem se rozhodl pro vytvoření jedné abstraktní třídy \code{ScannerBase}, která bude použita jako bázová pro všechny třídy, které provádět skenování. Tato třída bude svým podtřídám nabízet sadu základních metod, které umožní sdílet kód pro síťovou komunikaci, a oddělí tak platformně specifické části kódu (tvorba/uzavírání soketů, nastavování socketů,...). Zároveň se tak budeme moci v~podtřídách \code{ScannerBase} soustředit na skenování jako takové a neřešit problémy při tvorbě a nastavování socketů.
+
+Třídy pro vyhledávání aktivních hostů \code{ArpScanner} a \code{IcmpScanner} obsahují metodu \code{ScanNetwork} vracející \code{std::vector<IpAddress>}, jehož obsahem budou objekty \code{IpAddress} reprezentující aktivní hosty ve skenované síti.
+
+Třídy pro skenování otevřených portů \code{TcpScanner} a \code{UdpScanner} obsahují metodu \code{Scan}, přijímající jako parametr objekt typu \code{IpAddress} reprezentující adresu hosta, jenž má být skenován. Zároveň tyto třídy obsahují metody, které jsou specifické pro daný typ skenování (vytvoření TCP hlavičky, odeslání TCP RST zprávy,...).
+
+\end{document}

@@ -1,0 +1,48 @@
+\documentclass[../projekt.tex]{subfiles}
+\begin{document}
+
+
+\chapter{Návod}
+
+Nástroj isamon je program spustitelný z příkazové řádky používaný ke skenování aktivních hostů v IPv4 sítích a jejich portů.
+
+
+\begin{lstlisting}[caption=Možnosti použití nástroje isamon.]
+isamon [-h] [-i <interface>] [-t] [-u] [-p <port>] [-w <ms>] -n <net_address/mask>
+\end{lstlisting}
+
+\section{Parametry}
+
+Povinné parametry:
+\begin{itemize}
+    \item \textbf{-n} <adresa\_sítě/maska> - adresa a mask sítě, která má být skenována ve formátu CIDR\cite{RFC4632}.  
+\end{itemize}
+
+Nepovinné parametry:
+\begin{itemize}
+    \item \textbf{-h} - vypíše nápovědu k užívání programu isamon
+    \item \textbf{-i} <rozhrání> - specifikuje rozhraní, které má být použito ke komunikaci
+    \item \textbf{-t} - určuje, že má dojít ke skenování otevřených TCP portů
+    \item \textbf{-u} - určuje, že má dojít ke skenování otevřených UDP portů
+    \item \textbf{-p} <port> - zobrazí aktivní klienty, kteří mají otevřený tento port
+    \item \textbf{-w} <ms> - maximální povolený RTT v ms
+\end{itemize}
+
+
+\section{Ukázky použití}
+
+\begin{lstlisting}[caption=Ukázka použití isamon pro skenování TCP a UDP portů sítě 192.168.1.0/30 s maximálním RTT 5 ms.]
+$ isamon -n 192.168.1.0/30 -t -u -w 5 
+192.168.1.1
+192.168.1.1 TCP 80
+192.168.1.1 TCP 22
+192.168.1.1 UDP 53
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ukázka použití isamon pro skenování aktivních hostů na síti 192.168.1.0/30.]
+$ isamon -n 192.168.1.0/30
+192.168.1.1
+192.168.1.2
+\end{lstlisting}
+
+\end{document}

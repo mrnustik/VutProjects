@@ -1,0 +1,75 @@
+\documentclass[../projekt.tex]{subfiles}
+\begin{document}
+
+\chapter{Implementace}
+
+V~minulé kapitole jsme si popsali, jakým způsobem jsem navrhl námi vybrané řešení. V~této kapitole si popíšeme, jaké prostředky operačního systému a knihovny libpcap\cite{LibpcapReference} jsme použili pro implementaci našeho řešení.
+
+\section{Detekce lokální sítě}
+Pro výběr mezi skenováním aktivních hostů pomocí protokolu ARP nebo ICMP je potřeba vědět, jestli je zadaná síť přímo připojená (tzn. nějaká síťová karta zařízení je k~ní připojená) nebo nepřímo připojená. 
+Pro řešení tohoto problému je nejprve potřebné zjistit, jaká sítová zařízení jsou ke stanici připojena. V~tom jsem využil možností knihovny libpcap\cite{LibpcapReference}. V~rámci této knihovny je přítomna funkce \code{pcap\_findalldevs()}, která umožňuje přístup ke všem síťovým zařízením, která jsou na zařízení přítomná a jejich adresám. Poté už stačilo iterovat nad zařízeními a porovnávat adresy sítě k~nim připojeným s~adresou, kterou nám zdal uživatel.
+
+\section{Síťová komunikace}
+
+Pro síťovou komunikaci jsem vybral řešení za pomocí BSD schránek, které jsou nám poskytované operačním systémem. Ve všech případech odesílání používáme neblokující sockety (ukázka nastavení socketu na neblokující \autoref{BSDNonBlocking}). 
+
+\begin{lstlisting}[language=c, label=BSDNonBlocking, caption= Nastavení socketu na neblokující.]
+int flags = fcntl(socketFd, F_GETFL, 0);
+fcntl(socketFd, F_SETFL, flags | O_NONBLOCK);
+\end{lstlisting}
+
+\subsection{ICMP komunikace}\label{ICMPComm}
+
+Pro komunikaci pomocí protokolu ICMP (více o protokolu v kapitole \ref{icmp}) je potřeba nastavit při vytváření nastavit socket na tzv. RAW socket a zároveň nastavit hodnotu protokolu na \code{IPPROTO\_ICMP}, pro obě tyto nastavení je potřeba, aby program byl spuštěný s právy root. 
+
+Poté je potřeba odeslat vyplněnou ICMP hlavičku. V~této věci nám pomáhá operační systém, který poskytuje makra a struktury pro ICMP hlavičku v~ hlavičkovém souboru \code{netinet/ip\_icmp.h}. 
+
+Po odeslání hlavičky na všechny zařízení stačí akorát naslouchat a kontrolovat příchozí zda příchozí packety jsou ICMP pakety typu ECHO Reply a mají stejné id jako námi odeslané pakety.
+
+\subsection{ARP komunikace}\label{ARPComm}
+
+Pro zaslání a získávání ARP požadavků pomocí BSD socketů je potřeba nejprve nastavit do domény socketu hodnotu \code{AF\_PACKET}. Tato hodnota nastaví socket, aby komunukoval na L2 úrovni. 
+
+V případě ARPu operační systém bohužel nenabízí ani makrat ani struktury pro ARP hlavičku, což znamená, že si je musíme poskytnout sami (námi použitá struktura \autoref{ARPHeader}). Následně musíme hlavičku vyplnit potřebnými konstantami a odeslat na ethernetový broadcast (FF:FF:FF:FF:FF:FF).
+
+\begin{lstlisting}[language=c, label=ARPHeader, caption= Struktura reprezentující ethernet a ARP hlavičku.]
+    typedef struct {
+        struct {	                
+            uint8_t destinationMac[6];
+            uint8_t sourceMac[6];
+            uint8_t type[2];
+        } eth;
+        struct {
+            uint16_t hardwareType;
+            uint16_t protocolType;
+            uint8_t hardwareLength;
+            uint8_t protocolLength;
+            uint16_t operationCode;
+            uint8_t senderMac[6];
+            uint8_t senderIp[4];
+            uint8_t targetMac[6];
+            uint8_t targetIp[4];
+        } arp;
+        uint8_t padding[36];
+    } arpEthPacket;
+\end{lstlisting}
+
+Následně se přijímají pakety a pokud se jedná o packety typu ARP Reply, uloží se adresa ze které informace přišla.
+
+\subsection{UDP komunikace}\label{UDPComm}
+
+Pro skenování UDP portů je potřeba otevřít dva BSD sockety. Jeden pro klasickou UDP komunikaci (s natavením \code{SOCK\_DGRAM}) a druhý pro ICMP (stejně jako v \autoref{ICMPComm}).
+
+Nejprve je potřeba odeslat na všechny porty cokoliv pomocí UDP. Toto můžeme udělat, protože na testovacích zařízeních bude v rámci sysctl nastavený \code{net.ipv4.icmp\_ratelimit} na 0.
+
+Poté stačí pouze poslouchat na ICMP socketu a čekat jestli nám příjdou zprávy typu ICMP Unreachable. V rámci této zprávy také nachází část původní zprávy, ze které jsme schopni vyčíst o jaký port se jednalo a označit ho za uzavřený.
+
+\subsection{TCP komunikace}\label{TCPComm}
+
+Pro skenování TCP portů postačí jeden RAW socket s nastaveným protokolem na \code{IPPROTO\_TCP}. 
+
+Do tohoto socketu musíme vyslat vyplněnou IP hlavičku společně s TCP hlavičkou. Tyto můžeme opět získat z operačního systému a to z~hlavičkových souborů \code{netinet/ip.h} a \code{netinet/tcp.h}. Po vyplnění potřebných bitů do obou hlaviček můžeme je obě v rámci jednoho bufferu odeslat. 
+
+Poté opět nasloucháme na odpovědi ve formě TCP packetů s nastaveným příznakem SYN nebo RST. Po přijetí těchto paketů odešleme zpět na hosta TCP paket s~příznakem RST, aby spojení mezi stanicemi nezůstalo napůl otevřené.
+
+\end{document}

@@ -1,0 +1,29 @@
+.TH IPK-CLIENT 1
+.SH NAME
+ipk\-client \- connects to master server and receive mathematical orders and send the results
+.SH SYNOPSIS
+.B ipk\-client
+\fIADDRESS\fR
+.SH DESCRIPTION
+.B ipk\-client
+connects to a server specified in \fIADDRESS\fR. 
+First it sends \fBHELLO\fR message with MD5 hash of the student, that developed it. 
+Then the server sends to the client mathematical orders in specified format (\fB SOLVE\fR \fIOPERAND_1\fR \fIOPERATION\fR \fIOPERAND_2\fR\\n), then it performs the computing and sends back the result in specified format (\fBRESULT\fR \fIDECIMAL_NUMBER\fR). 
+The client ends the connection after it receives \fBBYE\fR message with \fISECRET\fR, then the client prints the \fISECRET\fR and terminates.
+.SH OPTIONS
+.TP
+.BR \fIADDRESS\fR
+IPv4/IPv6 address of the master server.
+.SH BUGS
+The client stores the data into int data type. Depending on your architecture the numbers send from the server may overflow size of int and the client will send \fBRESULT ERROR\fR To server.
+.SH EXAMPLES
+To connect to the reference server, use it like this:
+.PP
+.nf
+.RS
+ipk-client 13.94.144.31
+.RE
+.fi
+.PP
+.SH AUTHOR
+Michal Mrnustik <xmrnus01@stud.fit.vutbr.cz>

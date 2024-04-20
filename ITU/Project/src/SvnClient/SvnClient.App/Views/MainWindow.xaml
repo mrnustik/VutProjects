@@ -1,0 +1,76 @@
+﻿<Window x:Class="SvnClient.App.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SvnClient.App"
+        xmlns:views="clr-namespace:SvnClient.App.Views"
+        mc:Ignorable="d"
+        Loaded="OnLoaded"
+        Title="SVN Client" Height="450" Width="600"
+        DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainViewModel}">
+    <Window.InputBindings>
+        <KeyBinding
+            Modifiers="Control"
+            Key="T"
+            Command="{Binding OpenConnectionCommand}"/>
+        <KeyBinding
+            Modifiers="Control"
+            Key="W"
+            Command="{Binding CloseConnectionCommand}"
+            CommandParameter="{Binding ElementName=TabControl, Path=SelectedItem}"/>
+    </Window.InputBindings>
+
+    <Grid x:Name="Root">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu Height="20" Width="Auto" Grid.Row="0">
+            <MenuItem Header="File">
+                <MenuItem Header="Open" InputGestureText="Ctrl+T"  Command="{Binding OpenConnectionCommand}" />
+                <MenuItem Header="Close" InputGestureText="Alt+F4" Click="CloseMenuItemClick"/>
+            </MenuItem>
+        </Menu>
+        <TabControl Grid.Row="1" SelectedIndex="0" x:Name="TabControl" SelectedItem="{Binding SelectedRepository}" ItemsSource="{Binding Repositories}">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="TabItem">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding}" Value="{x:Static CollectionView.NewItemPlaceholder}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Button Command="{Binding DataContext.OpenConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="Open Connection" >
+                                            +
+                                        </Button>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}"/>
+                        <Button Width="15" Height="15"
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                                Background="Transparent" BorderBrush="Transparent"
+                                Command="{Binding ElementName=Root, Path=DataContext.CloseConnectionCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=StackPanel}, Path=DataContext}">
+                            <Image Source="../Resources/IconClose.png"></Image>
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <views:RepositoryView />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+
+        </TabControl>
+    </Grid>
+</Window>
